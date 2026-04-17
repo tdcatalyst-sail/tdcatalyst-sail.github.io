@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TD Catalyst — AI Workforce Transformation</title>
+  <meta name="description" content="TD Catalyst advises the leaders building, buying, and adopting agentic AI at work. Advisory practice by Thomas Delaporte." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ─── PACIFICA PALETTE ────────────────────────────────────────
+       Inspired by the Pacific coastline at Pacifica, CA:
+       deep ocean water, coastal fog, slate cliffs, seafoam, wet sand.
+    ──────────────────────────────────────────────────────────────── */
+    :root {
+      --ocean:       #1c3840;   /* deep Pacific — hero bg, dark sections  */
+      --ocean-mid:   #2e5e70;   /* mid-depth ocean                        */
+      --fog:         #eff2f1;   /* marine-layer white — main bg           */
+      --seafoam:     #5e9fa2;   /* seafoam accent — primary CTA color     */
+      --seafoam-dk:  #4a8588;   /* deeper seafoam for hover               */
+      --cliff:       #3a4e52;   /* slate cliff — footer                   */
+      --sand:        #c4b9a5;   /* wet sand — warm neutral                */
+      --mist:        #dce2e1;   /* coastal mist — borders                 */
+      --charcoal:    #252b2c;   /* deep cool charcoal — body text         */
+      --midgray:     #6b7274;   /* cool mid-gray — secondary text         */
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--fog);
+      color: var(--charcoal);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── SCROLL REVEAL ──────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.22s; }
+    .reveal-delay-3 { transition-delay: 0.34s; }
+
+    /* ─── NAV ─────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 3rem;
+      background: rgba(239, 242, 241, 0.90);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--mist);
+      transition: background 0.3s;
+    }
+
+    .nav-logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.35rem;
+      color: var(--ocean);
+      letter-spacing: 0.01em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--midgray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ocean); }
+
+    .nav-cta {
+      font-size: 0.78rem !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.08em !important;
+      text-transform: uppercase;
+      color: var(--seafoam) !important;
+      border-bottom: 1px solid var(--seafoam);
+      padding-bottom: 1px;
+    }
+    .nav-cta:hover { color: var(--seafoam-dk) !important; border-color: var(--seafoam-dk); }
+
+    /* ─── HERO ────────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 7rem 3rem 5.5rem;
+      background-color: var(--ocean);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Layered atmospheric gradients — fog bank over deep water */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 15% 110%, rgba(94, 159, 162, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% -10%, rgba(46, 94, 112, 0.35) 0%, transparent 55%),
+        radial-gradient(ellipse 100% 30% at 50% 100%, rgba(28, 56, 64, 0.6) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Horizon line — the Pacific meets the sky */
+    .hero::after {
+      content: '';
+      position: absolute;
+      left: 3rem;
+      right: 3rem;
+      top: 46%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(94, 159, 162, 0.25), transparent);
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--seafoam);
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .hero-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+      color: var(--fog);
+      line-height: 1.06;
+      letter-spacing: -0.01em;
+      max-width: 15ch;
+      margin-bottom: 2rem;
+    }
+
+    .hero-divider {
+      width: 3rem;
+      height: 1px;
+      background: var(--seafoam);
+      margin-bottom: 2rem;
+      opacity: 0.7;
+    }
+
+    .hero-tagline {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 1.9vw, 1.45rem);
+      color: rgba(239, 242, 241, 0.72);
+      max-width: 54ch;
+      line-height: 1.55;
+      margin-bottom: 2.75rem;
+    }
+
+    .hero-intro {
+      font-size: 0.92rem;
+      color: rgba(239, 242, 241, 0.45);
+      max-width: 60ch;
+      line-height: 1.85;
+    }
+
+    /* ─── SECTION SHARED ─────────────────────────────────────────── */
+    section {
+      padding: 6rem 3rem;
+    }
+
+    .section-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--seafoam);
+      margin-bottom: 3rem;
+    }
+
+    /* ─── ABOUT ──────────────────────────────────────────────────── */
+    .about {
+      background: var(--fog);
+      border-top: 1px solid var(--mist);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-left h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(1.9rem, 3.2vw, 2.8rem);
+      color: var(--ocean);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-left p {
+      font-size: 0.9rem;
+      color: var(--midgray);
+      line-height: 1.85;
+    }
+
+    .about-right p {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--charcoal);
+      margin-bottom: 1.25rem;
+    }
+    .about-right p:last-of-type { margin-bottom: 0; }
+
+    .about-meta {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .meta-tag {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--ocean-mid);
+      background: rgba(28, 56, 64, 0.07);
+      border: 1px solid rgba(28, 56, 64, 0.1);
+      border-radius: 2px;
+      padding: 0.3rem 0.7rem;
+    }
+
+    /* ─── STRENGTHS ──────────────────────────────────────────────── */
+    .strengths {
+      background: var(--ocean);
+      color: var(--fog);
+    }
+
+    .strengths .section-label { color: rgba(94, 159, 162, 0.8); }
+
+    .strengths-heading {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(1.7rem, 2.8vw, 2.5rem);
+      color: var(--fog);
+      max-width: 44ch;
+      line-height: 1.22;
+      margin-bottom: 4rem;
+    }
+
+    .strengths-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      border-top: 1px solid rgba(239, 242, 241, 0.1);
+      padding-top: 3rem;
+    }
+
+    .strength-number {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2.8rem;
+      color: rgba(239, 242, 241, 0.08);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .strength-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.25rem;
+      color: var(--fog);
+      margin-bottom: 0.85rem;
+      line-height: 1.28;
+    }
+
+    .strength-body {
+      font-size: 0.87rem;
+      color: rgba(239, 242, 241, 0.52);
+      line-height: 1.85;
+    }
+
+    .strength-accent {
+      color: rgba(239, 242, 241, 0.82);
+      font-weight: 400;
+    }
+
+    /* ─── PROOF ──────────────────────────────────────────────────── */
+    .proof {
+      background: var(--fog);
+      border-top: 1px solid var(--mist);
+      padding: 5rem 3rem;
+    }
+
+    .proof-heading {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--midgray);
+      margin-bottom: 2.5rem;
+    }
+
+    .proof-intro {
+      font-size: 0.92rem;
+      color: var(--midgray);
+      max-width: 64ch;
+      line-height: 1.85;
+      margin-bottom: 3.5rem;
+    }
+
+    .sectors-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.75rem 4rem;
+      max-width: 960px;
+    }
+
+    .sector-block {
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--mist);
+    }
+
+    .sector-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--seafoam);
+      margin-bottom: 0.9rem;
+    }
+
+    .sector-clients {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.08rem;
+      color: var(--ocean);
+      line-height: 1.6;
+    }
+
+    /* ─── OFFERS ─────────────────────────────────────────────────── */
+    .offers {
+      background: var(--fog);
+      border-top: 1px solid var(--mist);
+    }
+
+    .offers-heading {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(1.7rem, 2.8vw, 2.5rem);
+      color: var(--ocean);
+      max-width: 40ch;
+      line-height: 1.22;
+      margin-bottom: 3.5rem;
+    }
+
+    /* Featured card spans full width, then two below */
+    .offers-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .offer-card {
+      background: white;
+      border: 1px solid var(--mist);
+      border-radius: 3px;
+      padding: 2.5rem;
+      transition: border-color 0.25s;
+    }
+    .offer-card:hover { border-color: var(--seafoam); }
+
+    .offer-card.featured {
+      grid-column: 1 / -1;
+      border-color: var(--ocean);
+      background: var(--ocean);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    .offer-card.featured:hover { border-color: var(--ocean-mid); }
+
+    .offer-card-left { }
+    .offer-card-right { }
+
+    .offer-tag {
+      font-size: 0.67rem;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--seafoam);
+      margin-bottom: 1.25rem;
+    }
+
+    .offer-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.5rem;
+      color: var(--ocean);
+      margin-bottom: 0.75rem;
+      line-height: 1.22;
+    }
+
+    .offer-card.featured .offer-title { color: var(--fog); }
+
+    .offer-desc {
+      font-size: 0.88rem;
+      color: var(--midgray);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .offer-card.featured .offer-desc { color: rgba(239, 242, 241, 0.55); }
+
+    .offer-price {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--ocean);
+      letter-spacing: 0.03em;
+    }
+
+    .offer-card.featured .offer-price { color: rgba(239, 242, 241, 0.45); }
+
+    .offer-includes {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(239, 242, 241, 0.1);
+    }
+
+    .offer-includes-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(239, 242, 241, 0.35);
+      margin-bottom: 0.75rem;
+    }
+
+    .offer-includes ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .offer-includes li {
+      font-size: 0.83rem;
+      color: rgba(239, 242, 241, 0.55);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+    }
+
+    .offer-includes li::before {
+      content: '—';
+      color: var(--seafoam);
+      opacity: 0.6;
+      flex-shrink: 0;
+      margin-top: 0.05em;
+    }
+
+    /* ─── CTA ────────────────────────────────────────────────────── */
+    .cta-section {
+      background: var(--ocean);
+      padding: 7rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(94, 159, 162, 0.15) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .cta-section h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2rem, 3.8vw, 3.4rem);
+      color: var(--fog);
+      line-height: 1.15;
+      max-width: 24ch;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+
+    .cta-section p {
+      font-size: 0.95rem;
+      color: rgba(239, 242, 241, 0.55);
+      max-width: 46ch;
+      margin: 0 auto 2.75rem;
+      line-height: 1.8;
+      position: relative;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ocean);
+      background: var(--fog);
+      padding: 1rem 2.25rem;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      position: relative;
+    }
+    .btn-primary:hover {
+      background: white;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────────── */
+    footer {
+      background: var(--cliff);
+      padding: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    footer .logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.1rem;
+      color: rgba(239, 242, 241, 0.6);
+    }
+
+    footer .tagline-small {
+      font-size: 0.78rem;
+      color: rgba(239, 242, 241, 0.28);
+      font-style: italic;
+      font-family: 'Instrument Serif', serif;
+      margin-top: 0.35rem;
+    }
+
+    footer .disclaimer {
+      font-size: 0.7rem;
+      color: rgba(239, 242, 241, 0.22);
+      max-width: 48ch;
+      line-height: 1.65;
+      text-align: right;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────────── */
+    @media (max-width: 860px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-links { display: none; }
+      section, .proof { padding: 4.5rem 1.5rem; }
+      .hero { padding: 6rem 1.5rem 4.5rem; }
+      .cta-section { padding: 5.5rem 1.5rem; }
+      footer { padding: 2.5rem 1.5rem; flex-direction: column; align-items: flex-start; }
+      footer .disclaimer { text-align: left; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .strengths-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .sectors-grid { grid-template-columns: 1fr; gap: 2.25rem; }
+      .offer-card.featured { grid-template-columns: 1fr; gap: 0; }
+      .offers-grid { grid-template-columns: 1fr; }
+      .hero::after { display: none; }
+    }
+
+    @media (max-width: 520px) {
+      .hero-name { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">TD Catalyst</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#strengths">Approach</a></li>
+      <li><a href="#proof">Experience</a></li>
+      <li><a href="#work">Work together</a></li>
+      <li><a href="#contact" class="nav-cta">Start a conversation</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Advisory practice · Thomas Delaporte</div>
+      <h1 class="hero-name">AI workforce transformation, from the three sides that rarely meet.</h1>
+      <div class="hero-divider"></div>
+      <p class="hero-tagline">
+        TD Catalyst advises the leaders building, buying, and adopting agentic AI at work — founders moving upmarket, and enterprise and public sector operators turning new technology into real adoption.
+      </p>
+      <p class="hero-intro">
+        The edge is a rare combination: years inside a category-defining AI product company scaling past eight-figure ARR, years inside global consulting leading organizational change for Fortune 100 clients, and the operator fluency of someone who has run the function — not only prescribed it.
+      </p>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-inner">
+      <div class="section-label">The person behind the practice</div>
+      <div class="about-grid">
+        <div class="about-left reveal">
+          <h2>A combination most companies do not yet have a title for.</h2>
+          <p>
+            Most advisors have lived one side of this work. Thomas has lived three: AI product, global consulting, and HR operations. The category is new enough that the role keeps being renamed. The fit is not.
+          </p>
+        </div>
+        <div class="about-right reveal reveal-delay-1">
+          <p>
+            Thomas Delaporte founded TD Catalyst after more than a decade at the intersection of AI product, global consulting, and HR operations. Today, the practice advises the leaders building, buying, and adopting agentic AI at work.
+          </p>
+          <p>
+            Before founding TD Catalyst, Thomas spent over five years at Eightfold AI, leading Talent Transformation, Talent Intelligence Platform, and Agentic Scale programs. He built the public sector and enterprise practice from a standing start into an eight-figure ARR business, across Fortune 100 and public sector clients. Earlier, as an Engagement Manager at Capgemini Invent in San Francisco, he led organizational design, change, and M&amp;A integration engagements for global companies — including a 2.5 billion USD pharmaceutical post-merger integration. Before consulting, he ran HR and transformation programs on the operator side, across France, Vietnam, the Philippines, and the United States.
+          </p>
+          <p>
+            The result is a perspective that is genuinely rare: product-led and operator-sharp on the founder side, enterprise-seasoned and people-fluent on the adoption side, with commercial accountability and multicultural fluency throughout. Bilingual French and English, the ability to read people across cultures is not a credential on a slide — it is how the work actually gets done.
+          </p>
+          <p style="font-size:0.87rem; color:var(--midgray);">
+            TD Catalyst is an independent advisory practice operated by Thomas in a personal capacity, with no affiliation to prior employers.
+          </p>
+          <div class="about-meta">
+            <span class="meta-tag">Agentic AI</span>
+            <span class="meta-tag">Workforce Transformation</span>
+            <span class="meta-tag">Talent Intelligence</span>
+            <span class="meta-tag">Enterprise Readiness</span>
+            <span class="meta-tag">P&amp;L Ownership</span>
+            <span class="meta-tag">Public Sector</span>
+            <span class="meta-tag">Regulated Industries</span>
+            <span class="meta-tag">Multicultural Leadership</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRENGTHS -->
+  <section class="strengths" id="strengths">
+    <div class="section-inner">
+      <div class="section-label">What TD Catalyst brings</div>
+      <p class="strengths-heading reveal">Three capabilities that rarely sit in one advisor at the AI workforce frontier.</p>
+      <div class="strengths-grid">
+
+        <div class="strength-item reveal reveal-delay-1">
+          <div class="strength-number">01</div>
+          <div class="strength-title">The three disciplines AI workforce transformation actually needs.</div>
+          <p class="strength-body">
+            <span class="strength-accent">AI workforce transformation fails more often at the seams than at the center. Those seams sit between AI product, global consulting, and HR operations — three disciplines that almost never live in one advisor.</span> Product leaders know the technology but rarely the organizational change it demands. Consultants know the change but rarely the operator reality underneath it. People leaders know the workforce but rarely the product constraints shaping it. Thomas has spent years inside each.
+          </p>
+        </div>
+
+        <div class="strength-item reveal reveal-delay-2">
+          <div class="strength-number">02</div>
+          <div class="strength-title">A commercial operator, not a framework vendor.</div>
+          <p class="strength-body">
+            <span class="strength-accent">Built the delivery methodology at Eightfold from scratch. Scaled the practice past eight-figure ARR. Carried P&amp;L, quota, and client outcomes across Fortune 100 and public sector programs.</span> The playbooks on offer here have been tested against real revenue and real stakes, not only presented on a slide.
+          </p>
+        </div>
+
+        <div class="strength-item reveal reveal-delay-3">
+          <div class="strength-number">03</div>
+          <div class="strength-title">Regulated industries and global reach, by design.</div>
+          <p class="strength-body">
+            <span class="strength-accent">Delivered for state labor departments, the DoD Defense Innovation Unit, a 2.5 billion USD pharmaceutical post-merger integration, and global Fortune 100 clients.</span> Teams built and led across France, Vietnam, the Philippines, and the United States. Transformation that holds across compliance regimes, cultures, and time zones is structural here — not situational.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROOF STRIP -->
+  <section class="proof" id="proof">
+    <div class="section-inner">
+      <div class="proof-heading">Select sectors and client experience</div>
+      <p class="proof-intro">
+        Programs delivered across sectors where regulated complexity, scale, and workforce transformation intersect. Work completed during engagements at Eightfold AI and Capgemini Invent.
+      </p>
+      <div class="sectors-grid">
+
+        <div class="sector-block reveal">
+          <div class="sector-label">Public Sector and Workforce</div>
+          <div class="sector-clients">
+            DoD Defense Innovation Unit · New York State Department of Labor · State of Colorado · District of Columbia · Florida Commerce · Puerto Rico DTRH · Houston Independent School District · OneTen
+          </div>
+        </div>
+
+        <div class="sector-block reveal reveal-delay-1">
+          <div class="sector-label">Life Sciences and Healthcare</div>
+          <div class="sector-clients">
+            Sanofi · Bayer · Genentech
+          </div>
+        </div>
+
+        <div class="sector-block reveal reveal-delay-2">
+          <div class="sector-label">Consumer, Retail, and Hospitality</div>
+          <div class="sector-clients">
+            Kroger · Meijer · Carnival Cruise Line
+          </div>
+        </div>
+
+        <div class="sector-block reveal reveal-delay-3">
+          <div class="sector-label">Industrial and Enterprise Services</div>
+          <div class="sector-clients">
+            Micron · W.L. Gore · Aegis
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFERS -->
+  <section class="offers" id="work">
+    <div class="section-inner">
+      <div class="section-label">How to work together</div>
+      <p class="offers-heading reveal">Three ways to engage, one built as the right starting point.</p>
+      <div class="offers-grid">
+
+        <!-- FEATURED: full-width, two-column layout inside -->
+        <div class="offer-card featured reveal">
+          <div class="offer-card-left">
+            <div class="offer-tag">Recommended first step</div>
+            <div class="offer-title">The Catalyst Diagnostic</div>
+            <p class="offer-desc">
+              A three to four week engagement that names the specific gap between your product or initiative and the enterprise reality it needs to work inside. Designed for founders seeking enterprise readiness, and for enterprise and public sector leaders diagnosing stalled adoption.
+            </p>
+            <div class="offer-price">18K – 28K USD · fixed fee</div>
+          </div>
+          <div class="offer-card-right">
+            <div class="offer-includes">
+              <div class="offer-includes-label">What's included</div>
+              <ul>
+                <li>Structured stakeholder interviews</li>
+                <li>Written findings and gap analysis</li>
+                <li>90-day action plan</li>
+                <li>Executive debrief session</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="offer-card reveal reveal-delay-1">
+          <div class="offer-tag">For founders</div>
+          <div class="offer-title">Founder Retainer</div>
+          <p class="offer-desc">
+            Monthly advisory for seed to Series B companies in AI, talent intelligence, and agentic workforce technology. Weekly working session, deal and narrative review, stakeholder coaching, and introductions to enterprise champions where relevant.
+          </p>
+          <div class="offer-price">8K – 12K USD / month · 3–6 month minimum</div>
+        </div>
+
+        <div class="offer-card reveal reveal-delay-2">
+          <div class="offer-tag">For enterprise and public sector</div>
+          <div class="offer-title">Enterprise Retainer</div>
+          <p class="offer-desc">
+            Monthly advisory for CHROs, CTOs, and the emerging generation of AI and people leaders navigating agentic AI adoption. Adoption architecture, stakeholder mapping, resistance diagnosis, and optional leadership workshops.
+          </p>
+          <div class="offer-price">15K – 25K USD / month · 6 month minimum</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <h2>The fastest way to find out if this is the right fit.</h2>
+    <p>
+      A 30-minute conversation. No pitch deck, no generic framework. A direct exchange about where you are and what would actually move things forward.
+    </p>
+    <a href="https://cal.com" class="btn-primary">Book 30 minutes</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <div class="logo">TD Catalyst</div>
+      <div class="tagline-small">Advisory at the intersection of AI product, enterprise scale, and workforce change.</div>
+    </div>
+    <div class="disclaimer">
+      TD Catalyst is an independent advisory practice operated by Thomas Delaporte in a personal capacity. Not affiliated with Eightfold AI or any prior employer.
+    </div>
+  </footer>
+
+  <script>
+    // Scroll-reveal via IntersectionObserver
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
