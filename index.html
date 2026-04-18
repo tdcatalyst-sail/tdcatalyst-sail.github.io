@@ -606,6 +606,36 @@
     }
     .offer-card.featured:hover .offer-gem { opacity: 0.88; transform: none; }
 
+    /* CSS gem gradients for cards without working photo URLs */
+    .offer-gem-div {
+      display: block;
+      width: calc(100% + 5rem);
+      margin: -2.5rem -2.5rem 2rem -2.5rem;
+      height: 145px;
+      opacity: 0.92;
+      transition: opacity 0.35s, transform 0.35s;
+      transform-origin: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .offer-card:hover .offer-gem-div { opacity: 1; transform: scale(1.03); }
+
+    .offer-gem-sapphire {
+      background:
+        radial-gradient(ellipse at 25% 25%, rgba(147, 197, 253, 0.55) 0%, transparent 50%),
+        radial-gradient(ellipse at 75% 75%, rgba(30, 64, 175, 0.6) 0%, transparent 45%),
+        radial-gradient(ellipse at 60% 15%, rgba(96, 165, 250, 0.35) 0%, transparent 40%),
+        linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 30%, #2563eb 50%, #1e40af 70%, #1a3070 100%);
+    }
+
+    .offer-gem-malachite {
+      background:
+        radial-gradient(ellipse at 30% 30%, rgba(134, 239, 172, 0.45) 0%, transparent 45%),
+        radial-gradient(ellipse at 70% 70%, rgba(21, 128, 61, 0.65) 0%, transparent 45%),
+        radial-gradient(ellipse at 55% 10%, rgba(74, 222, 128, 0.3) 0%, transparent 40%),
+        linear-gradient(135deg, #14532d 0%, #166534 30%, #15803d 50%, #166534 70%, #14532d 100%);
+    }
+
     /* ─── CLIENT LOGOS ───────────────────────────────────────────── */
     .client-logo-section { margin-bottom: 3.5rem; }
     .client-logo-label {
@@ -859,8 +889,6 @@
       <a href="#" class="nav-logo">
         <span class="logo-td">TD</span><span class="logo-catalyst">catalyst</span>
       </a>
-      <div class="nav-divider"></div>
-      <a href="https://cal.com/tdcatalyst" class="nav-book-left">Book a meeting</a>
     </div>
     <div class="nav-right">
       <ul class="nav-links">
@@ -1038,14 +1066,8 @@
         </div>
 
         <div class="offer-card reveal reveal-delay-1">
-          <!-- Blue sapphire — momentum, growth, forward motion (founder) -->
-          <img
-            src="https://images.unsplash.com/photo-agsdDgRW2Ps?auto=format&fit=crop&w=800&q=80"
-            alt="Blue sapphire gem"
-            class="offer-gem"
-            loading="lazy"
-            onerror="this.style.display='none'"
-          />
+          <!-- Blue sapphire gem gradient — momentum, growth, forward motion (founder) -->
+          <div class="offer-gem-div offer-gem-sapphire" aria-hidden="true"></div>
           <div class="offer-tag">For founders</div>
           <div class="offer-title">Founder Retainer</div>
           <p class="offer-desc">
@@ -1055,14 +1077,8 @@
         </div>
 
         <div class="offer-card reveal reveal-delay-2">
-          <!-- Malachite emerald — depth, complexity, organisational scale (enterprise) -->
-          <img
-            src="https://images.unsplash.com/photo-O2X58S1t9QM?auto=format&fit=crop&w=800&q=80"
-            alt="Green malachite gem"
-            class="offer-gem"
-            loading="lazy"
-            onerror="this.style.display='none'"
-          />
+          <!-- Malachite emerald gem gradient — depth, complexity, organisational scale (enterprise) -->
+          <div class="offer-gem-div offer-gem-malachite" aria-hidden="true"></div>
           <div class="offer-tag">For enterprise and public sector</div>
           <div class="offer-title">Enterprise Retainer</div>
           <p class="offer-desc">
