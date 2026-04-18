@@ -65,6 +65,28 @@
       border-bottom: 1px solid var(--mist);
     }
 
+    /* Left side of nav: logo + booking link together */
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .nav-divider {
+      width: 1px;
+      height: 1rem;
+      background: var(--mist);
+    }
+    .nav-book-left {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      color: var(--seafoam);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.2s;
+    }
+    .nav-book-left:hover { color: var(--seafoam-dk); }
+
     /* Styled to match logo typography: TD bold, catalyst light */
     .nav-logo {
       text-decoration: none;
@@ -553,8 +575,40 @@
       border-radius: 3px;
       padding: 2.5rem;
       transition: border-color 0.25s;
+      position: relative;
+      overflow: hidden;
     }
     .offer-card:hover { border-color: var(--seafoam); }
+
+    /* Gem thumbnail — top-right corner of each standard card */
+    .offer-gem {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      object-position: center;
+      border-bottom-left-radius: 3px;
+      filter: saturate(0.8) brightness(0.95);
+      opacity: 0.88;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .offer-card:hover .offer-gem { opacity: 1; transform: scale(1.04); }
+
+    /* Gem in featured card — sits above the includes list */
+    .offer-card.featured .offer-gem {
+      position: relative;
+      top: auto; right: auto;
+      width: 100%;
+      height: 160px;
+      border-radius: 3px;
+      margin-bottom: 1.5rem;
+      border-bottom-left-radius: 3px;
+      filter: saturate(0.65) brightness(0.8);
+      opacity: 0.75;
+    }
+    .offer-card.featured:hover .offer-gem { opacity: 0.9; transform: none; }
     .offer-card.featured {
       grid-column: 1 / -1;
       border-color: var(--ocean);
@@ -761,9 +815,13 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#" class="nav-logo">
-      <span class="logo-td">TD</span><span class="logo-catalyst">catalyst</span>
-    </a>
+    <div class="nav-left">
+      <a href="#" class="nav-logo">
+        <span class="logo-td">TD</span><span class="logo-catalyst">catalyst</span>
+      </a>
+      <div class="nav-divider"></div>
+      <a href="https://cal.com/tdcatalyst" class="nav-book-left">Book a meeting</a>
+    </div>
     <div class="nav-right">
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
@@ -814,8 +872,8 @@
           <!-- Person on cliff overlooking Pacific — Unsplash: MontyLov -->
           <div class="about-photo-wrap">
             <img
-              src="https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=800&q=80"
-              alt="Figure overlooking the Pacific coast"
+              src="https://images.unsplash.com/photo-1500514966906-fe245eea9344?auto=format&fit=crop&w=800&q=80"
+              alt="Sailing on the Pacific"
               loading="lazy"
             />
           </div>
@@ -952,6 +1010,7 @@
         <div class="offer-card featured reveal">
           <div class="offer-card-left">
             <div class="offer-tag">Recommended first step</div>
+
             <div class="offer-title">The Catalyst Diagnostic</div>
             <p class="offer-desc">
               A three to four week engagement that names the specific gap between your product or initiative and the enterprise reality it needs to work inside. Designed for founders seeking enterprise readiness, and for enterprise and public sector leaders diagnosing stalled adoption.
@@ -959,6 +1018,14 @@
             <div class="offer-price">18K – 28K USD · fixed fee</div>
           </div>
           <div class="offer-card-right">
+            <!-- Aquamarine gem — clarity & precision -->
+            <img
+              src="https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?auto=format&fit=crop&w=600&q=80"
+              alt="Gem"
+              class="offer-gem"
+              loading="lazy"
+              onerror="this.style.display='none'"
+            />
             <div class="offer-includes">
               <div class="offer-includes-label">What's included</div>
               <ul>
@@ -972,6 +1039,14 @@
         </div>
 
         <div class="offer-card reveal reveal-delay-1">
+          <!-- Purple crystal gem — energy & momentum -->
+          <img
+            src="https://images.unsplash.com/photo-1567593810070-7a3d471af022?auto=format&fit=crop&w=400&q=80"
+            alt="Gem"
+            class="offer-gem"
+            loading="lazy"
+            onerror="this.style.display='none'"
+          />
           <div class="offer-tag">For founders</div>
           <div class="offer-title">Founder Retainer</div>
           <p class="offer-desc">
@@ -981,6 +1056,14 @@
         </div>
 
         <div class="offer-card reveal reveal-delay-2">
+          <!-- Deep green gem — depth & scale -->
+          <img
+            src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=80"
+            alt="Gem"
+            class="offer-gem"
+            loading="lazy"
+            onerror="this.style.display='none'"
+          />
           <div class="offer-tag">For enterprise and public sector</div>
           <div class="offer-title">Enterprise Retainer</div>
           <p class="offer-desc">
