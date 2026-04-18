@@ -1256,9 +1256,10 @@
         </div>
 
         <div class="contact-right reveal reveal-delay-1">
-          <!-- Replace YOUR_FORM_ID with your Formspree form ID from formspree.io -->
-          <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-            <input type="hidden" name="_replyto" value="sail@tdcatalyst.com" />
+          <form class="contact-form" action="https://formsubmit.co/sail@tdcatalyst.com" method="POST">
+            <input type="hidden" name="_subject" value="New enquiry — TD Catalyst" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
             <div class="form-row">
               <input type="text" name="name" placeholder="Your name" required />
               <input type="text" name="company" placeholder="Company and role" />
