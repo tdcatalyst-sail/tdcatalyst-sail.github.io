@@ -7,25 +7,24 @@
   <meta name="description" content="TD Catalyst advises the leaders building, buying, and adopting agentic AI at work. Advisory practice by Thomas Delaporte." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ─── PACIFICA PALETTE ────────────────────────────────────────
-       Inspired by the Pacific coastline at Pacifica, CA:
-       deep ocean water, coastal fog, slate cliffs, seafoam, wet sand.
-    ──────────────────────────────────────────────────────────────── */
     :root {
-      --ocean:       #1c3840;   /* deep Pacific — hero bg, dark sections  */
-      --ocean-mid:   #2e5e70;   /* mid-depth ocean                        */
-      --fog:         #eff2f1;   /* marine-layer white — main bg           */
-      --seafoam:     #5e9fa2;   /* seafoam accent — primary CTA color     */
-      --seafoam-dk:  #4a8588;   /* deeper seafoam for hover               */
-      --cliff:       #3a4e52;   /* slate cliff — footer                   */
-      --sand:        #c4b9a5;   /* wet sand — warm neutral                */
-      --mist:        #dce2e1;   /* coastal mist — borders                 */
-      --charcoal:    #252b2c;   /* deep cool charcoal — body text         */
-      --midgray:     #6b7274;   /* cool mid-gray — secondary text         */
+      --ocean:       #1c3840;
+      --ocean-mid:   #2e5e70;
+      --fog:         #eff2f1;
+      --seafoam:     #5e9fa2;
+      --seafoam-dk:  #4a8588;
+      --cliff:       #3a4e52;
+      --mist:        #dce2e1;
+      --charcoal:    #252b2c;
+      --midgray:     #6b7274;
+      /* Logo accent colors */
+      --logo-red:    #c0392b;
+      --logo-gold:   #d4a017;
+      --logo-blue:   #2471a3;
     }
 
     html { scroll-behavior: smooth; }
@@ -46,13 +45,10 @@
       transform: translateY(22px);
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.22s; }
-    .reveal-delay-3 { transition-delay: 0.34s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.12s; }
+    .reveal-delay-2 { transition-delay: 0.24s; }
+    .reveal-delay-3 { transition-delay: 0.36s; }
 
     /* ─── NAV ─────────────────────────────────────────────────────── */
     nav {
@@ -62,21 +58,24 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem 3rem;
-      background: rgba(239, 242, 241, 0.90);
+      padding: 1.2rem 3rem;
+      background: rgba(239, 242, 241, 0.92);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--mist);
-      transition: background 0.3s;
     }
 
+    /* Styled to match logo typography: TD bold, catalyst light */
     .nav-logo {
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.35rem;
-      color: var(--ocean);
-      letter-spacing: 0.01em;
       text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      color: var(--ocean);
     }
+    .nav-logo .logo-td { font-weight: 700; }
+    .nav-logo .logo-catalyst { font-weight: 300; }
 
     .nav-links {
       display: flex;
@@ -84,7 +83,6 @@
       gap: 2.5rem;
       list-style: none;
     }
-
     .nav-links a {
       font-size: 0.78rem;
       font-weight: 400;
@@ -94,7 +92,6 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--ocean); }
-
     .nav-cta {
       font-size: 0.78rem !important;
       font-weight: 500 !important;
@@ -113,36 +110,44 @@
       flex-direction: column;
       justify-content: flex-end;
       padding: 7rem 3rem 5.5rem;
-      background-color: var(--ocean);
       position: relative;
       overflow: hidden;
+      /* Pacifica foggy coast — Unsplash: Braden Egli */
+      background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80');
+      background-size: cover;
+      background-position: center 40%;
     }
 
-    /* Layered atmospheric gradients — fog bank over deep water */
+    /* Deep ocean overlay so text stays readable */
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 50% at 15% 110%, rgba(94, 159, 162, 0.18) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 90% -10%, rgba(46, 94, 112, 0.35) 0%, transparent 55%),
-        radial-gradient(ellipse 100% 30% at 50% 100%, rgba(28, 56, 64, 0.6) 0%, transparent 70%);
-      pointer-events: none;
+        linear-gradient(to top, rgba(10, 22, 28, 0.97) 0%, rgba(10, 22, 28, 0.78) 45%, rgba(10, 22, 28, 0.45) 100%),
+        radial-gradient(ellipse 80% 50% at 15% 110%, rgba(94, 159, 162, 0.15) 0%, transparent 60%);
     }
 
-    /* Horizon line — the Pacific meets the sky */
+    /* Horizon line */
     .hero::after {
       content: '';
       position: absolute;
-      left: 3rem;
-      right: 3rem;
-      top: 46%;
+      left: 3rem; right: 3rem; top: 46%;
       height: 1px;
-      background: linear-gradient(to right, transparent, rgba(94, 159, 162, 0.25), transparent);
+      background: linear-gradient(to right, transparent, rgba(94, 159, 162, 0.2), transparent);
       pointer-events: none;
     }
 
     .hero-content { position: relative; z-index: 1; }
+
+    /* Logo in hero — mix-blend-mode:screen makes its black bg transparent */
+    .hero-logo {
+      display: block;
+      width: 180px;
+      margin-bottom: 3rem;
+      mix-blend-mode: screen;
+      opacity: 0.92;
+    }
 
     .hero-eyebrow {
       font-size: 0.72rem;
@@ -164,13 +169,21 @@
       margin-bottom: 2rem;
     }
 
-    .hero-divider {
-      width: 3rem;
-      height: 1px;
-      background: var(--seafoam);
+    /* Three-line motif — echoes the logo's converging disciplines */
+    .hero-lines {
+      display: flex;
+      gap: 4px;
       margin-bottom: 2rem;
-      opacity: 0.7;
+      align-items: center;
     }
+    .hero-lines span {
+      display: block;
+      height: 2px;
+      border-radius: 2px;
+    }
+    .hero-lines .line-red  { width: 2.5rem; background: var(--logo-red);  opacity: 0.8; }
+    .hero-lines .line-gold { width: 1.75rem; background: var(--logo-gold); opacity: 0.8; }
+    .hero-lines .line-blue { width: 3.25rem; background: var(--logo-blue); opacity: 0.8; }
 
     .hero-tagline {
       font-family: 'Instrument Serif', serif;
@@ -184,21 +197,14 @@
 
     .hero-intro {
       font-size: 0.92rem;
-      color: rgba(239, 242, 241, 0.45);
+      color: rgba(239, 242, 241, 0.42);
       max-width: 60ch;
       line-height: 1.85;
     }
 
     /* ─── SECTION SHARED ─────────────────────────────────────────── */
-    section {
-      padding: 6rem 3rem;
-    }
-
-    .section-inner {
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-
+    section { padding: 6rem 3rem; }
+    .section-inner { max-width: 1080px; margin: 0 auto; }
     .section-label {
       font-size: 0.68rem;
       font-weight: 500;
@@ -221,14 +227,36 @@
       align-items: start;
     }
 
+    /* Photo of person on cliff in left column */
+    .about-photo-wrap {
+      position: relative;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .about-photo-wrap img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: saturate(0.75) contrast(1.05);
+    }
+    /* Gem accent overlay at bottom of photo */
+    .about-photo-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(28, 56, 64, 0.5) 0%, transparent 50%);
+    }
+
     .about-left h2 {
       font-family: 'Instrument Serif', serif;
       font-size: clamp(1.9rem, 3.2vw, 2.8rem);
       color: var(--ocean);
       line-height: 1.15;
       margin-bottom: 1.5rem;
+      margin-top: 1.5rem;
     }
-
     .about-left p {
       font-size: 0.9rem;
       color: var(--midgray);
@@ -249,7 +277,6 @@
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-
     .meta-tag {
       font-size: 0.7rem;
       font-weight: 500;
@@ -266,6 +293,27 @@
     .strengths {
       background: var(--ocean);
       color: var(--fog);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Gem texture — subtle gemstone image as background */
+    .strengths-bg-gem {
+      position: absolute;
+      top: -5%;
+      right: -8%;
+      width: 42%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      opacity: 0.06;
+      pointer-events: none;
+    }
+    .strengths-bg-gem img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.5) brightness(1.5);
     }
 
     .strengths .section-label { color: rgba(94, 159, 162, 0.8); }
@@ -277,6 +325,7 @@
       max-width: 44ch;
       line-height: 1.22;
       margin-bottom: 4rem;
+      position: relative;
     }
 
     .strengths-grid {
@@ -285,6 +334,7 @@
       gap: 3rem;
       border-top: 1px solid rgba(239, 242, 241, 0.1);
       padding-top: 3rem;
+      position: relative;
     }
 
     .strength-number {
@@ -294,7 +344,6 @@
       line-height: 1;
       margin-bottom: 1rem;
     }
-
     .strength-title {
       font-family: 'Instrument Serif', serif;
       font-size: 1.25rem;
@@ -302,17 +351,27 @@
       margin-bottom: 0.85rem;
       line-height: 1.28;
     }
-
     .strength-body {
       font-size: 0.87rem;
       color: rgba(239, 242, 241, 0.52);
       line-height: 1.85;
     }
-
     .strength-accent {
       color: rgba(239, 242, 241, 0.82);
       font-weight: 400;
     }
+
+    /* Three-discipline color bars above each strength */
+    .strength-bar {
+      display: block;
+      width: 2rem;
+      height: 2px;
+      border-radius: 2px;
+      margin-bottom: 1.25rem;
+    }
+    .strength-bar.red  { background: var(--logo-red);  opacity: 0.7; }
+    .strength-bar.gold { background: var(--logo-gold); opacity: 0.7; }
+    .strength-bar.blue { background: var(--logo-blue); opacity: 0.7; }
 
     /* ─── PROOF ──────────────────────────────────────────────────── */
     .proof {
@@ -320,7 +379,6 @@
       border-top: 1px solid var(--mist);
       padding: 5rem 3rem;
     }
-
     .proof-heading {
       font-size: 0.68rem;
       font-weight: 500;
@@ -329,7 +387,6 @@
       color: var(--midgray);
       margin-bottom: 2.5rem;
     }
-
     .proof-intro {
       font-size: 0.92rem;
       color: var(--midgray);
@@ -337,19 +394,16 @@
       line-height: 1.85;
       margin-bottom: 3.5rem;
     }
-
     .sectors-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 2.75rem 4rem;
       max-width: 960px;
     }
-
     .sector-block {
       padding-top: 1.5rem;
       border-top: 1px solid var(--mist);
     }
-
     .sector-label {
       font-size: 0.68rem;
       font-weight: 500;
@@ -358,7 +412,6 @@
       color: var(--seafoam);
       margin-bottom: 0.9rem;
     }
-
     .sector-clients {
       font-family: 'Instrument Serif', serif;
       font-size: 1.08rem;
@@ -371,7 +424,6 @@
       background: var(--fog);
       border-top: 1px solid var(--mist);
     }
-
     .offers-heading {
       font-family: 'Instrument Serif', serif;
       font-size: clamp(1.7rem, 2.8vw, 2.5rem);
@@ -380,14 +432,11 @@
       line-height: 1.22;
       margin-bottom: 3.5rem;
     }
-
-    /* Featured card spans full width, then two below */
     .offers-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1.25rem;
     }
-
     .offer-card {
       background: white;
       border: 1px solid var(--mist);
@@ -396,7 +445,6 @@
       transition: border-color 0.25s;
     }
     .offer-card:hover { border-color: var(--seafoam); }
-
     .offer-card.featured {
       grid-column: 1 / -1;
       border-color: var(--ocean);
@@ -407,10 +455,6 @@
       align-items: start;
     }
     .offer-card.featured:hover { border-color: var(--ocean-mid); }
-
-    .offer-card-left { }
-    .offer-card-right { }
-
     .offer-tag {
       font-size: 0.67rem;
       font-weight: 500;
@@ -419,7 +463,6 @@
       color: var(--seafoam);
       margin-bottom: 1.25rem;
     }
-
     .offer-title {
       font-family: 'Instrument Serif', serif;
       font-size: 1.5rem;
@@ -427,33 +470,22 @@
       margin-bottom: 0.75rem;
       line-height: 1.22;
     }
-
     .offer-card.featured .offer-title { color: var(--fog); }
-
     .offer-desc {
       font-size: 0.88rem;
       color: var(--midgray);
       line-height: 1.8;
       margin-bottom: 1.5rem;
     }
-
     .offer-card.featured .offer-desc { color: rgba(239, 242, 241, 0.55); }
-
     .offer-price {
       font-size: 0.82rem;
       font-weight: 500;
       color: var(--ocean);
       letter-spacing: 0.03em;
     }
-
     .offer-card.featured .offer-price { color: rgba(239, 242, 241, 0.45); }
-
-    .offer-includes {
-      margin-top: 1.25rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid rgba(239, 242, 241, 0.1);
-    }
-
+    .offer-includes { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(239, 242, 241, 0.1); }
     .offer-includes-label {
       font-size: 0.65rem;
       font-weight: 500;
@@ -462,14 +494,7 @@
       color: rgba(239, 242, 241, 0.35);
       margin-bottom: 0.75rem;
     }
-
-    .offer-includes ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-    }
-
+    .offer-includes ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
     .offer-includes li {
       font-size: 0.83rem;
       color: rgba(239, 242, 241, 0.55);
@@ -477,32 +502,37 @@
       align-items: flex-start;
       gap: 0.65rem;
     }
-
-    .offer-includes li::before {
-      content: '—';
-      color: var(--seafoam);
-      opacity: 0.6;
-      flex-shrink: 0;
-      margin-top: 0.05em;
-    }
+    .offer-includes li::before { content: '—'; color: var(--seafoam); opacity: 0.6; flex-shrink: 0; }
 
     /* ─── CTA ────────────────────────────────────────────────────── */
     .cta-section {
-      background: var(--ocean);
-      padding: 7rem 3rem;
-      text-align: center;
+      padding: 0;
       position: relative;
       overflow: hidden;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Silhouette on cliff — Unsplash: MontyLov */
+      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1800&q=80');
+      background-size: cover;
+      background-position: center 30%;
+      background-attachment: fixed;
     }
-
     .cta-section::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 120%, rgba(94, 159, 162, 0.15) 0%, transparent 65%);
-      pointer-events: none;
+      background: linear-gradient(to bottom,
+        rgba(10, 22, 28, 0.88) 0%,
+        rgba(10, 22, 28, 0.82) 100%);
     }
-
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 7rem 3rem;
+    }
     .cta-section h2 {
       font-family: 'Instrument Serif', serif;
       font-size: clamp(2rem, 3.8vw, 3.4rem);
@@ -510,18 +540,14 @@
       line-height: 1.15;
       max-width: 24ch;
       margin: 0 auto 1.5rem;
-      position: relative;
     }
-
     .cta-section p {
       font-size: 0.95rem;
       color: rgba(239, 242, 241, 0.55);
       max-width: 46ch;
       margin: 0 auto 2.75rem;
       line-height: 1.8;
-      position: relative;
     }
-
     .btn-primary {
       display: inline-block;
       font-size: 0.78rem;
@@ -533,12 +559,9 @@
       padding: 1rem 2.25rem;
       border-radius: 2px;
       text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-      position: relative;
+      transition: background 0.2s;
     }
-    .btn-primary:hover {
-      background: white;
-    }
+    .btn-primary:hover { background: white; }
 
     /* ─── FOOTER ─────────────────────────────────────────────────── */
     footer {
@@ -546,31 +569,45 @@
       padding: 3rem;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       flex-wrap: wrap;
       gap: 1.5rem;
     }
-
-    footer .logo {
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.1rem;
+    .footer-logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
       color: rgba(239, 242, 241, 0.6);
+      letter-spacing: -0.01em;
+      line-height: 1;
     }
+    .footer-logo .logo-td { font-weight: 700; }
+    .footer-logo .logo-catalyst { font-weight: 300; }
 
-    footer .tagline-small {
-      font-size: 0.78rem;
-      color: rgba(239, 242, 241, 0.28);
-      font-style: italic;
-      font-family: 'Instrument Serif', serif;
-      margin-top: 0.35rem;
+    /* Precision · Catalysis · Momentum from logo tagline */
+    .footer-tagline {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(239, 242, 241, 0.22);
+      margin-top: 0.55rem;
     }
+    .footer-tagline span { color: rgba(239, 242, 241, 0.15); margin: 0 0.4em; }
 
     footer .disclaimer {
       font-size: 0.7rem;
       color: rgba(239, 242, 241, 0.22);
-      max-width: 48ch;
+      max-width: 46ch;
       line-height: 1.65;
       text-align: right;
+    }
+    footer .photo-credits {
+      width: 100%;
+      font-size: 0.65rem;
+      color: rgba(239, 242, 241, 0.15);
+      border-top: 1px solid rgba(239, 242, 241, 0.07);
+      padding-top: 1.25rem;
+      margin-top: 0.5rem;
     }
 
     /* ─── RESPONSIVE ─────────────────────────────────────────────── */
@@ -579,7 +616,8 @@
       .nav-links { display: none; }
       section, .proof { padding: 4.5rem 1.5rem; }
       .hero { padding: 6rem 1.5rem 4.5rem; }
-      .cta-section { padding: 5.5rem 1.5rem; }
+      .cta-inner { padding: 5.5rem 1.5rem; }
+      .cta-section { background-attachment: scroll; }
       footer { padding: 2.5rem 1.5rem; flex-direction: column; align-items: flex-start; }
       footer .disclaimer { text-align: left; }
       .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -588,6 +626,8 @@
       .offer-card.featured { grid-template-columns: 1fr; gap: 0; }
       .offers-grid { grid-template-columns: 1fr; }
       .hero::after { display: none; }
+      .hero-logo { width: 140px; }
+      .strengths-bg-gem { display: none; }
     }
 
     @media (max-width: 520px) {
@@ -599,7 +639,9 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#" class="nav-logo">TD Catalyst</a>
+    <a href="#" class="nav-logo">
+      <span class="logo-td">TD</span><span class="logo-catalyst">catalyst</span>
+    </a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#strengths">Approach</a></li>
@@ -609,12 +651,22 @@
     </ul>
   </nav>
 
-  <!-- HERO -->
+  <!-- HERO — Pacifica coastal background + logo -->
   <section class="hero">
     <div class="hero-content">
+      <!-- Logo: mix-blend-mode:screen makes its black background disappear on dark bg -->
+      <img src="images/logo.png" alt="TD Catalyst" class="hero-logo" />
+
       <div class="hero-eyebrow">Advisory practice · Thomas Delaporte</div>
       <h1 class="hero-name">AI workforce transformation, from the three sides that rarely meet.</h1>
-      <div class="hero-divider"></div>
+
+      <!-- Three lines motif — echoes the logo's three converging disciplines -->
+      <div class="hero-lines">
+        <span class="line-red"></span>
+        <span class="line-gold"></span>
+        <span class="line-blue"></span>
+      </div>
+
       <p class="hero-tagline">
         TD Catalyst advises the leaders building, buying, and adopting agentic AI at work — founders moving upmarket, and enterprise and public sector operators turning new technology into real adoption.
       </p>
@@ -624,17 +676,27 @@
     </div>
   </section>
 
-  <!-- ABOUT -->
+  <!-- ABOUT — silhouette photo left, bio right -->
   <section class="about" id="about">
     <div class="section-inner">
       <div class="section-label">The person behind the practice</div>
       <div class="about-grid">
+
         <div class="about-left reveal">
+          <!-- Person on cliff overlooking Pacific — Unsplash: MontyLov -->
+          <div class="about-photo-wrap">
+            <img
+              src="https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=800&q=80"
+              alt="Figure overlooking the Pacific coast"
+              loading="lazy"
+            />
+          </div>
           <h2>A combination most companies do not yet have a title for.</h2>
           <p>
             Most advisors have lived one side of this work. Thomas has lived three: AI product, global consulting, and HR operations. The category is new enough that the role keeps being renamed. The fit is not.
           </p>
         </div>
+
         <div class="about-right reveal reveal-delay-1">
           <p>
             Thomas Delaporte founded TD Catalyst after more than a decade at the intersection of AI product, global consulting, and HR operations. Today, the practice advises the leaders building, buying, and adopting agentic AI at work.
@@ -659,18 +721,29 @@
             <span class="meta-tag">Multicultural Leadership</span>
           </div>
         </div>
+
       </div>
     </div>
   </section>
 
-  <!-- STRENGTHS -->
+  <!-- STRENGTHS — gem texture behind, three-color bars per discipline -->
   <section class="strengths" id="strengths">
+    <!-- Gemstone texture — Unsplash: Jason D -->
+    <div class="strengths-bg-gem">
+      <img
+        src="https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?auto=format&fit=crop&w=800&q=80"
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+      />
+    </div>
     <div class="section-inner">
       <div class="section-label">What TD Catalyst brings</div>
       <p class="strengths-heading reveal">Three capabilities that rarely sit in one advisor at the AI workforce frontier.</p>
       <div class="strengths-grid">
 
         <div class="strength-item reveal reveal-delay-1">
+          <span class="strength-bar red"></span>
           <div class="strength-number">01</div>
           <div class="strength-title">The three disciplines AI workforce transformation actually needs.</div>
           <p class="strength-body">
@@ -679,6 +752,7 @@
         </div>
 
         <div class="strength-item reveal reveal-delay-2">
+          <span class="strength-bar gold"></span>
           <div class="strength-number">02</div>
           <div class="strength-title">A commercial operator, not a framework vendor.</div>
           <p class="strength-body">
@@ -687,6 +761,7 @@
         </div>
 
         <div class="strength-item reveal reveal-delay-3">
+          <span class="strength-bar blue"></span>
           <div class="strength-number">03</div>
           <div class="strength-title">Regulated industries and global reach, by design.</div>
           <p class="strength-body">
@@ -746,7 +821,6 @@
       <p class="offers-heading reveal">Three ways to engage, one built as the right starting point.</p>
       <div class="offers-grid">
 
-        <!-- FEATURED: full-width, two-column layout inside -->
         <div class="offer-card featured reveal">
           <div class="offer-card-left">
             <div class="offer-tag">Recommended first step</div>
@@ -791,28 +865,37 @@
     </div>
   </section>
 
-  <!-- CTA -->
+  <!-- CTA — dramatic silhouette on Pacific cliff as background -->
   <section class="cta-section" id="contact">
-    <h2>The fastest way to find out if this is the right fit.</h2>
-    <p>
-      A 30-minute conversation. No pitch deck, no generic framework. A direct exchange about where you are and what would actually move things forward.
-    </p>
-    <a href="https://cal.com" class="btn-primary">Book 30 minutes</a>
+    <div class="cta-inner">
+      <h2>The fastest way to find out if this is the right fit.</h2>
+      <p>
+        A 30-minute conversation. No pitch deck, no generic framework. A direct exchange about where you are and what would actually move things forward.
+      </p>
+      <a href="https://cal.com/tdcatalyst" class="btn-primary">Book 30 minutes</a>
+    </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <div>
-      <div class="logo">TD Catalyst</div>
-      <div class="tagline-small">Advisory at the intersection of AI product, enterprise scale, and workforce change.</div>
+      <div class="footer-logo">
+        <span class="logo-td">TD</span><span class="logo-catalyst">catalyst</span>
+      </div>
+      <div class="footer-tagline">
+        Precision <span>·</span> Catalysis <span>·</span> Momentum
+      </div>
     </div>
     <div class="disclaimer">
       TD Catalyst is an independent advisory practice operated by Thomas Delaporte in a personal capacity. Not affiliated with Eightfold AI or any prior employer.
     </div>
+    <div class="photo-credits">
+      Photography: Unsplash — coastal imagery, Pacific coast, gemstone detail. All images used under the Unsplash License.
+    </div>
   </footer>
 
   <script>
-    // Scroll-reveal via IntersectionObserver
+    // Scroll-reveal
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -821,7 +904,7 @@
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.1 });
     reveals.forEach(el => observer.observe(el));
   </script>
 
