@@ -60,6 +60,8 @@
       align-items: center;
       padding: 1.2rem 3rem;
       background: rgba(239, 242, 241, 0.92);
+      transform: translateY(0);
+      transition: transform 0.35s ease;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--mist);
@@ -1216,6 +1218,22 @@
 
     // Close on Escape key
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+    // Hide nav on scroll down, reveal on scroll up
+    const nav = document.querySelector('nav');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const current = window.scrollY;
+      if (current <= 0) {
+        nav.style.transform = 'translateY(0)';
+      } else if (current > lastScroll) {
+        nav.style.transform = 'translateY(-100%)';
+        closeMenu();
+      } else {
+        nav.style.transform = 'translateY(0)';
+      }
+      lastScroll = current;
+    }, { passive: true });
   </script>
 
 </body>
