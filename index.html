@@ -580,35 +580,75 @@
     }
     .offer-card:hover { border-color: var(--seafoam); }
 
-    /* Gem thumbnail — top-right corner of each standard card */
+    /* Gem — full-width top banner bleeding to card edges (standard cards) */
     .offer-gem {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 90px;
-      height: 90px;
+      display: block;
+      width: calc(100% + 5rem);
+      margin: -2.5rem -2.5rem 2rem -2.5rem;
+      height: 145px;
       object-fit: cover;
       object-position: center;
-      border-bottom-left-radius: 3px;
-      filter: saturate(0.8) brightness(0.95);
-      opacity: 0.88;
-      transition: opacity 0.3s, transform 0.3s;
+      filter: saturate(0.78) brightness(0.97);
+      opacity: 0.92;
+      transition: opacity 0.35s, transform 0.35s;
+      transform-origin: center;
     }
-    .offer-card:hover .offer-gem { opacity: 1; transform: scale(1.04); }
+    .offer-card:hover .offer-gem { opacity: 1; transform: scale(1.03); }
 
-    /* Gem in featured card — sits above the includes list */
+    /* Gem in featured card right column — contained, no bleed needed */
     .offer-card.featured .offer-gem {
-      position: relative;
-      top: auto; right: auto;
       width: 100%;
       height: 160px;
+      margin: 0 0 1.5rem 0;
       border-radius: 3px;
-      margin-bottom: 1.5rem;
-      border-bottom-left-radius: 3px;
-      filter: saturate(0.65) brightness(0.8);
-      opacity: 0.75;
+      filter: saturate(0.6) brightness(0.75);
+      opacity: 0.72;
     }
-    .offer-card.featured:hover .offer-gem { opacity: 0.9; transform: none; }
+    .offer-card.featured:hover .offer-gem { opacity: 0.88; transform: none; }
+
+    /* ─── CLIENT LOGOS ───────────────────────────────────────────── */
+    .client-logo-section { margin-bottom: 3.5rem; }
+    .client-logo-label {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--seafoam);
+      margin-bottom: 1.75rem;
+    }
+    .client-logo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem 3rem;
+      align-items: center;
+    }
+    .client-logo {
+      height: 26px;
+      width: auto;
+      max-width: 110px;
+      object-fit: contain;
+      filter: grayscale(1) opacity(0.45);
+      transition: filter 0.25s;
+    }
+    .client-logo:hover { filter: grayscale(0) opacity(0.9); }
+
+    /* Government/public sector text badges */
+    .govt-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+    .govt-badge {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--ocean);
+      background: rgba(28, 56, 64, 0.07);
+      border: 1px solid rgba(28, 56, 64, 0.1);
+      border-radius: 2px;
+      padding: 0.3rem 0.75rem;
+      letter-spacing: 0.02em;
+    }
     .offer-card.featured {
       grid-column: 1 / -1;
       border-color: var(--ocean);
@@ -872,9 +912,10 @@
           <!-- Person on cliff overlooking Pacific — Unsplash: MontyLov -->
           <div class="about-photo-wrap">
             <img
-              src="https://images.unsplash.com/photo-1500514966906-fe245eea9344?auto=format&fit=crop&w=800&q=80"
+              src="https://images.unsplash.com/photo-lsXbZtrVSdQ?auto=format&fit=crop&w=800&q=80"
               alt="Sailing on the Pacific"
               loading="lazy"
+              onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80'"
             />
           </div>
           <h2>A combination most companies do not yet have a title for.</h2>
@@ -959,47 +1000,6 @@
     </div>
   </section>
 
-  <!-- PROOF STRIP -->
-  <section class="proof" id="proof">
-    <div class="section-inner">
-      <div class="proof-heading">Select sectors and client experience</div>
-      <p class="proof-intro">
-        Programs delivered across sectors where regulated complexity, scale, and workforce transformation intersect. Work completed during engagements at Eightfold AI and Capgemini Invent.
-      </p>
-      <div class="sectors-grid">
-
-        <div class="sector-block reveal">
-          <div class="sector-label">Public Sector and Workforce</div>
-          <div class="sector-clients">
-            DoD Defense Innovation Unit · New York State Department of Labor · State of Colorado · District of Columbia · Florida Commerce · Puerto Rico DTRH · Houston Independent School District · OneTen
-          </div>
-        </div>
-
-        <div class="sector-block reveal reveal-delay-1">
-          <div class="sector-label">Life Sciences and Healthcare</div>
-          <div class="sector-clients">
-            Sanofi · Bayer · Genentech
-          </div>
-        </div>
-
-        <div class="sector-block reveal reveal-delay-2">
-          <div class="sector-label">Consumer, Retail, and Hospitality</div>
-          <div class="sector-clients">
-            Kroger · Meijer · Carnival Cruise Line
-          </div>
-        </div>
-
-        <div class="sector-block reveal reveal-delay-3">
-          <div class="sector-label">Industrial and Enterprise Services</div>
-          <div class="sector-clients">
-            Micron · W.L. Gore · Aegis
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
   <!-- OFFERS -->
   <section class="offers" id="work">
     <div class="section-inner">
@@ -1010,7 +1010,6 @@
         <div class="offer-card featured reveal">
           <div class="offer-card-left">
             <div class="offer-tag">Recommended first step</div>
-
             <div class="offer-title">The Catalyst Diagnostic</div>
             <p class="offer-desc">
               A three to four week engagement that names the specific gap between your product or initiative and the enterprise reality it needs to work inside. Designed for founders seeking enterprise readiness, and for enterprise and public sector leaders diagnosing stalled adoption.
@@ -1018,10 +1017,10 @@
             <div class="offer-price">18K – 28K USD · fixed fee</div>
           </div>
           <div class="offer-card-right">
-            <!-- Aquamarine gem — clarity & precision -->
+            <!-- Blue aquamarine gem — clarity, diagnosis, seeing through fog -->
             <img
               src="https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?auto=format&fit=crop&w=600&q=80"
-              alt="Gem"
+              alt="Aquamarine gem"
               class="offer-gem"
               loading="lazy"
               onerror="this.style.display='none'"
@@ -1039,10 +1038,10 @@
         </div>
 
         <div class="offer-card reveal reveal-delay-1">
-          <!-- Purple crystal gem — energy & momentum -->
+          <!-- Blue sapphire — momentum, growth, forward motion (founder) -->
           <img
-            src="https://images.unsplash.com/photo-1567593810070-7a3d471af022?auto=format&fit=crop&w=400&q=80"
-            alt="Gem"
+            src="https://images.unsplash.com/photo-agsdDgRW2Ps?auto=format&fit=crop&w=800&q=80"
+            alt="Blue sapphire gem"
             class="offer-gem"
             loading="lazy"
             onerror="this.style.display='none'"
@@ -1056,10 +1055,10 @@
         </div>
 
         <div class="offer-card reveal reveal-delay-2">
-          <!-- Deep green gem — depth & scale -->
+          <!-- Malachite emerald — depth, complexity, organisational scale (enterprise) -->
           <img
-            src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=400&q=80"
-            alt="Gem"
+            src="https://images.unsplash.com/photo-O2X58S1t9QM?auto=format&fit=crop&w=800&q=80"
+            alt="Green malachite gem"
             class="offer-gem"
             loading="lazy"
             onerror="this.style.display='none'"
@@ -1073,6 +1072,62 @@
         </div>
 
       </div>
+    </div>
+  </section>
+
+  <!-- CLIENT EXPERIENCE — moved to last, with logos -->
+  <section class="proof" id="proof">
+    <div class="section-inner">
+      <div class="section-label">Select client experience</div>
+      <p class="proof-intro">
+        Programs delivered across sectors where regulated complexity, scale, and workforce transformation intersect. Work completed during engagements at Eightfold AI and Capgemini Invent.
+      </p>
+
+      <!-- Life Sciences -->
+      <div class="client-logo-section reveal">
+        <div class="client-logo-label">Life Sciences and Healthcare</div>
+        <div class="client-logo-grid">
+          <img src="https://logo.clearbit.com/sanofi.com"   alt="Sanofi"    class="client-logo" onerror="this.style.display='none'">
+          <img src="https://logo.clearbit.com/bayer.com"    alt="Bayer"     class="client-logo" onerror="this.style.display='none'">
+          <img src="https://logo.clearbit.com/gene.com"     alt="Genentech" class="client-logo" onerror="this.style.display='none'">
+        </div>
+      </div>
+
+      <!-- Consumer -->
+      <div class="client-logo-section reveal reveal-delay-1">
+        <div class="client-logo-label">Consumer, Retail, and Hospitality</div>
+        <div class="client-logo-grid">
+          <img src="https://logo.clearbit.com/kroger.com"   alt="Kroger"          class="client-logo" onerror="this.style.display='none'">
+          <img src="https://logo.clearbit.com/meijer.com"   alt="Meijer"          class="client-logo" onerror="this.style.display='none'">
+          <img src="https://logo.clearbit.com/carnival.com" alt="Carnival Cruise"  class="client-logo" onerror="this.style.display='none'">
+        </div>
+      </div>
+
+      <!-- Industrial -->
+      <div class="client-logo-section reveal reveal-delay-2">
+        <div class="client-logo-label">Industrial and Enterprise Services</div>
+        <div class="client-logo-grid">
+          <img src="https://logo.clearbit.com/micron.com"   alt="Micron"   class="client-logo" onerror="this.style.display='none'">
+          <img src="https://logo.clearbit.com/gore.com"     alt="W.L. Gore" class="client-logo" onerror="this.style.display='none'">
+          <img src="https://logo.clearbit.com/aegis-bpo.com" alt="Aegis"   class="client-logo" onerror="this.style.display='none'">
+        </div>
+      </div>
+
+      <!-- Public Sector — text badges (no Clearbit logos for .gov agencies) -->
+      <div class="client-logo-section reveal reveal-delay-3">
+        <div class="client-logo-label">Public Sector and Workforce</div>
+        <div class="govt-badges">
+          <span class="govt-badge">DoD Defense Innovation Unit</span>
+          <span class="govt-badge">NY State Dept. of Labor</span>
+          <span class="govt-badge">State of Colorado</span>
+          <span class="govt-badge">District of Columbia</span>
+          <span class="govt-badge">Florida Commerce</span>
+          <span class="govt-badge">Puerto Rico DTRH</span>
+          <span class="govt-badge">Houston Independent School District</span>
+          <span class="govt-badge">OneTen</span>
+        </div>
+      </div>
+
     </div>
   </section>
 
