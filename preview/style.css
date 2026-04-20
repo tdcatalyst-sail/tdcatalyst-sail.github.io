@@ -1,14 +1,14 @@
 /* TDcatalyst v2 — shared stylesheet
    Palette per brief v2.0 */
 :root {
-  --offwhite: #F7F4EF;
+  --offwhite: #EBEFEC;           /* warm pale blue-grey ground (was warm off-white) */
   --seamist: #D9E2E6;
   --navy: #1F3A5F;
   --navy-soft: #2a4a75;
   --charcoal: #222222;
   --midgray: #6B6B6B;
-  --terracotta: #C86D4F;
-  --terracotta-soft: #d88a70;
+  --terracotta: #4A7C9E;         /* retired terracotta; primary accent is now logo blue */
+  --terracotta-soft: #6a9cbd;
   --hairline: #D9D3CA;
   --logo-red: #C44536;
   --logo-gold: #D4A84B;
@@ -53,7 +53,7 @@ nav {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(247, 244, 239, 0.92);
+  background: rgba(235, 239, 236, 0.92);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--hairline);
   transform: translateY(0);
@@ -421,3 +421,72 @@ hr.rule { border: none; border-top: 1px solid var(--hairline); margin: 2.5rem 0;
 .note-item .note-meta { font-size: 0.82rem; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; }
 .note-item h3 { color: var(--navy); transition: color 0.2s; }
 .note-item p { color: var(--midgray); margin-top: 0.4rem; }
+
+/* ============================================================
+   v2.1 — three-color logo accent system
+   Top bars on cards, lead-phrase bolding, tier left borders,
+   hero three-line motif echoing the logo's converging strokes.
+   ============================================================ */
+
+/* Three-color top bar for strength / method cards */
+.card { position: relative; overflow: hidden; }
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--logo-blue);
+}
+.grid-3 > .card:nth-child(3n+1)::before { background: var(--logo-red); }
+.grid-3 > .card:nth-child(3n+2)::before { background: var(--logo-gold); }
+.grid-3 > .card:nth-child(3n+3)::before { background: var(--logo-blue); }
+
+/* Method teaser on home: 5 cards, rotate red/gold/blue/red/gold */
+.method-cards > .card:nth-child(1)::before { background: var(--logo-red); }
+.method-cards > .card:nth-child(2)::before { background: var(--logo-gold); }
+.method-cards > .card:nth-child(3)::before { background: var(--logo-blue); }
+.method-cards > .card:nth-child(4)::before { background: var(--logo-red); }
+.method-cards > .card:nth-child(5)::before { background: var(--logo-gold); }
+
+/* Numeral colors follow the bar */
+.grid-3 > .card:nth-child(3n+1) .num { color: var(--logo-red); }
+.grid-3 > .card:nth-child(3n+2) .num { color: var(--logo-gold); }
+.grid-3 > .card:nth-child(3n+3) .num { color: var(--logo-blue); }
+.method-cards > .card:nth-child(1) .num { color: var(--logo-red); }
+.method-cards > .card:nth-child(2) .num { color: var(--logo-gold); }
+.method-cards > .card:nth-child(3) .num { color: var(--logo-blue); }
+.method-cards > .card:nth-child(4) .num { color: var(--logo-red); }
+.method-cards > .card:nth-child(5) .num { color: var(--logo-gold); }
+
+/* Bold lead phrases in body copy */
+.lead-phrase {
+  font-weight: 600;
+  color: var(--charcoal);
+}
+
+/* Session tier left borders, rotating through the three logo colors */
+.tier {
+  border-left: 3px solid transparent;
+  padding-left: 1.5rem;
+  transition: border-color 200ms ease;
+}
+.tier:nth-of-type(1) { border-left-color: var(--logo-red); }
+.tier:nth-of-type(2) { border-left-color: var(--logo-gold); }
+.tier:nth-of-type(3) { border-left-color: var(--logo-blue); }
+.tier:nth-of-type(4) { border-left-color: var(--navy); }
+
+/* Hero three-line motif (echoes the logo's converging strokes) */
+.hero-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 1.2rem 0 1.6rem;
+  max-width: 160px;
+}
+.hero-lines span { display: block; height: 3px; border-radius: 2px; }
+.hero-lines .l-red  { background: var(--logo-red);  width: 100%; }
+.hero-lines .l-gold { background: var(--logo-gold); width: 75%; }
+.hero-lines .l-blue { background: var(--logo-blue); width: 50%; }
+
+/* Recommended first step tag = logo red (signals "start here") */
+.recommended-tag { color: var(--logo-red) !important; font-weight: 600; }
