@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Begin — TDcatalyst</title>
+  <meta name="description" content="Begin a conversation with TDcatalyst. Book a 30 minute call, or write." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="preview-banner">Preview build. v2.0 revamp. Not yet published to <a href="https://tdcatalyst.com">tdcatalyst.com</a>.</div>
+
+<nav>
+  <div class="nav-inner" id="nav">
+    <a href="index.html" class="nav-logo">
+      <span class="mark-td">TD</span><span class="mark-cat">catalyst</span>
+    </a>
+    <button class="nav-toggle" onclick="document.getElementById('nav').classList.toggle('open')"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="method.html">Method</a></li>
+      <li><a href="sessions.html">Sessions</a></li>
+      <li><a href="field-notes.html">Field Notes</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="begin.html" class="nav-cta active">Begin</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap narrow">
+    <div class="eyebrow">Begin</div>
+    <h1>Most AI programs stall in the same place.</h1>
+    <p class="hero-sub">Not at the model. Not at the budget. At the seam between AI product, operations, and people, where new technology enters the workforce and the org chart has not caught up. Pilots that will not convert. Teams reorganized three times in eighteen months. A board asking how the work changes, and no one with the three disciplines to answer.</p>
+    <p class="hero-sub" style="margin-top:1rem;">TDcatalyst advises the leaders working that seam. Reach out when it is time to stop running pilots and start running adaptation.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap grid-2">
+
+    <div>
+      <h2>Book a free session</h2>
+      <p>30 minutes on Cal.com. Video or phone. Time zones accommodated.</p>
+      <div class="btn-row" style="margin-top:1.2rem;">
+        <a href="https://cal.com/tdcatalyst" class="btn btn-primary">Book a free session</a>
+      </div>
+    </div>
+
+    <div>
+      <h2>Start a conversation</h2>
+      <p>Prefer to write. Every note reaches Thomas directly.</p>
+      <form class="form-grid" action="https://formsubmit.co/sail@tdcatalyst.com" method="POST">
+        <input type="hidden" name="_subject" value="New note from tdcatalyst.com">
+        <input type="hidden" name="_captcha" value="true">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" value="https://tdcatalyst.com/preview/begin.html?sent=1">
+        <div>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+          <label for="company">Company or practice</label>
+          <input type="text" id="company" name="company">
+        </div>
+        <div>
+          <label for="role">Role</label>
+          <input type="text" id="role" name="role">
+        </div>
+        <div>
+          <label for="interest">Session of interest</label>
+          <select id="interest" name="interest">
+            <option value="">Not sure yet</option>
+            <option value="trail">Trail Diagnostic</option>
+            <option value="field">Catalyst Field Session</option>
+            <option value="immersive">Catalyst Immersive</option>
+            <option value="enterprise">Enterprise Engagement</option>
+          </select>
+        </div>
+        <div>
+          <label for="context">What is the situation</label>
+          <textarea id="context" name="context" placeholder="A few sentences on what is prompting the outreach."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
+        <p style="font-size:0.82rem; color:var(--midgray); margin-top:0.4rem;">Messages route to sail@tdcatalyst.com.</p>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap narrow" style="text-align:center;">
+    <p class="positioning" style="margin:0 auto;">An advisory practice for AI workforce transformation, anchored in 3,000 years of reading the land.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="tagline">TDcatalyst</div>
+      <div style="font-size:0.9rem; color: var(--seamist);">Precision · Catalysis · Momentum</div>
+      <div class="fine">Independent advisory. No affiliation with prior employers.</div>
+    </div>
+    <div>
+      <h4>Practice</h4>
+      <a href="method.html">Method</a>
+      <a href="sessions.html">Sessions</a>
+      <a href="about.html">About</a>
+    </div>
+    <div>
+      <h4>Engage</h4>
+      <a href="begin.html">Begin</a>
+      <a href="https://cal.com/tdcatalyst">Book a call</a>
+      <a href="field-notes.html">Field Notes</a>
+    </div>
+    <div class="land">
+      TDcatalyst operates on the ancestral lands of the Aramai band of the Ramaytush Ohlone people. A Yunakin Land Tax is paid annually in acknowledgment.
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
