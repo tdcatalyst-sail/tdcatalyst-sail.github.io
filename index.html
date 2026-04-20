@@ -1,1372 +1,261 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TD Catalyst — AI Workforce Transformation</title>
-  <meta name="description" content="TD Catalyst advises the leaders building, buying, and adopting agentic AI at work. Advisory practice by Tom Delaporte." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --ocean:       #1c3840;
-      --ocean-mid:   #2e5e70;
-      --fog:         #eff2f1;
-      --seafoam:     #5e9fa2;
-      --seafoam-dk:  #4a8588;
-      --cliff:       #3a4e52;
-      --mist:        #dce2e1;
-      --charcoal:    #252b2c;
-      --midgray:     #6b7274;
-      /* Logo accent colors */
-      --logo-red:    #c0392b;
-      --logo-gold:   #d4a017;
-      --logo-blue:   #2471a3;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background-color: var(--fog);
-      color: var(--charcoal);
-      font-family: 'Inter', sans-serif;
-      font-weight: 300;
-      font-size: 16px;
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ─── SCROLL REVEAL ──────────────────────────────────────────── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: 0.12s; }
-    .reveal-delay-2 { transition-delay: 0.24s; }
-    .reveal-delay-3 { transition-delay: 0.36s; }
-
-    /* ─── NAV ─────────────────────────────────────────────────────── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 3rem;
-      background: rgba(239, 242, 241, 0.92);
-      transform: translateY(0);
-      transition: transform 0.35s ease;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--mist);
-    }
-
-    /* Left side of nav: logo + booking link together */
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    .nav-divider {
-      width: 1px;
-      height: 1rem;
-      background: var(--mist);
-    }
-    .nav-book-left {
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.07em;
-      color: var(--seafoam);
-      text-decoration: none;
-      white-space: nowrap;
-      transition: color 0.2s;
-    }
-    .nav-book-left:hover { color: var(--seafoam-dk); }
-
-    /* Styled to match logo typography: TD bold, catalyst light */
-    .nav-logo {
-      text-decoration: none;
-      font-family: 'Inter', sans-serif;
-      font-size: 1.2rem;
-      letter-spacing: -0.01em;
-      line-height: 1;
-      color: var(--ocean);
-    }
-    .nav-logo .logo-td { font-weight: 700; }
-    .nav-logo .logo-catalyst { font-weight: 300; }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 2.5rem;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 2.5rem;
-      list-style: none;
-    }
-    .nav-links a {
-      font-size: 0.78rem;
-      font-weight: 400;
-      letter-spacing: 0.06em;
-      color: var(--midgray);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--ocean); }
-    .nav-cta {
-      font-size: 0.78rem !important;
-      font-weight: 500 !important;
-      letter-spacing: 0.08em !important;
-      text-transform: uppercase;
-      color: var(--seafoam) !important;
-      border-bottom: 1px solid var(--seafoam);
-      padding-bottom: 1px;
-    }
-    .nav-cta:hover { color: var(--seafoam-dk) !important; border-color: var(--seafoam-dk); }
-
-    /* Booking button in nav */
-    .nav-book {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--fog);
-      background: var(--ocean);
-      padding: 0.55rem 1.25rem;
-      border-radius: 2px;
-      text-decoration: none;
-      transition: background 0.2s;
-      white-space: nowrap;
-    }
-    .nav-book:hover { background: var(--ocean-mid); }
-
-    /* ─── HAMBURGER ───────────────────────────────────────────────── */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
-      width: 32px;
-      height: 32px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 2px;
-      z-index: 200;
-    }
-    .hamburger span {
-      display: block;
-      width: 100%;
-      height: 1.5px;
-      background: var(--ocean);
-      border-radius: 2px;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      transform-origin: center;
-    }
-    /* Animate to X when open */
-    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-
-    /* ─── MOBILE MENU DRAWER ─────────────────────────────────────── */
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      z-index: 150;
-      background: rgba(239, 242, 241, 0.98);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 0;
-      padding: 6rem 2rem 3rem;
-      opacity: 0;
-      transform: translateY(-8px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      pointer-events: none;
-    }
-    .mobile-menu.open {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: all;
-    }
-    .mobile-menu nav-tab {
-      display: block;
-    }
-    .mobile-menu a {
-      display: block;
-      font-size: 1.6rem;
-      font-family: 'Instrument Serif', serif;
-      color: var(--ocean);
-      text-decoration: none;
-      text-align: center;
-      padding: 0.9rem 0;
-      border-bottom: 1px solid var(--mist);
-      width: 100%;
-      max-width: 320px;
-      transition: color 0.2s;
-    }
-    .mobile-menu a:first-child { border-top: 1px solid var(--mist); }
-    .mobile-menu a:hover { color: var(--seafoam); }
-    .mobile-menu .mobile-book {
-      display: block;
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--fog) !important;
-      background: var(--ocean);
-      padding: 1rem 2.5rem;
-      border-radius: 2px;
-      border: none !important;
-      font-family: 'Inter', sans-serif;
-      text-align: center;
-    }
-    .mobile-menu .mobile-book:hover { background: var(--ocean-mid) !important; color: var(--fog) !important; }
-
-    /* ─── HERO ────────────────────────────────────────────────────── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 7rem 3rem 5.5rem;
-      position: relative;
-      overflow: hidden;
-      /* Pacifica foggy coast — Unsplash: Braden Egli */
-      background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80');
-      background-size: cover;
-      background-position: center 40%;
-    }
-
-    /* Deep ocean overlay so text stays readable */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(to top, rgba(10, 22, 28, 0.97) 0%, rgba(10, 22, 28, 0.78) 45%, rgba(10, 22, 28, 0.45) 100%),
-        radial-gradient(ellipse 80% 50% at 15% 110%, rgba(94, 159, 162, 0.15) 0%, transparent 60%);
-    }
-
-    /* Horizon line */
-    .hero::after {
-      content: '';
-      position: absolute;
-      left: 3rem; right: 3rem; top: 46%;
-      height: 1px;
-      background: linear-gradient(to right, transparent, rgba(94, 159, 162, 0.2), transparent);
-      pointer-events: none;
-    }
-
-    .hero-content { position: relative; z-index: 1; }
-
-    /* Logo in hero — mix-blend-mode:screen makes its black bg transparent */
-    .hero-logo {
-      display: block;
-      width: 180px;
-      margin-bottom: 3rem;
-      mix-blend-mode: screen;
-      opacity: 0.92;
-    }
-
-    .hero-eyebrow {
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--seafoam);
-      margin-bottom: 1.5rem;
-      opacity: 0.9;
-    }
-
-    .hero-name {
-      font-family: 'Instrument Serif', serif;
-      font-size: clamp(2.8rem, 5.5vw, 5.2rem);
-      color: var(--fog);
-      line-height: 1.06;
-      letter-spacing: -0.01em;
-      max-width: 15ch;
-      margin-bottom: 2rem;
-    }
-
-    /* Three-line motif — echoes the logo's converging disciplines */
-    .hero-lines {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 2rem;
-      align-items: center;
-    }
-    .hero-lines span {
-      display: block;
-      height: 2px;
-      border-radius: 2px;
-    }
-    .hero-lines .line-red  { width: 2.5rem; background: var(--logo-red);  opacity: 0.8; }
-    .hero-lines .line-gold { width: 1.75rem; background: var(--logo-gold); opacity: 0.8; }
-    .hero-lines .line-blue { width: 3.25rem; background: var(--logo-blue); opacity: 0.8; }
-
-    .hero-tagline {
-      font-family: 'Instrument Serif', serif;
-      font-style: italic;
-      font-size: clamp(1.1rem, 1.9vw, 1.45rem);
-      color: rgba(239, 242, 241, 0.88);
-      max-width: 54ch;
-      line-height: 1.55;
-      margin-bottom: 2.75rem;
-    }
-
-    .hero-intro {
-      font-size: 0.92rem;
-      color: rgba(239, 242, 241, 0.68);
-      max-width: 60ch;
-      line-height: 1.85;
-    }
-
-    /* ─── SECTION SHARED ─────────────────────────────────────────── */
-    section { padding: 6rem 3rem; }
-    .section-inner { max-width: 1080px; margin: 0 auto; }
-    .section-label {
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--seafoam);
-      margin-bottom: 3rem;
-    }
-
-    /* ─── ABOUT ──────────────────────────────────────────────────── */
-    .about {
-      background: var(--fog);
-      border-top: 1px solid var(--mist);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.6fr;
-      gap: 5rem;
-      align-items: start;
-    }
-
-    /* Photo of person on cliff in left column */
-    .about-photo-wrap {
-      position: relative;
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .about-photo-wrap img {
-      width: 100%;
-      aspect-ratio: 3/4;
-      object-fit: cover;
-      object-position: center top;
-      display: block;
-      filter: saturate(0.75) contrast(1.05);
-    }
-    /* Gem accent overlay at bottom of photo */
-    .about-photo-wrap::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(28, 56, 64, 0.5) 0%, transparent 50%);
-    }
-
-    .about-left h2 {
-      font-family: 'Instrument Serif', serif;
-      font-size: clamp(1.9rem, 3.2vw, 2.8rem);
-      color: var(--ocean);
-      line-height: 1.15;
-      margin-bottom: 1.5rem;
-      margin-top: 1.5rem;
-    }
-    .about-left p {
-      font-size: 0.9rem;
-      color: var(--midgray);
-      line-height: 1.85;
-    }
-
-    .about-right p {
-      font-size: 1rem;
-      line-height: 1.9;
-      color: var(--charcoal);
-      margin-bottom: 1.25rem;
-    }
-    .about-right p:last-of-type { margin-bottom: 0; }
-
-    .about-meta {
-      margin-top: 2.5rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    .meta-tag {
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--ocean-mid);
-      background: rgba(28, 56, 64, 0.07);
-      border: 1px solid rgba(28, 56, 64, 0.1);
-      border-radius: 2px;
-      padding: 0.3rem 0.7rem;
-    }
-
-    /* ─── STRENGTHS ──────────────────────────────────────────────── */
-    .strengths {
-      background: var(--ocean);
-      color: var(--fog);
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Gem texture — subtle gemstone image as background */
-    .strengths-bg-gem {
-      position: absolute;
-      top: -5%;
-      right: -8%;
-      width: 42%;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      overflow: hidden;
-      opacity: 0.06;
-      pointer-events: none;
-    }
-    .strengths-bg-gem img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: saturate(0.5) brightness(1.5);
-    }
-
-    .strengths .section-label { color: rgba(94, 159, 162, 0.8); }
-
-    .strengths-heading {
-      font-family: 'Instrument Serif', serif;
-      font-size: clamp(1.7rem, 2.8vw, 2.5rem);
-      color: var(--fog);
-      max-width: 44ch;
-      line-height: 1.22;
-      margin-bottom: 4rem;
-      position: relative;
-    }
-
-    .strengths-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 3rem;
-      border-top: 1px solid rgba(239, 242, 241, 0.1);
-      padding-top: 3rem;
-      position: relative;
-    }
-
-    .strength-number {
-      font-family: 'Instrument Serif', serif;
-      font-size: 2.8rem;
-      color: rgba(239, 242, 241, 0.28);
-      line-height: 1;
-      margin-bottom: 1rem;
-    }
-    .strength-title {
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.25rem;
-      color: var(--fog);
-      margin-bottom: 0.85rem;
-      line-height: 1.28;
-    }
-    .strength-body {
-      font-size: 0.87rem;
-      color: rgba(239, 242, 241, 0.72);
-      line-height: 1.85;
-    }
-    .strength-accent {
-      color: rgba(239, 242, 241, 0.92);
-      font-weight: 400;
-    }
-
-    /* Three-discipline color bars above each strength */
-    .strength-bar {
-      display: block;
-      width: 2rem;
-      height: 2px;
-      border-radius: 2px;
-      margin-bottom: 1.25rem;
-    }
-    .strength-bar.red  { background: var(--logo-red);  opacity: 0.7; }
-    .strength-bar.gold { background: var(--logo-gold); opacity: 0.7; }
-    .strength-bar.blue { background: var(--logo-blue); opacity: 0.7; }
-
-    /* ─── PROOF ──────────────────────────────────────────────────── */
-    .proof {
-      background: var(--fog);
-      border-top: 1px solid var(--mist);
-      padding: 5rem 3rem;
-    }
-    .proof-heading {
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--midgray);
-      margin-bottom: 2.5rem;
-    }
-    .proof-intro {
-      font-size: 0.92rem;
-      color: var(--midgray);
-      max-width: 64ch;
-      line-height: 1.85;
-      margin-bottom: 3.5rem;
-    }
-    .sectors-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2.75rem 4rem;
-      max-width: 960px;
-    }
-    .sector-block {
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--mist);
-    }
-    .sector-label {
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--seafoam);
-      margin-bottom: 0.9rem;
-    }
-    .sector-clients {
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.08rem;
-      color: var(--ocean);
-      line-height: 1.6;
-    }
-
-    /* ─── OFFERS ─────────────────────────────────────────────────── */
-    .offers {
-      background: var(--fog);
-      border-top: 1px solid var(--mist);
-    }
-    .offers-heading {
-      font-family: 'Instrument Serif', serif;
-      font-size: clamp(1.7rem, 2.8vw, 2.5rem);
-      color: var(--ocean);
-      max-width: 40ch;
-      line-height: 1.22;
-      margin-bottom: 3.5rem;
-    }
-    .offers-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.25rem;
-    }
-    .offer-card {
-      background: white;
-      border: 1px solid var(--mist);
-      border-radius: 3px;
-      padding: 2.5rem;
-      transition: border-color 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-    .offer-card:hover { border-color: var(--seafoam); }
-
-    /* Gem — full-width top banner bleeding to card edges (standard cards) */
-    .offer-gem {
-      display: block;
-      width: calc(100% + 5rem);
-      margin: -2.5rem -2.5rem 2rem -2.5rem;
-      height: 145px;
-      object-fit: cover;
-      object-position: center;
-      filter: saturate(0.78) brightness(0.97);
-      opacity: 0.92;
-      transition: opacity 0.35s, transform 0.35s;
-      transform-origin: center;
-    }
-    .offer-card:hover .offer-gem { opacity: 1; transform: scale(1.03); }
-
-    /* Gem in featured card right column — contained, no bleed needed */
-    .offer-card.featured .offer-gem {
-      width: 100%;
-      height: 160px;
-      margin: 0 0 1.5rem 0;
-      border-radius: 3px;
-      filter: saturate(1.1) brightness(1.05);
-      opacity: 1;
-    }
-    .offer-card.featured:hover .offer-gem { opacity: 1; transform: none; }
-
-    /* CSS gem gradients for cards without working photo URLs */
-    .offer-gem-div {
-      display: block;
-      width: calc(100% + 5rem);
-      margin: -2.5rem -2.5rem 2rem -2.5rem;
-      height: 145px;
-      opacity: 0.92;
-      transition: opacity 0.35s, transform 0.35s;
-      transform-origin: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .offer-card:hover .offer-gem-div { opacity: 1; transform: scale(1.03); }
-
-    .offer-gem-sapphire {
-      background:
-        radial-gradient(ellipse at 25% 25%, rgba(147, 197, 253, 0.55) 0%, transparent 50%),
-        radial-gradient(ellipse at 75% 75%, rgba(30, 64, 175, 0.6) 0%, transparent 45%),
-        radial-gradient(ellipse at 60% 15%, rgba(96, 165, 250, 0.35) 0%, transparent 40%),
-        linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 30%, #2563eb 50%, #1e40af 70%, #1a3070 100%);
-    }
-
-    .offer-gem-malachite {
-      background:
-        radial-gradient(ellipse at 30% 30%, rgba(134, 239, 172, 0.45) 0%, transparent 45%),
-        radial-gradient(ellipse at 70% 70%, rgba(21, 128, 61, 0.65) 0%, transparent 45%),
-        radial-gradient(ellipse at 55% 10%, rgba(74, 222, 128, 0.3) 0%, transparent 40%),
-        linear-gradient(135deg, #14532d 0%, #166534 30%, #15803d 50%, #166534 70%, #14532d 100%);
-    }
-
-    /* ─── CLIENT LOGOS ───────────────────────────────────────────── */
-    .client-logo-section { margin-bottom: 3.5rem; }
-    .client-logo-label {
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--seafoam);
-      margin-bottom: 1.75rem;
-    }
-    .client-logo-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem 3rem;
-      align-items: center;
-    }
-    .client-logo {
-      height: 26px;
-      width: auto;
-      max-width: 110px;
-      object-fit: contain;
-      filter: grayscale(1) opacity(0.45);
-      transition: filter 0.25s;
-    }
-    .client-logo:hover { filter: grayscale(0) opacity(0.9); }
-
-    /* Government/public sector text badges */
-    .govt-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.25rem;
-    }
-    .govt-badge {
-      font-size: 0.7rem;
-      font-weight: 400;
-      color: var(--ocean);
-      background: rgba(28, 56, 64, 0.07);
-      border: 1px solid rgba(28, 56, 64, 0.1);
-      border-radius: 2px;
-      padding: 0.3rem 0.75rem;
-      letter-spacing: 0.02em;
-    }
-    .offer-card.featured {
-      grid-column: 1 / -1;
-      border-color: var(--ocean);
-      background: var(--ocean);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2.5rem;
-      align-items: start;
-    }
-    .offer-card.featured:hover { border-color: var(--ocean-mid); }
-    .offer-tag {
-      font-size: 0.67rem;
-      font-weight: 500;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      color: var(--seafoam);
-      margin-bottom: 1.25rem;
-    }
-    .offer-title {
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.5rem;
-      color: var(--ocean);
-      margin-bottom: 0.75rem;
-      line-height: 1.22;
-    }
-    .offer-card.featured .offer-title { color: var(--fog); }
-    .offer-desc {
-      font-size: 0.88rem;
-      color: var(--midgray);
-      line-height: 1.8;
-      margin-bottom: 1.5rem;
-    }
-    .offer-card.featured .offer-desc { color: rgba(239, 242, 241, 0.75); }
-    .offer-price {
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--ocean);
-      letter-spacing: 0.03em;
-    }
-    .offer-card.featured .offer-price { color: rgba(239, 242, 241, 0.70); }
-    .offer-includes { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(239, 242, 241, 0.15); }
-    .offer-includes-label {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(239, 242, 241, 0.60);
-      margin-bottom: 0.75rem;
-    }
-    .offer-includes ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
-    .offer-includes li {
-      font-size: 0.83rem;
-      color: rgba(239, 242, 241, 0.75);
-      display: flex;
-      align-items: flex-start;
-      gap: 0.65rem;
-    }
-    .offer-includes li::before { content: '—'; color: var(--seafoam); opacity: 0.6; flex-shrink: 0; }
-
-    /* ─── CONTACT FORM ──────────────────────────────────────────── */
-    .contact {
-      background: var(--fog);
-      border-top: 1px solid var(--mist);
-    }
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 5rem;
-      align-items: start;
-    }
-    .contact-left h2 {
-      font-family: 'Instrument Serif', serif;
-      font-size: clamp(1.7rem, 2.6vw, 2.4rem);
-      color: var(--ocean);
-      line-height: 1.2;
-      margin-bottom: 1.25rem;
-    }
-    .contact-left p {
-      font-size: 0.9rem;
-      color: var(--midgray);
-      line-height: 1.85;
-    }
-    .contact-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-    .contact-form input,
-    .contact-form select,
-    .contact-form textarea {
-      width: 100%;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 300;
-      color: var(--charcoal);
-      background: white;
-      border: 1px solid var(--mist);
-      border-radius: 2px;
-      padding: 0.85rem 1rem;
-      outline: none;
-      transition: border-color 0.2s;
-      -webkit-appearance: none;
-    }
-    .contact-form input::placeholder,
-    .contact-form textarea::placeholder { color: var(--midgray); opacity: 0.7; }
-    .contact-form input:focus,
-    .contact-form select:focus,
-    .contact-form textarea:focus { border-color: var(--seafoam); }
-    .contact-form select { color: var(--midgray); cursor: pointer; }
-    .contact-form select.filled { color: var(--charcoal); }
-    .contact-form textarea { resize: vertical; min-height: 130px; line-height: 1.7; }
-    .form-submit {
-      display: inline-block;
-      align-self: flex-start;
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--fog);
-      background: var(--ocean);
-      border: none;
-      padding: 0.9rem 2rem;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .form-submit:hover { background: var(--ocean-mid); }
-    .form-success {
-      display: none;
-      font-size: 0.9rem;
-      color: var(--seafoam);
-      padding: 1rem 0;
-    }
-    @media (max-width: 860px) {
-      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .form-row { grid-template-columns: 1fr; }
-    }
-
-    /* ─── CTA ────────────────────────────────────────────────────── */
-    .cta-section {
-      padding: 0;
-      position: relative;
-      overflow: hidden;
-      min-height: 520px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      /* Silhouette on cliff — Unsplash: MontyLov */
-      background-image: url('https://images.pexels.com/photos/23228018/pexels-photo-23228018.jpeg?auto=compress&cs=tinysrgb&w=1800');
-      background-size: cover;
-      background-position: center 30%;
-      background-attachment: fixed;
-    }
-    .cta-section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom,
-        rgba(10, 22, 28, 0.88) 0%,
-        rgba(10, 22, 28, 0.82) 100%);
-    }
-    .cta-inner {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 7rem 3rem;
-    }
-    .cta-section h2 {
-      font-family: 'Instrument Serif', serif;
-      font-size: clamp(2rem, 3.8vw, 3.4rem);
-      color: var(--fog);
-      line-height: 1.15;
-      max-width: 24ch;
-      margin: 0 auto 1.5rem;
-    }
-    .cta-section p {
-      font-size: 0.95rem;
-      color: rgba(239, 242, 241, 0.55);
-      max-width: 46ch;
-      margin: 0 auto 2.75rem;
-      line-height: 1.8;
-    }
-    .btn-primary {
-      display: inline-block;
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--ocean);
-      background: var(--fog);
-      padding: 1rem 2.25rem;
-      border-radius: 2px;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-    .btn-primary:hover { background: white; }
-
-    /* ─── FOOTER ─────────────────────────────────────────────────── */
-    footer {
-      background: var(--cliff);
-      padding: 3rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-    }
-    .footer-logo {
-      font-family: 'Inter', sans-serif;
-      font-size: 1.05rem;
-      color: rgba(239, 242, 241, 0.88);
-      letter-spacing: -0.01em;
-      line-height: 1;
-    }
-    .footer-logo .logo-td { font-weight: 700; }
-    .footer-logo .logo-catalyst { font-weight: 300; }
-
-    /* Precision · Catalysis · Momentum from logo tagline */
-    .footer-tagline {
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(239, 242, 241, 0.6);
-      margin-top: 0.55rem;
-    }
-    .footer-tagline span { color: rgba(239, 242, 241, 0.35); margin: 0 0.4em; }
-
-    footer .disclaimer {
-      font-size: 0.7rem;
-      color: rgba(239, 242, 241, 0.6);
-      max-width: 46ch;
-      line-height: 1.65;
-      text-align: right;
-    }
-    footer .photo-credits {
-      width: 100%;
-      font-size: 0.65rem;
-      color: rgba(239, 242, 241, 0.35);
-      border-top: 1px solid rgba(239, 242, 241, 0.12);
-      padding-top: 1.25rem;
-      margin-top: 0.5rem;
-    }
-
-    /* ─── RESPONSIVE ─────────────────────────────────────────────── */
-    @media (max-width: 860px) {
-      nav { padding: 1.1rem 1.5rem; }
-      .nav-links { display: none; }
-      .nav-book { display: none; }
-      .hamburger { display: flex; }
-      .mobile-menu { display: flex; }
-      section, .proof { padding: 4.5rem 1.5rem; }
-      .hero { padding: 6rem 1.5rem 4.5rem; }
-      .cta-inner { padding: 5.5rem 1.5rem; }
-      .cta-section { background-attachment: scroll; }
-      footer { padding: 2.5rem 1.5rem; flex-direction: column; align-items: flex-start; }
-      footer .disclaimer { text-align: left; }
-      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .strengths-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .sectors-grid { grid-template-columns: 1fr; gap: 2.25rem; }
-      .offer-card.featured { grid-template-columns: 1fr; gap: 0; }
-      .offers-grid { grid-template-columns: 1fr; }
-      .hero::after { display: none; }
-      .hero-logo { width: 140px; }
-      .strengths-bg-gem { display: none; }
-    }
-
-    @media (max-width: 520px) {
-      .hero-name { font-size: 2.5rem; }
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TDcatalyst — AI workforce transformation advisory</title>
+  <meta name="description" content="TDcatalyst advises the leaders building, buying, and adopting agentic AI at work. Advisory practice by Tom Delaporte." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- MOBILE MENU DRAWER -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#about"     onclick="closeMenu()">About</a>
-    <a href="#strengths" onclick="closeMenu()">Approach</a>
-    <a href="#proof"     onclick="closeMenu()">Experience</a>
-    <a href="#work"      onclick="closeMenu()">Work together</a>
-    <a href="https://cal.com/tdcatalyst" class="mobile-book">Book a free session</a>
+<nav>
+  <div class="nav-inner" id="nav">
+    <a href="index.html" class="nav-logo">
+      <span class="mark-td">TD</span><span class="mark-cat">catalyst</span>
+    </a>
+    <button class="nav-toggle" onclick="document.getElementById('nav').classList.toggle('open')"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="method.html">Method</a></li>
+      <li><a href="sessions.html">Sessions</a></li>
+      <li><a href="field-notes.html">Field Notes</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="begin.html" class="nav-cta">Begin</a></li>
+    </ul>
   </div>
+</nav>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-left">
-      <a href="#" class="nav-logo">
-        <span class="logo-td">TD</span><span class="logo-catalyst">catalyst</span>
-      </a>
-    </div>
-    <div class="nav-right">
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#strengths">Approach</a></li>
-        <li><a href="#proof">Experience</a></li>
-        <li><a href="#work">Work together</a></li>
-      </ul>
-      <a href="https://cal.com/tdcatalyst" class="nav-book">Book a free session</a>
-      <button class="hamburger" id="hamburger" aria-label="Open menu" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- HERO — Pacifica coastal background + logo -->
-  <section class="hero">
-    <div class="hero-content">
-      <!-- Logo: mix-blend-mode:screen makes its black background disappear on dark bg -->
-      <img src="images/logo.jpg" alt="TD Catalyst" class="hero-logo" />
-
-      <div class="hero-eyebrow">Advisory practice · Tom Delaporte</div>
-      <h1 class="hero-name">AI workforce transformation, from the three sides that rarely meet.</h1>
-
-      <!-- Three lines motif — echoes the logo's three converging disciplines -->
-      <div class="hero-lines">
-        <span class="line-red"></span>
-        <span class="line-gold"></span>
-        <span class="line-blue"></span>
-      </div>
-
-      <p class="hero-tagline">
-        TD Catalyst advises the leaders building, buying, and adopting AI at work — founders moving upmarket, and enterprise and public sector operators turning new technology into real adoption. The bridge between worlds that rarely speak to each other.
-      </p>
-      <p class="hero-intro">
-        The edge is a rare combination: years inside a category-defining AI product company — scaling a product line past eight-figure ARR, years inside global consulting — leading organizational change for Fortune 100 clients, and the operator fluency of someone who has run the talent function, in an international context.
-      </p>
-    </div>
-  </section>
-
-  <!-- ABOUT — silhouette photo left, bio right -->
-  <section class="about" id="about">
-    <div class="section-inner">
-      <div class="section-label">The person behind the practice</div>
-      <div class="about-grid">
-
-        <div class="about-left reveal">
-          <!-- Person on cliff overlooking Pacific — Unsplash: MontyLov -->
-          <div class="about-photo-wrap">
-            <img
-              src="https://images.unsplash.com/photo-1429743305873-d4065c15f93e?q=80&w=1467&auto=format&fit=crop"
-              alt="Two paths through the forest"
-              loading="lazy"
-            />
-          </div>
-          <h2>A combination most companies do not yet have a title for.</h2>
-          <p>
-            Most advisors have lived one side of this work. Tom has lived three: Deep AI product, global consulting, and international HR operations. The category is new enough that the role keeps being renamed. The imperative is not.
-          </p>
-        </div>
-
-        <div class="about-right reveal reveal-delay-1">
-          <p>
-            Tom Delaporte founded TD Catalyst after more than a decade at the intersection of Deep AI product, global consulting, and international HR operations. Today, the practice advises the leaders building, buying, and adopting AI at work.
-          </p>
-          <p>
-            Before founding TD Catalyst, Tom spent over five years at Eightfold AI, leading Talent Transformation, Talent Intelligence Platform, and Agentic Scale programs. He built the public sector practice from a standing start into an eight-figure ARR business, across Fortune 100 and public sector clients. Earlier, as an Engagement Manager at Capgemini Invent in San Francisco, he led organizational design, change, and M&amp;A integration engagements for global companies — including a 2.5 billion USD pharmaceutical post-merger integration. Before consulting, he ran HR and transformation programs on the operator side, across France, Vietnam, the Philippines, and the United States.
-          </p>
-          <p>
-            The result is a perspective that is genuinely rare: product-led and operator-sharp on the founder side, enterprise-seasoned and people-fluent on the adoption side, with commercial accountability and multicultural fluency throughout. Bilingual French and English, the ability to read people across cultures is not a credential on a slide — it is how the work actually gets done.
-          </p>
-          <p style="font-size:0.87rem; color:var(--midgray);">
-            TD Catalyst is an independent advisory practice operated by Tom in a personal capacity, with no affiliation to prior employers.
-          </p>
-          <div class="about-meta">
-            <span class="meta-tag">Agentic AI</span>
-            <span class="meta-tag">Workforce Transformation</span>
-            <span class="meta-tag">Talent Intelligence</span>
-            <span class="meta-tag">Enterprise Readiness</span>
-            <span class="meta-tag">P&amp;L Ownership</span>
-            <span class="meta-tag">Public Sector</span>
-            <span class="meta-tag">Regulated Industries</span>
-            <span class="meta-tag">Multicultural Leadership</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- STRENGTHS — gem texture behind, three-color bars per discipline -->
-  <section class="strengths" id="strengths">
-    <!-- Gemstone texture — Unsplash: Jason D -->
-    <div class="strengths-bg-gem">
-      <img
-        src="https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?auto=format&fit=crop&w=800&q=80"
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-      />
-    </div>
-    <div class="section-inner">
-      <div class="section-label">What TD Catalyst brings</div>
-      <p class="strengths-heading reveal">Three capabilities that rarely sit in one advisor at the AI workforce frontier.</p>
-      <div class="strengths-grid">
-
-        <div class="strength-item reveal reveal-delay-1">
-          <span class="strength-bar red"></span>
-          <div class="strength-number">01</div>
-          <div class="strength-title">The three disciplines AI workforce transformation actually needs.</div>
-          <p class="strength-body">
-            <span class="strength-accent">AI workforce transformation fails more often at the seams than at the center. Those seams sit between AI product, global consulting, and HR strategy and operations — three disciplines that almost never live in one advisor.</span> Product leaders know the technology but rarely the organizational change it demands. Consultants know the change but rarely the operator reality underneath it. People leaders know the workforce but rarely the product constraints shaping it. Tom has spent years inside each.
-          </p>
-        </div>
-
-        <div class="strength-item reveal reveal-delay-2">
-          <span class="strength-bar gold"></span>
-          <div class="strength-number">02</div>
-          <div class="strength-title">A commercial operator, not a framework vendor.</div>
-          <p class="strength-body">
-            <span class="strength-accent">Built the delivery methodology at Eightfold from scratch. Scaled a new product practice past eight-figure ARR. Carried P&amp;L, and client outcomes across Fortune 100 and public sector programs.</span> The playbooks on offer here have been tested against real revenue and real stakes, not only presented on a slide.
-          </p>
-        </div>
-
-        <div class="strength-item reveal reveal-delay-3">
-          <span class="strength-bar blue"></span>
-          <div class="strength-number">03</div>
-          <div class="strength-title">Regulated industries and global reach, by design.</div>
-          <p class="strength-body">
-            <span class="strength-accent">Delivered for state labor departments, the DoD Defense Innovation Unit, a 2.5 billion USD pharmaceutical post-merger integration, and global Fortune 100 clients.</span> Teams built and led across France, Vietnam, the Philippines, and the United States. Transformation that holds across compliance regimes, cultures, and time zones is structural here — not situational.
-          </p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- OFFERS -->
-  <section class="offers" id="work">
-    <div class="section-inner">
-      <div class="section-label">How to work together</div>
-      <p class="offers-heading reveal">Three ways to engage, one built as the right starting point.</p>
-      <div class="offers-grid">
-
-        <div class="offer-card featured reveal">
-          <div class="offer-card-left">
-            <div class="offer-tag">Recommended first step</div>
-            <div class="offer-title">The Catalyst Diagnostic</div>
-            <p class="offer-desc">
-              A three to four week engagement that names the specific gap between your product or initiative and the enterprise reality it needs to work inside. Designed for founders seeking enterprise readiness, and for enterprise and public sector leaders diagnosing stalled adoption.
-            </p>
-            <div class="offer-price">18K – 28K USD · fixed fee</div>
-          </div>
-          <div class="offer-card-right">
-            <!-- Blue aquamarine gem — clarity, diagnosis, seeing through fog -->
-            <img
-              src="https://images.unsplash.com/photo-1706257038615-2d80b92587b7?q=80&w=1171&auto=format&fit=crop"
-              alt="Prism light refraction"
-              class="offer-gem"
-              loading="lazy"
-              onerror="this.style.display='none'"
-            />
-            <div class="offer-includes">
-              <div class="offer-includes-label">What's included</div>
-              <ul>
-                <li>Structured stakeholder interviews</li>
-                <li>Written findings and gap analysis</li>
-                <li>90-day action plan</li>
-                <li>Executive debrief session</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="offer-card reveal reveal-delay-1">
-          <!-- Blue topaz gem — momentum, growth, forward motion (founder) -->
-          <img
-            src="https://images.unsplash.com/photo-1613843351058-1dd06fda7c02?q=80&w=1374&auto=format&fit=crop"
-            alt="Blue sapphire gemstone"
-            class="offer-gem"
-            loading="lazy"
-          />
-          <div class="offer-tag">For founders</div>
-          <div class="offer-title">Founder Retainer</div>
-          <p class="offer-desc">
-            Monthly advisory for seed to Series B companies in AI, talent intelligence, and agentic workforce technology. Weekly working session, deal and narrative review, stakeholder coaching, and introductions to enterprise champions where relevant.
-          </p>
-          <div class="offer-price">8K – 12K USD / month · 3–6 month minimum</div>
-        </div>
-
-        <div class="offer-card reveal reveal-delay-2">
-          <!-- Green malachite gem — depth, complexity, organisational scale (enterprise) -->
-          <img
-            src="https://images.unsplash.com/photo-1534882974931-c092f1562251?q=80&w=1176&auto=format&fit=crop"
-            alt="Green malachite gemstone"
-            class="offer-gem"
-            loading="lazy"
-          />
-          <div class="offer-tag">For enterprise and public sector</div>
-          <div class="offer-title">Enterprise Retainer</div>
-          <p class="offer-desc">
-            Monthly advisory for CHROs, CTOs, and the emerging generation of AI and people leaders navigating agentic AI adoption. Adoption architecture, stakeholder mapping, resistance diagnosis, and optional leadership workshops.
-          </p>
-          <div class="offer-price">15K – 25K USD / month · 6 month minimum</div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CLIENT EXPERIENCE — moved to last, with logos -->
-  <section class="proof" id="proof">
-    <div class="section-inner">
-      <div class="section-label">Select client experience</div>
-      <p class="proof-intro">
-        Programs delivered across sectors where regulated complexity, scale, and workforce transformation intersect. Work completed during engagements at Eightfold AI and Capgemini Invent.
-      </p>
-
-      <!-- Life Sciences -->
-      <div class="client-logo-section reveal">
-        <div class="client-logo-label">Life Sciences and Healthcare</div>
-        <div class="govt-badges">
-          <span class="govt-badge">Sanofi</span>
-          <span class="govt-badge">Bayer</span>
-          <span class="govt-badge">Genentech</span>
-        </div>
-      </div>
-
-      <!-- Consumer -->
-      <div class="client-logo-section reveal reveal-delay-1">
-        <div class="client-logo-label">Consumer, Retail, and Hospitality</div>
-        <div class="govt-badges">
-          <span class="govt-badge">Kroger</span>
-          <span class="govt-badge">Meijer</span>
-          <span class="govt-badge">Carnival Cruise</span>
-        </div>
-      </div>
-
-      <!-- Industrial -->
-      <div class="client-logo-section reveal reveal-delay-2">
-        <div class="client-logo-label">Industrial and Enterprise Services</div>
-        <div class="govt-badges">
-          <span class="govt-badge">Micron</span>
-          <span class="govt-badge">W.L. Gore</span>
-          <span class="govt-badge">Aegis</span>
-          <span class="govt-badge">Capgemini</span>
-        </div>
-      </div>
-
-      <!-- Public Sector — text badges (no Clearbit logos for .gov agencies) -->
-      <div class="client-logo-section reveal reveal-delay-3">
-        <div class="client-logo-label">Public Sector and Workforce</div>
-        <div class="govt-badges">
-          <span class="govt-badge">DoD Defense Innovation Unit</span>
-          <span class="govt-badge">NY State Dept. of Labor</span>
-          <span class="govt-badge">State of Colorado</span>
-          <span class="govt-badge">District of Columbia</span>
-          <span class="govt-badge">Florida Commerce</span>
-          <span class="govt-badge">Puerto Rico DTRH</span>
-          <span class="govt-badge">Houston Independent School District</span>
-          <span class="govt-badge">OneTen</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CONTACT FORM -->
-  <section class="contact" id="contact">
-    <div class="section-inner">
-      <div class="section-label">Get in touch</div>
-      <div class="contact-grid">
-
-        <div class="contact-left reveal">
-          <h2>Tell me what you're working on.</h2>
-          <p>
-            No pitch deck needed. A short brief of your situation — where you are, what you're trying to figure out, and why now — is enough to know if there's a fit worth exploring.
-          </p>
-        </div>
-
-        <div class="contact-right reveal reveal-delay-1">
-          <form class="contact-form" action="https://formsubmit.co/sail@tdcatalyst.com" method="POST">
-            <input type="hidden" name="_subject" value="New enquiry — TD Catalyst" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_template" value="table" />
-            <div class="form-row">
-              <input type="text" name="name" placeholder="Your name" required />
-              <input type="text" name="company" placeholder="Company and role" />
-            </div>
-            <input type="email" name="email" placeholder="Your email" required />
-            <select name="engagement" id="engagementSelect">
-              <option value="" disabled selected>What kind of engagement are you considering?</option>
-              <option value="Catalyst Diagnostic">The Catalyst Diagnostic</option>
-              <option value="Founder Retainer">Founder Retainer</option>
-              <option value="Enterprise Retainer">Enterprise Retainer</option>
-              <option value="Not sure yet">Not sure yet</option>
-            </select>
-            <textarea name="message" placeholder="Give me a brief — what's on your plate, what you're trying to figure out, and why you think there might be a fit." required></textarea>
-            <button type="submit" class="form-submit">Send message</button>
-            <p class="form-success" id="formSuccess">Message sent — I'll be in touch shortly.</p>
-          </form>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA — dramatic silhouette on Pacific cliff as background -->
-  <section class="cta-section" id="contact-cta">
-    <div class="cta-inner">
-      <h2>The fastest way to find out if this is the right fit.</h2>
-      <p>
-        A 30-minute conversation. No pitch deck, no generic framework. A direct exchange about where you are and what would actually move things forward.
-      </p>
-      <a href="https://cal.com/tdcatalyst" class="btn-primary">Book a free session</a>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
     <div>
-      <div class="footer-logo">
-        <span class="logo-td">TD</span><span class="logo-catalyst">catalyst</span>
+      <img src="images/logo-full.jpg" alt="TDcatalyst — Precision, Catalysis, Momentum" class="hero-logo">
+      <div class="hero-lines" aria-hidden="true">
+        <span class="l-red"></span>
+        <span class="l-gold"></span>
+        <span class="l-blue"></span>
       </div>
-      <div class="footer-tagline">
-        Precision <span>·</span> Catalysis <span>·</span> Momentum
+      <div class="eyebrow">Advisory practice · Tom Delaporte</div>
+      <h1>AI workforce transformation, from the three sides that rarely meet.</h1>
+      <p class="hero-sub">TDcatalyst advises the leaders building, buying, and adopting agentic AI at work. Founders moving upmarket, and enterprise and public sector operators turning new technology into real adoption. The method is anchored in dynamic capabilities theory, organizational ambidexterity, and 3,000 years of reading the land.</p>
+      <div class="btn-row">
+        <a href="sessions.html" class="btn btn-primary">See the sessions</a>
+        <a href="begin.html" class="btn btn-ghost">Begin a conversation</a>
       </div>
     </div>
-    <div class="disclaimer">
-      TD Catalyst is an independent advisory practice operated by Tom Delaporte in a personal capacity. Not affiliated with any prior employer.
+    <div class="hero-image">
+      <img src="https://images.unsplash.com/photo-1429743305873-d4065c15f93e?auto=format&fit=crop&w=1200&q=80" alt="A forest path splitting into two, the choice point in any transformation" onerror="this.style.display='none'">
     </div>
-    <div class="photo-credits">
-      Photography: Unsplash — coastal imagery, Pacific coast, gemstone detail. All images used under the Unsplash License.
+  </div>
+</section>
+
+<!-- THE EDGE -->
+<section>
+  <div class="wrap narrow" style="text-align:center;">
+    <p class="positioning" style="margin:0 auto;">The edge is a rare combination. Years inside a category defining AI product company scaling a product line past eight figure ARR. Years inside global consulting leading organizational change for Fortune 100 clients. And the operator fluency of someone who has run the talent function, in an international context.</p>
+  </div>
+</section>
+
+<!-- STRENGTHS — three disciplines -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What TDcatalyst brings</div>
+      <h2>Three capabilities that rarely sit in one advisor at the AI workforce frontier.</h2>
     </div>
-  </footer>
+    <div class="grid-3">
+      <div class="card">
+        <div class="num">01</div>
+        <h3>The three disciplines AI workforce transformation actually needs.</h3>
+        <p><span class="lead-phrase">AI workforce transformation fails more often at the seams than at the center. Those seams sit between AI product, global consulting, and HR strategy and operations, three disciplines that almost never live in one advisor.</span> Product leaders know the technology but rarely the organizational change it demands. Consultants know the change but rarely the operator reality underneath it. People leaders know the workforce but rarely the product constraints shaping it. Tom has spent years inside each.</p>
+      </div>
+      <div class="card">
+        <div class="num">02</div>
+        <h3>A commercial operator, not a framework vendor.</h3>
+        <p><span class="lead-phrase">Built the delivery methodology at Eightfold from scratch. Scaled a new product practice past eight figure ARR. Carried P and L and client outcomes across Fortune 100 and public sector programs.</span> The playbooks on offer here have been tested against real revenue and real stakes, not only presented on a slide.</p>
+      </div>
+      <div class="card">
+        <div class="num">03</div>
+        <h3>Regulated industries and global reach, by design.</h3>
+        <p><span class="lead-phrase">Delivered for state labor departments, the DoD Defense Innovation Unit, a 2.5 billion USD pharmaceutical post merger integration, and global Fortune 100 clients. Teams built and led across France, Vietnam, the Philippines, and the United States.</span> Transformation that holds across compliance regimes, cultures, and time zones is structural here, not situational.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <script>
-    // Scroll-reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    reveals.forEach(el => observer.observe(el));
+<!-- METHOD TEASER -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The Adaptation Method</div>
+      <h2>Five frameworks that hold under AI change.</h2>
+      <p>Each draws from a named body of research. Each has been tested inside Fortune 100 and public sector programs.</p>
+    </div>
+    <div class="grid-3 method-cards">
+      <div class="card"><div class="num">01</div><h3>Signs Framework</h3><p>Reading the weak signals that precede structural workforce change, before the org chart catches up.</p></div>
+      <div class="card"><div class="num">02</div><h3>Dynamic Capabilities</h3><p>Sensing, seizing, and reconfiguring assets under uncertainty.</p><div class="source">Teece, UC Berkeley, 2007.</div></div>
+      <div class="card"><div class="num">03</div><h3>Organizational Ambidexterity</h3><p>Running exploration and exploitation in the same company without one eating the other.</p><div class="source">O&#x2019;Reilly (Stanford) and Tushman (Harvard).</div></div>
+      <div class="card"><div class="num">04</div><h3>Sensing and Responding Loop</h3><p>Closing the gap between signal detection and organizational response.</p><div class="source">Burnard and Bhamra.</div></div>
+      <div class="card"><div class="num">05</div><h3>The Methuselah Principle</h3><p>What an 1,800 year redwood teaches about adapting in place rather than starting over.</p><div class="source">Named after the Methuselah tree, Muir Woods region.</div></div>
+    </div>
+    <div style="margin-top:2rem;"><a href="method.html">Read the full method &rarr;</a></div>
+  </div>
+</section>
 
-    // Mobile menu
-    const menu     = document.getElementById('mobileMenu');
-    const burger   = document.getElementById('hamburger');
+<!-- SESSIONS TEASER -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">How to work together</div>
+      <h2>Four sessions, one recommended starting point.</h2>
+      <p>Each session begins with a half day or full day on the Pacifica coast. Pricing is directional. Final scope is set after a 30 minute call.</p>
+    </div>
+    <div class="tier">
+      <div>
+        <div class="tier-meta recommended-tag">Recommended first step</div>
+        <div class="tier-name">Trail Diagnostic</div>
+        <div class="tier-meta">Half day · Mori Point</div>
+        <p class="tier-desc"><span class="lead-phrase">A single session to name the specific gap</span> between an AI initiative and the workforce reality it needs to work inside. Fit for enterprise and public sector leaders diagnosing stalled adoption, and for founders seeking enterprise readiness.</p>
+      </div>
+      <div class="tier-price"><span class="amount tabular">4.5K to 6K USD</span><span class="unit">Fixed fee</span><br><a href="begin.html" class="inquire-link">Inquire</a></div>
+    </div>
+    <div class="tier">
+      <div>
+        <div class="tier-name">Catalyst Field Session</div>
+        <div class="tier-meta">Full day · Mori Point and Methuselah</div>
+        <p class="tier-desc">A working day with the leadership team. Outputs a decision memo and a 90 day plan.</p>
+      </div>
+      <div class="tier-price"><span class="amount tabular">12K to 18K USD</span><span class="unit">Fixed fee</span><br><a href="begin.html" class="inquire-link">Inquire</a></div>
+    </div>
+    <div class="tier">
+      <div>
+        <div class="tier-name">Catalyst Immersive</div>
+        <div class="tier-meta">4 to 6 weeks · embedded</div>
+        <p class="tier-desc">A focused engagement that builds the adaptation plan and gets the first moves into motion.</p>
+      </div>
+      <div class="tier-price"><span class="amount tabular">45K to 75K USD</span><span class="unit">Fixed fee</span><br><a href="begin.html" class="inquire-link">Inquire</a></div>
+    </div>
+    <div class="tier">
+      <div>
+        <div class="tier-name">Enterprise Engagement</div>
+        <div class="tier-meta">Custom scope · multi quarter</div>
+        <p class="tier-desc">Bespoke program for enterprise transformations with program level accountability.</p>
+      </div>
+      <div class="tier-price"><span class="amount">Inquire</span><span class="unit">Custom</span><br><a href="begin.html" class="inquire-link">Contact</a></div>
+    </div>
+    <div style="margin-top:2rem;"><a href="sessions.html">Session details &rarr;</a></div>
+  </div>
+</section>
 
-    function toggleMenu() {
-      const isOpen = menu.classList.toggle('open');
-      burger.classList.toggle('open', isOpen);
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-    }
+<!-- ABOUT TEASER -->
+<section>
+  <div class="wrap grid-2">
+    <div>
+      <div class="eyebrow">About</div>
+      <h2>A combination most companies do not yet have a title for.</h2>
+      <p><span class="lead-phrase">Most advisors have lived one side of this work.</span> Tom has lived three: Deep AI product, global consulting, and international HR operations. The category is new enough that the role keeps being renamed. The imperative is not.</p>
+      <p>Before founding TDcatalyst, Tom spent over five years at Eightfold AI leading Talent Transformation, Talent Intelligence Platform, and Agentic Scale programs, and built the public sector practice from a standing start into an eight figure ARR business.</p>
+      <a href="about.html">Full profile &rarr;</a>
+    </div>
+    <div class="headshot-frame">
+      <img src="images/headshot.jpg" alt="Tom Delaporte" onerror="this.style.display='none'">
+    </div>
+  </div>
+</section>
 
-    function closeMenu() {
-      menu.classList.remove('open');
-      burger.classList.remove('open');
-      document.body.style.overflow = '';
-    }
+<!-- CLIENT EXPERIENCE -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Select client experience</div>
+      <h2>Programs delivered across sectors where regulated complexity, scale, and workforce transformation intersect.</h2>
+      <p>Work completed during engagements at Eightfold AI and Capgemini Invent.</p>
+    </div>
 
-    // Close on Escape key
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+    <div style="margin-bottom:2.2rem;">
+      <div class="tier-meta" style="margin-bottom:1rem;">Life Sciences and Healthcare</div>
+      <div class="logo-row">
+        <div class="logo-cell"><img src="https://logo.clearbit.com/sanofi.com" alt="Sanofi" onerror="this.style.display='none'"><span class="logo-name">Sanofi</span></div>
+        <div class="logo-cell"><img src="https://logo.clearbit.com/bayer.com" alt="Bayer" onerror="this.style.display='none'"><span class="logo-name">Bayer</span></div>
+        <div class="logo-cell"><img src="https://logo.clearbit.com/gene.com" alt="Genentech" onerror="this.style.display='none'"><span class="logo-name">Genentech</span></div>
+      </div>
+    </div>
 
-    // Style select when a value is chosen
-    const engagementSelect = document.getElementById('engagementSelect');
-    if (engagementSelect) {
-      engagementSelect.addEventListener('change', () => {
-        engagementSelect.classList.toggle('filled', engagementSelect.value !== '');
-      });
-    }
+    <div style="margin-bottom:2.2rem;">
+      <div class="tier-meta" style="margin-bottom:1rem;">Consumer, Retail, and Hospitality</div>
+      <div class="logo-row">
+        <div class="logo-cell"><img src="https://logo.clearbit.com/kroger.com" alt="Kroger" onerror="this.style.display='none'"><span class="logo-name">Kroger</span></div>
+        <div class="logo-cell"><img src="https://logo.clearbit.com/meijer.com" alt="Meijer" onerror="this.style.display='none'"><span class="logo-name">Meijer</span></div>
+        <div class="logo-cell"><img src="https://logo.clearbit.com/carnival.com" alt="Carnival Cruise" onerror="this.style.display='none'"><span class="logo-name">Carnival Cruise</span></div>
+      </div>
+    </div>
 
-    // Hide nav on scroll down, reveal on scroll up
-    const nav = document.querySelector('nav');
-    let lastScroll = 0;
-    window.addEventListener('scroll', () => {
-      const current = window.scrollY;
-      if (current <= 0) {
-        nav.style.transform = 'translateY(0)';
-      } else if (current > lastScroll) {
-        nav.style.transform = 'translateY(-100%)';
-        closeMenu();
-      } else {
-        nav.style.transform = 'translateY(0)';
-      }
-      lastScroll = current;
-    }, { passive: true });
-  </script>
+    <div style="margin-bottom:2.2rem;">
+      <div class="tier-meta" style="margin-bottom:1rem;">Industrial and Enterprise Services</div>
+      <div class="logo-row">
+        <div class="logo-cell"><img src="https://logo.clearbit.com/micron.com" alt="Micron" onerror="this.style.display='none'"><span class="logo-name">Micron</span></div>
+        <div class="logo-cell"><img src="https://logo.clearbit.com/gore.com" alt="W.L. Gore" onerror="this.style.display='none'"><span class="logo-name">W.L. Gore</span></div>
+        <div class="logo-cell"><img src="https://logo.clearbit.com/aegis-bpo.com" alt="Aegis" onerror="this.style.display='none'"><span class="logo-name">Aegis</span></div>
+        <div class="logo-cell"><img src="https://logo.clearbit.com/capgemini.com" alt="Capgemini" onerror="this.style.display='none'"><span class="logo-name">Capgemini</span></div>
+      </div>
+    </div>
 
+    <div>
+      <div class="tier-meta" style="margin-bottom:0.8rem;">Public Sector and Workforce</div>
+      <div class="meta-tags">
+        <span class="meta-tag">DoD Defense Innovation Unit</span>
+        <span class="meta-tag">NY State Dept. of Labor</span>
+        <span class="meta-tag">State of Colorado</span>
+        <span class="meta-tag">District of Columbia</span>
+        <span class="meta-tag">Florida Commerce</span>
+        <span class="meta-tag">Puerto Rico DTRH</span>
+        <span class="meta-tag">Houston Independent School District</span>
+        <span class="meta-tag">OneTen</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING CTA -->
+<section>
+  <div class="wrap narrow" style="text-align:center;">
+    <h2>The fastest way to find out if this is the right fit.</h2>
+    <p>A 30 minute conversation. No pitch deck, no generic framework. A direct exchange about where you are and what would actually move things forward.</p>
+    <div class="btn-row" style="justify-content:center; margin-top:1.5rem;">
+      <a href="https://cal.com/tdcatalyst" class="btn btn-primary">Book a free session</a>
+      <a href="begin.html" class="btn btn-ghost">Start a conversation</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="tagline">TDcatalyst</div>
+      <div style="font-size:0.9rem; color: var(--seamist);">Precision · Catalysis · Momentum</div>
+      <div class="fine">Independent advisory. No affiliation with prior employers.</div>
+    </div>
+    <div>
+      <h4>Practice</h4>
+      <a href="method.html">Method</a>
+      <a href="sessions.html">Sessions</a>
+      <a href="about.html">About</a>
+    </div>
+    <div>
+      <h4>Engage</h4>
+      <a href="begin.html">Begin</a>
+      <a href="https://cal.com/tdcatalyst">Book a call</a>
+      <a href="field-notes.html">Field Notes</a>
+    </div>
+    <div class="land">
+      TDcatalyst operates on the ancestral lands of the Aramai band of the Ramaytush Ohlone people. A Yunakin Land Tax is paid annually in acknowledgment.
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
