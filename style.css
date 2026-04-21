@@ -410,6 +410,16 @@ hr.rule { border: none; border-top: 1px solid var(--hairline); margin: 2.5rem 0;
   letter-spacing: 0.02em;
 }
 
+/* Signs framework grid — 2 columns, 10 signs, red/gold/blue cycling */
+.signs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+@media (max-width: 820px) { .signs-grid { grid-template-columns: 1fr; } }
+.signs-grid > .card:nth-child(3n+1)::before { background: var(--logo-red); }
+.signs-grid > .card:nth-child(3n+2)::before { background: var(--logo-gold); }
+.signs-grid > .card:nth-child(3n+3)::before { background: var(--logo-blue); }
+.signs-grid > .card:nth-child(3n+1) .num { color: var(--logo-red); }
+.signs-grid > .card:nth-child(3n+2) .num { color: var(--logo-gold); }
+.signs-grid > .card:nth-child(3n+3) .num { color: var(--logo-blue); }
+
 /* Field notes list */
 .note-item {
   display: block;
