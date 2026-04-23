@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tom Delaporte · TDcatalyst</title>
+  <title>Contact Card — Tom Delaporte · TDcatalyst</title>
   <meta name="description" content="Experiential strategic framing based on millenary practices of adaptability for executives leading the AI transformation." />
-  <meta property="og:title" content="Tom Delaporte · TDcatalyst" />
+  <meta property="og:title" content="Contact Card — Tom Delaporte · TDcatalyst" />
   <meta property="og:description" content="Experiential strategic framing based on millenary practices of adaptability for executives leading the AI transformation." />
   <meta property="og:url" content="https://tdcatalyst.com/calling-card.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,15 +13,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --offwhite:        #EBEFEC;
-      --seamist:         #D9E2E6;
-      --navy:            #1F3A5F;
-      --charcoal:        #222222;
-      --midgray:         #6B6B6B;
-      --hairline:        #D9D3CA;
-      --logo-red:        #C44536;
-      --logo-gold:       #D4A84B;
-      --logo-blue:       #4A7C9E;
+      --offwhite:  #EBEFEC;
+      --seamist:   #D9E2E6;
+      --navy:      #1F3A5F;
+      --charcoal:  #222222;
+      --midgray:   #6B6B6B;
+      --hairline:  #D9D3CA;
+      --logo-red:  #C44536;
+      --logo-gold: #D4A84B;
+      --logo-blue: #4A7C9E;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -81,7 +81,6 @@
       );
     }
 
-    /* Land acknowledgment watermark on the landscape */
     .card-land-note {
       position: absolute;
       bottom: 1.1rem;
@@ -111,17 +110,8 @@
       align-items: start;
     }
 
-    /* ── Left: identity ── */
-    .card-main {}
-
-    .card-logo-wrap {
-      margin-bottom: 1.4rem;
-    }
-    .card-logo {
-      height: 48px;
-      width: auto;
-      display: block;
-    }
+    .card-logo-wrap { margin-bottom: 1.4rem; }
+    .card-logo { height: 48px; width: auto; display: block; }
 
     .card-name {
       font-family: 'Fraunces', Georgia, serif;
@@ -141,7 +131,6 @@
       margin-bottom: 1.4rem;
     }
 
-    /* Decorative three-line motif echoing the logo strokes */
     .card-lines {
       display: flex;
       flex-direction: column;
@@ -165,13 +154,9 @@
     }
 
     /* ── Right: contact ── */
-    .card-contact {
-      padding-top: 0.3rem;
-    }
+    .card-contact { padding-top: 0.3rem; }
 
-    .contact-item {
-      margin-bottom: 1.4rem;
-    }
+    .contact-item { margin-bottom: 1.4rem; }
 
     .contact-label {
       font-size: 0.68rem;
@@ -188,27 +173,18 @@
       line-height: 1.4;
     }
 
-    .contact-value a {
-      color: var(--navy);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
+    .contact-value a { color: var(--navy); text-decoration: none; transition: color 0.2s; }
     .contact-value a:hover { color: var(--logo-blue); }
 
-    /* LinkedIn icon */
     .li-icon {
-      width: 13px;
-      height: 13px;
+      width: 13px; height: 13px;
       vertical-align: middle;
-      margin-right: 5px;
-      margin-top: -2px;
+      margin-right: 5px; margin-top: -2px;
       flex-shrink: 0;
     }
 
-    /* QR placeholder — print-friendly */
     .qr-placeholder {
-      width: 80px;
-      height: 80px;
+      width: 80px; height: 80px;
       border: 1px solid var(--hairline);
       border-radius: 2px;
       display: flex;
@@ -217,11 +193,7 @@
       margin-top: 1.6rem;
       background: var(--offwhite);
     }
-    .qr-placeholder svg {
-      width: 44px;
-      height: 44px;
-      opacity: 0.35;
-    }
+    .qr-placeholder svg { width: 44px; height: 44px; opacity: 0.35; }
     .qr-label {
       font-size: 0.68rem;
       text-transform: uppercase;
@@ -252,7 +224,6 @@
       font-size: 0.8rem;
       color: rgba(217, 226, 230, 0.75);
       letter-spacing: 0.06em;
-      font-weight: 400;
     }
 
     /* ── Below-card utility row ── */
@@ -274,11 +245,7 @@
       transition: color 0.2s, border-color 0.2s;
     }
     .card-actions a:hover { color: var(--navy); border-bottom-color: var(--navy); }
-
-    .card-actions .sep {
-      color: var(--hairline);
-      font-size: 0.75rem;
-    }
+    .card-actions .sep { color: var(--hairline); font-size: 0.75rem; }
 
     /* ── Responsive ── */
     @media (max-width: 620px) {
@@ -293,10 +260,115 @@
       .qr-placeholder { display: none; }
     }
 
-    /* ── Print ── */
+    /* ── Print: standard business card 3.5" × 2" ── */
     @media print {
-      body { background: #fff; padding: 0; }
-      .calling-card { box-shadow: none; }
+      @page { size: 3.5in 2in; margin: 0; }
+
+      html, body {
+        background: #fff;
+        padding: 0;
+        margin: 0;
+        min-height: 0;
+        display: block;
+        width: 3.5in;
+        height: 2in;
+        overflow: hidden;
+      }
+
+      .card-wrap {
+        width: 3.5in;
+        max-width: 3.5in;
+        height: 2in;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .calling-card {
+        box-shadow: none;
+        border-radius: 0;
+        width: 3.5in;
+        height: 2in;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      /* Landscape photo: hidden on print card */
+      .card-landscape { display: none; }
+
+      /* Color bar stays — thinner */
+      .color-bar { height: 3px; flex-shrink: 0; }
+
+      /* Card body: compact two-column */
+      .card-body {
+        flex: 1;
+        padding: 0.16in 0.18in 0.1in;
+        grid-template-columns: 1.25fr 1fr;
+        gap: 0 0.18in;
+        align-items: start;
+        overflow: hidden;
+      }
+
+      .card-logo { height: 24px; }
+      .card-logo-wrap { margin-bottom: 0.07in; }
+
+      .card-name {
+        font-size: 13pt;
+        margin-bottom: 0.02in;
+        letter-spacing: -0.01em;
+      }
+
+      .card-role {
+        font-size: 5.5pt;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.07in;
+      }
+
+      .card-lines {
+        gap: 3px;
+        margin-bottom: 0.07in;
+        max-width: 64px;
+      }
+      .card-lines span { height: 1.5px; }
+
+      .card-tagline {
+        font-size: 6.5pt;
+        line-height: 1.45;
+        max-width: 100%;
+      }
+
+      /* Contact column */
+      .card-contact { padding-top: 0; }
+
+      .contact-item { margin-bottom: 0.07in; }
+
+      .contact-label {
+        font-size: 5pt;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.02in;
+      }
+
+      .contact-value { font-size: 6.5pt; }
+      .li-icon { width: 8px; height: 8px; margin-right: 3px; }
+
+      .qr-placeholder {
+        width: 50px;
+        height: 50px;
+        margin-top: 0.07in;
+      }
+      .qr-placeholder svg { width: 28px; height: 28px; }
+      .qr-label { font-size: 5pt; margin-top: 0.03in; }
+
+      /* Navy footer strip */
+      .card-footer-strip {
+        padding: 0.06in 0.18in;
+        flex-shrink: 0;
+      }
+      .card-footer-strip .brand { font-size: 6.5pt; letter-spacing: 0.01em; }
+      .card-footer-strip .footer-url { font-size: 6pt; }
+
+      /* Hide utility links */
       .card-actions { display: none; }
     }
   </style>
@@ -311,7 +383,7 @@
       <img
         src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1600&q=82"
         alt="Pacific coastline — Pacifica, ancestral lands of the Aramai band of the Ramaytush Ohlone"
-        onerror="this.style.background='var(--navy)'; this.style.display='none';"
+        onerror="this.style.display='none';"
       >
       <div class="card-landscape-overlay"></div>
       <div class="card-land-note">Pacifica · Aramai band of the Ramaytush Ohlone · ancestral territory</div>
@@ -332,17 +404,13 @@
         <div class="card-logo-wrap">
           <img src="images/logo-full.jpg" alt="TDcatalyst" class="card-logo">
         </div>
-
         <div class="card-name">Tom Delaporte</div>
         <div class="card-role">Founder · TDcatalyst</div>
-
-        <!-- Converging-strokes motif -->
         <div class="card-lines" aria-hidden="true">
           <span class="l-red"></span>
           <span class="l-gold"></span>
           <span class="l-blue"></span>
         </div>
-
         <p class="card-tagline">Experiential strategic framing based on millenary practices of adaptability for executives leading the AI transformation</p>
       </div>
 
@@ -375,7 +443,7 @@
           </div>
         </div>
 
-        <!-- QR placeholder (swap for a real QR at print time) -->
+        <!-- QR placeholder — replace with real QR before printing -->
         <div class="qr-placeholder" title="Scan to visit tdcatalyst.com">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <rect x="3" y="3" width="7" height="7" rx="0.5"/>
@@ -406,7 +474,7 @@
     <span class="sep">·</span>
     <a href="begin.html">Begin a conversation</a>
     <span class="sep">·</span>
-    <a href="javascript:window.print()">Print card</a>
+    <a href="javascript:window.print()">Save contact card</a>
   </div>
 </div>
 
