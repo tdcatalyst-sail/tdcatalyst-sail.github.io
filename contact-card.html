@@ -92,8 +92,8 @@
       align-items: start;
     }
 
-    .card-logo-wrap { margin-bottom: 1.4rem; }
-    .card-logo { height: 80px; width: auto; display: block; }
+    .card-logo-wrap { margin-bottom: 1rem; }
+    .card-logo { height: 120px; width: auto; display: block; }
 
     .card-name {
       font-family: 'Fraunces', Georgia, serif;
@@ -133,9 +133,9 @@
       width: 80px; height: 80px; border: 1px solid var(--hairline); border-radius: 2px;
       display: flex; align-items: center; justify-content: center;
       margin-top: 1.6rem; background: var(--offwhite);
+      text-decoration: none; cursor: pointer;
     }
     .qr-placeholder svg { width: 44px; height: 44px; opacity: 0.35; }
-    .qr-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--midgray); margin-top: 0.4rem; }
 
     /* ── Navy footer strip ── */
     .card-footer-strip {
@@ -172,6 +172,7 @@
 
     /* ── Print: standard business card 3.5" × 2" ── */
     @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
       @page { size: 3.5in 2in; margin: 0; }
 
       html, body {
@@ -191,8 +192,8 @@
         align-items: start; overflow: hidden;
       }
 
-      .card-logo { height: 40px; }
-      .card-logo-wrap { margin-bottom: 0.07in; }
+      .card-logo { height: 56px; }
+      .card-logo-wrap { margin-bottom: 0.05in; }
       .card-name { font-size: 13pt; margin-bottom: 0.02in; letter-spacing: -0.01em; }
       .card-role { font-size: 5.5pt; letter-spacing: 0.1em; margin-bottom: 0.07in; }
       .card-lines { gap: 3px; margin-bottom: 0.07in; max-width: 64px; }
@@ -270,13 +271,8 @@
           </div>
         </div>
 
-        <div class="contact-item">
-          <div class="contact-label">Begin</div>
-          <div class="contact-value"><a href="https://tdcatalyst.com/begin.html">TDcatalyst.com/begin</a></div>
-        </div>
-
         <!-- QR placeholder — replace with real QR before printing -->
-        <div class="qr-placeholder" title="Scan to visit TDcatalyst.com">
+        <a href="https://www.linkedin.com/company/tdcatalyst/" target="_blank" rel="noopener" class="qr-placeholder" title="Scan to visit TDcatalyst on LinkedIn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <rect x="3" y="3" width="7" height="7" rx="0.5"/><rect x="14" y="3" width="7" height="7" rx="0.5"/>
             <rect x="3" y="14" width="7" height="7" rx="0.5"/>
@@ -285,8 +281,7 @@
             <rect x="5" y="16" width="3" height="3" fill="currentColor" stroke="none"/>
             <path d="M14 14h2v2h-2zM16 16h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z" fill="currentColor" stroke="none"/>
           </svg>
-        </div>
-        <div class="qr-label">TDcatalyst.com</div>
+        </a>
 
       </div>
     </div>
