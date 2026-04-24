@@ -129,13 +129,8 @@
     .contact-value a:hover { color: var(--logo-blue); }
     .li-icon { width: 13px; height: 13px; vertical-align: middle; margin-right: 5px; margin-top: -2px; flex-shrink: 0; }
 
-    .qr-placeholder {
-      width: 80px; height: 80px; border: 1px solid var(--hairline); border-radius: 2px;
-      display: flex; align-items: center; justify-content: center;
-      margin-top: 1.6rem; background: var(--offwhite);
-      text-decoration: none; cursor: pointer;
-    }
-    .qr-placeholder svg { width: 44px; height: 44px; opacity: 0.35; }
+    .qr-wrap { display: block; margin-top: 1.6rem; text-decoration: none; width: 80px; }
+    .qr-img { width: 80px; height: 80px; display: block; border-radius: 2px; }
 
     /* ── Navy footer strip ── */
     .card-footer-strip {
@@ -206,9 +201,8 @@
       .contact-value { font-size: 6.5pt; }
       .li-icon { width: 8px; height: 8px; margin-right: 3px; }
 
-      .qr-placeholder { width: 50px; height: 50px; margin-top: 0.07in; }
-      .qr-placeholder svg { width: 28px; height: 28px; }
-      .qr-label { font-size: 5pt; margin-top: 0.03in; }
+      .qr-wrap { width: 50px; margin-top: 0.07in; }
+      .qr-img { width: 50px; height: 50px; }
 
       .card-footer-strip { padding: 0.06in 0.18in; flex-shrink: 0; }
       .card-footer-strip .brand { font-size: 6.5pt; letter-spacing: 0.01em; }
@@ -271,16 +265,8 @@
           </div>
         </div>
 
-        <!-- QR placeholder — replace with real QR before printing -->
-        <a href="https://www.linkedin.com/company/tdcatalyst/" target="_blank" rel="noopener" class="qr-placeholder" title="Scan to visit TDcatalyst on LinkedIn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <rect x="3" y="3" width="7" height="7" rx="0.5"/><rect x="14" y="3" width="7" height="7" rx="0.5"/>
-            <rect x="3" y="14" width="7" height="7" rx="0.5"/>
-            <rect x="5" y="5" width="3" height="3" fill="currentColor" stroke="none"/>
-            <rect x="16" y="5" width="3" height="3" fill="currentColor" stroke="none"/>
-            <rect x="5" y="16" width="3" height="3" fill="currentColor" stroke="none"/>
-            <path d="M14 14h2v2h-2zM16 16h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z" fill="currentColor" stroke="none"/>
-          </svg>
+        <a href="https://www.linkedin.com/company/tdcatalyst/" target="_blank" rel="noopener" class="qr-wrap" title="Scan to visit TDcatalyst on LinkedIn">
+          <img src="images/qr-linkedin.png" alt="QR code — TDcatalyst LinkedIn" class="qr-img">
         </a>
 
       </div>
