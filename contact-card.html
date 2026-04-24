@@ -179,7 +179,12 @@
       .calling-card { box-shadow: none; border-radius: 0; width: 3.5in; height: 2in; display: flex; flex-direction: column; overflow: hidden; }
 
       .card-landscape { display: none; }
-      .color-bar { height: 3px; flex-shrink: 0; }
+      .card-footer-strip { display: none; }
+
+      .color-bar { height: 4px; flex-shrink: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .b-red  { background-color: #C44536 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .b-gold { background-color: #D4A84B !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .b-blue { background-color: #4A7C9E !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 
       .card-body {
         flex: 1; padding: 0.16in 0.18in 0.1in;
@@ -203,10 +208,6 @@
 
       .qr-wrap { width: 50px; margin-top: 0.07in; }
       .qr-img { width: 50px; height: 50px; }
-
-      .card-footer-strip { padding: 0.06in 0.18in; flex-shrink: 0; }
-      .card-footer-strip .brand { font-size: 6.5pt; letter-spacing: 0.01em; }
-      .card-footer-strip .footer-url { font-size: 6pt; }
 
       .card-actions { display: none; }
     }
