@@ -6,19 +6,27 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>About — TDcatalyst</title>
   <meta name="description" content="Tom Delaporte founded TDcatalyst after more than a decade at the intersection of Deep AI product, global consulting, and international HR operations." />
+  <link rel="canonical" href="https://tdcatalyst.com/about.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tdcatalyst.com/about.html" />
+  <meta property="og:title" content="About Tom Delaporte — TDcatalyst" />
+  <meta property="og:description" content="Tom Delaporte founded TDcatalyst after more than a decade at the intersection of Deep AI product, global consulting, and international HR operations." />
+  <meta property="og:image" content="https://tdcatalyst.com/images/logo-full.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-full.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+<a href="#main-content" class="skip-link">Skip to content</a>
 <nav>
   <div class="nav-inner" id="nav">
     <a href="index.html" class="nav-logo">
       <span class="mark-td">TD</span><span class="mark-cat">catalyst</span>
     </a>
-    <button class="nav-toggle" onclick="document.getElementById('nav').classList.toggle('open')"><span></span><span></span><span></span></button>
+    <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false" onclick="var o=document.getElementById('nav').classList.toggle('open');this.setAttribute('aria-expanded',o)"><span></span><span></span><span></span></button>
     <ul class="nav-links">
       <li><a href="method.html">Method</a></li>
       <li><a href="adaptation-framework.html">Framework</a></li>
@@ -30,12 +38,12 @@
   </div>
 </nav>
 
-<section class="hero">
+<section class="hero" id="main-content">
   <div class="wrap hero-grid">
     <div>
       <div class="eyebrow">About</div>
-      <h1>A combination most companies do not yet have a title for.</h1>
-      <p class="hero-sub">Most advisors have lived one side of AI workforce transformation. Tom has lived three: Deep AI product, global consulting, and international HR operations. The category is new enough that the role keeps being renamed. The imperative is not.</p>
+      <h1>Built at the frontier of AI product, global consulting, and workforce operations — before the job title existed.</h1>
+      <p class="hero-sub">Most advisors have worked one side of this problem. Tom has worked three — Deep AI product, global consulting, and international HR operations. The category is new enough that the role keeps being renamed. The imperative is not.</p>
     </div>
     <div class="headshot-frame headshot-hero">
       <img src="images/headshot.jpg" alt="Tom Delaporte" onerror="this.style.display='none'">

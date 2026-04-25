@@ -11,9 +11,23 @@
   --terracotta-soft: #6a9cbd;
   --hairline: #D9D3CA;
   --logo-red: #C44536;
-  --logo-gold: #D4A84B;
+  --logo-gold: #7D5618;
   --logo-blue: #4A7C9E;
 }
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--navy);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 1100;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: top 0.1s;
+}
+.skip-link:focus { top: 0; }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
