@@ -865,3 +865,55 @@ hr.sign-rule {
 
 /* What could surface — sign cards */
 .sign-surface { font-style: italic; font-size: 0.88rem; color: var(--midgray); margin-top: 0.6rem; margin-bottom: 0; border-top: 1px solid var(--hairline); padding-top: 0.6rem; }
+
+/* ============================================================
+   Mobile optimization
+   ============================================================ */
+
+/* Sensing and Responding 4-step loop (method.html) */
+.method-loop {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 1.5rem;
+  border: 1px solid var(--hairline);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.method-loop > div {
+  padding: 1.2rem;
+  border-right: 1px solid var(--hairline);
+}
+.method-loop > div:last-child { border-right: none; }
+@media (max-width: 820px) {
+  .method-loop { grid-template-columns: repeat(2, 1fr); }
+  .method-loop > div { border-right: 1px solid var(--hairline); }
+  .method-loop > div:nth-child(2n) { border-right: none; }
+  .method-loop > div:nth-child(-n+2) { border-bottom: 1px solid var(--hairline); }
+}
+@media (max-width: 480px) {
+  .method-loop { grid-template-columns: 1fr; }
+  .method-loop > div { border-right: none; border-bottom: 1px solid var(--hairline); }
+  .method-loop > div:last-child { border-bottom: none; }
+}
+
+/* Tighter horizontal padding on narrow phones */
+@media (max-width: 480px) {
+  .wrap { padding: 0 1.25rem; }
+  .nav-inner { padding: 0.9rem 1.25rem; }
+  .hero-card { margin: 0 0.75rem 1.5rem; padding: 1.4rem 1.25rem 1.6rem; max-width: calc(100% - 1.5rem); }
+  .diagnostic-excerpt,
+  .land-ack { padding: 1.4rem 1.25rem; }
+  .scard,
+  .outcome-item,
+  .logistics-item,
+  .fn-featured-body { padding: 1.4rem 1.25rem; }
+  .mini-card-inner { padding: 1.2rem 1.25rem; }
+}
+
+/* Make any image inside content responsive by default */
+img { max-width: 100%; height: auto; }
+.hero-image img,
+.hero-bg img,
+.headshot-frame img,
+.fn-featured-img img { height: 100%; }
