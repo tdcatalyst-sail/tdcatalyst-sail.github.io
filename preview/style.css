@@ -594,8 +594,8 @@ hr.sign-rule {
   position: relative;
   z-index: 2;
   background: var(--offwhite);
-  padding: 2.8rem 3rem 3rem;
-  max-width: 660px;
+  padding: 2.2rem 2.4rem 2.4rem;
+  max-width: 620px;
   margin: 0 0 3.5rem 1.75rem;
 }
 @media (max-width: 900px) {
@@ -618,20 +618,7 @@ hr.sign-rule {
   border: 1px solid var(--hairline);
   padding: 2rem;
   border-radius: 2px;
-  position: relative;
-  overflow: hidden;
 }
-.outcome-item::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--logo-blue);
-}
-.outcomes-grid .outcome-item:nth-child(1)::before { background: var(--logo-red); }
-.outcomes-grid .outcome-item:nth-child(2)::before { background: var(--logo-gold); }
-.outcomes-grid .outcome-item:nth-child(3)::before { background: var(--logo-blue); }
-.outcomes-grid .outcome-item:nth-child(4)::before { background: var(--logo-red); }
 
 .outcome-num {
   font-family: 'Fraunces', serif;
@@ -686,18 +673,7 @@ hr.sign-rule {
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  position: relative;
-  overflow: hidden;
 }
-.scard::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-}
-.scard:nth-child(1)::before { background: var(--logo-red); }
-.scard:nth-child(2)::before { background: var(--logo-gold); }
-.scard:nth-child(3)::before { background: var(--logo-blue); }
 .scard.recommended { background: var(--seamist); }
 .scard-tag { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--logo-red); font-weight: 600; margin-bottom: 0.5rem; }
 .scard-name { font-family: 'Fraunces', serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 0.3rem; }
@@ -752,8 +728,8 @@ hr.sign-rule {
 .fn-read:hover { color: var(--terracotta); border: none; }
 .fn-footer-link { margin-top: 1.2rem; font-size: 0.88rem; }
 
-/* Footer CTA panel */
-.cta-panel { background: var(--seamist); padding: 5rem 0; text-align: center; }
+/* Footer CTA panel — uses standard alt section spacing, just centered */
+.cta-panel { background: var(--seamist); text-align: center; }
 .cta-panel p.cta-sentence {
   font-family: 'Fraunces', serif;
   font-size: clamp(1.2rem, 2.6vw, 1.75rem);
@@ -827,7 +803,7 @@ hr.sign-rule {
 .logistics-item p { font-size: 0.93rem; margin: 0; color: var(--midgray); }
 
 /* Diagnostic excerpt */
-.diagnostic-excerpt { background: var(--seamist); border-top: 3px solid var(--terracotta); padding: 2rem 2.5rem; border-radius: 0 0 2px 2px; }
+.diagnostic-excerpt { background: var(--seamist); padding: 2rem 2.5rem; border-radius: 2px; }
 .diagnostic-excerpt blockquote { font-style: italic; font-size: 1rem; color: var(--charcoal); line-height: 1.75; margin: 0 0 1rem; }
 .excerpt-source { font-size: 0.78rem; color: var(--midgray); letter-spacing: 0.03em; }
 
@@ -855,9 +831,8 @@ hr.sign-rule {
 /* Land acknowledgment card */
 .land-ack {
   background: var(--seamist);
-  border-top: 3px solid var(--terracotta);
   padding: 2rem 2.5rem;
-  border-radius: 0 0 2px 2px;
+  border-radius: 2px;
   margin: 2rem 0;
 }
 .land-ack-eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--terracotta); font-weight: 500; margin-bottom: 0.8rem; }
