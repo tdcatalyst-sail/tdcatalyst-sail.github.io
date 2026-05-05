@@ -7,8 +7,8 @@
   --navy-soft: #2a4a75;
   --charcoal: #222222;
   --midgray: #6B6B6B;
-  --terracotta: #4A7C9E;         /* retired terracotta; primary accent is now logo blue */
-  --terracotta-soft: #6a9cbd;
+  --terracotta: #7D5618;         /* logo gold — accent color throughout */
+  --terracotta-soft: #A07828;
   --hairline: #D9D3CA;
   --logo-red: #C44536;
   --logo-gold: #7D5618;
@@ -879,6 +879,49 @@ hr.sign-rule {
 
 /* Make any image inside content responsive by default */
 img { max-width: 100%; height: auto; }
+
+/* ============================================================
+   Field note article page
+   ============================================================ */
+
+.article-meta {
+  font-size: 0.82rem;
+  color: var(--midgray);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 1.2rem;
+}
+
+.article-lead {
+  font-size: 1.1rem;
+  line-height: 1.78;
+  color: var(--charcoal);
+  margin-bottom: 1.4rem;
+}
+
+.article-body { font-size: 1.02rem; line-height: 1.78; }
+.article-body h2 { margin-top: 2.8rem; margin-bottom: 0.75rem; font-size: clamp(1.2rem, 2.4vw, 1.55rem); }
+.article-body p { margin-bottom: 1.3rem; }
+
+.article-body sup { font-size: 0.68em; line-height: 0; vertical-align: super; }
+.article-body sup a { color: var(--terracotta); border: none; font-weight: 500; }
+.article-body sup a:hover { color: var(--navy); }
+
+.article-cta-box {
+  background: var(--seamist);
+  border-left: 3px solid var(--logo-blue);
+  padding: 1.8rem 2rem;
+  margin: 3rem 0 1.5rem;
+  border-radius: 0 2px 2px 0;
+}
+.article-cta-box .eyebrow { margin-bottom: 0.8rem; }
+.article-cta-box p { color: var(--charcoal); margin-bottom: 0.9rem; }
+.article-cta-box p:last-child { margin-bottom: 0; }
+
+.fn-notes { padding-left: 1.5rem; margin-top: 1rem; }
+.fn-notes li { font-size: 0.88rem; color: var(--midgray); line-height: 1.65; margin-bottom: 1rem; padding-left: 0.4rem; }
+.fn-notes li a { color: var(--midgray); border-bottom: 1px solid var(--hairline); word-break: break-all; font-size: 0.82rem; }
+.fn-notes li a:hover { color: var(--terracotta); border-bottom-color: var(--terracotta); }
 .hero-image img,
 .hero-bg img,
 .headshot-frame img,
