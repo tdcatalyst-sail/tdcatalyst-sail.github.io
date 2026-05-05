@@ -924,6 +924,16 @@ img { max-width: 100%; height: auto; }
    Field note article page
    ============================================================ */
 
+.back-link {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--midgray);
+  border: none;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+}
+.back-link:hover { color: var(--navy); border: none; }
+
 /* Tighter spacing for article pages */
 .hero.article-hero { padding-bottom: 1.5rem; }
 section.article-section { padding-top: 2rem; }
