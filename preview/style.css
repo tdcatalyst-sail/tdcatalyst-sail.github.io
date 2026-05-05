@@ -528,6 +528,19 @@ hr.sign-rule {
 /* Recommended first step tag = logo red (signals "start here") */
 .recommended-tag { color: var(--logo-red) !important; font-weight: 600; }
 
+/* Highlighted "first session" tier (sessions.html) — a light cream box */
+.tier.recommended {
+  background: #F5EDD5;
+  border: 1px solid rgba(196, 69, 54, 0.22);
+  border-left: 3px solid var(--logo-red);
+  border-radius: 2px;
+  padding: 1.8rem 1.6rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 6px 20px rgba(31, 58, 95, 0.06);
+}
+.tier.recommended:first-child { border-top: 1px solid rgba(196, 69, 54, 0.22); }
+.tier.recommended + .tier { border-top: 1px solid var(--hairline); }
+
 /* ============================================================
    Contact Card mini — shown on Begin page
    ============================================================ */
@@ -574,35 +587,6 @@ hr.sign-rule {
 /* ============================================================
    v3 REVAMP — new section styles
    ============================================================ */
-
-/* Full-bleed hero with off-white card */
-.hero-fullbleed {
-  position: relative;
-  min-height: 600px;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  border-bottom: 1px solid var(--hairline);
-  padding: 0;
-}
-@media (max-width: 780px) { .hero-fullbleed { min-height: 460px; } }
-
-.hero-bg { position: absolute; inset: 0; background: var(--seamist); }
-.hero-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-.hero-card {
-  position: relative;
-  z-index: 2;
-  background: var(--offwhite);
-  padding: 2.2rem 2.4rem 2.4rem;
-  max-width: 620px;
-  margin: 0 0 3.5rem 1.75rem;
-}
-@media (max-width: 900px) {
-  .hero-card { margin: 0 1rem 2rem; padding: 1.8rem 1.6rem 2rem; max-width: calc(100% - 2rem); }
-}
-.hero-card h1 { margin-bottom: 1.2rem; }
-.hero-card .hero-sub { font-size: 1.05rem; color: var(--midgray); margin-bottom: 1.8rem; max-width: 52ch; }
 
 /* Outcomes grid */
 .outcomes-grid {
@@ -674,7 +658,11 @@ hr.sign-rule {
   display: flex;
   flex-direction: column;
 }
-.scard.recommended { background: var(--seamist); }
+.scard.recommended {
+  background: #F5EDD5;
+  border-color: rgba(196, 69, 54, 0.22);
+  box-shadow: 0 6px 20px rgba(31, 58, 95, 0.06);
+}
 .scard-tag { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--logo-red); font-weight: 600; margin-bottom: 0.5rem; }
 .scard-name { font-family: 'Fraunces', serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 0.3rem; }
 .scard-meta { font-size: 0.82rem; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
@@ -876,7 +864,6 @@ hr.sign-rule {
 @media (max-width: 480px) {
   .wrap { padding: 0 1.25rem; }
   .nav-inner { padding: 0.9rem 1.25rem; }
-  .hero-card { margin: 0 0.75rem 1.5rem; padding: 1.4rem 1.25rem 1.6rem; max-width: calc(100% - 1.5rem); }
   .diagnostic-excerpt,
   .land-ack { padding: 1.4rem 1.25rem; }
   .scard,
