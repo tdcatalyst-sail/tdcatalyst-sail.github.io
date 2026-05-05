@@ -241,6 +241,9 @@ section { padding: 5rem 0; }
   border: 1px solid rgba(255, 255, 255, 0.55);
 }
 .btn-ghost-light:hover { background: rgba(255, 255, 255, 0.15); color: #fff; border-color: rgba(255,255,255,0.8); }
+.thesis-photo { border-bottom: none; }
+.thesis-photo p { color: rgba(235, 239, 236, 0.88); font-size: 1.12rem; line-height: 1.75; }
+.thesis-photo strong { color: #fff; }
 
 /* Headshot frame — smaller, face-centered, not too zoomed */
 .headshot-frame {
