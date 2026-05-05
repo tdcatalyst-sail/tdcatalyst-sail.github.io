@@ -338,6 +338,8 @@ section { padding: 5rem 0; }
 /* Alt background sections */
 .alt { background: var(--seamist); }
 .alt .card { background: var(--offwhite); }
+/* Collapse doubled vertical padding between consecutive alt sections */
+.alt + .alt { padding-top: 0; }
 
 /* ===== FORM ===== */
 .form-grid { display: grid; gap: 1.2rem; max-width: 620px; }
