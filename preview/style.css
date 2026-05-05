@@ -883,3 +883,149 @@ img { max-width: 100%; height: auto; }
 .hero-bg img,
 .headshot-frame img,
 .fn-featured-img img { height: 100%; }
+
+/* ============================================================
+   Session page — tier card layout (replaces old .tier rows)
+   ============================================================ */
+
+.tiers-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.tier-card {
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-top: 4px solid var(--logo-blue);
+  border-radius: 4px;
+  box-shadow: 0 4px 24px rgba(31, 58, 95, 0.08);
+  overflow: hidden;
+}
+
+.tier-card--featured {
+  background: #F5EDD5;
+  border-color: rgba(196, 69, 54, 0.22);
+  border-top: 4px solid var(--logo-red);
+  box-shadow: 0 6px 32px rgba(31, 58, 95, 0.13);
+}
+
+.tier-card--enterprise {
+  background: var(--offwhite);
+  border-top-color: var(--navy);
+}
+
+.tier-card-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.tier-card-pair .tier-card {
+  display: flex;
+  flex-direction: column;
+}
+.tier-card-pair .tier-card:first-child { border-top-color: var(--logo-gold); }
+.tier-card-pair .tier-card:last-child  { border-top-color: var(--logo-blue); }
+@media (max-width: 820px) {
+  .tier-card-pair { grid-template-columns: 1fr; }
+}
+
+/* Horizontal inner layout for featured + enterprise */
+.tcard-inner {
+  display: grid;
+  grid-template-columns: 1fr 210px;
+  gap: 2.5rem;
+  padding: 2rem 2.5rem;
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .tcard-inner { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem 1.75rem; }
+}
+
+.tcard-body { padding: 2rem 2rem 1rem; }
+.tcard-inner .tcard-body { padding: 0; }
+.tier-card-pair .tcard-body { flex: 1; }
+
+.tcard-tag {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--logo-red);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.tcard-name {
+  font-family: 'Fraunces', serif;
+  font-size: 1.85rem;
+  color: var(--navy);
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+  font-weight: 400;
+}
+
+.tcard-meta {
+  font-size: 0.82rem;
+  color: var(--midgray);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.tcard-desc {
+  color: var(--charcoal);
+  max-width: 58ch;
+  margin-bottom: 0.9rem;
+  font-size: 0.97rem;
+}
+
+.tcard-list {
+  list-style: none;
+  color: var(--midgray);
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 0;
+}
+.tcard-list li { padding: 0.2rem 0 0.2rem 1.1rem; position: relative; }
+.tcard-list li::before { content: "·"; position: absolute; left: 0; color: var(--terracotta); font-weight: 700; }
+
+/* Footer for pair cards: price left, button right */
+.tcard-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 2rem 1.8rem;
+  border-top: 1px solid var(--hairline);
+}
+
+/* Price panel for horizontal (featured + enterprise) */
+.tcard-price-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+@media (max-width: 820px) {
+  .tcard-price-panel { flex-direction: row; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+}
+
+.tcard-amount {
+  font-family: 'Fraunces', serif;
+  font-size: 1.75rem;
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+  display: block;
+  line-height: 1.1;
+}
+
+.tcard-unit {
+  font-size: 0.78rem;
+  color: var(--midgray);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.tcard-cta { display: block; text-align: center; }
+@media (max-width: 820px) { .tcard-cta { display: inline-block; } }
