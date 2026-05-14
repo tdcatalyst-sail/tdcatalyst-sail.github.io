@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Workflow
 
-**After making changes and pushing to a feature branch, always create a pull request to merge into `main`.** This is a GitHub Pages site deployed from the main branch. Changes are live only after merging to main.
+**After making changes and pushing to a feature branch, always create a pull request to merge into `main`, then merge it immediately.** This is a GitHub Pages site deployed from the main branch. Changes are live only after merging to main. There is no review process—merge right away to deploy.
 
 ## Project Overview
 
