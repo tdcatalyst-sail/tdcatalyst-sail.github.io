@@ -36,51 +36,61 @@
       }
     }
     .op-box {
-      padding: 1.5rem;
-      background: var(--seamist);
+      padding: 2rem;
+      background: #fff;
+      border: 1px solid var(--hairline);
       border-radius: 2px;
     }
     .op-box h3 {
-      font-size: 1.1rem;
+      font-family: 'Fraunces', serif;
+      font-size: 1.15rem;
       color: var(--navy);
-      margin: 0 0 0.8rem 0;
+      margin: 0 0 1rem 0;
+      font-weight: 400;
     }
     .op-box ul {
       list-style: none;
       margin: 0;
       padding: 0;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
     }
     .op-box li {
-      padding: 0.4rem 0;
+      padding: 0.5rem 0 0.5rem 1.2rem;
       color: var(--charcoal);
-      line-height: 1.5;
+      line-height: 1.6;
+      position: relative;
     }
     .op-box li:before {
-      content: "→ ";
+      content: "·";
+      position: absolute;
+      left: 0;
       color: var(--terracotta);
-      font-weight: 600;
-      margin-right: 0.5rem;
+      font-weight: 700;
     }
     .op-full-width {
       grid-column: 1 / -1;
     }
     .op-thesis {
       background: var(--offwhite);
-      padding: 2rem;
-      border-left: 4px solid var(--terracotta);
+      padding: 2.2rem 2.5rem;
+      border-left: 4px solid var(--logo-blue);
       margin: 2rem 0;
+      border-radius: 2px;
     }
     .op-thesis p {
       margin: 0;
-      font-size: 0.98rem;
-      line-height: 1.7;
+      font-size: 1.01rem;
+      line-height: 1.75;
       color: var(--charcoal);
+    }
+    .op-thesis strong {
+      color: var(--navy);
+      font-weight: 600;
     }
     .op-outcomes {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+      gap: 1.8rem;
       margin: 2rem 0;
     }
     @media (max-width: 768px) {
@@ -89,42 +99,54 @@
       }
     }
     .op-outcome-card {
-      padding: 1.2rem;
+      padding: 2rem;
       background: white;
       border: 1px solid var(--hairline);
+      border-top: 4px solid var(--logo-blue);
       border-radius: 2px;
+      box-shadow: 0 2px 8px rgba(31, 58, 95, 0.04);
     }
+    .op-outcomes .op-outcome-card:nth-child(1) { border-top-color: var(--logo-red); }
+    .op-outcomes .op-outcome-card:nth-child(2) { border-top-color: var(--logo-gold); }
+    .op-outcomes .op-outcome-card:nth-child(3) { border-top-color: var(--logo-blue); }
+    .op-outcomes .op-outcome-card:nth-child(4) { border-top-color: var(--logo-red); }
     .op-outcome-num {
-      font-size: 0.75rem;
+      font-family: 'Fraunces', serif;
+      font-size: 0.72rem;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--terracotta);
-      font-weight: 600;
-      margin-bottom: 0.5rem;
+      letter-spacing: 0.15em;
+      color: var(--logo-blue);
+      font-weight: 500;
+      margin-bottom: 0.8rem;
     }
+    .op-outcomes .op-outcome-card:nth-child(1) .op-outcome-num { color: var(--logo-red); }
+    .op-outcomes .op-outcome-card:nth-child(2) .op-outcome-num { color: var(--logo-gold); }
+    .op-outcomes .op-outcome-card:nth-child(3) .op-outcome-num { color: var(--logo-blue); }
+    .op-outcomes .op-outcome-card:nth-child(4) .op-outcome-num { color: var(--logo-red); }
     .op-outcome-card h4 {
       font-family: 'Fraunces', serif;
-      font-size: 1rem;
+      font-size: 1.08rem;
       color: var(--navy);
-      margin: 0 0 0.5rem 0;
+      margin: 0 0 0.7rem 0;
       font-weight: 400;
+      line-height: 1.3;
     }
     .op-outcome-card p {
-      font-size: 0.85rem;
+      font-size: 0.93rem;
       color: var(--charcoal);
       margin: 0;
-      line-height: 1.5;
+      line-height: 1.6;
     }
     .op-cta-section {
       text-align: center;
-      padding: 2rem 0;
+      padding: 2.5rem 0;
       margin-top: 2rem;
     }
     .op-divider {
       border: none;
       height: 1px;
       background: var(--hairline);
-      margin: 2rem 0;
+      margin: 2.5rem 0;
     }
   </style>
 </head>
@@ -257,65 +279,69 @@
     <div id="tiers">
       <div class="eyebrow">ENGAGEMENT OPTIONS</div>
       <h2>Four tiers to fit your timeline and depth.</h2>
-      <div class="one-pager-grid op-full-width">
-        <div class="tier-card">
+      <div class="tiers-stack" style="margin-top: 2rem;">
+        <div class="tier-card" style="border-top-color: var(--logo-red);">
           <div class="tcard-body">
             <div class="tcard-name">Trail Diagnostic</div>
             <div class="tcard-meta">Half day &middot; Individual executive</div>
-            <p class="tcard-desc" style="font-size: 0.92rem; line-height: 1.6;">A single engagement designed to name the specific adaptive challenge facing the organization. Applied through the Signs Framework on the Pacifica headlands. Output is a concise, actionable written diagnostic.</p>
-            <ul class="tcard-list" style="font-size: 0.9rem;">
+            <p class="tcard-desc">A single engagement designed to name the specific adaptive challenge facing the organization. Applied through the Signs Framework on the Pacifica headlands. Output is a concise, actionable written diagnostic.</p>
+            <ul class="tcard-list">
               <li>30-minute prep call</li>
               <li>4-hour field engagement</li>
               <li>Written diagnostic in 7 days</li>
             </ul>
           </div>
-          <div class="tcard-foot" style="border-top: 1px solid var(--hairline); padding-top: 1rem; margin-top: 1rem;">
-            <div style="font-weight: 600; color: var(--terracotta); font-size: 1rem;">5K USD</div>
+          <div class="tcard-foot">
+            <div class="tcard-amount">5K USD</div>
+            <a href="begin.html" class="btn btn-ghost" style="font-size: 0.88rem; padding: 0.6rem 1rem;">Inquire</a>
           </div>
         </div>
 
-        <div class="tier-card">
+        <div class="tier-card" style="border-top-color: var(--logo-gold);">
           <div class="tcard-body">
             <div class="tcard-name">Catalyst Field Session</div>
             <div class="tcard-meta">Full day &middot; Up to 4 participants</div>
-            <p class="tcard-desc" style="font-size: 0.92rem; line-height: 1.6;">The full methodology applied in one working day. Morning on the Pacifica headlands activates signal-reading. Afternoon at the Methuselah grove on Skyline Boulevard applies strategic frameworks. Output is a full written diagnostic with priority action map.</p>
-            <ul class="tcard-list" style="font-size: 0.9rem;">
+            <p class="tcard-desc">The full methodology applied in one working day. Morning on the Pacifica headlands activates signal-reading. Afternoon at the Methuselah grove applies strategic frameworks. Output is a full written diagnostic with priority action map.</p>
+            <ul class="tcard-list">
               <li>30-minute prep call per person</li>
               <li>Full-day field engagement</li>
               <li>Full written diagnostic in 10 days</li>
               <li>Optional 45-minute review call</li>
             </ul>
           </div>
-          <div class="tcard-foot" style="border-top: 1px solid var(--hairline); padding-top: 1rem; margin-top: 1rem;">
-            <div style="font-weight: 600; color: var(--terracotta); font-size: 1rem;">15K USD</div>
+          <div class="tcard-foot">
+            <div class="tcard-amount">15K USD</div>
+            <a href="begin.html" class="btn btn-ghost" style="font-size: 0.88rem; padding: 0.6rem 1rem;">Inquire</a>
           </div>
         </div>
 
-        <div class="tier-card">
+        <div class="tier-card" style="border-top-color: var(--logo-blue);">
           <div class="tcard-body">
             <div class="tcard-name">Catalyst Immersive</div>
             <div class="tcard-meta">4 to 6 weeks &middot; Sustained partnership</div>
-            <p class="tcard-desc" style="font-size: 0.92rem; line-height: 1.6;">A sustained thinking partnership during active transformation. Two field engagements anchor the arc. Virtual working sessions between them apply frameworks to real in-flight decisions. Output is multiple written documents with organizational design depth you can act on.</p>
-            <ul class="tcard-list" style="font-size: 0.9rem;">
+            <p class="tcard-desc">A sustained thinking partnership during active transformation. Two field engagements anchor the arc. Virtual working sessions between them apply frameworks to real in-flight decisions. Output is multiple written documents with organizational design depth you can act on.</p>
+            <ul class="tcard-list">
               <li>Two full-day field engagements</li>
               <li>4 to 6 virtual working sessions</li>
               <li>Organizational design documentation</li>
               <li>90-day roadmap with structural detail</li>
             </ul>
           </div>
-          <div class="tcard-foot" style="border-top: 1px solid var(--hairline); padding-top: 1rem; margin-top: 1rem;">
-            <div style="font-weight: 600; color: var(--terracotta); font-size: 1rem;">55K USD</div>
+          <div class="tcard-foot">
+            <div class="tcard-amount">55K USD</div>
+            <a href="begin.html" class="btn btn-ghost" style="font-size: 0.88rem; padding: 0.6rem 1rem;">Inquire</a>
           </div>
         </div>
 
-        <div class="tier-card">
+        <div class="tier-card tier-card--enterprise">
           <div class="tcard-body">
             <div class="tcard-name">Enterprise Engagement</div>
             <div class="tcard-meta">Team or multi-executive cohort &middot; Bespoke scoping</div>
-            <p class="tcard-desc" style="font-size: 0.92rem; line-height: 1.6;">Bespoke program for enterprise transformations requiring program-level accountability across a leadership cohort. Emerges from Immersive conversations that expand in scope. Scope, cadence, and structure are set with the client. Pricing set with procurement.</p>
+            <p class="tcard-desc">Bespoke program for enterprise transformations requiring program-level accountability across a leadership cohort. Emerges from Immersive conversations that expand in scope. Scope, cadence, and structure are set with the client. Pricing set with procurement.</p>
           </div>
-          <div class="tcard-foot" style="border-top: 1px solid var(--hairline); padding-top: 1rem; margin-top: 1rem;">
-            <div style="font-weight: 600; color: var(--terracotta); font-size: 1rem;">100K+ USD</div>
+          <div class="tcard-foot">
+            <div class="tcard-amount">100K+ USD</div>
+            <a href="begin.html" class="btn btn-ghost" style="font-size: 0.88rem; padding: 0.6rem 1rem;">Contact</a>
           </div>
         </div>
       </div>
