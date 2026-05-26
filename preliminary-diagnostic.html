@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <title>AI Adoption Stall Diagnostic — TDcatalyst</title>
+  <meta name="description" content="Twelve questions. Four minutes. One named diagnosis — the archetype of AI adoption stall your organization is most likely carrying, and three organizational moves to begin addressing it." />
+  <link rel="canonical" href="https://tdcatalyst.com/preliminary-diagnostic.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tdcatalyst.com/preliminary-diagnostic.html" />
+  <meta property="og:title" content="AI Adoption Stall Diagnostic — TDcatalyst" />
+  <meta property="og:description" content="Twelve questions. One named diagnosis. Three organizational moves." />
+  <meta property="og:image" content="https://tdcatalyst.com/images/logo-full.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-full.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ============================================================
+       Diagnostic page — page-specific styles only.
+       All brand tokens, nav, footer, buttons, eyebrows, etc.
+       come from style.css. New classes are diag-* prefixed
+       to avoid collision with any existing or future classes.
+       ============================================================ */
+
+    .diag-progress {
+      position: sticky; top: 65px; z-index: 40;
+      height: 2px; background: var(--hairline);
+    }
+    .diag-progress-fill {
+      height: 100%; background: var(--navy);
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0;
+    }
+
+    .diag-hero-lines {
+      display: flex; flex-direction: column; gap: 6px;
+      margin: 1.2rem 0 1.6rem;
+      max-width: 160px;
+    }
+    .diag-hero-lines span { display: block; height: 3px; border-radius: 2px; }
+    .diag-hero-lines .l-red  { background: var(--logo-red);  width: 100%; }
+    .diag-hero-lines .l-gold { background: var(--logo-gold); width: 75%; }
+    .diag-hero-lines .l-blue { background: var(--logo-blue); width: 50%; }
+
+    .diag-hero-logo {
+      display: block;
+      width: 220px;
+      max-width: 100%;
+      margin-bottom: 1.4rem;
+    }
+    @media (max-width: 780px) { .diag-hero-logo { width: 170px; } }
+
+    .diag-hero-meta {
+      font-family: 'Fraunces', serif;
+      font-style: italic; font-weight: 300;
+      font-size: 1rem;
+      color: var(--midgray);
+      max-width: 52ch;
+      margin-bottom: 2rem;
+    }
+
+    /* Question card */
+    .diag-card {
+      background: #fff;
+      border: 1px solid var(--hairline);
+      border-radius: 2px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .diag-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .diag-card.accent-red::before  { background: var(--logo-red); }
+    .diag-card.accent-gold::before { background: var(--logo-gold); }
+    .diag-card.accent-blue::before { background: var(--logo-blue); }
+    .diag-card.accent-navy::before { background: var(--navy); }
+    @media (max-width: 680px) { .diag-card { padding: 1.8rem 1.4rem; } }
+
+    .diag-section {
+      font-family: 'Fraunces', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      font-weight: 400;
+    }
+    .diag-section.accent-red  { color: var(--logo-red); }
+    .diag-section.accent-gold { color: var(--logo-gold); }
+    .diag-section.accent-blue { color: var(--logo-blue); }
+    .diag-section.accent-navy { color: var(--navy); }
+
+    .diag-num {
+      font-family: 'Fraunces', serif;
+      font-size: 2.4rem;
+      font-weight: 400;
+      line-height: 1;
+      margin-bottom: 0.8rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .diag-num.accent-red  { color: var(--logo-red); }
+    .diag-num.accent-gold { color: var(--logo-gold); }
+    .diag-num.accent-blue { color: var(--logo-blue); }
+    .diag-num.accent-navy { color: var(--navy); }
+
+    .diag-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.5rem, 2.6vw, 1.9rem);
+      color: var(--navy);
+      line-height: 1.25;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .diag-hint {
+      font-size: 0.82rem;
+      color: var(--midgray);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+    }
+
+    .diag-opt {
+      width: 100%;
+      background: #fff;
+      border: 1px solid var(--hairline);
+      border-radius: 2px;
+      padding: 1.1rem 1.2rem;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      text-align: left;
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+      margin-bottom: 0.6rem;
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+    }
+    .diag-opt:hover { border-color: var(--navy); }
+    .diag-opt.selected {
+      border-color: var(--navy);
+      box-shadow: inset 3px 0 0 var(--navy);
+      background: rgba(31, 58, 95, 0.025);
+    }
+    .diag-opt-check {
+      width: 16px; height: 16px;
+      border: 1.5px solid var(--hairline);
+      flex-shrink: 0;
+      margin-top: 4px;
+      transition: all 0.15s;
+      position: relative;
+      border-radius: 2px;
+    }
+    .diag-opt:hover .diag-opt-check { border-color: var(--navy); }
+    .diag-opt.selected .diag-opt-check {
+      background: var(--navy);
+      border-color: var(--navy);
+    }
+    .diag-opt.selected .diag-opt-check::after {
+      content: '';
+      position: absolute;
+      left: 3.5px; top: 1px;
+      width: 5px; height: 9px;
+      border: 1.5px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+    .diag-opt-body { flex: 1; min-width: 0; }
+    .diag-opt-label {
+      font-size: 1rem;
+      line-height: 1.55;
+      color: var(--charcoal);
+    }
+    .diag-opt-data {
+      font-size: 0.85rem;
+      line-height: 1.55;
+      color: var(--midgray);
+      margin-top: 0.55rem;
+      font-style: italic;
+      border-top: 1px solid var(--hairline);
+      padding-top: 0.55rem;
+    }
+
+    .diag-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.8rem;
+      padding-top: 1.6rem;
+      border-top: 1px solid var(--hairline);
+      gap: 1rem;
+    }
+    .diag-back {
+      background: transparent; border: none; padding: 0;
+      color: var(--navy); font-family: 'Inter', sans-serif;
+      font-size: 0.92rem; font-weight: 500; cursor: pointer;
+      border-bottom: 1px solid transparent; transition: border-color 0.2s, color 0.2s;
+    }
+    .diag-back:hover { border-bottom-color: var(--terracotta); color: var(--terracotta); }
+    .diag-counter {
+      font-family: 'Fraunces', serif;
+      font-size: 0.92rem;
+      font-style: italic;
+      color: var(--midgray);
+      font-variant-numeric: tabular-nums;
+    }
+    .btn:disabled { background: var(--hairline); color: var(--midgray); cursor: not-allowed; }
+    .btn:disabled:hover { background: var(--hairline); }
+
+    /* Result */
+    .diag-result-sub {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.25rem, 2.6vw, 1.65rem);
+      color: var(--navy);
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.35;
+      max-width: 44ch;
+      margin-bottom: 2rem;
+    }
+    .diag-result-body p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--charcoal);
+      margin-bottom: 1.2rem;
+      max-width: 64ch;
+    }
+
+    .diag-signal {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+      color: var(--navy);
+      line-height: 1.3;
+      font-style: italic;
+      font-weight: 300;
+      max-width: 42ch;
+      margin: 2rem 0 0;
+      padding-left: 1.5rem;
+      border-left: 3px solid var(--logo-red);
+    }
+
+    .diag-moves {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 900px) { .diag-moves { grid-template-columns: 1fr; } }
+    .diag-move {
+      background: #fff;
+      border: 1px solid var(--hairline);
+      padding: 2rem;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+    .diag-move::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .diag-moves > .diag-move:nth-child(1)::before { background: var(--logo-red); }
+    .diag-moves > .diag-move:nth-child(2)::before { background: var(--logo-gold); }
+    .diag-moves > .diag-move:nth-child(3)::before { background: var(--logo-blue); }
+    .diag-move-num {
+      font-family: 'Fraunces', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.7rem;
+    }
+    .diag-moves > .diag-move:nth-child(1) .diag-move-num { color: var(--logo-red); }
+    .diag-moves > .diag-move:nth-child(2) .diag-move-num { color: var(--logo-gold); }
+    .diag-moves > .diag-move:nth-child(3) .diag-move-num { color: var(--logo-blue); }
+    .diag-move-text {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--charcoal);
+    }
+
+    .diag-cta-body {
+      color: var(--midgray);
+      font-size: 0.98rem;
+      max-width: 56ch;
+      margin: 0 auto 2rem;
+    }
+
+    @keyframes diagFadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .diag-anim { animation: diagFadeSlideIn 0.4s ease forwards; }
+    @keyframes diagFadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .diag-fade { animation: diagFadeIn 0.5s ease forwards; }
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav>
+  <div class="nav-inner" id="nav">
+    <a href="index.html" class="nav-logo">
+      <span class="mark-td">TD</span><span class="mark-cat">catalyst</span>
+    </a>
+    <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false" onclick="var o=document.getElementById('nav').classList.toggle('open');this.setAttribute('aria-expanded',o)"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="method.html">Method</a></li>
+      <li><a href="sessions.html">Sessions</a></li>
+      <li><a href="field-notes.html">Field Notes</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="begin.html" class="nav-cta">Begin</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="diag-progress" id="diag-progress" style="display:none;">
+  <div class="diag-progress-fill" id="diag-progress-fill"></div>
+</div>
+
+<main id="main-content">
+  <div id="diag-app"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="tagline">TDcatalyst</div>
+      <div class="fine">Independent advisory. No affiliation with prior employers.</div>
+    </div>
+    <div>
+      <h4>Practice</h4>
+      <a href="method.html">Method</a>
+      <a href="sessions.html">Sessions</a>
+      <a href="about.html">About</a>
+    </div>
+    <div>
+      <h4>Engage</h4>
+      <a href="begin.html">Begin</a>
+      <a href="https://cal.com/tdcatalyst" target="_blank" rel="noopener">Book a call</a>
+      <a href="field-notes.html">Field Notes</a>
+      <a href="contact-card.html">Contact Card</a>
+    </div>
+    <div class="land">
+      TDcatalyst operates on the ancestral lands of the Aramai band of the Ramaytush Ohlone people. A Yunakin Land Tax is paid annually in acknowledgment.
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+<script>
+// ============================================================
+// AI Adoption Stall Diagnostic — vanilla JS state machine
+// ============================================================
+
+const SECTIONS = [
+  { name: "The Adaptive Challenge",    accent: "red"  },
+  { name: "Diagnostics & Constraints", accent: "gold" },
+  { name: "Capability Inventory",      accent: "blue" },
+  { name: "Archetype Orientation",     accent: "navy" }
+];
+const sectionFor = (qIdx) => SECTIONS[Math.floor(qIdx / 3)];
+
+const QUESTIONS = [
+  { q: "Where is AI transformation currently stalling in your organization?", opts: [
+    { t: "Tools are deployed. Sustained usage hasn't followed.", d: "Workforce access grew 50% in one year — yet fewer than 60% of workers with access use AI in their daily workflow, unchanged from the prior year. Deloitte, 3,235 leaders, 2026", s: { Seam: 2 } },
+    { t: "Pilots are live. Production deployment is not.", d: "Only 25% of organizations have moved 40% or more of their AI experiments into production. Deloitte 2026", s: { Seam: 2, OM: 1 } },
+    { t: "Usage exists. But the actual work and operating rhythm haven't changed.", d: "84% of organizations have not redesigned a single job around AI capabilities — the tools arrived, the work didn't change. Deloitte 2026", s: { OM: 3 } },
+    { t: "The board is asking questions the organization can't yet answer.", d: "97% of executives report benefiting from AI. Only 29% see significant organizational ROI. MIT GenAI Divide, 2025", s: { Sensing: 3 } },
+    { t: "A single enterprise tool was mandated — but it doesn't map to how most people actually work.", d: "Single-vendor rollouts (Microsoft Copilot, Google Workspace AI) frequently produce tool-fit resistance distinct from general adoption lag. Access exists. The workflow case doesn't.", s: { Seam: 2, OM: 2 } }
+  ]},
+  { q: "Which tier most accurately describes how your organization is currently using AI?", opts: [
+    { t: "Surface level — AI runs on top of existing processes, with little or no change to how work is done.", d: "37% of enterprises are here. The most common position. Deloitte 2026", s: { OM: 2 } },
+    { t: "Process redesign — key workflows are being rebuilt around AI, but the business model is unchanged.", d: "30% of enterprises are at this stage, targeting selective redesign rather than full reinvention. Deloitte 2026", s: { OM: 1, Seam: 1 } },
+    { t: "Transformation — AI is reshaping products, operating model, or what the business offers.", d: "34% of enterprises say this is their stage — though far fewer have completed the move. Deloitte 2026", s: { Sensing: 1 } },
+    { t: "Hard to say — different functions are at different stages with no shared frame.", d: "Fractured position: access and ambition are uneven across the organization, with no coherent read of where it stands.", s: { UP: 2, Sensing: 1 } },
+    { t: "Pre-deployment — AI tools are just being evaluated or piloted for the first time.", d: "The starting point. The question is whether the first deployment will be a workflow design decision or a procurement one. That choice shapes everything that follows.", s: { Seam: 1 } }
+  ]},
+  { q: "What does the gap feel like from inside the organization?", opts: [
+    { t: "A skills and fluency problem — people lack the capability or bandwidth to use AI effectively.", d: "Insufficient worker skills is cited as the #1 barrier to integrating AI into workflows. 53% of organizations are responding with broad fluency training. Deloitte 2026", s: { Seam: 1, OM: 1 } },
+    { t: "A belief and trust problem — people don't believe the intent behind what is being asked of them.", d: "55% of workers are open to AI but not activated. 21% will comply if required but would rather not. 61% report rising anxiety about AI-driven displacement. Deloitte 2026 / Index.dev 2025", s: { UP: 3 } },
+    { t: "A structural problem — the operating model didn't change when the tools did.", d: "82% of organizations expect significant automation within three years, but 84% have not redesigned any jobs. The expectation-design gap is the dominant structural failure. Deloitte 2026", s: { OM: 2 } },
+    { t: "Hard to name — we are still looking for the right frame.", d: "95% of GenAI pilots fail to deliver measurable P&L impact. The absence of a clear diagnostic frame is itself a signal. MIT NANDA, 2025", s: { Sensing: 2, UP: 1 } },
+    { t: "A fit problem — the tool we gave people doesn't match how they actually work.", d: "When AI tools are selected for procurement or compliance reasons rather than workflow fit, low engagement follows structurally. Skepticism is the rational response to a tool that doesn't help.", s: { Seam: 2, OM: 1 } }
+  ]},
+  { q: "Who owns AI transformation in your organization?", opts: [
+    { t: "Technology or IT", d: "The most common early ownership structure. AI began as an infrastructure decision, not a workforce or operating model one.", s: { Seam: 3 } },
+    { t: "Product or Innovation", d: "Common in tech-forward companies. AI as product capability expansion — but rarely includes people operations in the core governance.", s: { Seam: 2 } },
+    { t: "HR or People Operations", d: "Rare as primary owner. Finance and HR show lower scaled AI implementation and higher 'no plans' responses than any other function. Deloitte 2026", s: { OM: 1 } },
+    { t: "No clear owner — multiple teams with overlapping accountability.", d: "The seam between product, operations, and people is where most enterprise AI transformations stall. Absence of a single accountable owner is a structural signal.", s: { Seam: 2, UP: 1 } }
+  ]},
+  { q: "When did People Operations or HR become a real voice in the AI transformation?", opts: [
+    { t: "From the beginning — they co-shaped the strategy and governance.", d: "Some organizations are now merging technology and people-leadership functions to ensure workforce design and systems evolve together. Deloitte 2026", s: { OM: 2 } },
+    { t: "After the technology decisions were already made.", d: "The most common pattern. Technology choice precedes people strategy by months — often when the operating model implications are already locked in.", s: { Seam: 2 } },
+    { t: "Recently — mainly to manage workforce reactions and communications.", d: "61% of employees now report rising anxiety about AI-driven displacement, pushing HR into a reactive communications role rather than a design one. Index.dev 2025", s: { Seam: 3 } },
+    { t: "Not yet, or only nominally involved.", d: "HR director-level AI adoption stands at 73% — but that has not translated into structural influence over AI governance or job redesign. SHRM 2026", s: { Seam: 3, UP: 1 } }
+  ]},
+  { q: "What is your organization's primary response to the AI skills and talent challenge?", opts: [
+    { t: "Educating the broader workforce to raise overall AI fluency.", d: "The most common response, cited by 53% of organizations. Fluency is necessary but not sufficient — it does not redesign roles or change accountability. Deloitte 2026", s: { Seam: 1, OM: 1 } },
+    { t: "Designing upskilling and reskilling strategies for specific functions.", d: "Cited by 48% of organizations. More targeted than fluency programs, but still skill-layer rather than structure-layer. Deloitte 2026", s: { OM: 1 } },
+    { t: "Redesigning career paths and role structures around new AI-enabled work patterns.", d: "Cited by only 33% of organizations. The harder intervention — and the one most correlated with sustained adoption. Deloitte 2026", s: { OM: 2 } },
+    { t: "Reimagining how the organization is structured based on new AI-use patterns.", d: "Cited by only 30% of organizations. 53% have considered structural redesign — but only 16% have moved significantly in that direction. Deloitte 2026", s: { OM: 1, Sensing: 1 } }
+  ]},
+  { q: "How strong is your organization at detecting early signals that AI is reshaping your competitive environment? (Sensing)", opts: [
+    { t: "Weak — we tend to learn late, from external pressure or a competitive wake-up call.", d: "Sensing degrades first in organizations not designed for adaptive environments. Without a systematic sensing loop, seizing and transforming degrade with it. Teece, Dynamic Capabilities", s: { Sensing: 3 } },
+    { t: "Mixed — some functions read the environment well; others operate on last year's picture.", d: "The most common enterprise pattern. Sensing is leader-dependent and uneven across functions — which means it is not yet an organizational capability.", s: { Sensing: 1, Seam: 1 } },
+    { t: "Strong — we have systematic ways of detecting and escalating weak signals early.", d: "Enterprises where senior leadership actively shapes AI strategy and governance achieve significantly greater business value. Deloitte 2026", s: { OM: 1 } }
+  ]},
+  { q: "When a signal is detected, how quickly does your organization commit to acting on it? (Seizing)", opts: [
+    { t: "Slow — multiple approval layers, low organizational risk tolerance.", d: "53% of companies have considered restructuring around AI, but only 16% have moved significantly in that direction. Recognition consistently precedes action by a wide margin. Deloitte 2026", s: { Sensing: 3 } },
+    { t: "Mixed — decision speed depends heavily on which leader and which domain.", d: "The most common pattern. Seizing is leader-dependent rather than process-driven — which means it is not yet an organizational capability.", s: { Sensing: 1, Seam: 1 } },
+    { t: "Fast — we have governance and decision rights designed for the tempo AI requires.", d: "Organizations where senior leadership actively shapes AI decisions — rather than delegating to technical teams — achieve significantly greater business value. Deloitte 2026", s: { OM: 1 } }
+  ]},
+  { q: "How frequently does your organization redesign its operating model — not just add tools? (Transforming)", opts: [
+    { t: "Rarely — we layer AI onto existing workflows and existing role definitions.", d: "37% of enterprises use AI with little or no change to underlying processes. 'Roles, skills, and career paths should be rebuilt — not simply adjusted.' Deloitte 2026", s: { OM: 3 } },
+    { t: "Selectively — we redesign specific processes when pressure or failure requires it.", d: "30% of enterprises pursue targeted process redesign rather than full reinvention. The reactive pattern: redesign follows failure rather than leads strategy. Deloitte 2026", s: { OM: 1, Seam: 1 } },
+    { t: "Systematically — role and operating model redesign are treated as prerequisites for tool deployment, not afterthoughts.", d: "Organizations that redesign work holistically rather than layering AI onto legacy processes. The standard Deloitte identifies as the dividing line between optimization and transformation. Deloitte 2026", s: { Sensing: 1 } }
+  ]},
+  { q: "Which description most closely matches how the workforce is experiencing AI in your organization right now?", opts: [
+    { t: "A small group is actively driving AI use. The majority is watching.", d: "13% of workers are highly enthusiastic and actively seeking to use AI. The rest are open, cautious, or resistant. The activation gap is structural, not motivational. Deloitte 2026", s: { Seam: 2 } },
+    { t: "Most people are open to AI but haven't been given a clear reason or workflow to change behavior.", d: "55% of workers are open to exploring AI but not yet activated. The access-to-activation gap 'remains largely unchanged from last year.' Deloitte 2026", s: { OM: 2, Seam: 1 } },
+    { t: "A visible portion is complying because required to — not because they believe it.", d: "21% of workers say they would rather not use AI but will if required. Compliance without belief produces adoption theater — the metrics look fine until they don't. Deloitte 2026", s: { UP: 3 } },
+    { t: "Enthusiasm, compliance, and resistance coexist across teams — with no coherent management signal.", d: "Fractured workforce sentiment is most often a product of fractured leadership framing. When leaders speak in different registers, teams read different signals. Deloitte 2026 / TDcatalyst", s: { UP: 2, Sensing: 1 } },
+    { t: "The workforce was already using AI on personal devices or free tools before any enterprise rollout existed.", d: "Shadow AI precedes enterprise rollout in many organizations. When the sanctioned tool arrives and is inferior to what people already know and use, adoption resistance is structural — not motivational.", s: { Seam: 2, UP: 1 } }
+  ]},
+  { q: "What has most reliably blocked AI adoption in your experience?", opts: [
+    { t: "Access and training — people lack the skills or bandwidth to change behavior.", d: "Insufficient worker skills is the #1 cited barrier to integrating AI into workflows. But fluency training alone does not redesign roles, change accountability, or move adoption past ~30%. Deloitte 2026", s: { Seam: 2 } },
+    { t: "Belief and trust — people don't believe AI is being deployed for their benefit.", d: "61% of employees report rising anxiety about AI-driven displacement. The belief gap drives the behavior gap — and training does not close a trust problem. BetterUp 'Pilots and Passengers', 2025", s: { UP: 3 } },
+    { t: "Middle management — they set the team-level reading of every leadership signal.", d: "Deloitte identifies managers as central to the AI transition — but AI tools could free managers from administrative overload only if managerial roles are redesigned. Most aren't. Deloitte Global Human Capital Trends 2025", s: { UP: 2, OM: 1 } },
+    { t: "Structure — roles, accountability, and decision rights didn't change when the tools did.", d: "84% of organizations have not redesigned a single job around AI capabilities. The most statistically significant gap in the enterprise AI dataset. Deloitte 2026", s: { OM: 2, Seam: 1 } }
+  ]},
+  { q: "What do you most need clarity on right now?", opts: [
+    { t: "Exactly where adoption is stalling — and whether it is an access, activation, or belief problem.", d: "60% of workers have access. Fewer than 60% of those use AI daily. The gap has a name. Locating where it sits in your organization is the diagnostic question. Deloitte 2026", s: { Seam: 2, Sensing: 1 } },
+    { t: "How to move from surface-level efficiency to actual operating model redesign.", d: "37% of organizations are in the surface tier. 'Roles, skills, and career paths should be rebuilt, not simply adjusted — organizations must redesign work holistically.' Deloitte 2026", s: { OM: 3 } },
+    { t: "How to align the leadership team on what this transition actually requires — not the tools, the organizational moves.", d: "Enterprises where senior leadership actively shapes AI governance achieve significantly greater business value than those delegating to technical teams. Deloitte 2026", s: { UP: 3 } },
+    { t: "What specific organizational moves to make in the next 90 days.", d: "The Trail Diagnostic produces a written capability map, a named adaptive challenge, and a 90-day roadmap — grounded in a half-day field session with leadership. TDcatalyst", s: { OM: 1, Sensing: 1 } }
+  ]}
+];
+
+const ARCHETYPES = {
+  Seam: {
+    name: "The Seam Organization",
+    subtitle: "AI sits in one function. The rest were brought in too late.",
+    body: [
+      "The adaptive challenge here is structural. AI transformation has been held by product, technology, or innovation — while People Operations and the operating model owners were consulted after the key decisions were already made. The result is predictable: tools that work but don't spread. Capability that exists but doesn't change how work is actually organized.",
+      "What looks like an adoption problem is more precisely a governance problem — and more specifically, a table problem. The wrong people have been in the room where the decisions happen. The three disciplines AI transformation requires — product, operations, and people — rarely sit together. Each underweights what the others know. The seam between them is where most transformations stall."
+    ],
+    moves: [
+      "Bring People Ops into the AI strategy governance now — not as a communications function but as a structural design partner with a seat at the decision table.",
+      "Map the seam between product, operations, and people explicitly. Name where handoffs break, where accountability is unclear, where each function pulls in a different direction.",
+      "The 90-day work is not more training or a better rollout campaign. It is redesigning the room the transformation is run from."
+    ],
+    signal: "Your challenge is not enablement. It is structural."
+  },
+  UP: {
+    name: "The Unmarked Passage",
+    subtitle: "The identity hasn't been named. Leadership is performing a transition it hasn't yet entered.",
+    body: [
+      "AI workforce transformation is not a procedure change. It is an operating identity shift — what skills count, what trust hierarchies exist, what people are for, what the work even is. When that shift goes unnamed and unmarked, leadership teams show predictable symptoms: old vocabulary on Monday morning regardless of what the offsite decided on Friday, performance theater without operational change behind the words, diffuse anxiety in functions that had been stable, and fractured registers when different leaders speak about the transition.",
+      "The passage is still unmarked. The threshold has not been crossed. Organizations stuck here tend to grab for premature certainty — bad pivots committed early, defended fiercely, abandoned in six months. Victor Turner called this liminal collapse. The adaptive challenge is not strategic clarity. It is identity architecture."
+    ],
+    moves: [
+      "Name the transition explicitly at the leadership level — what the organization is moving away from, not just toward. The loss has to be acknowledged before the forward frame can hold.",
+      "Design threshold work at the leadership level before the general workforce program. The leadership team needs to cross first. A structured session that makes the passage visible is not symbolic — it is structural.",
+      "The 90-day work is operating from the new identity in behavior, vocabulary, and how decisions are actually made — not performing the new frame while running the old operating system."
+    ],
+    signal: "Your challenge is not strategy. It is identity."
+  },
+  OM: {
+    name: "The Operating Model Lag",
+    subtitle: "The tools arrived. The work didn't change.",
+    body: [
+      "Pilots are live. Usage numbers exist. Login rates look adequate. And yet the actual operating rhythm has not shifted. Work is being done the same way, slightly faster. This is the most common stall pattern in AI transformation — and the hardest to diagnose from inside, because the metrics look fine until the competitive consequence arrives.",
+      "The fix is not more training, a better adoption campaign, or a higher mandate. It is redesigning the work before or alongside the tool deployment: what tasks change, what roles change, what decisions change, what handoffs change when AI enters the workflow. Deloitte is direct: 84% of organizations have not redesigned a single job around AI capabilities. A faster broken workflow is still broken. Redesign first."
+    ],
+    moves: [
+      "Run a task-level analysis for two or three high-volume roles. Separate what AI absorbs from what requires human judgment, trust, and accountability. The distinction drives the redesign.",
+      "Redesign the role before retraining the person. The sequence matters: operating model first, capability second. Most organizations have it inverted.",
+      "The 90-day work is specific operating model redesign — named, role-level, accountable — not another enablement or adoption campaign."
+    ],
+    signal: "Your challenge is not adoption. It is operating model redesign."
+  },
+  Sensing: {
+    name: "The Sensing Deficit",
+    subtitle: "The board is asking questions the team can't answer yet.",
+    body: [
+      "The harder problem is not adoption — it is organizational sensing. Your environment is changing faster than your internal radar is calibrated to read it. Weak signals are arriving: competitor moves, workforce behavior shifts, board-level questions that don't yet have clean answers inside the organization. The sensing infrastructure — who reads the environment, what gets escalated, what gets acted on — was built for a slower tempo and a different kind of change.",
+      "What the organization needs now is not a better strategy document. It is a better loop: detection, activation, response, organizational learning. Without the loop, every strategy becomes a defended artifact — accurate at the moment of writing, and increasingly wrong as the environment continues to move. Sensing, seizing, and transforming are simultaneous capabilities. If sensing is weak, the other two degrade."
+    ],
+    moves: [
+      "Design the sensing infrastructure explicitly. Who reads what signals, at what cadence, with what authority to escalate and commit to action? Make the loop visible before trying to improve it.",
+      "Map the gap between what the board is asking and what the organization can currently answer. That gap is the diagnostic agenda — not a communications problem but a structural one.",
+      "The 90-day work is building the detection–activation–response loop and institutionalizing it — not refining the strategy plan that the current sensing capacity already can't update fast enough."
+    ],
+    signal: "Your challenge is not strategy. It is sensing infrastructure."
+  }
+};
+
+// ---- escape util ----
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+}[c]));
+const pad2 = (n) => String(n).padStart(2, '0');
+
+// ---- state ----
+const state = {
+  phase: 'intro',
+  currentQ: 0,
+  answers: Array(QUESTIONS.length).fill(null).map(() => []),
+  selected: [],
+  result: null
+};
+
+// ---- render ----
+const app = document.getElementById('diag-app');
+const progressEl = document.getElementById('diag-progress');
+const progressFillEl = document.getElementById('diag-progress-fill');
+
+function setProgress() {
+  if (state.phase === 'question') {
+    progressEl.style.display = '';
+    const pct = ((state.currentQ + (state.selected.length > 0 ? 0.5 : 0)) / QUESTIONS.length) * 100;
+    progressFillEl.style.width = pct + '%';
+  } else {
+    progressEl.style.display = 'none';
+  }
+}
+
+function renderIntro() {
+  app.innerHTML = `
+    <section class="hero" id="main-content">
+      <div class="wrap narrow diag-fade">
+        <img src="images/logo-v2.jpg" alt="TDcatalyst — Precision, Catalysis, Momentum" class="diag-hero-logo">
+        <div class="diag-hero-lines" aria-hidden="true">
+          <span class="l-red"></span>
+          <span class="l-gold"></span>
+          <span class="l-blue"></span>
+        </div>
+        <div class="eyebrow">A Preliminary Diagnostic</div>
+        <h1>Where AI transformation is actually stalling in your organization.</h1>
+        <p class="hero-sub">Twelve questions. Four minutes. One named diagnosis — the archetype of stall your organization is most likely carrying, and three organizational moves to begin addressing it.</p>
+        <p class="diag-hero-meta">Built on the TDcatalyst methodology. Grounded in Deloitte's survey of 3,235 business and IT leaders across 24 countries, 2026.</p>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="diag-begin">Begin the diagnostic</button>
+          <a class="btn btn-ghost" href="method.html">Explore the Method</a>
+        </div>
+      </div>
+    </section>
+  `;
+  document.getElementById('diag-begin').addEventListener('click', () => {
+    state.phase = 'question';
+    state.currentQ = 0;
+    state.selected = state.answers[0] ? [...state.answers[0]] : [];
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[state.currentQ];
+  const sect = sectionFor(state.currentQ);
+  const accent = sect.accent;
+  const isLast = state.currentQ === QUESTIONS.length - 1;
+  const canContinue = state.selected.length > 0;
+
+  const optsHtml = q.opts.map((opt, i) => `
+    <button class="diag-opt${state.selected.includes(i) ? ' selected' : ''}" data-opt="${i}">
+      <div class="diag-opt-check"></div>
+      <div class="diag-opt-body">
+        <div class="diag-opt-label">${esc(opt.t)}</div>
+        ${opt.d ? `<div class="diag-opt-data">${esc(opt.d)}</div>` : ''}
+      </div>
+    </button>
+  `).join('');
+
+  app.innerHTML = `
+    <section id="main-content">
+      <div class="wrap narrow">
+        <div class="diag-card accent-${accent} diag-anim">
+          <div class="diag-section accent-${accent}">${esc(sect.name)}</div>
+          <div class="diag-num accent-${accent}">${pad2(state.currentQ + 1)}</div>
+          <h2 class="diag-title">${esc(q.q)}</h2>
+          <div class="diag-hint">Select all that apply</div>
+          <div>${optsHtml}</div>
+          <div class="diag-nav">
+            <button class="diag-back" id="diag-back" style="visibility:${state.currentQ === 0 ? 'hidden' : 'visible'};">← Back</button>
+            <span class="diag-counter">${pad2(state.currentQ + 1)} / ${pad2(QUESTIONS.length)}</span>
+            <button class="btn btn-primary" id="diag-next" ${canContinue ? '' : 'disabled'}>${isLast ? 'See diagnosis' : 'Continue'}</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  app.querySelectorAll('.diag-opt').forEach((el) => {
+    el.addEventListener('click', () => {
+      const i = parseInt(el.dataset.opt, 10);
+      if (state.selected.includes(i)) state.selected = state.selected.filter((x) => x !== i);
+      else state.selected = [...state.selected, i];
+      render();
+    });
+  });
+  document.getElementById('diag-back').addEventListener('click', handleBack);
+  document.getElementById('diag-next').addEventListener('click', handleNext);
+}
+
+function renderResult() {
+  const a = state.result;
+  const bodyHtml = a.body.map((p) => `<p>${esc(p)}</p>`).join('');
+  const movesHtml = a.moves.map((m, i) => `
+    <div class="diag-move">
+      <div class="diag-move-num">${pad2(i + 1)}</div>
+      <div class="diag-move-text">${esc(m)}</div>
+    </div>
+  `).join('');
+
+  app.innerHTML = `
+    <section class="hero" id="main-content">
+      <div class="wrap narrow diag-fade">
+        <div class="diag-hero-lines" aria-hidden="true">
+          <span class="l-red"></span>
+          <span class="l-gold"></span>
+          <span class="l-blue"></span>
+        </div>
+        <div class="eyebrow">Your diagnostic</div>
+        <h1>${esc(a.name)}</h1>
+        <p class="diag-result-sub">${esc(a.subtitle)}</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap narrow diag-result-body">
+        ${bodyHtml}
+        <p class="diag-signal">${esc(a.signal)}</p>
+      </div>
+    </section>
+
+    <section class="alt">
+      <div class="wrap">
+        <div class="section-head" style="max-width:680px;">
+          <div class="eyebrow">Three organizational moves</div>
+          <h2>The work that begins now.</h2>
+        </div>
+        <div class="diag-moves">${movesHtml}</div>
+      </div>
+    </section>
+
+    <section class="cta-panel">
+      <div class="wrap">
+        <p class="cta-sentence">From a named challenge to a mapped terrain.</p>
+        <p class="diag-cta-body">This diagnostic names the challenge. The Trail Diagnostic maps it — a half-day field session that produces a written capability inventory, surfaces the belief gap between leadership intent and team-level reading, and names the specific organizational moves required.</p>
+        <div class="btn-row" style="justify-content:center;">
+          <a class="btn btn-primary" href="begin.html">Begin a conversation</a>
+          <button class="btn btn-ghost" id="diag-restart">Retake the diagnostic</button>
+        </div>
+      </div>
+    </section>
+  `;
+  document.getElementById('diag-restart').addEventListener('click', restart);
+}
+
+// ---- handlers ----
+function handleNext() {
+  if (state.selected.length === 0) return;
+  state.answers[state.currentQ] = [...state.selected];
+  if (state.currentQ < QUESTIONS.length - 1) {
+    state.currentQ += 1;
+    state.selected = state.answers[state.currentQ] ? [...state.answers[state.currentQ]] : [];
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    state.result = ARCHETYPES[computeResult()];
+    state.phase = 'result';
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function handleBack() {
+  if (state.currentQ === 0) return;
+  state.answers[state.currentQ] = [...state.selected];
+  state.currentQ -= 1;
+  state.selected = state.answers[state.currentQ] ? [...state.answers[state.currentQ]] : [];
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart() {
+  state.phase = 'intro';
+  state.currentQ = 0;
+  state.answers = Array(QUESTIONS.length).fill(null).map(() => []);
+  state.selected = [];
+  state.result = null;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function computeResult() {
+  const scores = { Seam: 0, UP: 0, OM: 0, Sensing: 0 };
+  QUESTIONS.forEach((q, i) => {
+    (state.answers[i] || []).forEach((idx) => {
+      const o = q.opts[idx];
+      if (!o || !o.s) return;
+      Object.entries(o.s).forEach(([k, v]) => { scores[k] = (scores[k] || 0) + v; });
+    });
+  });
+  return Object.entries(scores).reduce((best, cur) => (cur[1] > best[1] ? cur : best))[0];
+}
+
+function render() {
+  if (state.phase === 'intro') renderIntro();
+  else if (state.phase === 'question') renderQuestion();
+  else if (state.phase === 'result') renderResult();
+  setProgress();
+}
+
+render();
+</script>
+</body>
+</html>
