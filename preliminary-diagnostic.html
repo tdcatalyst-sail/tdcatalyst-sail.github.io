@@ -291,6 +291,46 @@
       margin: 0 auto 2rem;
     }
 
+    /* Optional submission form */
+    .diag-form { max-width: 620px; }
+    .diag-form-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 600px) { .diag-form-fields { grid-template-columns: 1fr; } }
+    .diag-form label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--midgray);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.35rem;
+    }
+    .diag-form input {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--hairline);
+      background: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      color: var(--charcoal);
+      border-radius: 2px;
+    }
+    .diag-form input:focus {
+      outline: none;
+      border-color: var(--navy);
+    }
+    .diag-form-status {
+      margin-top: 1rem;
+      font-size: 0.92rem;
+      font-style: italic;
+      color: var(--midgray);
+    }
+    .diag-form-status.success { color: var(--navy); font-style: normal; }
+    .diag-form-status.error { color: var(--logo-red); }
+
     @keyframes diagFadeSlideIn {
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -360,6 +400,11 @@
 // ============================================================
 // AI Adoption Stall Diagnostic — vanilla JS state machine
 // ============================================================
+
+// Apps Script web app URL for optional contact-form submission.
+// Set this to the deployed Google Apps Script /exec URL.
+// While empty, the form is rendered but the submit button is disabled.
+const SUBMIT_URL = '';
 
 const SECTIONS = [
   { name: "The Adaptive Challenge",    accent: "red"  },
@@ -517,7 +562,8 @@ const state = {
   currentQ: 0,
   answers: Array(QUESTIONS.length).fill(null).map(() => []),
   selected: [],
-  result: null
+  result: null,
+  resultKey: null
 };
 
 // ---- render ----
@@ -664,8 +710,42 @@ function renderResult() {
         </div>
       </div>
     </section>
+
+    <section>
+      <div class="wrap narrow">
+        <div class="section-head" style="max-width:680px;">
+          <div class="eyebrow">Optional</div>
+          <h2>Share who you are.</h2>
+          <p>If you would like the TDcatalyst team to read your diagnosis with context — or to follow up about your specific operating reality — share who you are. All fields are optional.</p>
+        </div>
+        <form class="diag-form" id="diag-form" autocomplete="on" novalidate>
+          <div class="diag-form-fields">
+            <div>
+              <label for="f-name">Your name</label>
+              <input type="text" id="f-name" name="name" autocomplete="name" />
+            </div>
+            <div>
+              <label for="f-email">Email</label>
+              <input type="email" id="f-email" name="email" autocomplete="email" />
+            </div>
+            <div>
+              <label for="f-company">Company</label>
+              <input type="text" id="f-company" name="company" autocomplete="organization" />
+            </div>
+            <div>
+              <label for="f-department">Department or role</label>
+              <input type="text" id="f-department" name="department" autocomplete="organization-title" />
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit" id="diag-form-submit"${SUBMIT_URL ? '' : ' disabled'}>Send</button>
+          <div class="diag-form-status" id="diag-form-status">${SUBMIT_URL ? '' : 'Form submission is not yet configured.'}</div>
+        </form>
+      </div>
+    </section>
   `;
   document.getElementById('diag-restart').addEventListener('click', restart);
+  const formEl = document.getElementById('diag-form');
+  if (formEl) formEl.addEventListener('submit', submitForm);
 }
 
 // ---- handlers ----
@@ -678,7 +758,8 @@ function handleNext() {
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else {
-    state.result = ARCHETYPES[computeResult()];
+    state.resultKey = computeResult();
+    state.result = ARCHETYPES[state.resultKey];
     state.phase = 'result';
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -700,6 +781,7 @@ function restart() {
   state.answers = Array(QUESTIONS.length).fill(null).map(() => []);
   state.selected = [];
   state.result = null;
+  state.resultKey = null;
   render();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -716,6 +798,71 @@ function computeMaxScores() {
     });
   });
   return max;
+}
+
+// ---- optional submission form ----
+function setFormStatus(msg, cls) {
+  const el = document.getElementById('diag-form-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'diag-form-status ' + (cls || '');
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  if (!SUBMIT_URL) {
+    setFormStatus('Form submission is not yet configured.', 'error');
+    return;
+  }
+  const form = e.target;
+  const name = form.name.value.trim();
+  const email = form.email.value.trim();
+  const company = form.company.value.trim();
+  const department = form.department.value.trim();
+
+  if (!name && !email && !company) {
+    setFormStatus('Please share at least your name, email, or company.', 'error');
+    return;
+  }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setFormStatus('Please check the email address format.', 'error');
+    return;
+  }
+
+  const submitBtn = document.getElementById('diag-form-submit');
+  submitBtn.disabled = true;
+  setFormStatus('Sending…', '');
+
+  const payload = {
+    name: name,
+    email: email,
+    company: company,
+    department: department,
+    archetype: state.result ? state.result.name : '',
+    archetypeId: state.resultKey || '',
+    signal: state.result ? state.result.signal : '',
+    answers: state.answers.map((sel, i) => ({
+      question: QUESTIONS[i].q,
+      section: sectionFor(i).name,
+      selected: sel.map((idx) => (QUESTIONS[i].opts[idx] ? QUESTIONS[i].opts[idx].t : ''))
+    })),
+    timestamp: new Date().toISOString(),
+    userAgent: navigator.userAgent,
+    referrer: document.referrer || ''
+  };
+
+  fetch(SUBMIT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  }).then(function () {
+    form.style.display = 'none';
+    setFormStatus('Thank you. Your context is on its way to TDcatalyst.', 'success');
+  }).catch(function () {
+    submitBtn.disabled = false;
+    setFormStatus('Could not send. Please try again or email begin@tdcatalyst.com.', 'error');
+  });
 }
 
 function computeResult() {
