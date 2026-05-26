@@ -394,6 +394,7 @@ const QUESTIONS = [
   { q: "Who owns AI transformation in your organization?", opts: [
     { t: "Technology or IT", d: "The most common early ownership structure. AI began as an infrastructure decision, not a workforce or operating model one.", s: { Seam: 3 } },
     { t: "Product or Innovation", d: "Common in tech-forward companies. AI as product capability expansion — but rarely includes people operations in the core governance.", s: { Seam: 2 } },
+    { t: "Finance", d: "When Finance owns the transformation, the lens is cost containment and ROI measurement — not workforce design or operating model redesign. Finance and HR show lower scaled AI implementation and higher 'no plans' responses than any other function. Deloitte 2026", s: { Seam: 3 } },
     { t: "HR or People Operations", d: "Rare as primary owner. Finance and HR show lower scaled AI implementation and higher 'no plans' responses than any other function. Deloitte 2026", s: { OM: 1 } },
     { t: "No clear owner — multiple teams with overlapping accountability.", d: "The seam between product, operations, and people is where most enterprise AI transformations stall. Absence of a single accountable owner is a structural signal.", s: { Seam: 2, UP: 1 } }
   ]},
@@ -434,7 +435,7 @@ const QUESTIONS = [
   { q: "What has most reliably blocked AI adoption in your experience?", opts: [
     { t: "Access and training — people lack the skills or bandwidth to change behavior.", d: "Insufficient worker skills is the #1 cited barrier to integrating AI into workflows. But fluency training alone does not redesign roles, change accountability, or move adoption past ~30%. Deloitte 2026", s: { Seam: 2 } },
     { t: "Belief and trust — people don't believe AI is being deployed for their benefit.", d: "61% of employees report rising anxiety about AI-driven displacement. The belief gap drives the behavior gap — and training does not close a trust problem. BetterUp 'Pilots and Passengers', 2025", s: { UP: 3 } },
-    { t: "Middle management — they set the team-level reading of every leadership signal.", d: "Deloitte identifies managers as central to the AI transition — but AI tools could free managers from administrative overload only if managerial roles are redesigned. Most aren't. Deloitte Global Human Capital Trends 2025", s: { UP: 2, OM: 1 } },
+    { t: "Middle management — they set the team-level reading of every leadership signal.", d: "Middle managers are operating without a clear read of where the company is going, what outcomes AI is supposed to produce inside their scope, or what authority they have to redesign the workflows underneath them. Without that, every signal they pass down to their teams stays vague. The block is not capability. It is direction.", s: { UP: 2, OM: 1 } },
     { t: "Structure — roles, accountability, and decision rights didn't change when the tools did.", d: "84% of organizations have not redesigned a single job around AI capabilities. The most statistically significant gap in the enterprise AI dataset. Deloitte 2026", s: { OM: 2, Seam: 1 } }
   ]},
   { q: "What do you most need clarity on right now?", opts: [
