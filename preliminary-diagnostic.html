@@ -455,7 +455,7 @@ const ARCHETYPES = {
       "What looks like an adoption problem is more precisely a governance problem — and more specifically, a table problem. The wrong people have been in the room where the decisions happen. The three disciplines AI transformation requires — product, operations, and people — rarely sit together. Each underweights what the others know. The seam between them is where most transformations stall."
     ],
     moves: [
-      "Bring People Ops into the AI strategy governance now — not as a communications function but as a structural design partner with a seat at the decision table.",
+      "Name what people in the organization actually need from leadership to act on AI — clarity on direction, on what AI is supposed to produce inside their scope, on how their roles will change. Then make the organizational work that clarity requires visible: product redesign, operating-model redesign, role-level work, manager enablement. That scope sits with the leadership team as a whole — broader than any single function can carry, and the first move is owning it there, not delegating it.",
       "Map the seam between product, operations, and people explicitly. Name where handoffs break, where accountability is unclear, where each function pulls in a different direction.",
       "The 90-day work is not more training or a better rollout campaign. It is redesigning the room the transformation is run from."
     ],
@@ -704,6 +704,20 @@ function restart() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Maximum possible points per archetype if every contributing option were
+// selected. Used to normalize so archetypes with more available points
+// (Seam ~43) don't structurally outweigh those with fewer (Sensing ~20).
+function computeMaxScores() {
+  const max = { Seam: 0, UP: 0, OM: 0, Sensing: 0 };
+  QUESTIONS.forEach((q) => {
+    q.opts.forEach((opt) => {
+      if (!opt.s) return;
+      Object.entries(opt.s).forEach(([k, v]) => { max[k] = (max[k] || 0) + v; });
+    });
+  });
+  return max;
+}
+
 function computeResult() {
   const scores = { Seam: 0, UP: 0, OM: 0, Sensing: 0 };
   QUESTIONS.forEach((q, i) => {
@@ -713,7 +727,13 @@ function computeResult() {
       Object.entries(o.s).forEach(([k, v]) => { scores[k] = (scores[k] || 0) + v; });
     });
   });
-  return Object.entries(scores).reduce((best, cur) => (cur[1] > best[1] ? cur : best))[0];
+  // Normalize: each archetype's raw score as a fraction of its max possible.
+  const max = computeMaxScores();
+  const normalized = {};
+  Object.keys(scores).forEach((k) => {
+    normalized[k] = max[k] > 0 ? scores[k] / max[k] : 0;
+  });
+  return Object.entries(normalized).reduce((best, cur) => (cur[1] > best[1] ? cur : best))[0];
 }
 
 function render() {
