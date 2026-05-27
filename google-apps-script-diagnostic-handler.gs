@@ -17,14 +17,7 @@ function getTargetFolder() {
 }
 
 function ensureSubmissionsSheet(folder) {
-  const iter = folder.getFilesByName(SUBMISSIONS_SHEET);
-  if (iter.hasNext()) {
-    return SpreadsheetApp.open(iter.next());
-  }
-  const ss = SpreadsheetApp.create(SUBMISSIONS_SHEET);
-  DriveApp.getFileById(ss.getId()).moveTo(folder);
-  const sheet = ss.getActiveSheet();
-  sheet.appendRow([
+  const expectedHeaders = [
     'Timestamp',
     'Session ID',
     'Name',
@@ -40,10 +33,33 @@ function ensureSubmissionsSheet(folder) {
     'User Agent',
     'Referrer',
     'Submission Doc URL'
-  ]);
+  ];
+
+  const iter = folder.getFilesByName(SUBMISSIONS_SHEET);
+  if (iter.hasNext()) {
+    const file = iter.next();
+    const ss = SpreadsheetApp.open(file);
+    const sheet = ss.getActiveSheet();
+    const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+
+    // If headers don't match, delete and recreate
+    if (headers.length !== expectedHeaders.length || headers.join('|') !== expectedHeaders.join('|')) {
+      Drive.Files.remove(file.getId());
+      return createSubmissionsSheet(folder, expectedHeaders);
+    }
+    return ss;
+  }
+
+  return createSubmissionsSheet(folder, expectedHeaders);
+}
+
+function createSubmissionsSheet(folder, headers) {
+  const ss = SpreadsheetApp.create(SUBMISSIONS_SHEET);
+  DriveApp.getFileById(ss.getId()).moveTo(folder);
+  const sheet = ss.getActiveSheet();
+  sheet.appendRow(headers);
   sheet.setFrozenRows(1);
-  // Auto-resize columns
-  sheet.autoResizeColumns(1, 15);
+  sheet.autoResizeColumns(1, headers.length);
   return ss;
 }
 
