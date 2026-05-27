@@ -801,35 +801,47 @@ function renderContact() {
 function detectIncoherencies() {
   const incoherencies = [];
 
-  // Q7 (Sensing capability) vs Q8 (Decision speed): strong sensing but slow action
-  const q7Answers = state.answers[6] || [];
-  const q8Answers = state.answers[7] || [];
-  const q9Answers = state.answers[8] || [];
-  const q4Answers = state.answers[3] || [];
-  const q5Answers = state.answers[4] || [];
-  const q10Answers = state.answers[9] || [];
-  const q11Answers = state.answers[10] || [];
+  const q1 = state.answers[0] || [];  // Where stalling
+  const q2 = state.answers[1] || [];  // Which tier
+  const q3 = state.answers[2] || [];  // What gap feels like
+  const q4 = state.answers[3] || [];  // Who owns
+  const q5 = state.answers[4] || [];  // HR timing
+  const q6 = state.answers[5] || [];  // Response to skills
+  const q7 = state.answers[6] || [];  // Sensing strength
+  const q8 = state.answers[7] || [];  // Decision speed
+  const q9 = state.answers[8] || [];  // Redesign frequency
+  const q10 = state.answers[9] || []; // Workforce experience
+  const q11 = state.answers[10] || []; // What blocked
+  const q12 = state.answers[11] || []; // Clarity needed
 
-  // Q7 strong (index 2) vs Q8 slow (index 0)
-  if (q7Answers.includes(2) && q8Answers.includes(0)) {
-    incoherencies.push('Strong sensing but slow decision speed—you detect signals well but may struggle to act on them fast enough.');
+  // Q2 "Transformation" (index 2) BUT Q1 "Work hasn't changed" (index 2) - direct contradiction
+  if (q2.includes(2) && q1.includes(2)) {
+    incoherencies.push('You selected "Transformation" tier but also "Work unchanged despite tool usage"—these contradict. If work is truly redesigned, it's transformation. If work is unchanged, you're at surface level.');
   }
 
-  // Q8 fast (index 2) vs Q9 rarely (index 0)
-  if (q8Answers.includes(2) && q9Answers.includes(0)) {
-    incoherencies.push('Fast decision speed but rarely redesign operating model—you move quickly, but structural changes lag.');
+  // Q2 "Transformation" (index 2) BUT Q9 "Rarely redesign" (index 0) - contradiction
+  if (q2.includes(2) && q9.includes(0)) {
+    incoherencies.push('You selected "Transformation" tier but also "Rarely redesign operating model"—transformation requires systematic redesign, not rare redesign.');
   }
 
-  // Q4 has clear owner (any but index 4) vs Q5 HR came late (index 1 or 2)
-  const q4HasClearOwner = q4Answers.length > 0 && !q4Answers.includes(4);
-  const q5HRLate = q5Answers.includes(1) || q5Answers.includes(2);
-  if (q4HasClearOwner && q5HRLate) {
-    incoherencies.push('Clear ownership but HR came in late—early tech/product ownership may have locked in decisions before workforce design was considered.');
+  // Q1 "Work unchanged" (index 2) BUT Q9 "Systematically redesign" (index 2) - contradiction
+  if (q1.includes(2) && q9.includes(2)) {
+    incoherencies.push('You said work hasn\'t changed but also that you systematically redesign operating models—these don\'t align. Which is it?');
   }
 
-  // Q10 small group (index 0) vs Q11 belief blocker (index 1)
-  if (q10Answers.includes(0) && q11Answers.includes(1)) {
-    incoherencies.push('Small group actively driving adoption but belief/trust is the main blocker—resistance may reflect exclusion from the transition rather than skepticism of AI itself.');
+  // Q3 "Skills problem" (index 0) BUT Q6 "Structural redesign" (index 3) - contradiction
+  if (q3.includes(0) && q6.includes(3)) {
+    incoherencies.push('You identified the gap as skills/fluency but your response is structural organizational redesign—these address different problems. Which is the actual constraint?');
+  }
+
+  // Q10 "Enthusiasm/actively seeking" (index 0) BUT Q11 "Belief/trust blocker" (index 1) - contradiction
+  if (q10.includes(0) && q11.includes(1)) {
+    incoherencies.push('You said workforce is highly enthusiastic but belief/trust is the main blocker—these contradict. If they\'re enthusiastic, belief isn\'t the blocker.');
+  }
+
+  // Q7 "Strong sensing" (index 2) BUT Q3 "Hard to name/lack frame" (index 3) - contradiction
+  if (q7.includes(2) && q3.includes(3)) {
+    incoherencies.push('You marked sensing as strong but also said the gap is hard to name and lacks framing—strong sensing usually brings clarity on what\'s happening.');
   }
 
   return incoherencies;
