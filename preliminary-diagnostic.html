@@ -342,41 +342,30 @@
     }
     .diag-fade { animation: diagFadeIn 0.5s ease forwards; }
 
-    .diag-archetypes-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin-top: 2rem;
+    .diag-archetypes-inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      margin: 2rem 0 2.5rem;
+      align-items: center;
     }
-    @media (max-width: 1200px) { .diag-archetypes-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 680px) { .diag-archetypes-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .diag-archetypes-inline { gap: 1.5rem; } }
+    @media (max-width: 680px) { .diag-archetypes-inline { flex-direction: column; align-items: flex-start; gap: 1rem; } }
 
-    .diag-archetype-card {
-      background: #fff;
-      border: 1px solid var(--hairline);
-      border-top: 4px solid;
-      padding: 1.8rem;
-      border-radius: 2px;
-      text-align: center;
+    .diag-archetype-inline {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .diag-archetype-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-    .diag-archetype-title {
+    .diag-archetype-inline-name {
       font-family: 'Fraunces', serif;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 400;
       color: var(--navy);
-      margin-bottom: 0.6rem;
-      line-height: 1.3;
     }
-    .diag-archetype-desc {
-      font-size: 0.95rem;
-      line-height: 1.55;
-      color: var(--charcoal);
-      margin: 0;
+    .diag-archetype-inline-icon {
+      font-size: 1.8rem;
+      display: inline-block;
     }
   </style>
 </head>
@@ -632,7 +621,26 @@ function renderIntro() {
         <div class="eyebrow">A Preliminary Diagnostic</div>
         <h1>Where AI transformation is actually stalling in your organization.</h1>
         <p class="hero-sub">Twelve questions. Four minutes. One named diagnosis — the archetype of stall your organization is most likely carrying, and three organizational moves to begin addressing it.</p>
-        <p class="diag-hero-meta">Built on the TDcatalyst methodology. Grounded in Deloitte's survey of 3,235 business and IT leaders across 24 countries, 2026.</p>
+
+        <div class="diag-archetypes-inline">
+          <div class="diag-archetype-inline">
+            <span class="diag-archetype-inline-name">The Seam Organization</span>
+            <span class="diag-archetype-inline-icon" style="color: var(--logo-red);">🔗</span>
+          </div>
+          <div class="diag-archetype-inline">
+            <span class="diag-archetype-inline-name">The Unmarked Passage</span>
+            <span class="diag-archetype-inline-icon" style="color: var(--logo-gold);">🚪</span>
+          </div>
+          <div class="diag-archetype-inline">
+            <span class="diag-archetype-inline-name">The Operating Model Lag</span>
+            <span class="diag-archetype-inline-icon" style="color: var(--logo-blue);">⚙️</span>
+          </div>
+          <div class="diag-archetype-inline">
+            <span class="diag-archetype-inline-name">The Sensing Deficit</span>
+            <span class="diag-archetype-inline-icon" style="color: var(--navy);">📡</span>
+          </div>
+        </div>
+
         <div class="btn-row">
           <button class="btn btn-primary" id="diag-begin">Begin the diagnostic</button>
           <a class="btn btn-ghost" href="method.html">Explore the Method</a>
@@ -640,36 +648,6 @@ function renderIntro() {
       </div>
     </section>
 
-    <section class="alt">
-      <div class="wrap">
-        <div class="section-head" style="max-width:680px;">
-          <div class="eyebrow">Four possible archetypes</div>
-          <h2>You might discover you are.</h2>
-        </div>
-        <div class="diag-archetypes-grid">
-          <div class="diag-archetype-card" style="border-top-color: var(--logo-red);">
-            <div class="diag-archetype-icon">🔗</div>
-            <h3 class="diag-archetype-title">The Seam Organization</h3>
-            <p class="diag-archetype-desc">AI sits in one function. The rest were brought in too late.</p>
-          </div>
-          <div class="diag-archetype-card" style="border-top-color: var(--logo-gold);">
-            <div class="diag-archetype-icon">🚪</div>
-            <h3 class="diag-archetype-title">The Unmarked Passage</h3>
-            <p class="diag-archetype-desc">The identity hasn't been named. Leadership is performing a transition it hasn't yet entered.</p>
-          </div>
-          <div class="diag-archetype-card" style="border-top-color: var(--logo-blue);">
-            <div class="diag-archetype-icon">⚙️</div>
-            <h3 class="diag-archetype-title">The Operating Model Lag</h3>
-            <p class="diag-archetype-desc">The tools arrived. The work didn't change.</p>
-          </div>
-          <div class="diag-archetype-card" style="border-top-color: var(--navy);">
-            <div class="diag-archetype-icon">📡</div>
-            <h3 class="diag-archetype-title">The Sensing Deficit</h3>
-            <p class="diag-archetype-desc">The board is asking questions the team can't answer yet.</p>
-          </div>
-        </div>
-      </div>
-    </section>
     <section>
       <div class="wrap narrow">
         <div class="section-head" style="max-width:680px;">
