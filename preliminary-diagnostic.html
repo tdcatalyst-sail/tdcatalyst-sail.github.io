@@ -976,6 +976,10 @@ function skipContactAndShowResult(e) {
   e.preventDefault();
   if (!SUBMIT_URL) return;
 
+  const skipBtn = document.getElementById('diag-form-skip');
+  skipBtn.disabled = true;
+  setFormStatus('Sending…', '');
+
   const payload = {
     sessionId: state.sessionId,
     name: '',
