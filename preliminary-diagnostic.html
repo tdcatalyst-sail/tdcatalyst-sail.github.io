@@ -800,48 +800,32 @@ function renderContact() {
 
 function detectIncoherencies() {
   const incoherencies = [];
+  const q1 = state.answers[0] || [];
+  const q2 = state.answers[1] || [];
+  const q3 = state.answers[2] || [];
+  const q6 = state.answers[5] || [];
+  const q7 = state.answers[6] || [];
+  const q9 = state.answers[8] || [];
+  const q10 = state.answers[9] || [];
+  const q11 = state.answers[10] || [];
 
-  const q1 = state.answers[0] || [];  // Where stalling
-  const q2 = state.answers[1] || [];  // Which tier
-  const q3 = state.answers[2] || [];  // What gap feels like
-  const q4 = state.answers[3] || [];  // Who owns
-  const q5 = state.answers[4] || [];  // HR timing
-  const q6 = state.answers[5] || [];  // Response to skills
-  const q7 = state.answers[6] || [];  // Sensing strength
-  const q8 = state.answers[7] || [];  // Decision speed
-  const q9 = state.answers[8] || [];  // Redesign frequency
-  const q10 = state.answers[9] || []; // Workforce experience
-  const q11 = state.answers[10] || []; // What blocked
-  const q12 = state.answers[11] || []; // Clarity needed
-
-  // Q2 "Transformation" (index 2) BUT Q1 "Work hasn't changed" (index 2) - direct contradiction
   if (q2.includes(2) && q1.includes(2)) {
-    incoherencies.push('You selected "Transformation" tier but also "Work unchanged despite tool usage"—these contradict. If work is truly redesigned, it's transformation. If work is unchanged, you're at surface level.');
+    incoherencies.push('You selected Transformation tier but also Work unchanged - contradiction.');
   }
-
-  // Q2 "Transformation" (index 2) BUT Q9 "Rarely redesign" (index 0) - contradiction
   if (q2.includes(2) && q9.includes(0)) {
-    incoherencies.push('You selected "Transformation" tier but also "Rarely redesign operating model"—transformation requires systematic redesign, not rare redesign.');
+    incoherencies.push('You selected Transformation tier but also Rarely redesign - contradiction.');
   }
-
-  // Q1 "Work unchanged" (index 2) BUT Q9 "Systematically redesign" (index 2) - contradiction
   if (q1.includes(2) && q9.includes(2)) {
-    incoherencies.push('You said work hasn\'t changed but also that you systematically redesign operating models—these don\'t align. Which is it?');
+    incoherencies.push('You said work is unchanged but also systematically redesign - contradiction.');
   }
-
-  // Q3 "Skills problem" (index 0) BUT Q6 "Structural redesign" (index 3) - contradiction
   if (q3.includes(0) && q6.includes(3)) {
-    incoherencies.push('You identified the gap as skills/fluency but your response is structural organizational redesign—these address different problems. Which is the actual constraint?');
+    incoherencies.push('You identified a skills gap but responded with structural redesign - these address different problems.');
   }
-
-  // Q10 "Enthusiasm/actively seeking" (index 0) BUT Q11 "Belief/trust blocker" (index 1) - contradiction
   if (q10.includes(0) && q11.includes(1)) {
-    incoherencies.push('You said workforce is highly enthusiastic but belief/trust is the main blocker—these contradict. If they\'re enthusiastic, belief isn\'t the blocker.');
+    incoherencies.push('You said workforce is highly enthusiastic but belief is the main blocker - contradiction.');
   }
-
-  // Q7 "Strong sensing" (index 2) BUT Q3 "Hard to name/lack frame" (index 3) - contradiction
   if (q7.includes(2) && q3.includes(3)) {
-    incoherencies.push('You marked sensing as strong but also said the gap is hard to name and lacks framing—strong sensing usually brings clarity on what\'s happening.');
+    incoherencies.push('You marked sensing as strong but said the gap is hard to name - contradiction.');
   }
 
   return incoherencies;
