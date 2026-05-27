@@ -153,8 +153,8 @@ function doPost(e) {
 
     // Clean up any old analytics sheet
     const analyticsIter = folder.getFilesByName('TDcatalyst — Analytics');
-    if (analyticsIter.hasNext()) {
-      Drive.Files.remove(analyticsIter.next().getId());
+    while (analyticsIter.hasNext()) {
+      DriveApp.getFileById(analyticsIter.next().getId()).setTrashed(true);
     }
 
     // Ensure submissions sheet exists
