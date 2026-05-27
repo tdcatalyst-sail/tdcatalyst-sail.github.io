@@ -897,7 +897,9 @@ function autoSubmitResult() {
     sessionId: state.sessionId,
     archetype: state.result ? state.result.name : '',
     archetypeId: state.resultKey || '',
+    secondaryArchetype: state.secondaryKey ? ARCHETYPES[state.secondaryKey].name : '',
     signal: state.result ? state.result.signal : '',
+    scores: state.resultScores || {},
     answers: state.answers.map((sel, i) => ({
       question: QUESTIONS[i].q,
       questionNumber: i + 1,
@@ -959,7 +961,9 @@ function submitForm(e) {
     department: department,
     archetype: state.result ? state.result.name : '',
     archetypeId: state.resultKey || '',
+    secondaryArchetype: state.secondaryKey ? ARCHETYPES[state.secondaryKey].name : '',
     signal: state.result ? state.result.signal : '',
+    scores: state.resultScores || {},
     timestamp: new Date().toISOString(),
     userAgent: navigator.userAgent,
     referrer: document.referrer || ''
