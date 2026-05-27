@@ -37,28 +37,29 @@ function ensureSubmissionsSheet(folder) {
 
   // Look for existing sheet
   const iter = folder.getFilesByName(SUBMISSIONS_SHEET);
-  let ss;
-
   if (iter.hasNext()) {
     const file = iter.next();
     ss = SpreadsheetApp.open(file);
     const sheet = ss.getActiveSheet();
+    const currentHeaders = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
 
-    // Clear all content and rebuild with correct headers
-    sheet.clearContents();
-    sheet.appendRow(expectedHeaders);
-    sheet.setFrozenRows(1);
-    sheet.autoResizeColumns(1, expectedHeaders.length);
-  } else {
-    // Create new sheet
-    ss = SpreadsheetApp.create(SUBMISSIONS_SHEET);
-    DriveApp.getFileById(ss.getId()).moveTo(folder);
-    const sheet = ss.getActiveSheet();
-    sheet.appendRow(expectedHeaders);
-    sheet.setFrozenRows(1);
-    sheet.autoResizeColumns(1, expectedHeaders.length);
+    // If headers match, we're good
+    if (currentHeaders.length === expectedHeaders.length &&
+        currentHeaders.every((h, i) => h === expectedHeaders[i])) {
+      return ss;
+    }
+
+    // Headers don't match - delete the misaligned sheet and create new one
+    DriveApp.getFileById(file.getId()).setTrashed(true);
   }
 
+  // Create fresh sheet with correct headers
+  const ss = SpreadsheetApp.create(SUBMISSIONS_SHEET);
+  DriveApp.getFileById(ss.getId()).moveTo(folder);
+  const sheet = ss.getActiveSheet();
+  sheet.appendRow(expectedHeaders);
+  sheet.setFrozenRows(1);
+  sheet.autoResizeColumns(1, expectedHeaders.length);
   return ss;
 }
 
