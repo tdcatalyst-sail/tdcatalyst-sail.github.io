@@ -49,7 +49,7 @@
       display: block;
       width: 220px;
       max-width: 100%;
-      margin-bottom: 1.4rem;
+      margin: 0 0 1.4rem 0;
     }
     @media (max-width: 780px) { .diag-hero-logo { width: 170px; } }
 
@@ -342,30 +342,25 @@
     }
     .diag-fade { animation: diagFadeIn 0.5s ease forwards; }
 
-    .diag-archetypes-inline {
+    .diag-archetypes-box {
       display: flex;
-      flex-wrap: wrap;
-      gap: 2.5rem;
-      margin: 2rem 0 2.5rem;
-      align-items: center;
+      flex-direction: column;
+      gap: 1.2rem;
     }
-    @media (max-width: 900px) { .diag-archetypes-inline { gap: 1.5rem; } }
-    @media (max-width: 680px) { .diag-archetypes-inline { flex-direction: column; align-items: flex-start; gap: 1rem; } }
 
-    .diag-archetype-inline {
+    .diag-archetype-row {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .diag-archetype-inline-name {
-      font-family: 'Fraunces', serif;
+      align-items: flex-start;
+      gap: 1rem;
       font-size: 1rem;
-      font-weight: 400;
-      color: var(--navy);
+      line-height: 1.5;
+      color: var(--charcoal);
     }
-    .diag-archetype-inline-icon {
+    .diag-archetype-icon {
       font-size: 1.8rem;
-      display: inline-block;
+      flex-shrink: 0;
+      display: block;
+      margin-top: 0.1rem;
     }
   </style>
 </head>
@@ -621,27 +616,35 @@ function renderIntro() {
         <div class="eyebrow">A Preliminary Diagnostic</div>
         <h1>Where AI transformation is actually stalling in your organization.</h1>
         <p class="hero-sub">Twelve questions. Four minutes. One named diagnosis — the archetype of stall your organization is most likely carrying, and three organizational moves to begin addressing it.</p>
+      </div>
+    </section>
 
-        <div class="diag-archetypes-inline">
-          <div class="diag-archetype-inline">
-            <span class="diag-archetype-inline-name">The Seam Organization</span>
-            <span class="diag-archetype-inline-icon" style="color: var(--logo-red);">🔗</span>
+    <section class="alt">
+      <div class="wrap narrow">
+        <div class="diag-archetypes-box">
+          <div class="diag-archetype-row">
+            <span class="diag-archetype-icon" style="color: var(--logo-red);">🔗</span>
+            <span><strong>The Seam Organization</strong> — AI sits in one function. The rest were brought in too late.</span>
           </div>
-          <div class="diag-archetype-inline">
-            <span class="diag-archetype-inline-name">The Unmarked Passage</span>
-            <span class="diag-archetype-inline-icon" style="color: var(--logo-gold);">🚪</span>
+          <div class="diag-archetype-row">
+            <span class="diag-archetype-icon" style="color: var(--logo-gold);">🚪</span>
+            <span><strong>The Unmarked Passage</strong> — The identity hasn't been named. Leadership is performing a transition it hasn't yet entered.</span>
           </div>
-          <div class="diag-archetype-inline">
-            <span class="diag-archetype-inline-name">The Operating Model Lag</span>
-            <span class="diag-archetype-inline-icon" style="color: var(--logo-blue);">⚙️</span>
+          <div class="diag-archetype-row">
+            <span class="diag-archetype-icon" style="color: var(--logo-blue);">⚙️</span>
+            <span><strong>The Operating Model Lag</strong> — The tools arrived. The work didn't change.</span>
           </div>
-          <div class="diag-archetype-inline">
-            <span class="diag-archetype-inline-name">The Sensing Deficit</span>
-            <span class="diag-archetype-inline-icon" style="color: var(--navy);">📡</span>
+          <div class="diag-archetype-row">
+            <span class="diag-archetype-icon" style="color: var(--navy);">📡</span>
+            <span><strong>The Sensing Deficit</strong> — The board is asking questions the team can't answer yet.</span>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="btn-row">
+    <section>
+      <div class="wrap narrow">
+        <div class="btn-row" style="margin-top: 0;">
           <button class="btn btn-primary" id="diag-begin">Begin the diagnostic</button>
           <a class="btn btn-ghost" href="method.html">Explore the Method</a>
         </div>
