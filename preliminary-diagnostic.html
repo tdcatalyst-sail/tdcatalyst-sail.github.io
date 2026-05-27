@@ -689,6 +689,7 @@ function renderQuestion() {
   const accent = sect.accent;
   const isLast = state.currentQ === QUESTIONS.length - 1;
   const canContinue = state.selected.length > 0;
+  const isSingleSelect = [6, 7, 8].includes(state.currentQ); // Q7, Q8, Q9 (0-indexed)
 
   const optsHtml = q.opts.map((opt, i) => `
     <button class="diag-opt${state.selected.includes(i) ? ' selected' : ''}" data-opt="${i}">
@@ -707,7 +708,7 @@ function renderQuestion() {
           <div class="diag-section accent-${accent}">${esc(sect.name)}</div>
           <div class="diag-num accent-${accent}">${pad2(state.currentQ + 1)}</div>
           <h2 class="diag-title">${esc(q.q)}</h2>
-          <div class="diag-hint">Select all that apply</div>
+          <div class="diag-hint">${isSingleSelect ? 'Select one' : 'Select all that apply'}</div>
           <div>${optsHtml}</div>
           <div class="diag-nav">
             <button class="diag-back" id="diag-back" style="visibility:${state.currentQ === 0 ? 'hidden' : 'visible'};">← Back</button>
@@ -722,8 +723,12 @@ function renderQuestion() {
   app.querySelectorAll('.diag-opt').forEach((el) => {
     el.addEventListener('click', () => {
       const i = parseInt(el.dataset.opt, 10);
-      if (state.selected.includes(i)) state.selected = state.selected.filter((x) => x !== i);
-      else state.selected = [...state.selected, i];
+      if (isSingleSelect) {
+        state.selected = [i];
+      } else {
+        if (state.selected.includes(i)) state.selected = state.selected.filter((x) => x !== i);
+        else state.selected = [...state.selected, i];
+      }
       render();
     });
   });
