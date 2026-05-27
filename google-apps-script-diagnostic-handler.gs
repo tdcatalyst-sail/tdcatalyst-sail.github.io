@@ -151,6 +151,12 @@ function doPost(e) {
     const folder = getTargetFolder();
     const now = new Date();
 
+    // Clean up any old analytics sheet
+    const analyticsIter = folder.getFilesByName('TDcatalyst — Analytics');
+    if (analyticsIter.hasNext()) {
+      Drive.Files.remove(analyticsIter.next().getId());
+    }
+
     // Ensure submissions sheet exists
     const submissionsSheet = ensureSubmissionsSheet(folder);
 
