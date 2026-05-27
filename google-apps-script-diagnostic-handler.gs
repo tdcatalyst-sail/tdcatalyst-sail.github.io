@@ -7,7 +7,6 @@
 const PARENT_ID = '0AMKqT8DT5gnSUk9PVA';
 const SUBFOLDER_NAME = 'diagnostic results';
 const SUBMISSIONS_SHEET = 'TDcatalyst — Diagnostic Submissions';
-const ANALYTICS_SHEET = 'TDcatalyst — Analytics';
 const TZ = 'America/Los_Angeles';
 
 function getTargetFolder() {
@@ -48,18 +47,6 @@ function ensureSubmissionsSheet(folder) {
   return ss;
 }
 
-function ensureAnalyticsSheet(folder) {
-  const iter = folder.getFilesByName(ANALYTICS_SHEET);
-  if (iter.hasNext()) {
-    return SpreadsheetApp.open(iter.next());
-  }
-  const ss = SpreadsheetApp.create(ANALYTICS_SHEET);
-  DriveApp.getFileById(ss.getId()).moveTo(folder);
-  const sheet = ss.getActiveSheet();
-  sheet.appendRow(['Date', 'Primary Archetype', 'Count', 'Avg Seam', 'Avg UP', 'Avg OM', 'Avg Sensing']);
-  sheet.setFrozenRows(1);
-  return ss;
-}
 
 function createSubmissionDocument(data, folder) {
   const now = new Date();
@@ -142,20 +129,14 @@ function createSubmissionDocument(data, folder) {
   return doc;
 }
 
-function updateAnalytics(folder, data) {
-  // Optional: Update aggregated analytics sheet
-  // This is a future enhancement for dashboard reporting
-}
-
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     const folder = getTargetFolder();
     const now = new Date();
 
-    // Ensure sheets exist
+    // Ensure submissions sheet exists
     const submissionsSheet = ensureSubmissionsSheet(folder);
-    const analyticsSheet = ensureAnalyticsSheet(folder);
 
     // Create submission document
     const doc = createSubmissionDocument(data, folder);
