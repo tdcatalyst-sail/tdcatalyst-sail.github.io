@@ -731,6 +731,55 @@ function renderQuestion() {
   document.getElementById('diag-next').addEventListener('click', handleNext);
 }
 
+function renderContact() {
+  app.innerHTML = `
+    <section class="hero" id="main-content">
+      <div class="wrap narrow diag-fade">
+        <div class="diag-hero-lines" aria-hidden="true">
+          <span class="l-red"></span>
+          <span class="l-gold"></span>
+          <span class="l-blue"></span>
+        </div>
+        <div class="eyebrow">Almost there</div>
+        <h1>Share who you are</h1>
+        <p class="hero-sub">If you would like the TDcatalyst team to read your diagnosis with context — or to follow up about your specific operating reality — share who you are. All fields are optional.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap narrow">
+        <form class="diag-form" id="diag-form" autocomplete="on" novalidate>
+          <div class="diag-form-fields">
+            <div>
+              <label for="f-name">Your name</label>
+              <input type="text" id="f-name" name="name" autocomplete="name" />
+            </div>
+            <div>
+              <label for="f-email">Email</label>
+              <input type="email" id="f-email" name="email" autocomplete="email" />
+            </div>
+            <div>
+              <label for="f-company">Company</label>
+              <input type="text" id="f-company" name="company" autocomplete="organization" />
+            </div>
+            <div>
+              <label for="f-department">Department or role</label>
+              <input type="text" id="f-department" name="department" autocomplete="organization-title" />
+            </div>
+          </div>
+          <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+            <button class="btn btn-primary" type="submit" id="diag-form-submit"${SUBMIT_URL ? '' : ' disabled'}>See your diagnosis</button>
+            <button class="btn btn-ghost" type="button" id="diag-form-skip">Skip</button>
+          </div>
+          <div class="diag-form-status" id="diag-form-status">${SUBMIT_URL ? '' : 'Form submission is not yet configured.'}</div>
+        </form>
+      </div>
+    </section>
+  `;
+  document.getElementById('diag-form').addEventListener('submit', submitContactAndShowResult);
+  document.getElementById('diag-form-skip').addEventListener('click', skipContactAndShowResult);
+}
+
 function renderResult() {
   const a = state.result;
   const bodyHtml = a.body.map((p) => `<p>${esc(p)}</p>`).join('');
@@ -777,38 +826,6 @@ function renderResult() {
       </div>
     </section>
 
-    <section>
-      <div class="wrap narrow">
-        <div class="section-head" style="max-width:680px;">
-          <div class="eyebrow">Optional</div>
-          <h2>Share who you are.</h2>
-          <p>If you would like the TDcatalyst team to read your diagnosis with context — or to follow up about your specific operating reality — share who you are. All fields are optional.</p>
-        </div>
-        <form class="diag-form" id="diag-form" autocomplete="on" novalidate>
-          <div class="diag-form-fields">
-            <div>
-              <label for="f-name">Your name</label>
-              <input type="text" id="f-name" name="name" autocomplete="name" />
-            </div>
-            <div>
-              <label for="f-email">Email</label>
-              <input type="email" id="f-email" name="email" autocomplete="email" />
-            </div>
-            <div>
-              <label for="f-company">Company</label>
-              <input type="text" id="f-company" name="company" autocomplete="organization" />
-            </div>
-            <div>
-              <label for="f-department">Department or role</label>
-              <input type="text" id="f-department" name="department" autocomplete="organization-title" />
-            </div>
-          </div>
-          <button class="btn btn-primary" type="submit" id="diag-form-submit"${SUBMIT_URL ? '' : ' disabled'}>Send</button>
-          <div class="diag-form-status" id="diag-form-status">${SUBMIT_URL ? '' : 'Form submission is not yet configured.'}</div>
-        </form>
-      </div>
-    </section>
-
     <section class="cta-panel">
       <div class="wrap">
         <p class="cta-sentence">From a named challenge to a mapped terrain.</p>
@@ -838,9 +855,8 @@ function handleNext() {
     state.resultKey = computeResult();
     state.result = ARCHETYPES[state.resultKey];
     state.sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    state.phase = 'result';
+    state.phase = 'contact';
     render();
-    autoSubmitResult();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
@@ -883,12 +899,41 @@ function computeMaxScores() {
 }
 
 // ---- auto-submit diagnostic results ----
-function autoSubmitResult() {
-  if (!SUBMIT_URL || !state.sessionId) return;
+// ---- contact form submission ----
+function setFormStatus(msg, cls) {
+  const el = document.getElementById('diag-form-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'diag-form-status ' + (cls || '');
+}
+
+function submitContactAndShowResult(e) {
+  e.preventDefault();
+  if (!SUBMIT_URL) {
+    setFormStatus('Form submission is not yet configured.', 'error');
+    return;
+  }
+  const form = e.target;
+  const name = form.name.value.trim();
+  const email = form.email.value.trim();
+  const company = form.company.value.trim();
+  const department = form.department.value.trim();
+
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setFormStatus('Please check the email address format.', 'error');
+    return;
+  }
+
+  const submitBtn = document.getElementById('diag-form-submit');
+  submitBtn.disabled = true;
+  setFormStatus('Sending…', '');
 
   const payload = {
-    type: 'initial',
     sessionId: state.sessionId,
+    name: name,
+    email: email,
+    company: company,
+    department: department,
     archetype: state.result ? state.result.name : '',
     archetypeId: state.resultKey || '',
     secondaryArchetype: state.secondaryKey ? ARCHETYPES[state.secondaryKey].name : '',
@@ -910,54 +955,37 @@ function autoSubmitResult() {
     mode: 'no-cors',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify(payload)
-  }).catch(() => {});
+  }).then(function () {
+    state.phase = 'result';
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }).catch(function () {
+    submitBtn.disabled = false;
+    setFormStatus('Could not send. Please try again or email begin@tdcatalyst.com.', 'error');
+  });
 }
 
-// ---- optional submission form ----
-function setFormStatus(msg, cls) {
-  const el = document.getElementById('diag-form-status');
-  if (!el) return;
-  el.textContent = msg;
-  el.className = 'diag-form-status ' + (cls || '');
-}
-
-function submitForm(e) {
+function skipContactAndShowResult(e) {
   e.preventDefault();
-  if (!SUBMIT_URL) {
-    setFormStatus('Form submission is not yet configured.', 'error');
-    return;
-  }
-  const form = e.target;
-  const name = form.name.value.trim();
-  const email = form.email.value.trim();
-  const company = form.company.value.trim();
-  const department = form.department.value.trim();
-
-  if (!name && !email && !company) {
-    setFormStatus('Please share at least your name, email, or company.', 'error');
-    return;
-  }
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    setFormStatus('Please check the email address format.', 'error');
-    return;
-  }
-
-  const submitBtn = document.getElementById('diag-form-submit');
-  submitBtn.disabled = true;
-  setFormStatus('Sending…', '');
+  if (!SUBMIT_URL) return;
 
   const payload = {
-    type: 'contact_update',
     sessionId: state.sessionId,
-    name: name,
-    email: email,
-    company: company,
-    department: department,
+    name: '',
+    email: '',
+    company: '',
+    department: '',
     archetype: state.result ? state.result.name : '',
     archetypeId: state.resultKey || '',
     secondaryArchetype: state.secondaryKey ? ARCHETYPES[state.secondaryKey].name : '',
     signal: state.result ? state.result.signal : '',
     scores: state.resultScores || {},
+    answers: state.answers.map((sel, i) => ({
+      question: QUESTIONS[i].q,
+      questionNumber: i + 1,
+      section: sectionFor(i).name,
+      selected: sel.map((idx) => (QUESTIONS[i].opts[idx] ? QUESTIONS[i].opts[idx].t : ''))
+    })),
     timestamp: new Date().toISOString(),
     userAgent: navigator.userAgent,
     referrer: document.referrer || ''
@@ -969,11 +997,13 @@ function submitForm(e) {
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify(payload)
   }).then(function () {
-    form.style.display = 'none';
-    setFormStatus('Thank you. Your context is on its way to TDcatalyst.', 'success');
+    state.phase = 'result';
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }).catch(function () {
-    submitBtn.disabled = false;
-    setFormStatus('Could not send. Please try again or email begin@tdcatalyst.com.', 'error');
+    state.phase = 'result';
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
 
@@ -1003,6 +1033,7 @@ function computeResult() {
 function render() {
   if (state.phase === 'intro') renderIntro();
   else if (state.phase === 'question') renderQuestion();
+  else if (state.phase === 'contact') renderContact();
   else if (state.phase === 'result') renderResult();
   setProgress();
 }

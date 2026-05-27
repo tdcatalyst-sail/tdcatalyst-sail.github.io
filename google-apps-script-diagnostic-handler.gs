@@ -168,23 +168,24 @@ function doPost(e) {
     const om = data.scores ? (data.scores.OM || 0) : 0;
     const sensing = data.scores ? (data.scores.Sensing || 0) : 0;
 
-    sheet.appendRow([
-      now,
-      data.sessionId || '',
-      data.name || '',
-      data.email || '',
-      data.company || '',
-      data.department || '',
-      data.archetype || '',
-      data.secondaryArchetype || '',
-      (seam * 100).toFixed(1),
-      (up * 100).toFixed(1),
-      (om * 100).toFixed(1),
-      (sensing * 100).toFixed(1),
-      data.userAgent || '',
-      data.referrer || '',
-      doc.getUrl()
-    ]);
+    const row = [
+      now,                                  // Timestamp
+      data.sessionId || '',                 // Session ID
+      data.name || '',                      // Name
+      data.email || '',                     // Email
+      data.company || '',                   // Company
+      data.department || '',                // Department
+      data.archetype || '',                 // Primary Archetype
+      data.secondaryArchetype || '',        // Secondary Archetype
+      (seam * 100).toFixed(1),              // Seam Score
+      (up * 100).toFixed(1),                // UP Score
+      (om * 100).toFixed(1),                // OM Score
+      (sensing * 100).toFixed(1),           // Sensing Score
+      data.userAgent || '',                 // User Agent
+      data.referrer || '',                  // Referrer
+      doc.getUrl()                          // Submission Doc URL
+    ];
+    sheet.appendRow(row);
 
     return ContentService.createTextOutput(JSON.stringify({ ok: true }))
       .setMimeType(ContentService.MimeType.JSON);
