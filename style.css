@@ -189,9 +189,12 @@ section { padding: 5rem 0; }
 .hero-with-logo .hero-logo { margin-bottom: 1.4rem; }
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 3rem;
-  align-items: center;
+  align-items: start;
+}
+.hero-main {
+  /* Left column with logo and main content */
 }
 @media (max-width: 900px) {
   .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
@@ -298,6 +301,51 @@ section { padding: 5rem 0; }
 }
 .btn-ghost:hover { background: var(--navy); color: var(--offwhite); }
 .btn-row { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+
+/* Adaptive challenges CTA */
+.adaptive-challenges { padding-top: 0.5rem; }
+.challenges-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--terracotta);
+  margin-bottom: 1.8rem;
+  font-weight: 500;
+  display: block;
+}
+.challenges-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+.challenge-item {
+  display: block;
+  padding-left: 1.2rem;
+  border-left: 3px solid var(--terracotta);
+  transition: border-color 0.2s;
+  color: var(--charcoal);
+}
+.challenge-item:hover {
+  border-left-color: var(--navy);
+}
+.challenge-title {
+  display: block;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 0.35rem;
+  transition: color 0.2s;
+}
+.challenge-item:hover .challenge-title {
+  color: var(--terracotta);
+}
+.challenge-detail {
+  display: block;
+  font-size: 0.93rem;
+  line-height: 1.5;
+  color: var(--midgray);
+}
 
 /* ===== CARDS / GRIDS ===== */
 .section-head { margin-bottom: 2.5rem; max-width: 680px; }
