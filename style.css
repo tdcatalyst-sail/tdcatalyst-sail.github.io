@@ -189,9 +189,12 @@ section { padding: 5rem 0; }
 .hero-with-logo .hero-logo { margin-bottom: 1.4rem; }
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 3rem;
-  align-items: center;
+  align-items: start;
+}
+.hero-main {
+  /* Left column with logo and main content */
 }
 @media (max-width: 900px) {
   .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
