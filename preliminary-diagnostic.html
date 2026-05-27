@@ -798,6 +798,43 @@ function renderContact() {
   document.getElementById('diag-form-skip').addEventListener('click', skipContactAndShowResult);
 }
 
+function detectIncoherencies() {
+  const incoherencies = [];
+
+  // Q7 (Sensing capability) vs Q8 (Decision speed): strong sensing but slow action
+  const q7Answers = state.answers[6] || [];
+  const q8Answers = state.answers[7] || [];
+  const q9Answers = state.answers[8] || [];
+  const q4Answers = state.answers[3] || [];
+  const q5Answers = state.answers[4] || [];
+  const q10Answers = state.answers[9] || [];
+  const q11Answers = state.answers[10] || [];
+
+  // Q7 strong (index 2) vs Q8 slow (index 0)
+  if (q7Answers.includes(2) && q8Answers.includes(0)) {
+    incoherencies.push('Strong sensing but slow decision speed—you detect signals well but may struggle to act on them fast enough.');
+  }
+
+  // Q8 fast (index 2) vs Q9 rarely (index 0)
+  if (q8Answers.includes(2) && q9Answers.includes(0)) {
+    incoherencies.push('Fast decision speed but rarely redesign operating model—you move quickly, but structural changes lag.');
+  }
+
+  // Q4 has clear owner (any but index 4) vs Q5 HR came late (index 1 or 2)
+  const q4HasClearOwner = q4Answers.length > 0 && !q4Answers.includes(4);
+  const q5HRLate = q5Answers.includes(1) || q5Answers.includes(2);
+  if (q4HasClearOwner && q5HRLate) {
+    incoherencies.push('Clear ownership but HR came in late—early tech/product ownership may have locked in decisions before workforce design was considered.');
+  }
+
+  // Q10 small group (index 0) vs Q11 belief blocker (index 1)
+  if (q10Answers.includes(0) && q11Answers.includes(1)) {
+    incoherencies.push('Small group actively driving adoption but belief/trust is the main blocker—resistance may reflect exclusion from the transition rather than skepticism of AI itself.');
+  }
+
+  return incoherencies;
+}
+
 function renderResult() {
   const a = state.result;
   const bodyHtml = a.body.map((p) => `<p>${esc(p)}</p>`).join('');
@@ -807,6 +844,13 @@ function renderResult() {
       <div class="diag-move-text">${esc(m)}</div>
     </div>
   `).join('');
+  const incoherencies = detectIncoherencies();
+  const incoherencyHtml = incoherencies.length > 0 ? `
+    <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(200, 149, 10, 0.08); border-left: 3px solid var(--terracotta);">
+      <p style="font-size: 0.9rem; color: var(--midgray); margin-top: 0; margin-bottom: 0.8rem;"><strong>Possible tensions in your responses:</strong></p>
+      ${incoherencies.map(inc => `<p style="font-size: 0.9rem; color: var(--charcoal); margin: 0.5rem 0;">• ${esc(inc)}</p>`).join('')}
+    </div>
+  ` : '';
 
   app.innerHTML = `
     <section class="hero" id="main-content">
@@ -842,6 +886,7 @@ function renderResult() {
           <h2>The work that begins now.</h2>
         </div>
         <div class="diag-moves">${movesHtml}</div>
+        ${incoherencyHtml}
       </div>
     </section>
 
