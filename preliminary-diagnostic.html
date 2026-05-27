@@ -798,39 +798,6 @@ function renderContact() {
   document.getElementById('diag-form-skip').addEventListener('click', skipContactAndShowResult);
 }
 
-function detectIncoherencies() {
-  const incoherencies = [];
-  const q1 = state.answers[0] || [];
-  const q2 = state.answers[1] || [];
-  const q3 = state.answers[2] || [];
-  const q6 = state.answers[5] || [];
-  const q7 = state.answers[6] || [];
-  const q9 = state.answers[8] || [];
-  const q10 = state.answers[9] || [];
-  const q11 = state.answers[10] || [];
-
-  if (q2.includes(2) && q1.includes(2)) {
-    incoherencies.push('You selected Transformation tier but also Work unchanged - contradiction.');
-  }
-  if (q2.includes(2) && q9.includes(0)) {
-    incoherencies.push('You selected Transformation tier but also Rarely redesign - contradiction.');
-  }
-  if (q1.includes(2) && q9.includes(2)) {
-    incoherencies.push('You said work is unchanged but also systematically redesign - contradiction.');
-  }
-  if (q3.includes(0) && q6.includes(3)) {
-    incoherencies.push('You identified a skills gap but responded with structural redesign - these address different problems.');
-  }
-  if (q10.includes(0) && q11.includes(1)) {
-    incoherencies.push('You said workforce is highly enthusiastic but belief is the main blocker - contradiction.');
-  }
-  if (q7.includes(2) && q3.includes(3)) {
-    incoherencies.push('You marked sensing as strong but said the gap is hard to name - contradiction.');
-  }
-
-  return incoherencies;
-}
-
 function renderResult() {
   const a = state.result;
   const bodyHtml = a.body.map((p) => `<p>${esc(p)}</p>`).join('');
@@ -840,13 +807,6 @@ function renderResult() {
       <div class="diag-move-text">${esc(m)}</div>
     </div>
   `).join('');
-  const incoherencies = detectIncoherencies();
-  const incoherencyHtml = incoherencies.length > 0 ? `
-    <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(200, 149, 10, 0.08); border-left: 3px solid var(--terracotta);">
-      <p style="font-size: 0.9rem; color: var(--midgray); margin-top: 0; margin-bottom: 0.8rem;"><strong>Possible tensions in your responses:</strong></p>
-      ${incoherencies.map(inc => `<p style="font-size: 0.9rem; color: var(--charcoal); margin: 0.5rem 0;">• ${esc(inc)}</p>`).join('')}
-    </div>
-  ` : '';
 
   app.innerHTML = `
     <section class="hero" id="main-content">
@@ -882,7 +842,6 @@ function renderResult() {
           <h2>The work that begins now.</h2>
         </div>
         <div class="diag-moves">${movesHtml}</div>
-        ${incoherencyHtml}
       </div>
     </section>
 
