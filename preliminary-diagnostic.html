@@ -341,6 +341,43 @@
       to   { opacity: 1; }
     }
     .diag-fade { animation: diagFadeIn 0.5s ease forwards; }
+
+    .diag-archetypes-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 1200px) { .diag-archetypes-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 680px) { .diag-archetypes-grid { grid-template-columns: 1fr; } }
+
+    .diag-archetype-card {
+      background: #fff;
+      border: 1px solid var(--hairline);
+      border-top: 4px solid;
+      padding: 1.8rem;
+      border-radius: 2px;
+      text-align: center;
+    }
+    .diag-archetype-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .diag-archetype-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--navy);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+    .diag-archetype-desc {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--charcoal);
+      margin: 0;
+    }
   </style>
 </head>
 <body>
@@ -599,6 +636,37 @@ function renderIntro() {
         <div class="btn-row">
           <button class="btn btn-primary" id="diag-begin">Begin the diagnostic</button>
           <a class="btn btn-ghost" href="method.html">Explore the Method</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="alt">
+      <div class="wrap">
+        <div class="section-head" style="max-width:680px;">
+          <div class="eyebrow">Four possible archetypes</div>
+          <h2>You might discover you are.</h2>
+        </div>
+        <div class="diag-archetypes-grid">
+          <div class="diag-archetype-card" style="border-top-color: var(--logo-red);">
+            <div class="diag-archetype-icon">🔗</div>
+            <h3 class="diag-archetype-title">The Seam Organization</h3>
+            <p class="diag-archetype-desc">AI sits in one function. The rest were brought in too late.</p>
+          </div>
+          <div class="diag-archetype-card" style="border-top-color: var(--logo-gold);">
+            <div class="diag-archetype-icon">🚪</div>
+            <h3 class="diag-archetype-title">The Unmarked Passage</h3>
+            <p class="diag-archetype-desc">The identity hasn't been named. Leadership is performing a transition it hasn't yet entered.</p>
+          </div>
+          <div class="diag-archetype-card" style="border-top-color: var(--logo-blue);">
+            <div class="diag-archetype-icon">⚙️</div>
+            <h3 class="diag-archetype-title">The Operating Model Lag</h3>
+            <p class="diag-archetype-desc">The tools arrived. The work didn't change.</p>
+          </div>
+          <div class="diag-archetype-card" style="border-top-color: var(--navy);">
+            <div class="diag-archetype-icon">📡</div>
+            <h3 class="diag-archetype-title">The Sensing Deficit</h3>
+            <p class="diag-archetype-desc">The board is asking questions the team can't answer yet.</p>
+          </div>
         </div>
       </div>
     </section>
