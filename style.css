@@ -1186,3 +1186,48 @@ section.article-section { padding-top: 2rem; }
 
 .tcard-cta { display: block; text-align: center; }
 @media (max-width: 820px) { .tcard-cta { display: inline-block; } }
+
+/* Collapsible sources section */
+.sources-collapsible {
+  margin-top: 2rem;
+}
+
+.sources-collapsible summary {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
+  list-style: none;
+}
+
+.sources-collapsible summary::before {
+  content: '▼';
+  display: inline-block;
+  font-size: 0.75rem;
+  transition: transform 0.25s ease;
+  color: var(--navy);
+  width: 1em;
+}
+
+.sources-collapsible[open] summary::before {
+  transform: rotate(0deg);
+}
+
+.sources-collapsible:not([open]) summary::before {
+  transform: rotate(-90deg);
+}
+
+.sources-collapsible-content {
+  margin-top: 1.2rem;
+  padding-left: 1.8rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--charcoal);
+  max-width: 64ch;
+}
+
+.sources-collapsible-content p {
+  margin-bottom: 0.8rem;
+}
