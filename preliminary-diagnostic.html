@@ -563,7 +563,8 @@ const state = {
   answers: Array(QUESTIONS.length).fill(null).map(() => []),
   selected: [],
   result: null,
-  resultKey: null
+  resultKey: null,
+  sessionId: null
 };
 
 // ---- render ----
@@ -760,8 +761,10 @@ function handleNext() {
   } else {
     state.resultKey = computeResult();
     state.result = ARCHETYPES[state.resultKey];
+    state.sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     state.phase = 'result';
     render();
+    autoSubmitResult();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
@@ -782,6 +785,7 @@ function restart() {
   state.selected = [];
   state.result = null;
   state.resultKey = null;
+  state.sessionId = null;
   render();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -798,6 +802,35 @@ function computeMaxScores() {
     });
   });
   return max;
+}
+
+// ---- auto-submit diagnostic results ----
+function autoSubmitResult() {
+  if (!SUBMIT_URL || !state.sessionId) return;
+
+  const payload = {
+    type: 'initial',
+    sessionId: state.sessionId,
+    archetype: state.result ? state.result.name : '',
+    archetypeId: state.resultKey || '',
+    signal: state.result ? state.result.signal : '',
+    answers: state.answers.map((sel, i) => ({
+      question: QUESTIONS[i].q,
+      questionNumber: i + 1,
+      section: sectionFor(i).name,
+      selected: sel.map((idx) => (QUESTIONS[i].opts[idx] ? QUESTIONS[i].opts[idx].t : ''))
+    })),
+    timestamp: new Date().toISOString(),
+    userAgent: navigator.userAgent,
+    referrer: document.referrer || ''
+  };
+
+  fetch(SUBMIT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  }).catch(() => {});
 }
 
 // ---- optional submission form ----
@@ -834,6 +867,8 @@ function submitForm(e) {
   setFormStatus('Sending…', '');
 
   const payload = {
+    type: 'contact_update',
+    sessionId: state.sessionId,
     name: name,
     email: email,
     company: company,
@@ -841,11 +876,6 @@ function submitForm(e) {
     archetype: state.result ? state.result.name : '',
     archetypeId: state.resultKey || '',
     signal: state.result ? state.result.signal : '',
-    answers: state.answers.map((sel, i) => ({
-      question: QUESTIONS[i].q,
-      section: sectionFor(i).name,
-      selected: sel.map((idx) => (QUESTIONS[i].opts[idx] ? QUESTIONS[i].opts[idx].t : ''))
-    })),
     timestamp: new Date().toISOString(),
     userAgent: navigator.userAgent,
     referrer: document.referrer || ''
