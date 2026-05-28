@@ -182,7 +182,7 @@ section { padding: 5rem 0; }
 
 /* ===== HERO ===== */
 .hero {
-  padding: 6rem 0 4rem;
+  padding: 1.5rem 0 4rem;
   border-bottom: 1px solid var(--hairline);
 }
 .hero-with-logo { padding-top: 1.5rem; }
