@@ -203,10 +203,20 @@ section { padding: 5rem 0; }
   text-align: center;
   padding: 1.5rem;
   border-radius: 2px;
+  border-top: 3px solid;
 }
-.challenge-box-red { background: rgba(196, 69, 54, 0.08); }
-.challenge-box-gold { background: rgba(200, 149, 10, 0.08); }
-.challenge-box-blue { background: rgba(74, 124, 158, 0.08); }
+.challenge-box-red {
+  background: rgba(196, 69, 54, 0.08);
+  border-top-color: var(--logo-red);
+}
+.challenge-box-gold {
+  background: rgba(200, 149, 10, 0.08);
+  border-top-color: var(--logo-gold);
+}
+.challenge-box-blue {
+  background: rgba(74, 124, 158, 0.08);
+  border-top-color: var(--logo-blue);
+}
 .challenge-icon {
   font-size: 2.2rem;
   margin-bottom: 0.8rem;
