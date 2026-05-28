@@ -193,7 +193,7 @@ section { padding: 5rem 0; }
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
-  margin: 3rem 0;
+  margin: 2.5rem 0;
   padding: 0;
 }
 .challenge-box {
@@ -335,7 +335,7 @@ section { padding: 5rem 0; }
 
 /* Diagnostic CTA section */
 .cta-diagnostic {
-  padding: 4rem 0;
+  padding: 5rem 0;
   background: var(--seamist);
 }
 .cta-diagnostic p {
