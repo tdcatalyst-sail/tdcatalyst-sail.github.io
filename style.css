@@ -197,8 +197,8 @@ section:has(+ .hero) {
 .challenges-boxes {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin: 2.5rem 0;
+  gap: 2.5rem;
+  margin: 3rem 0;
   padding: 0;
 }
 .challenge-box {
@@ -214,7 +214,7 @@ section:has(+ .hero) {
   font-size: 1rem;
   font-weight: 500;
   color: var(--navy);
-  margin-bottom: 0.6rem;
+  margin-bottom: 1rem;
   line-height: 1.25;
 }
 .challenge-box-detail {
