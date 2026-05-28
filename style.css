@@ -187,6 +187,48 @@ section { padding: 5rem 0; }
 }
 .hero-with-logo { padding-top: 1.5rem; }
 .hero-with-logo .hero-logo { margin-bottom: 1.4rem; }
+
+/* Adaptive challenges boxes in hero */
+.challenges-boxes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+  margin: 2.5rem 0;
+  padding: 0;
+}
+.challenge-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 2px;
+}
+.challenge-box-red { background: rgba(196, 69, 54, 0.08); }
+.challenge-box-gold { background: rgba(200, 149, 10, 0.08); }
+.challenge-box-blue { background: rgba(74, 124, 158, 0.08); }
+.challenge-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.8rem;
+  line-height: 1;
+}
+.challenge-box-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+.challenge-box-detail {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--midgray);
+}
+@media (max-width: 900px) {
+  .challenges-boxes { grid-template-columns: 1fr; gap: 1rem; }
+}
+
 .hero-grid {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
