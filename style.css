@@ -182,13 +182,15 @@ section { padding: 5rem 0; }
 
 /* ===== HERO ===== */
 .hero {
-  padding: 1.5rem 0 4rem;
+  padding: 2.5rem 0 4rem;
   border-bottom: 1px solid var(--hairline);
 }
-section + .hero {
-  padding-top: 3.5rem;
-}
 .hero-with-logo { padding-top: 1.5rem; }
+.hero-photo-bg { padding: 5rem 0 4rem; }
+
+section:has(+ .hero) {
+  margin-bottom: 0.5rem;
+}
 .hero-with-logo .hero-logo { margin-bottom: 1.4rem; }
 
 /* Adaptive challenges boxes in hero */
@@ -596,7 +598,7 @@ hr.sign-rule {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin: -5.2rem 0 1.6rem;
+  margin: 0 0 1.6rem;
   max-width: 160px;
 }
 .hero-lines span { display: block; height: 3px; border-radius: 2px; }
