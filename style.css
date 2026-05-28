@@ -333,16 +333,6 @@ section { padding: 5rem 0; }
 .btn-ghost:hover { background: var(--navy); color: var(--offwhite); }
 .btn-row { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 
-/* Diagnostic CTA section */
-.cta-diagnostic {
-  padding: 5rem 0;
-  background: var(--seamist);
-}
-.cta-diagnostic p {
-  color: var(--navy);
-  font-size: 1.1rem;
-}
-
 /* ===== CARDS / GRIDS ===== */
 .section-head { margin-bottom: 2.5rem; max-width: 680px; }
 .section-head h2 { margin-bottom: 0.6rem; }
