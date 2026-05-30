@@ -598,12 +598,15 @@ const state = {
   currentQ: 0,
   answers: Array(QUESTIONS.length).fill(null).map(() => []),
   selected: [],
+  freetext: Array(QUESTIONS.length).fill(''),
   result: null,
   resultKey: null,
   resultScores: null,
   secondaryKey: null,
   sessionId: null
 };
+
+const FREETEXT_QUESTIONS = [0, 1, 3, 5, 9, 10, 11];
 
 // ---- render ----
 const app = document.getElementById('diag-app');
@@ -702,6 +705,7 @@ function renderQuestion() {
   const isLast = state.currentQ === QUESTIONS.length - 1;
   const canContinue = state.selected.length > 0;
   const isSingleSelect = [6, 7, 8].includes(state.currentQ); // Q7, Q8, Q9 (0-indexed)
+  const hasFreetextField = FREETEXT_QUESTIONS.includes(state.currentQ);
 
   const optsHtml = q.opts.map((opt, i) => `
     <button class="diag-opt${state.selected.includes(i) ? ' selected' : ''}" data-opt="${i}">
@@ -713,6 +717,13 @@ function renderQuestion() {
     </button>
   `).join('');
 
+  const freetextHtml = hasFreetextField ? `
+    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--hairline);">
+      <label for="diag-freetext" style="display: block; font-family: 'Fraunces', serif; font-size: 0.82rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.8rem; color: var(--midgray);">Neither / Something else</label>
+      <textarea id="diag-freetext" placeholder="Describe any aspect of your organization's AI transformation that isn't captured above..." style="width: 100%; padding: 1rem; border: 1px solid var(--hairline); border-radius: 2px; font-family: 'Inter', sans-serif; font-size: 0.95rem; color: var(--charcoal); resize: vertical; min-height: 80px;" spellcheck="true"></textarea>
+    </div>
+  ` : '';
+
   app.innerHTML = `
     <section id="main-content">
       <div class="wrap narrow">
@@ -722,6 +733,7 @@ function renderQuestion() {
           <h2 class="diag-title">${esc(q.q)}</h2>
           <div class="diag-hint">${isSingleSelect ? 'Select one' : 'Select all that apply'}</div>
           <div>${optsHtml}</div>
+          ${freetextHtml}
           <div class="diag-nav">
             <button class="diag-back" id="diag-back" style="visibility:${state.currentQ === 0 ? 'hidden' : 'visible'};">← Back</button>
             <span class="diag-counter">${pad2(state.currentQ + 1)} / ${pad2(QUESTIONS.length)}</span>
@@ -744,6 +756,15 @@ function renderQuestion() {
       render();
     });
   });
+
+  if (hasFreetextField) {
+    const freetextEl = document.getElementById('diag-freetext');
+    freetextEl.value = state.freetext[state.currentQ] || '';
+    freetextEl.addEventListener('input', (e) => {
+      state.freetext[state.currentQ] = e.target.value;
+    });
+  }
+
   document.getElementById('diag-back').addEventListener('click', handleBack);
   document.getElementById('diag-next').addEventListener('click', handleNext);
 }
@@ -934,6 +955,7 @@ function restart() {
   state.currentQ = 0;
   state.answers = Array(QUESTIONS.length).fill(null).map(() => []);
   state.selected = [];
+  state.freetext = Array(QUESTIONS.length).fill('');
   state.result = null;
   state.resultKey = null;
   state.resultScores = null;
@@ -1002,7 +1024,8 @@ function submitContactAndShowResult(e) {
       question: QUESTIONS[i].q,
       questionNumber: i + 1,
       section: sectionFor(i).name,
-      selected: sel.map((idx) => (QUESTIONS[i].opts[idx] ? QUESTIONS[i].opts[idx].t : ''))
+      selected: sel.map((idx) => (QUESTIONS[i].opts[idx] ? QUESTIONS[i].opts[idx].t : '')),
+      freetext: state.freetext[i] || ''
     })),
     timestamp: new Date().toISOString(),
     userAgent: navigator.userAgent,
@@ -1047,7 +1070,8 @@ function skipContactAndShowResult(e) {
       question: QUESTIONS[i].q,
       questionNumber: i + 1,
       section: sectionFor(i).name,
-      selected: sel.map((idx) => (QUESTIONS[i].opts[idx] ? QUESTIONS[i].opts[idx].t : ''))
+      selected: sel.map((idx) => (QUESTIONS[i].opts[idx] ? QUESTIONS[i].opts[idx].t : '')),
+      freetext: state.freetext[i] || ''
     })),
     timestamp: new Date().toISOString(),
     userAgent: navigator.userAgent,
