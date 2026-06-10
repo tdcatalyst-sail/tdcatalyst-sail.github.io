@@ -873,11 +873,6 @@ hr.sign-rule {
 .logistics-item h3 { font-size: 1rem; margin-bottom: 0.5rem; }
 .logistics-item p { font-size: 0.93rem; margin: 0; color: var(--midgray); }
 
-/* Diagnostic excerpt */
-.diagnostic-excerpt { background: var(--seamist); padding: 2rem 2.5rem; border-radius: 2px; }
-.diagnostic-excerpt blockquote { font-style: italic; font-size: 1rem; color: var(--charcoal); line-height: 1.75; margin: 0 0 1rem; }
-.excerpt-source { font-size: 0.78rem; color: var(--midgray); letter-spacing: 0.03em; }
-
 /* How to choose */
 .choose-blocks { display: grid; gap: 0; max-width: 740px; border-top: 1px solid var(--hairline); }
 .choose-block {
@@ -947,7 +942,6 @@ hr.sign-rule {
 @media (max-width: 480px) {
   .wrap { padding: 0 1.25rem; }
   .nav-inner { padding: 0.9rem 1.25rem; }
-  .diagnostic-excerpt,
   .land-ack { padding: 1.4rem 1.25rem; }
   .scard,
   .outcome-item,
