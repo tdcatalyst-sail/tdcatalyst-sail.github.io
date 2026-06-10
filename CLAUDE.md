@@ -9,9 +9,9 @@ This is a **static HTML website with no build process**—all pages are hand-aut
 ## Project Overview
 
 TDcatalyst is an advisory practice website focused on AI workforce transformation and adaptability. The site presents:
-- **Core service pages:** Method, Sessions, About, Begin (contact)
+- **Core service pages:** Method, Sessions, About, Begin (contact), Diagnose (preliminary-diagnostic.html)
 - **Field Notes:** Practitioner essays on AI, work, and organizational change
-- **Supporting pages:** Adaptability Framework, two calling cards (contact-card.html, calling-card.html)
+- **Supporting pages:** one-pager.html (direct-share summary), two calling cards (contact-card.html, calling-card.html — the latter is a redirect stub to the former)
 
 All pages are self-contained, semantic HTML with consistent navigation and styling.
 
@@ -19,17 +19,21 @@ All pages are self-contained, semantic HTML with consistent navigation and styli
 
 ### Directory Structure
 ```
-/home/user/tdcatalyst-sail.github.io/
+tdcatalyst-sail.github.io/
 ├── *.html                           # 13 page files (see below)
 ├── style.css                        # Single shared stylesheet
 ├── script.js                        # Minimal JavaScript (2 behaviors)
-├── images/                          # Logo, headshot, QR code, favicon
+├── images/                          # Logo, headshot, field-note images, QR code
 ├── CNAME                            # Domain config (tdcatalyst.com)
 ├── robots.txt                       # SEO config
 ├── sitemap.xml                      # Sitemap
 ├── .gitignore                       # Git ignore rules
+├── .gitattributes                   # Line-ending normalization
+├── _private/                        # Gitignored: backend notes + Apps Script source (NOT deployed)
 └── CLAUDE.md                        # This file
 ```
+
+**IMPORTANT:** Everything tracked in this repo is publicly served at tdcatalyst.com by GitHub Pages. Never commit internal notes, backend source, or credentials — put them in `_private/` (gitignored).
 
 ### HTML Pages (13 total)
 
@@ -39,7 +43,8 @@ All pages are self-contained, semantic HTML with consistent navigation and styli
 - `sessions.html` — Session tiers, deliverables, and pricing structure
 - `about.html` — About Thomas Delaporte and the practice
 - `begin.html` — Contact form (GET param: `?sent=1` shows confirmation)
-- `adaptability-framework.html` — Detailed framework exposition
+- `preliminary-diagnostic.html` — 12-question AI Transformation Stall Diagnostic. The quiz copy lives in inline JavaScript strings, not HTML; submissions POST to a Google Apps Script endpoint (source kept in `_private/`)
+- `one-pager.html` — Direct-share practice summary (not linked from nav or sitemap by design)
 
 **Field Notes Hub & Articles:**
 - `field-notes.html` — Hub page listing all field note essays
@@ -101,8 +106,9 @@ All pages are self-contained, semantic HTML with consistent navigation and styli
 ### Images (images/ directory)
 
 - `logo-v2.jpg` — Main logo (used in heroes)
-- `logo-full.jpg` — Full logo lockup (OG image, social media)
-- `headshot.jpg` — Thomas Delaporte headshot (about page)
+- `logo-og.jpg` — Social-share image referenced by every page's OG/Twitter meta tags (byte-identical copy of logo-v2.jpg under a cache-bustable name)
+- `headshot.jpg` — Thomas Delaporte headshot, 800×800 (about page)
+- `field-note-seams.jpg`, `field-note-adaptability.jpg`, `field-note-adoption-matrix.jpg` — Field note card/hero images
 - `qr-linkedin.png` — LinkedIn QR code (contact/calling cards)
 
 **External Images:** Unsplash CDN images are loaded with `onerror="this.style.display='none'"` fallback to hide broken images gracefully.
