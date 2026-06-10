@@ -8,22 +8,28 @@ This is a **static HTML website with no build process**—all pages are hand-aut
 
 ## Project Overview
 
-TDcatalyst is an advisory practice website focused on AI workforce transformation and adaptability. The site presents:
-- **Core service pages:** Method, Sessions, About, Begin (contact), Diagnose (preliminary-diagnostic.html)
-- **Field Notes:** Practitioner essays on AI, work, and organizational change
-- **Supporting pages:** one-pager.html (direct-share summary), two calling cards (contact-card.html, calling-card.html — the latter is a redirect stub to the former)
+TDcatalyst is an advisory practice with **three offerings under one domain**, each a sub-site:
 
-All pages are self-contained, semantic HTML with consistent navigation and styling.
+- **`/` (root)** — Umbrella hub page presenting the three practices
+- **`/sail/`** — Executive field sessions: adaptability advisory for senior executives, delivered on coastal/ridge walks. This is the original full site (13 pages: Method, Sessions, About, Begin, Diagnose, Field Notes, contact cards). Accent: gold (`--logo-gold`).
+- **`/grow/`** — AI transformation consulting for enterprises and public sector: AI deployment portfolio management, change management & adoption, reorganization. Single-page site. Accent: blue (`--logo-blue`).
+- **`/advise/`** — Advisory retainer / advisory-board offering for startup founders moving upmarket into enterprise. Single-page site. Accent: red (`--logo-red`).
+
+All pages are self-contained, semantic HTML with consistent navigation and styling. The root also holds **redirect stubs** at every pre-restructure URL (e.g. `/method.html` → `/sail/method.html`) — JS `location.replace` preserving query strings, with meta-refresh fallback and `noindex`. Do not delete these stubs; external links, QR codes, and search results depend on them.
 
 ## Architecture
 
 ### Directory Structure
 ```
 tdcatalyst-sail.github.io/
-├── *.html                           # 13 page files (see below)
-├── style.css                        # Single shared stylesheet
-├── script.js                        # Minimal JavaScript (2 behaviors)
-├── images/                          # Logo, headshot, field-note images, QR code
+├── index.html                       # Umbrella hub page (three practice cards)
+├── *.html                           # 12 redirect stubs → /sail/*.html (do not delete)
+├── sail/                            # Original 13-page site (executive field sessions)
+├── grow/index.html                  # Enterprise consulting one-pager
+├── advise/index.html                # Founder advisory one-pager
+├── style.css                        # Single shared stylesheet (all sub-sites)
+├── script.js                        # Minimal JavaScript (2 behaviors, shared)
+├── images/                          # Logo, headshot, field-note images, QR code (shared)
 ├── CNAME                            # Domain config (tdcatalyst.com)
 ├── robots.txt                       # SEO config
 ├── sitemap.xml                      # Sitemap
@@ -33,11 +39,17 @@ tdcatalyst-sail.github.io/
 └── CLAUDE.md                        # This file
 ```
 
+**Path convention since the restructure:** shared assets are referenced with root-absolute paths from every page (`/style.css`, `/script.js`, `/images/...`, `/favicon.png`). Page-to-page links within `sail/` remain relative (`method.html`); cross-site links are root-absolute (`/sail/`, `/grow/`, `/advise/`, `/`).
+
 **IMPORTANT:** Everything tracked in this repo is publicly served at tdcatalyst.com by GitHub Pages. Never commit internal notes, backend source, or credentials — put them in `_private/` (gitignored).
 
-### HTML Pages (13 total)
+### HTML Pages
 
-**Main Pages:**
+**Root:**
+- `index.html` — Umbrella hub: hero, three practice cards (`.practice-cards`), through-line section, CTA
+- `grow/index.html`, `advise/index.html` — Single-page practice sites with anchor nav (`#services`/`#offer`, `#begin`), each with its own contact form (`_subject` and `_next` are practice-specific; all route to sail@tdcatalyst.com via formsubmit.co)
+
+**Sail sub-site (sail/), main pages:**
 - `index.html` — Hero/home page with thesis, engagement outcomes, CTA
 - `method.html` — The five-framework method for advisory work
 - `sessions.html` — Session tiers, deliverables, and pricing structure

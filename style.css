@@ -1264,3 +1264,86 @@ section.article-section { padding-top: 2rem; }
 .sources-collapsible-content p {
   margin-bottom: 0.8rem;
 }
+
+/* ============================================================
+   Three-practice structure: hub page, practice branding
+   ============================================================ */
+
+/* Practice suffix in the nav logo (grow / advise subsites) */
+.nav-logo .mark-practice {
+  font-weight: 300;
+  font-style: italic;
+  color: var(--midgray);
+  font-size: 0.85em;
+  margin-left: 0.15em;
+}
+body.brand-grow .nav-logo .mark-practice { color: var(--logo-blue); }
+body.brand-advise .nav-logo .mark-practice { color: var(--logo-red); }
+
+/* Hub: practice cards */
+.practice-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2vw, 1.8rem);
+  margin-top: 2rem;
+}
+@media (max-width: 880px) { .practice-cards { grid-template-columns: 1fr; } }
+
+.practice-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 2px;
+  padding: clamp(1.5rem, 2.5vw, 2.2rem);
+  text-decoration: none;
+  color: var(--charcoal);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.practice-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(31, 58, 95, 0.10);
+  border-color: var(--navy);
+}
+.practice-bar {
+  display: block;
+  width: 52px;
+  height: 4px;
+  border-radius: 2px;
+  margin-bottom: 1.2rem;
+}
+.practice-card.sail .practice-bar { background: var(--logo-gold); }
+.practice-card.grow .practice-bar { background: var(--logo-blue); }
+.practice-card.advise .practice-bar { background: var(--logo-red); }
+
+.practice-name {
+  font-family: 'Fraunces', serif;
+  font-size: 1.55rem;
+  color: var(--navy);
+  margin-bottom: 0.2rem;
+}
+.practice-tag {
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--midgray);
+  margin-bottom: 1rem;
+}
+.practice-desc { font-size: 0.93rem; color: var(--charcoal); margin-bottom: 1rem; }
+.practice-who { font-size: 0.85rem; color: var(--midgray); margin-bottom: 1.4rem; }
+.practice-go { margin-top: auto; color: var(--navy); font-size: 0.9rem; font-weight: 500; }
+.practice-card:hover .practice-go { color: var(--terracotta); }
+
+/* 3-up variant of the outcomes grid (grow / advise service blocks) */
+.outcomes-grid.grow-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 880px) { .outcomes-grid.grow-grid { grid-template-columns: 1fr; } }
+
+/* Footer link back to the umbrella hub */
+footer .footer-home-link {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--midgray);
+}
+footer .footer-home-link:hover { color: var(--terracotta); }
