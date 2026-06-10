@@ -121,9 +121,10 @@ tdcatalyst-sail.github.io/
 - `logo-og.jpg` — Social-share image referenced by every page's OG/Twitter meta tags (byte-identical copy of logo-v2.jpg under a cache-bustable name)
 - `headshot.jpg` — Thomas Delaporte headshot, 800×800 (about page)
 - `field-note-seams.jpg`, `field-note-adaptability.jpg`, `field-note-adoption-matrix.jpg` — Field note card/hero images
+- `pacifica-panorama.jpg`, `pacifica-ridge-trail.jpg`, `pacifica-marine-layer.jpg`, `pacifica-bench-trail.jpg` — Original Pacifica/Skyline field-session photos (sail thesis band, one-pager hero, contact card, sessions page). Source: `~\pacifica-studio\processed\` (graded originals); re-export via `~\pacifica-studio\scripts\export_web.py`
 - `qr-linkedin.png` — LinkedIn QR code (contact/calling cards)
 
-**External Images:** Unsplash CDN images are loaded with `onerror="this.style.display='none'"` fallback to hide broken images gracefully.
+**External Images:** No stock photos remain — all photography is original. If an external CDN image is ever added, load it with `onerror="this.style.display='none'"` fallback to hide broken images gracefully.
 
 ## Editing Conventions
 
