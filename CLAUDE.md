@@ -129,7 +129,7 @@ tdcatalyst-sail.github.io/
 - `pacifica-*.jpg` (panorama, ridge-trail, marine-layer, bench, cypress-arch, forest-road, storm-coast, fog-beach) — Original Pacifica/Skyline field photography used in `.photo-band` strips and the sessions `.landscape-figures` duo across hub, sail, grow, and advise pages. Source: `~\pacifica-studio\processed\` (graded originals); re-export via `~\pacifica-studio\scripts\export_web.py`. The hero spots intentionally keep the licensed stock photos (Mori Point at Unsplash on sail index/one-pager/contact-card, prism on sessions) — do not swap those for iPhone shots.
 - `qr-linkedin.png` — LinkedIn QR code (contact/calling cards)
 
-**External Images:** No stock photos remain — all photography is original. If an external CDN image is ever added, load it with `onerror="this.style.display='none'"` fallback to hide broken images gracefully.
+**External Images:** Two Unsplash CDN images remain by design (Mori Point in the sail index/one-pager/contact-card hero spots, prism on sessions); all other photography is original. External CDN images must carry the `onerror="this.style.display='none'"` fallback to hide broken images gracefully.
 
 ## Editing Conventions
 
