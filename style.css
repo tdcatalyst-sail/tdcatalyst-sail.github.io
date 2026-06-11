@@ -1349,6 +1349,25 @@ footer .footer-home-link {
 }
 footer .footer-home-link:hover { color: var(--terracotta); }
 
+footer .footer-practices {
+  margin-top: 1rem;
+}
+footer .footer-practices a {
+  font-size: 0.82rem;
+  display: block;
+  margin-bottom: 0.6rem;
+  color: var(--seamist);
+}
+footer .footer-practices a:hover {
+  color: var(--terracotta-soft);
+}
+footer .footer-practices i {
+  color: var(--seamist);
+  opacity: 0.8;
+  font-size: 0.78rem;
+  margin-left: 0.3rem;
+}
+
 /* ============================================================
    Field photography — full-bleed bands and landscape figures
    ============================================================ */
