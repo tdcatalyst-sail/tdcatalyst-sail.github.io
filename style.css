@@ -1399,3 +1399,23 @@ footer .footer-home-link:hover { color: var(--terracotta); }
   font-weight: 500;
 }
 .landscape-figures figcaption strong { color: var(--navy); font-weight: 500; }
+
+/* Single captioned figure — portrait/inset format for frames that don't suit wide bands */
+.photo-figure { max-width: 620px; margin: 0 auto; }
+.photo-figure .fig-img {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--seamist);
+  box-shadow: 0 6px 20px rgba(31, 58, 95, 0.06);
+}
+.photo-figure .fig-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-figure figcaption {
+  margin-top: 0.8rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--midgray);
+  font-weight: 500;
+  text-align: center;
+}
