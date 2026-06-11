@@ -46,8 +46,13 @@ tdcatalyst-sail.github.io/
 ### HTML Pages
 
 **Root:**
-- `index.html` — Umbrella hub: hero, three practice cards (`.practice-cards`), through-line section, CTA
-- `grow/index.html`, `advise/index.html` — Single-page practice sites with anchor nav (`#services`/`#offer`, `#begin`), each with its own contact form (`_subject` and `_next` are practice-specific; all route to sail@tdcatalyst.com via formsubmit.co)
+- `index.html` — Umbrella hub: hero, three practice cards (`.practice-cards`), photo band, through-line section, CTA
+- `grow/index.html`, `advise/index.html` — Single-page **business conversion pages** for solo consulting: fixed-scope offers, proof sections citing Eightfold AI and Capgemini (quantified case studies pending — see HTML comments), an experimental "embodied strategic framing" component, anchor nav, and a contact form (`_subject` and `_next` are practice-specific; all route to sail@tdcatalyst.com via formsubmit.co)
+
+**Cross-linking rules:**
+- The hub (`/`) links to everything — it is the umbrella.
+- Each practice sub-site is **self-sufficient**: it never links to sibling practices. Its only way out is the footer "All TDcatalyst practices →" link to `/`. Do not add cross-practice links to nav, body, or footer of a practice page.
+- The nav logo on every practice page reads `TDcatalyst/sail` (or `/grow`, `/advise`) via `<span class="mark-practice">`, colored by the `body.brand-*` class (sail=gold, grow=blue, advise=red), and links to that practice's own home.
 
 **Sail sub-site (sail/), main pages:**
 - `index.html` — Hero/home page with thesis, engagement outcomes, CTA
@@ -121,7 +126,7 @@ tdcatalyst-sail.github.io/
 - `logo-og.jpg` — Social-share image referenced by every page's OG/Twitter meta tags (byte-identical copy of logo-v2.jpg under a cache-bustable name)
 - `headshot.jpg` — Thomas Delaporte headshot, 800×800 (about page)
 - `field-note-seams.jpg`, `field-note-adaptability.jpg`, `field-note-adoption-matrix.jpg` — Field note card/hero images
-- `pacifica-panorama.jpg`, `pacifica-ridge-trail.jpg`, `pacifica-marine-layer.jpg`, `pacifica-bench-trail.jpg` — Original Pacifica/Skyline field-session photos (sail thesis band, one-pager hero, contact card, sessions page). Source: `~\pacifica-studio\processed\` (graded originals); re-export via `~\pacifica-studio\scripts\export_web.py`
+- `pacifica-*.jpg` (panorama, ridge-trail, marine-layer, bench, cypress-arch, forest-road, storm-coast, fog-beach) — Original Pacifica/Skyline field photography used in `.photo-band` strips and the sessions `.landscape-figures` duo across hub, sail, grow, and advise pages. Source: `~\pacifica-studio\processed\` (graded originals); re-export via `~\pacifica-studio\scripts\export_web.py`. The hero spots intentionally keep the licensed stock photos (Mori Point at Unsplash on sail index/one-pager/contact-card, prism on sessions) — do not swap those for iPhone shots.
 - `qr-linkedin.png` — LinkedIn QR code (contact/calling cards)
 
 **External Images:** No stock photos remain — all photography is original. If an external CDN image is ever added, load it with `onerror="this.style.display='none'"` fallback to hide broken images gracefully.
