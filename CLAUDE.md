@@ -126,10 +126,10 @@ tdcatalyst-sail.github.io/
 - `logo-og.jpg` — Social-share image referenced by every page's OG/Twitter meta tags (byte-identical copy of logo-v2.jpg under a cache-bustable name)
 - `headshot.jpg` — Thomas Delaporte headshot, 800×800 (about page)
 - `field-note-seams.jpg`, `field-note-adaptability.jpg`, `field-note-adoption-matrix.jpg` — Field note card/hero images
-- `pacifica-*.jpg` (panorama, ridge-trail, marine-layer, bench, cypress-arch, forest-road, storm-coast, fog-beach) — Original Pacifica/Skyline field photography used in `.photo-band` strips and the sessions `.landscape-figures` duo across hub, sail, grow, and advise pages. Source: `~\pacifica-studio\processed\` (graded originals); re-export via `~\pacifica-studio\scripts\export_web.py`. The hero spots intentionally keep the licensed stock photos (Mori Point at Unsplash on sail index/one-pager/contact-card, prism on sessions) — do not swap those for iPhone shots.
+- `pacifica-*.jpg` — Original Pacifica/Skyline field photography used in `.photo-band` strips and the sessions `.landscape-figures` duo. **Each frame is used exactly once site-wide (Tom's rule: no photo repurposed across pages):** panorama (hub band), ridge-trail (sail home band), cypress-arch (method), storm-coast (about), town-fog (begin), marine-layer + forest-road (sessions landscapes duo), vista (grow), horizon (advise), ridgecrest (one-pager hero), fog-valley (contact card). Source: `~\pacifica-studio\processed\` (graded originals); re-export via `~\pacifica-studio\scripts\export_web.py`. The two remaining stock photos (below) are intentional — do not swap them for iPhone shots, and do not reuse a pacifica frame on a second page.
 - `qr-linkedin.png` — LinkedIn QR code (contact/calling cards)
 
-**External Images:** Two Unsplash CDN images remain by design (Mori Point in the sail index/one-pager/contact-card hero spots, prism on sessions); all other photography is original. External CDN images must carry the `onerror="this.style.display='none'"` fallback to hide broken images gracefully.
+**External Images:** Two Unsplash CDN images remain by design (Mori Point on the sail index thesis band only, prism on sessions); all other photography is original. External CDN images must carry the `onerror="this.style.display='none'"` fallback to hide broken images gracefully.
 
 ## Editing Conventions
 
