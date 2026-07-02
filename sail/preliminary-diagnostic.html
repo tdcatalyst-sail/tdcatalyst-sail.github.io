@@ -735,9 +735,12 @@ function renderQuestion() {
   const sect = sectionFor(state.currentQ);
   const accent = sect.accent;
   const isLast = state.currentQ === QUESTIONS.length - 1;
-  const canContinue = state.selected.length > 0;
   const isSingleSelect = [6, 7, 8].includes(state.currentQ); // Q7, Q8, Q9 (0-indexed)
   const hasFreetextField = FREETEXT_QUESTIONS.includes(state.currentQ);
+  // A filled "Neither / Something else" box is enough to continue on its own,
+  // even with no option selected.
+  const freetextFilled = hasFreetextField && (state.freetext[state.currentQ] || '').trim().length > 0;
+  const canContinue = state.selected.length > 0 || freetextFilled;
 
   const optsHtml = q.opts.map((opt, i) => `
     <button class="diag-opt${state.selected.includes(i) ? ' selected' : ''}" data-opt="${i}">
@@ -794,6 +797,9 @@ function renderQuestion() {
     freetextEl.value = state.freetext[state.currentQ] || '';
     freetextEl.addEventListener('input', (e) => {
       state.freetext[state.currentQ] = e.target.value;
+      // Live-toggle the Continue button so a filled box alone unlocks it.
+      const nextBtn = document.getElementById('diag-next');
+      if (nextBtn) nextBtn.disabled = !(state.selected.length > 0 || e.target.value.trim().length > 0);
     });
   }
 
@@ -956,7 +962,9 @@ function renderResult() {
 
 // ---- handlers ----
 function handleNext() {
-  if (state.selected.length === 0) return;
+  const hasFreetext = FREETEXT_QUESTIONS.includes(state.currentQ);
+  const freetextFilled = hasFreetext && (state.freetext[state.currentQ] || '').trim().length > 0;
+  if (state.selected.length === 0 && !freetextFilled) return;
   state.answers[state.currentQ] = [...state.selected];
   if (state.currentQ < QUESTIONS.length - 1) {
     state.currentQ += 1;
