@@ -51,8 +51,8 @@ tdcatalyst-sail.github.io/
 
 **Cross-linking rules:**
 - The hub (`/`) links to everything — it is the umbrella.
-- Each practice sub-site is **self-sufficient**: it never links to sibling practices. Do not add cross-practice links to nav, body, or footer of a practice page. Ways back to the umbrella hub are the nav logo (see below) and the footer "All TDcatalyst practices →" link, both pointing to `/`.
-- The nav logo on every page reads `TDcatalyst/sail` (or `/grow`, `/advise`) via `<span class="mark-practice">`, colored by the `body.brand-*` class (sail=gold, grow=blue, advise=red), and links to the umbrella home `/` (root-absolute on every page, including sail's otherwise-relative pages).
+- Each practice sub-site is **self-sufficient**: it never links to sibling practices. Do not add cross-practice links to nav, body, or footer of a practice page. The footer "All TDcatalyst practices →" link (to `/`) is every practice's way back to the umbrella hub.
+- The nav logo on every page reads `TDcatalyst/sail` (or `/grow`, `/advise`) via `<span class="mark-practice">`, colored by the `body.brand-*` class (sail=gold, grow=blue, advise=red). Logo link targets differ by sub-site: **sail** pages link to sail's own home (relative `index.html`) — the sail sub-site is a full multi-page site, so the logo is its in-site "home" affordance; **grow** and **advise** (single-page sites) link to the umbrella home `/`.
 
 **Sail sub-site (sail/), main pages:**
 - `index.html` — Hero/home page with thesis, engagement outcomes, CTA
