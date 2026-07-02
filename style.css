@@ -708,6 +708,27 @@ hr.sign-rule {
   margin: 0 0 0.7rem;
 }
 
+/* Retained Advisory block (Grow) */
+.retainer-block {
+  margin-top: 1.5rem;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 2px;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem 2rem;
+  flex-wrap: wrap;
+}
+.retainer-block h3 { font-size: 1.05rem; margin: 0.35rem 0 0.6rem; }
+.retainer-block p { color: var(--midgray); font-size: 0.93rem; margin: 0; max-width: 62ch; }
+.retainer-meta { text-align: right; }
+.retainer-meta .engagement-price { margin: 0; }
+.retainer-meta .price-unit { font-size: 0.85rem; color: var(--midgray); }
+.retainer-term { font-size: 0.85rem; color: var(--midgray); margin-top: 0.2rem; }
+@media (max-width: 620px) { .retainer-meta { text-align: left; } }
+
 /* 5-column method grid */
 .method-5 {
   display: grid;
