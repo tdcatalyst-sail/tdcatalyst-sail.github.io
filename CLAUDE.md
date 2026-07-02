@@ -12,7 +12,7 @@ TDcatalyst is an advisory practice with **three offerings under one domain**, ea
 
 - **`/` (root)** — Umbrella hub page presenting the three practices
 - **`/sail/`** — Executive field sessions: adaptability advisory for senior executives, delivered on coastal/ridge walks. This is the original full site (13 pages: Method, Sessions, About, Begin, Diagnose, Field Notes, contact cards). Accent: gold (`--logo-gold`).
-- **`/grow/`** — AI transformation consulting for enterprises and public sector: AI deployment portfolio management, change management & adoption, reorganization. Single-page site. Accent: blue (`--logo-blue`).
+- **`/grow/`** — AI transformation consulting for enterprises and public sector: AI deployment portfolio management, change management & adoption, reorganization. Single-page site. Accent: blue (`--logo-blue`). Display-branded **"Grow · Deploy"** — the "Deploy" qualifier (signaling implementation vs. Sail's framing) appears on Grow's own hero eyebrow, footer tagline, `<title>`/OG, and the hub card's tag line; peer enumerations (Sail / Grow / Advise lists), action CTAs ("Enter Grow →"), and running prose keep bare "Grow". The URL slug stays `/grow/`.
 - **`/advise/`** — Advisory retainer / advisory-board offering for startup founders moving upmarket into enterprise. Single-page site. Accent: red (`--logo-red`).
 
 All pages are self-contained, semantic HTML with consistent navigation and styling. The root also holds **redirect stubs** at every pre-restructure URL (e.g. `/method.html` → `/sail/method.html`) — JS `location.replace` preserving query strings, with meta-refresh fallback and `noindex`. Do not delete these stubs; external links, QR codes, and search results depend on them.
