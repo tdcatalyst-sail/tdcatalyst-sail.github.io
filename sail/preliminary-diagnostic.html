@@ -443,6 +443,36 @@
 // While empty, the form is rendered but the submit button is disabled.
 const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbyntwglwr21vytA-UKI6j00oVO-gUThURHmbMZCW7t_Uu9dUml9wr2Un_AQAVULGXSI8w/exec';
 
+// ---- abandonment / drop-off tracking ----
+// Fire-and-forget pings so we can see who STARTS the diagnostic, not only
+// who finishes. 'start' and 'progress' events land in a Sessions sheet in
+// Drive; the final submit sends 'complete'. Anyone who starts but never
+// completes stays in that sheet as an abandonment. All calls are best-effort
+// and must never block or break the quiz.
+function newSessionId() {
+  return 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function trackEvent(eventType, questionNumber) {
+  if (!SUBMIT_URL || !state.sessionId) return;
+  try {
+    fetch(SUBMIT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        eventType: eventType,
+        sessionId: state.sessionId,
+        questionNumber: questionNumber,
+        totalQuestions: QUESTIONS.length,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        referrer: document.referrer || ''
+      })
+    }).catch(function () {});
+  } catch (err) { /* best-effort only */ }
+}
+
 const SECTIONS = [
   { name: "The Adaptive Challenge",    accent: "red"  },
   { name: "Diagnostics & Constraints", accent: "gold" },
@@ -693,6 +723,8 @@ function renderIntro() {
     state.phase = 'question';
     state.currentQ = 0;
     state.selected = state.answers[0] ? [...state.answers[0]] : [];
+    if (!state.sessionId) state.sessionId = newSessionId();
+    trackEvent('start', 1);
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
@@ -929,12 +961,13 @@ function handleNext() {
   if (state.currentQ < QUESTIONS.length - 1) {
     state.currentQ += 1;
     state.selected = state.answers[state.currentQ] ? [...state.answers[state.currentQ]] : [];
+    trackEvent('progress', state.currentQ + 1);
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else {
     state.resultKey = computeResult();
     state.result = ARCHETYPES[state.resultKey];
-    state.sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    if (!state.sessionId) state.sessionId = newSessionId();
     state.phase = 'contact';
     render();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1010,6 +1043,7 @@ function submitContactAndShowResult(e) {
   setFormStatus('Sending…', '');
 
   const payload = {
+    eventType: 'complete',
     sessionId: state.sessionId,
     name: name,
     email: email,
@@ -1056,6 +1090,7 @@ function skipContactAndShowResult(e) {
   setFormStatus('Sending…', '');
 
   const payload = {
+    eventType: 'complete',
     sessionId: state.sessionId,
     name: '',
     email: '',
