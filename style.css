@@ -1755,4 +1755,11 @@ footer .footer-practices i {
 .sim-chart .end-dot-v { fill: var(--value-green); }
 .sim-legend .swatch.v { background: var(--value-green); }
 .readout-item.value { background: var(--seamist); }
-.readout-item.value .readout-num { color: var(--value-green); }
+.readout-item.value .readout-num { color: var(--value-green); }
+
+/* COM-B library group headers + full-plan lock (AI Transformation Simulation) */
+.lib-group-head { grid-column: 1 / -1; margin: 0.4rem 0 0.1rem; display: flex; align-items: baseline; gap: 0.5rem; }
+.lib-group-name { font-family: 'Fraunces', serif; font-size: 0.98rem; color: var(--navy); }
+.lib-group-desc { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--midgray); }
+.play-card.locked { opacity: 0.4; cursor: not-allowed; }
+.play-card.locked:hover { border-color: var(--hairline); border-left-color: var(--logo-blue); box-shadow: none; }
