@@ -1544,3 +1544,192 @@ footer .footer-practices i {
   text-align: center;
 }
 .photo-figure figcaption strong { color: var(--navy); font-weight: 500; }
+
+/* ============================================================
+   Adoption Matrix Planner (grow/adoption-matrix-planner.html)
+   Interactive playbook tool. Migrated from inline prototype styles.
+   Class names are unique to that page.
+   ============================================================ */
+
+    .planner-step { margin-bottom: 2.5rem; }
+    .step-head { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 1rem; }
+    .step-badge {
+      flex-shrink: 0;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--navy); color: #fff;
+      font-family: 'Fraunces', serif; font-size: 0.9rem;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .step-head h3 { margin: 0; font-size: 1.15rem; }
+    .step-head .step-hint { font-size: 0.85rem; color: var(--midgray); margin-left: auto; }
+
+    /* --- Step 1: matrix flagging grid --- */
+    .matrix-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: 158px repeat(4, 1fr);
+      gap: 6px; min-width: 860px;
+      background: #fff; border: 1px solid var(--hairline); border-radius: 5px;
+      padding: 1rem;
+    }
+    .mx-col-head, .mx-row-head {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--midgray); font-weight: 600; display: flex;
+    }
+    .mx-col-head { flex-direction: column; justify-content: flex-end; text-align: left; padding: 0.3rem 0.2rem; gap: 0.1rem; }
+    .mx-row-head { flex-direction: column; align-items: flex-start; justify-content: center; gap: 0.15rem; }
+    .mx-row-head .mx-seg { color: var(--navy); font-family: 'Fraunces', serif; font-size: 0.9rem; text-transform: none; letter-spacing: 0; line-height: 1.2; }
+    .mx-row-head .mx-size { font-size: 0.68rem; color: var(--logo-blue); }
+    .cell {
+      min-height: 68px; border: 1px solid var(--hairline); border-radius: 3px;
+      background: var(--offwhite); cursor: pointer; padding: 0.55rem 0.6rem;
+      font-size: 0.72rem; color: var(--charcoal); line-height: 1.38;
+      transition: all 0.15s; display: flex; align-items: flex-start; text-align: left;
+    }
+    .cell:hover { border-color: var(--logo-blue); background: #fff; }
+    .cell.flagged {
+      background: var(--logo-red); border-color: var(--logo-red); color: #fff; font-weight: 500;
+    }
+    .flag-note { font-size: 0.8rem; color: var(--midgray); margin-top: 0.7rem; }
+    .flag-count { color: var(--logo-red); font-weight: 600; }
+
+    /* --- Step 2: library + plan --- */
+    .build-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 1.5rem; align-items: start; }
+    @media (max-width: 900px) { .build-grid { grid-template-columns: 1fr; } }
+
+    .lib-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+    @media (max-width: 560px) { .lib-grid { grid-template-columns: 1fr; } }
+    .play-card {
+      background: #fff; border: 1px solid var(--hairline); border-radius: 5px;
+      border-left: 3px solid var(--logo-blue);
+      padding: 0.9rem 1rem; cursor: pointer; transition: all 0.15s; position: relative;
+    }
+    .play-card:hover { border-color: var(--navy); box-shadow: 0 6px 16px -10px rgba(31,58,95,0.4); }
+    .play-card.added { opacity: 0.45; cursor: default; }
+    .play-card.added:hover { box-shadow: none; border-color: var(--hairline); border-left-color: var(--logo-blue); }
+    .play-name { font-family: 'Fraunces', serif; font-size: 0.98rem; color: var(--navy); margin-bottom: 0.2rem; }
+    .play-blurb { font-size: 0.78rem; color: var(--midgray); line-height: 1.4; margin-bottom: 0.5rem; }
+    .play-framework { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--logo-blue); font-weight: 600; }
+    .play-add { position: absolute; top: 0.7rem; right: 0.8rem; font-size: 1.1rem; color: var(--logo-blue); font-weight: 300; }
+    .play-card.added .play-add { content: ''; }
+
+    .plan-panel { background: var(--navy); border-radius: 5px; padding: 1.3rem 1.4rem; position: sticky; top: 90px; }
+    .plan-panel h4 { color: #fff; font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.9rem; font-weight: 500; }
+    .plan-empty { color: rgba(235,239,236,0.6); font-size: 0.85rem; font-style: italic; padding: 1rem 0; }
+    .plan-list { list-style: none; margin: 0; padding: 0; }
+    .plan-item {
+      background: rgba(255,255,255,0.06); border-radius: 4px; padding: 0.6rem 0.7rem;
+      margin-bottom: 0.55rem; display: grid; grid-template-columns: auto 1fr auto; gap: 0.5rem; align-items: center;
+    }
+    .plan-week { font-family: 'Fraunces', serif; font-size: 0.72rem; color: var(--seamist); background: rgba(255,255,255,0.1); border-radius: 3px; padding: 0.15rem 0.4rem; white-space: nowrap; }
+    .plan-name { color: #fff; font-size: 0.82rem; line-height: 1.25; }
+    .plan-badge { display: block; font-size: 0.68rem; margin-top: 0.15rem; }
+    .plan-badge.good { color: #8FD4A8; }
+    .plan-badge.muted { color: #E8A87C; }
+    .plan-ctrls { display: flex; gap: 0.15rem; }
+    .plan-ctrls button {
+      background: rgba(255,255,255,0.1); border: none; color: var(--seamist);
+      width: 22px; height: 22px; border-radius: 3px; cursor: pointer; font-size: 0.8rem; line-height: 1;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .plan-ctrls button:hover { background: rgba(255,255,255,0.22); color: #fff; }
+    .plan-clear { margin-top: 0.6rem; background: none; border: none; color: rgba(235,239,236,0.55); font-size: 0.75rem; cursor: pointer; text-decoration: underline; padding: 0; }
+    .plan-clear:hover { color: #fff; }
+
+    /* --- Step 3: curve --- */
+    .sim-chart { width: 100%; height: auto; display: block; }
+    .sim-chart .grid-line { stroke: var(--hairline); stroke-width: 1; }
+    .sim-chart .axis-label { fill: var(--midgray); font-size: 12px; font-family: 'Inter', sans-serif; }
+    .sim-chart .curve-base { fill: none; stroke: var(--logo-red); stroke-width: 2.5; stroke-dasharray: 6 5; stroke-linecap: round; }
+    .sim-chart .curve-plan { fill: none; stroke: var(--logo-blue); stroke-width: 3; stroke-linecap: round; }
+    .sim-chart .gap-area { fill: var(--logo-blue); opacity: 0.09; }
+    .sim-chart .play-marker { stroke: var(--navy); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0.35; }
+    .sim-chart .play-dot { fill: var(--navy); }
+    .sim-chart .end-dot-p { fill: var(--logo-blue); }
+    .sim-chart .end-dot-b { fill: var(--logo-red); }
+
+    .sim-legend { display: flex; gap: 1.5rem; flex-wrap: wrap; margin: 1rem 0 1.4rem; font-size: 0.85rem; color: var(--charcoal); }
+    .sim-legend span { display: inline-flex; align-items: center; gap: 0.5rem; }
+    .swatch { width: 22px; height: 3px; border-radius: 2px; display: inline-block; }
+    .swatch.p { background: var(--logo-blue); }
+    .swatch.b { background: var(--logo-red); }
+
+    .sim-readout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.5rem; }
+    @media (max-width: 520px) { .sim-readout { grid-template-columns: 1fr; } }
+    .readout-item { background: var(--seamist); border-radius: 3px; padding: 1.1rem 1.2rem; text-align: center; }
+    .readout-item.gap { background: var(--navy); }
+    .readout-num { font-family: 'Fraunces', serif; font-size: 2.1rem; line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; }
+    .readout-item.gap .readout-num { color: #fff; }
+    .readout-item.plan .readout-num { color: var(--logo-blue); }
+    .readout-item.base .readout-num { color: var(--logo-red); }
+    .readout-label { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--midgray); margin-top: 0.5rem; line-height: 1.35; }
+    .readout-item.gap .readout-label { color: var(--seamist); }
+
+    .sim-disclaimer { font-size: 0.78rem; color: var(--midgray); font-style: italic; margin-top: 1.4rem; max-width: 66ch; }
+
+    /* --- Step 3: curve + risks side by side --- */
+    .curve-and-risks { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.8rem; align-items: start; }
+    @media (max-width: 900px) { .curve-and-risks { grid-template-columns: 1fr; } }
+    .risks-col h4 { font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); margin-bottom: 0.3rem; }
+    .risks-sub { font-size: 0.82rem; color: var(--midgray); font-style: italic; margin-bottom: 1rem; }
+    .risk-empty { font-size: 0.85rem; color: var(--midgray); background: #fff; border: 1px dashed var(--hairline); border-radius: 5px; padding: 1.1rem; line-height: 1.5; }
+    .risk-card { background: #fff; border: 1px solid var(--hairline); border-left: 3px solid var(--logo-gold); border-radius: 5px; padding: 0.85rem 1rem; margin-bottom: 0.7rem; }
+    .risk-play { font-family: 'Fraunces', serif; font-size: 0.95rem; color: var(--navy); margin-bottom: 0.5rem; }
+    .risk-line { font-size: 0.78rem; line-height: 1.5; color: var(--charcoal); margin-bottom: 0.45rem; }
+    .risk-line:last-child { margin-bottom: 0; }
+    .risk-tag { display: inline-block; font-size: 0.61rem; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; margin-right: 0.35rem; }
+    .risk-tag.pit { color: var(--logo-red); }
+    .risk-tag.pre { color: var(--logo-blue); }
+
+    /* --- demo disclaimer --- */
+    .sim-demo-note { background: #fff; border: 1px solid var(--hairline); border-left: 3px solid var(--navy); border-radius: 5px; padding: 1.1rem 1.3rem; margin-bottom: 2.2rem; }
+    .sim-demo-note .demo-tag { display: inline-block; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--navy); font-weight: 600; margin-bottom: 0.4rem; }
+    .sim-demo-note p { font-size: 0.88rem; color: var(--midgray); line-height: 1.55; margin: 0; }
+    .sim-demo-note strong { color: var(--navy); }
+
+    /* --- library match marker --- */
+    .play-match { display: none; margin-top: 0.5rem; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--logo-red); }
+    .play-card.matches { border-left-color: var(--logo-red); }
+    .play-card.matches .play-match { display: block; }
+    .play-card.matches.added .play-match { color: var(--midgray); }
+
+    /* --- threshold visuals on the chart --- */
+    .sim-chart .sustain-zone { fill: var(--logo-blue); opacity: 0.05; }
+    .sim-chart .threshold-line { stroke: var(--navy); stroke-width: 1.5; stroke-dasharray: 2 4; opacity: 0.6; }
+    .sim-chart .threshold-label { fill: var(--navy); font-size: 11px; font-family: 'Inter', sans-serif; font-weight: 600; opacity: 0.8; letter-spacing: 0.03em; }
+    .sim-chart .cross-line { stroke: var(--logo-gold); stroke-width: 1.5; }
+    .sim-chart .cross-dot { fill: var(--logo-gold); stroke: #fff; stroke-width: 1.5; }
+    .sim-chart .cross-flag { fill: var(--logo-gold); font-size: 11px; font-weight: 700; font-family: 'Inter', sans-serif; }
+
+    /* --- threshold status callout --- */
+    .threshold-status { margin-top: 1rem; border-radius: 5px; padding: 1rem 1.2rem; font-size: 0.86rem; line-height: 1.55; }
+    .threshold-status.crossed { background: rgba(74,124,158,0.10); border-left: 3px solid var(--logo-blue); color: var(--charcoal); }
+    .threshold-status.fragile { background: rgba(200,149,10,0.10); border-left: 3px solid var(--logo-gold); color: var(--charcoal); }
+    .threshold-status.liminal { background: var(--seamist); border-left: 3px solid var(--midgray); color: var(--charcoal); }
+    .threshold-status strong { color: var(--navy); }
+    .ts-head { display: block; font-family: 'Fraunces', serif; font-size: 0.98rem; color: var(--navy); margin-bottom: 0.35rem; }
+
+    /* --- left-side groundwork ladder --- */
+    .groundwork { margin-top: 1.6rem; }
+    .groundwork h4 { font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); margin-bottom: 0.3rem; }
+    .groundwork-sub { font-size: 0.82rem; color: var(--midgray); font-style: italic; margin-bottom: 1.1rem; }
+    .gw-empty { font-size: 0.85rem; color: var(--midgray); background: #fff; border: 1px dashed var(--hairline); border-radius: 5px; padding: 1.1rem; line-height: 1.5; }
+    .gw-step { position: relative; padding-left: 1.5rem; padding-bottom: 1.1rem; border-left: 2px solid var(--hairline); margin-left: 0.5rem; }
+    .gw-step:last-child { padding-bottom: 0; }
+    .gw-pip { position: absolute; left: -0.66rem; top: -0.1rem; width: 1.2rem; height: 1.2rem; border-radius: 50%; background: #fff; border: 2px solid var(--logo-blue); display: flex; align-items: center; justify-content: center; font-size: 0.62rem; color: var(--logo-blue); font-weight: 700; font-family: 'Inter', sans-serif; }
+    .gw-step.broke { border-left-color: var(--logo-red); }
+    .gw-step.broke .gw-pip { border-color: var(--logo-red); color: var(--logo-red); }
+    .gw-week { font-size: 0.68rem; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.06em; }
+    .gw-play { font-family: 'Fraunces', serif; font-size: 0.95rem; color: var(--navy); margin: 0.1rem 0 0.3rem; }
+    .gw-task { font-size: 0.8rem; line-height: 1.5; color: var(--charcoal); }
+    .gw-task strong { color: var(--navy); }
+    .gw-carry { font-size: 0.74rem; color: var(--midgray); margin-top: 0.35rem; }
+    .gw-break-note { font-size: 0.76rem; color: var(--logo-red); font-weight: 500; margin-top: 0.35rem; line-height: 1.45; }
+    .gw-closer { margin-top: 0.5rem; font-size: 0.8rem; line-height: 1.55; color: var(--charcoal); background: var(--seamist); border-radius: 5px; padding: 0.9rem 1rem; }
+    .gw-closer.crossed { background: rgba(74,124,158,0.12); }
+    .gw-closer strong { color: var(--navy); }
+
+    /* break glyphs on the curve */
+    .sim-chart .play-marker.break { stroke: var(--logo-red); opacity: 0.55; stroke-dasharray: 3 3; }
+    .sim-chart .break-x { fill: var(--logo-red); font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif; }
+  
