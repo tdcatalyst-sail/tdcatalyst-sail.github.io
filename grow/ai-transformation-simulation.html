@@ -722,10 +722,15 @@
 
   function buildSummaryCanvas(chartImg) {
     var res = simulate(plan), base = simulate([]);
-    var W = 1000, P = 44, scale = 2;
+    var W = 1000, P = 44, scale = 2, rowH = 25;
     var chartW = W - P * 2, chartH = Math.round(chartW * 380 / 720);
-    var rowH = 25, detailsH = Math.max(Math.max(plan.length, 1) * rowH + 34, 200);
-    var H = P + 52 + chartH + 26 + detailsH + 40;
+    function segLabel(k) { for (var i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].key === k) return SEGMENTS[i].label; } return k; }
+    function cellName(key) { var q = key.split('-'); return segLabel(q[0]) + ' · ' + (STAGE_ABBR[q[1]] || q[1]); }
+    var fl = Object.keys(flagged);
+    var fRows = Math.max(fl.length, 1), pRows = Math.max(plan.length, 1);
+    var leftH = 26 + fRows * rowH + 16 + 26 + pRows * rowH;
+    var detailsH = Math.max(leftH, 176) + 8;
+    var H = P + 52 + chartH + 26 + detailsH + 34;
     var c = document.createElement('canvas');
     c.width = W * scale; c.height = H * scale;
     var ctx = c.getContext('2d'); ctx.scale(scale, scale);
@@ -739,17 +744,26 @@
     var dy = cy + chartH + 26;
     ctx.strokeStyle = '#D9D3CA'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(P, dy - 14); ctx.lineTo(W - P, dy - 14); ctx.stroke();
+    // LEFT COLUMN — Step 1 (flagged cells) then Step 2 (interventions)
+    var lx = P, ly = dy + 4;
     ctx.fillStyle = '#1F3A5F'; ctx.font = '600 12px Inter, Arial, sans-serif';
-    ctx.fillText('YOUR 16-WEEK SEQUENCE', P, dy + 6);
-    var ly = dy + 32; ctx.font = '13px Inter, Arial, sans-serif';
-    if (!plan.length) { ctx.fillStyle = '#6B6B6B'; ctx.fillText('(no interventions selected)', P, ly); }
+    ctx.fillText('STEP 1 · FLAGGED AS STALLED', lx, ly);
+    ly += 26; ctx.font = '13px Inter, Arial, sans-serif';
+    if (!fl.length) { ctx.fillStyle = '#6B6B6B'; ctx.fillText('(none flagged)', lx, ly); ly += rowH; }
+    else fl.forEach(function (k) { ctx.fillStyle = '#C44536'; ctx.fillText('◆  ' + cellName(k), lx, ly); ly += rowH; });
+    ly += 16;
+    ctx.fillStyle = '#1F3A5F'; ctx.font = '600 12px Inter, Arial, sans-serif';
+    ctx.fillText('STEP 2 · INTERVENTIONS, IN ORDER', lx, ly);
+    ly += 26; ctx.font = '13px Inter, Arial, sans-serif';
+    if (!plan.length) { ctx.fillStyle = '#6B6B6B'; ctx.fillText('(none selected)', lx, ly); ly += rowH; }
     plan.forEach(function (id, i) {
       var pp = PLAY_BY_ID[id], n = res.notes[id] || {}, broke = !!n.muted;
       ctx.fillStyle = broke ? '#C44536' : '#1F3A5F';
-      ctx.fillText((broke ? '✕' : '✓') + '  Wk ' + (1 + i * 2) + '  ' + pp.name, P, ly);
+      ctx.fillText((broke ? '✕' : '✓') + '  Wk ' + (1 + i * 2) + '  ' + pp.name, lx, ly);
       ly += rowH;
     });
-    var rx = Math.round(W / 2) + 24, ry = dy + 6;
+    // RIGHT COLUMN — results
+    var rx = Math.round(W / 2) + 40, ry = dy + 4;
     ctx.fillStyle = '#1F3A5F'; ctx.font = '600 12px Inter, Arial, sans-serif';
     ctx.fillText('AT WEEK 16', rx, ry);
     ry += 26; ctx.font = '13px Inter, Arial, sans-serif';
@@ -760,11 +774,8 @@
     ry += 30; ctx.font = '600 13px Inter, Arial, sans-serif';
     if (res.crossedWeek !== null) { ctx.fillStyle = '#4A7C9E'; ctx.fillText('✓ Self-sustaining — crossed at week ' + res.crossedWeek, rx, ry); }
     else { ctx.fillStyle = '#6B6B6B'; ctx.fillText('Below the threshold — still liminal', rx, ry); }
-    var fk = Object.keys(flagged);
-    ry += 28; ctx.font = '13px Inter, Arial, sans-serif'; ctx.fillStyle = '#6B6B6B';
-    ctx.fillText('Flagged as stalled: ' + (fk.length ? fk.length + ' cell' + (fk.length > 1 ? 's' : '') : 'none'), rx, ry);
     ctx.fillStyle = '#9a9a9a'; ctx.font = '11px Inter, Arial, sans-serif';
-    ctx.fillText('Generated from the AI Transformation Simulation · illustrative model, not a forecast', P, H - 18);
+    ctx.fillText('Generated from the AI Transformation Simulation · illustrative model, not a forecast', P, H - 16);
     return c;
   }
 
