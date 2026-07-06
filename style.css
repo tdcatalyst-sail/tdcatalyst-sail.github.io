@@ -13,6 +13,7 @@
   --logo-red: #C44536;
   --logo-gold: #C8950A;
   --logo-blue: #4A7C9E;
+  --value-green: #4E8B72;
 }
 
 .skip-link {
@@ -1747,4 +1748,11 @@ footer .footer-practices i {
     /* break glyphs on the curve */
     .sim-chart .play-marker.break { stroke: var(--logo-red); opacity: 0.55; stroke-dasharray: 3 3; }
     .sim-chart .break-x { fill: var(--logo-red); font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif; }
-  
+  
+
+/* value-realized line + readout (AI Transformation Simulation) */
+.sim-chart .curve-value { fill: none; stroke: var(--value-green); stroke-width: 2; stroke-linecap: round; }
+.sim-chart .end-dot-v { fill: var(--value-green); }
+.sim-legend .swatch.v { background: var(--value-green); }
+.readout-item.value { background: var(--seamist); }
+.readout-item.value .readout-num { color: var(--value-green); }

@@ -127,13 +127,16 @@
         <text class="threshold-label" x="54" y="156" text-anchor="start">Self-sustaining transformation ↑</text>
         <g id="markers"></g>
         <path class="curve-base" id="curveB" d=""></path>
+        <path class="curve-value" id="curveV" d=""></path>
         <path class="curve-plan" id="curveP" d=""></path>
         <g id="crossMarker"></g>
         <circle class="end-dot-b" id="dotB" cx="0" cy="0" r="4.5"></circle>
+        <circle class="end-dot-v" id="dotV" cx="0" cy="0" r="4"></circle>
         <circle class="end-dot-p" id="dotP" cx="0" cy="0" r="5.5"></circle>
       </svg>
       <div class="sim-legend">
         <span><span class="swatch p"></span> Your sequenced plan</span>
+        <span><span class="swatch v"></span> Value realized (depth of use)</span>
         <span><span class="swatch b"></span> Do nothing (adoption stays stuck)</span>
       </div>
       <div class="sim-readout">
@@ -141,9 +144,9 @@
           <div class="readout-num" id="r-plan">—</div>
           <div class="readout-label">Week-16 adoption, your plan</div>
         </div>
-        <div class="readout-item base">
-          <div class="readout-num" id="r-base">—</div>
-          <div class="readout-label">Week-16 adoption, do nothing</div>
+        <div class="readout-item value">
+          <div class="readout-num" id="r-value">—</div>
+          <div class="readout-label">Week-16 value realized</div>
         </div>
         <div class="readout-item gap">
           <div class="readout-num" id="r-gap">—</div>
@@ -353,19 +356,19 @@
       cells: ['ia-pre','ia-con','ia-prp','ia-act'] },
     { id: 'manager',  name: 'Manager-as-Channel',   framework: 'Switch · rider/elephant/path',
       blurb: 'Equip managers with talking points, permission to localize, a one-page path. Amplifies everything after.',
-      raises: { ia: 0.04, em: 0.05, lm: 0.05, lg: 0.05 }, push: {}, needsProof: 0, manager: true,
+      raises: { ia: 0.04, em: 0.05, lm: 0.05, lg: 0.05 }, push: {}, needsProof: 0, manager: true, capability: 0.15,
       cells: ['ia-act','em-act','lm-act','lg-act'] },
     { id: 'whole',    name: 'Whole-Product Kit',    framework: 'Diffusion · whole product',
       blurb: 'Ship the toolkit, integrations, FAQ, and function-specific success stories — remove every reason to wait.',
-      raises: { em: 0.30 }, push: { em: 0.05 }, needsProof: 0.10,
+      raises: { em: 0.30 }, push: { em: 0.05 }, needsProof: 0.10, capability: 0.30,
       cells: ['em-con','em-prp'] },
     { id: 'friction', name: 'Friction Kill',        framework: 'Fogg · B = MAP (ability)',
       blurb: 'One-click flows, remove the old workflow, minimum-viable first step. Flip effort from motivation to ability.',
-      raises: { em: 0.18, lm: 0.16 }, push: { em: 0.08, lm: 0.06 }, needsProof: 0,
+      raises: { em: 0.18, lm: 0.16 }, push: { em: 0.08, lm: 0.06 }, needsProof: 0, capability: 0.20,
       cells: ['em-prp','lm-prp'] },
     { id: 'whenthen', name: 'When-Then Prompts',    framework: 'Implementation Intentions',
       blurb: '"When my Monday calendar opens, I run the review in the new tool." Converts intent into action.',
-      raises: { em: 0.10, lm: 0.08 }, push: { em: 0.12, lm: 0.08 }, needsProof: 0,
+      raises: { em: 0.10, lm: 0.08 }, push: { em: 0.12, lm: 0.08 }, needsProof: 0, capability: 0.15,
       cells: ['em-prp','em-act'] },
     { id: 'peer',     name: 'Peer Proof Relay',     framework: 'Diffusion · peer references',
       blurb: 'Replace decks with 15-minute calls from someone in their function who already moved.',
@@ -407,52 +410,57 @@
   function simulate(planIds) {
     var st = initState();
     var growth = 0.22, decay = 0.06, managerActive = false, inertiaActive = false;
-    var schedule = {};        // week -> {id, slot}
+    var schedule = {};
     planIds.forEach(function (id, i) { schedule[planWeek(i)] = { id: id, slot: i }; });
-    var notes = {}, markers = [], series = [];
+    var notes = {}, markers = [], series = [], valueSeries = [];
+    var capStock = 0, value = 0, CAP_REF = 0.80, VGROWTH = 0.16;
 
     for (var w = 0; w <= WEEKS; w++) {
-      // apply a play landing this week
       if (schedule[w]) {
         var p = PLAY_BY_ID[schedule[w].id];
         var overallNow = overallOf(st);
         var readiness = p.needsProof > 0 ? Math.max(0, Math.min(1, overallNow / p.needsProof)) : 1;
         var hits = p.cells.reduce(function (n, c) { return n + (flagged[c] ? 1 : 0); }, 0);
-        var tBonus = 1 + 0.25 * Math.min(hits, 3);           // up to +0.75 for hitting flagged cells
-        var eff = readiness * readiness * tBonus;            // squared: deploying before proof exists is sharply penalized
+        var tBonus = 1 + 0.25 * Math.min(hits, 3);
+        var eff = readiness * readiness * tBonus;
         for (var rk in p.raises) { st[rk].ceil = Math.min(0.95, st[rk].ceil + p.raises[rk] * eff); }
         for (var pk in p.push)   { st[pk].level = Math.min(st[pk].ceil, st[pk].level + p.push[pk] * eff); }
         if (p.manager) managerActive = true;
+        capStock += (p.capability || 0) * eff;
         notes[p.id] = { readiness: readiness, hits: hits, muted: readiness < 0.5 };
         markers.push({ week: w, overall: overallNow, id: p.id });
       }
-      // growth toward ceiling + decay toward floor.
-      // Once adoption crosses the threshold, a reinforcing loop kicks in: decay drops and
-      // growth lifts (social proof compounds) — the "success inertia" that locks the gain in.
       var g = growth * (managerActive ? 1.6 : 1) * (inertiaActive ? 1.12 : 1);
       var d = decay * (managerActive ? 0.4 : 1) * (inertiaActive ? 0.45 : 1);
-      SEGMENTS.forEach(function (s) {
-        var c = st[s.key];
+      SEGMENTS.forEach(function (s2) {
+        var c = st[s2.key];
         c.level += g * (c.ceil - c.level);
         c.level -= d * (c.level - c.floor);
         if (c.level < 0) c.level = 0;
         if (c.level > c.ceil) c.level = c.ceil;
       });
-      var ov = overallOf(st) * 100;
+      var adoptionFrac = overallOf(st);
+      var ov = adoptionFrac * 100;
       series.push(ov);
+      // value realized lags adoption and only closes the gap as capability is built.
+      // With no capability plays, value caps at ~22% of adoption: "adopted but not valuable".
+      var capNorm = Math.min(capStock / CAP_REF, 1);
+      var valueCeil = adoptionFrac * (0.22 + 0.78 * capNorm);
+      value += VGROWTH * (valueCeil - value);
+      if (value < 0) value = 0;
+      valueSeries.push(value * 100);
       if (!inertiaActive && ov >= THRESHOLD) inertiaActive = true;
     }
-    // crossing = first week the curve reaches the threshold and holds it through week 16
     var crossedWeek = null;
     for (var cw = 0; cw <= WEEKS && crossedWeek === null; cw++) {
       if (series[cw] >= THRESHOLD) {
         var stays = true;
-        for (var j = cw; j <= WEEKS; j++) { if (series[j] < THRESHOLD) { stays = false; break; } }
+        for (var jj = cw; jj <= WEEKS; jj++) { if (series[jj] < THRESHOLD) { stays = false; break; } }
         if (stays) crossedWeek = cw;
       }
     }
     var touched = series.some(function (v) { return v >= THRESHOLD; });
-    return { series: series, notes: notes, markers: markers, crossedWeek: crossedWeek, touched: touched };
+    return { series: series, valueSeries: valueSeries, notes: notes, markers: markers, crossedWeek: crossedWeek, touched: touched };
   }
 
   // ===== chart geometry =====
@@ -472,12 +480,12 @@
     planEmpty: document.getElementById('planEmpty'),
     planClear: document.getElementById('planClear'),
     riskPanel: document.getElementById('riskPanel'),
-    curveB: document.getElementById('curveB'), curveP: document.getElementById('curveP'),
+    curveB: document.getElementById('curveB'), curveP: document.getElementById('curveP'), curveV: document.getElementById('curveV'),
     gapArea: document.getElementById('gapArea'), markers: document.getElementById('markers'),
     crossMarker: document.getElementById('crossMarker'), thresholdStatus: document.getElementById('thresholdStatus'),
     groundworkLadder: document.getElementById('groundworkLadder'),
-    dotB: document.getElementById('dotB'), dotP: document.getElementById('dotP'),
-    rPlan: document.getElementById('r-plan'), rBase: document.getElementById('r-base'), rGap: document.getElementById('r-gap'),
+    dotB: document.getElementById('dotB'), dotP: document.getElementById('dotP'), dotV: document.getElementById('dotV'),
+    rPlan: document.getElementById('r-plan'), rValue: document.getElementById('r-value'), rGap: document.getElementById('r-gap'),
     fFlagged: document.getElementById('f-flagged'), fPlan: document.getElementById('f-plan'),
     fPlanRes: document.getElementById('f-plan-res'), fBaseRes: document.getElementById('f-base-res'), fGapRes: document.getElementById('f-gap-res'),
     fThr: document.getElementById('f-thr-res')
@@ -579,6 +587,7 @@
     // curves
     el.curveB.setAttribute('d', pathFrom(base.series));
     el.curveP.setAttribute('d', pathFrom(res.series));
+    el.curveV.setAttribute('d', pathFrom(res.valueSeries));
     var area = pathFrom(res.series) + ' ' +
       base.series.slice().reverse().map(function (v, k) {
         var w = WEEKS - k; return 'L' + x(w).toFixed(1) + ' ' + y(v).toFixed(1);
@@ -599,11 +608,12 @@
 
     var endP = res.series[WEEKS], endB = base.series[WEEKS];
     el.dotP.setAttribute('cx', x(WEEKS)); el.dotP.setAttribute('cy', y(endP));
+    el.dotV.setAttribute('cx', x(WEEKS)); el.dotV.setAttribute('cy', y(res.valueSeries[WEEKS]));
     el.dotB.setAttribute('cx', x(WEEKS)); el.dotB.setAttribute('cy', y(endB));
 
     var rP = Math.round(endP), rB = Math.round(endB), rG = Math.round(endP - endB);
     el.rPlan.textContent = rP + '%';
-    el.rBase.textContent = rB + '%';
+    el.rValue.textContent = Math.round(res.valueSeries[WEEKS]) + '%';
     el.rGap.textContent = '+' + rG;
 
     // threshold: crossing marker on the curve + success-inertia status (plays on the Seams thesis)
@@ -727,12 +737,13 @@
     '.axis-label{fill:#6B6B6B;font-family:Inter,Arial,sans-serif;font-size:12px}' +
     '.curve-base{fill:none;stroke:#C44536;stroke-width:2.5;stroke-dasharray:6 5;stroke-linecap:round}' +
     '.curve-plan{fill:none;stroke:#4A7C9E;stroke-width:3;stroke-linecap:round}' +
+    '.curve-value{fill:none;stroke:#4E8B72;stroke-width:2;stroke-linecap:round}' +
     '.gap-area{fill:#4A7C9E;opacity:.09}.sustain-zone{fill:#4A7C9E;opacity:.05}' +
     '.threshold-line{stroke:#1F3A5F;stroke-width:1.5;stroke-dasharray:2 4;opacity:.6}' +
     '.threshold-label{fill:#1F3A5F;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;opacity:.8}' +
     '.play-marker{stroke:#1F3A5F;stroke-width:1;stroke-dasharray:3 3;opacity:.35}.play-marker.break{stroke:#C44536;opacity:.55}' +
     '.play-dot{fill:#1F3A5F}.break-x{fill:#C44536;font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:700}' +
-    '.end-dot-b{fill:#C44536}.end-dot-p{fill:#4A7C9E}' +
+    '.end-dot-b{fill:#C44536}.end-dot-p{fill:#4A7C9E}.end-dot-v{fill:#4E8B72}' +
     '.cross-line{stroke:#C8950A;stroke-width:1.5}.cross-dot{fill:#C8950A;stroke:#fff;stroke-width:1.5}' +
     '.cross-flag{fill:#C8950A;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:700}';
 
@@ -803,6 +814,7 @@
     ctx.fillStyle = '#4A7C9E'; ctx.fillText('With your plan:  ' + rP + '%', rx, ry);
     ry += 22; ctx.fillStyle = '#C44536'; ctx.fillText('Do nothing:  ' + rB + '%', rx, ry);
     ry += 22; ctx.fillStyle = '#222222'; ctx.fillText('Adoption added:  +' + (rP - rB) + ' points', rx, ry);
+    ry += 22; ctx.fillStyle = '#4E8B72'; ctx.fillText('Value realized:  ' + Math.round(res.valueSeries[16]) + '%', rx, ry);
     ry += 30; ctx.font = '600 13px Inter, Arial, sans-serif';
     if (res.crossedWeek !== null) { ctx.fillStyle = '#4A7C9E'; ctx.fillText('✓ Self-sustaining — crossed at week ' + res.crossedWeek, rx, ry); }
     else { ctx.fillStyle = '#6B6B6B'; ctx.fillText('Below the threshold — still liminal', rx, ry); }
