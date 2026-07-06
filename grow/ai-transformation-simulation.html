@@ -31,7 +31,7 @@
       <li><a href="/grow/ai-transformation-simulation.html" class="active">Simulate</a></li>
       <li><a href="/grow/#services">Engagements</a></li>
       <li><a href="/grow/#proof">Proof</a></li>
-      <li><a href="#report">Get your plan</a></li>
+      <li><a href="/grow/#approach">How to start</a></li>
       <li><a href="/grow/#begin" class="nav-cta">Book a Fit Call</a></li>
     </ul>
   </div>
@@ -183,17 +183,17 @@
 <section class="alt" id="report">
   <div class="wrap">
     <div id="sent-banner" style="display:none; padding:1rem 1.2rem; margin-bottom:2rem; background:#fff; border-left:3px solid var(--logo-blue); border-radius:4px;">
-      <strong>Sent.</strong> Tom will reply directly from sail@tdcatalyst.com with a read on your plan — usually within two business days.
+      <strong>Request received.</strong> Tom will send your simulation summary — the curve, your sequence, and a short read on where it holds or breaks — usually within two business days.
     </div>
     <div class="grid-2">
       <div>
-        <div class="eyebrow">Get your plan read</div>
-        <h2>Send me the sequence you just built.</h2>
-        <p>The planner shows the logic. A short reply from Tom tells you whether your sequence is ordered right for your actual population — which flagged cell to hit first, and where the plan is spending effort the org doesn't need yet. Your flagged cells and play order ride along with the note.</p>
-        <p style="font-size:0.9rem; color:var(--midgray);">No sequence, no list. One human reply.</p>
+        <div class="eyebrow">Get your simulation summary</div>
+        <h2>Get the finished summary sent to you.</h2>
+        <p>You've built a working model. Request the finished summary and Tom sends it to you personally — a single sheet with your curve, your sequence, and the read on where the transformation holds or breaks, plus a short take on what it means for your actual rollout. The simulation you built is attached to the request automatically.</p>
+        <p style="font-size:0.9rem; color:var(--midgray);">No list, no drip sequence. One human reply.</p>
       </div>
       <div>
-        <form class="form-grid" action="https://formsubmit.co/sail@tdcatalyst.com" method="POST">
+        <form class="form-grid" action="https://formsubmit.co/sail@tdcatalyst.com" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="_subject" value="AI Transformation Simulation — scenario submitted">
           <input type="hidden" name="_captcha" value="true">
           <input type="hidden" name="_template" value="table">
@@ -204,6 +204,7 @@
           <input type="hidden" name="result_week16_donothing" id="f-base-res">
           <input type="hidden" name="result_points_added"     id="f-gap-res">
           <input type="hidden" name="result_transformation_threshold" id="f-thr-res">
+          <input type="file" name="attachment" id="f-attach" style="display:none" tabindex="-1" aria-hidden="true">
           <div>
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required>
@@ -220,7 +221,7 @@
             <label for="context">The deployment (optional)</label>
             <textarea id="context" name="context" placeholder="What was rolled out, to whom, and where adoption is now."></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Send my plan</button>
+          <button type="submit" class="btn btn-primary">Request my summary</button>
           <p style="font-size:0.82rem; color:var(--midgray); margin-top:0.4rem;">Messages route to sail@tdcatalyst.com. Prefer to talk? <a href="https://cal.com/tdcatalyst" target="_blank" rel="noopener">Book a Fit Call →</a></p>
         </form>
       </div>
@@ -687,6 +688,116 @@
   el.planClear.addEventListener('click', function () { plan = []; render(); });
 
   render();
+
+  // ===== lead-gen: build a summary image of what they built and attach it to the submission =====
+  var CHART_CSS =
+    '.grid-line{stroke:#D9D3CA;stroke-width:1}' +
+    '.axis-label{fill:#6B6B6B;font-family:Inter,Arial,sans-serif;font-size:12px}' +
+    '.curve-base{fill:none;stroke:#C44536;stroke-width:2.5;stroke-dasharray:6 5;stroke-linecap:round}' +
+    '.curve-plan{fill:none;stroke:#4A7C9E;stroke-width:3;stroke-linecap:round}' +
+    '.gap-area{fill:#4A7C9E;opacity:.09}.sustain-zone{fill:#4A7C9E;opacity:.05}' +
+    '.threshold-line{stroke:#1F3A5F;stroke-width:1.5;stroke-dasharray:2 4;opacity:.6}' +
+    '.threshold-label{fill:#1F3A5F;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;opacity:.8}' +
+    '.play-marker{stroke:#1F3A5F;stroke-width:1;stroke-dasharray:3 3;opacity:.35}.play-marker.break{stroke:#C44536;opacity:.55}' +
+    '.play-dot{fill:#1F3A5F}.break-x{fill:#C44536;font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:700}' +
+    '.end-dot-b{fill:#C44536}.end-dot-p{fill:#4A7C9E}' +
+    '.cross-line{stroke:#C8950A;stroke-width:1.5}.cross-dot{fill:#C8950A;stroke:#fff;stroke-width:1.5}' +
+    '.cross-flag{fill:#C8950A;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:700}';
+
+  function chartToImage(cb) {
+    var src = document.querySelector('.sim-chart');
+    if (!src) { cb(null); return; }
+    var svg = src.cloneNode(true);
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    svg.setAttribute('width', '720'); svg.setAttribute('height', '380');
+    var st = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    st.textContent = CHART_CSS; svg.insertBefore(st, svg.firstChild);
+    var str = new XMLSerializer().serializeToString(svg);
+    var img = new Image(), done = false;
+    var to = setTimeout(function () { if (!done) { done = true; cb(null); } }, 2500);
+    img.onload = function () { if (!done) { done = true; clearTimeout(to); cb(img); } };
+    img.onerror = function () { if (!done) { done = true; clearTimeout(to); cb(null); } };
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(str);
+  }
+
+  function buildSummaryCanvas(chartImg) {
+    var res = simulate(plan), base = simulate([]);
+    var W = 1000, P = 44, scale = 2;
+    var chartW = W - P * 2, chartH = Math.round(chartW * 380 / 720);
+    var rowH = 25, detailsH = Math.max(Math.max(plan.length, 1) * rowH + 34, 200);
+    var H = P + 52 + chartH + 26 + detailsH + 40;
+    var c = document.createElement('canvas');
+    c.width = W * scale; c.height = H * scale;
+    var ctx = c.getContext('2d'); ctx.scale(scale, scale);
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#1F3A5F'; ctx.font = '600 15px Inter, Arial, sans-serif';
+    ctx.fillText('AI TRANSFORMATION SIMULATION', P, P + 4);
+    ctx.fillStyle = '#6B6B6B'; ctx.font = '13px Inter, Arial, sans-serif';
+    ctx.fillText('TDcatalyst Grow · Deploy — tdcatalyst.com/grow', P, P + 26);
+    var cy = P + 52;
+    if (chartImg) ctx.drawImage(chartImg, P, cy, chartW, chartH);
+    var dy = cy + chartH + 26;
+    ctx.strokeStyle = '#D9D3CA'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(P, dy - 14); ctx.lineTo(W - P, dy - 14); ctx.stroke();
+    ctx.fillStyle = '#1F3A5F'; ctx.font = '600 12px Inter, Arial, sans-serif';
+    ctx.fillText('YOUR 16-WEEK SEQUENCE', P, dy + 6);
+    var ly = dy + 32; ctx.font = '13px Inter, Arial, sans-serif';
+    if (!plan.length) { ctx.fillStyle = '#6B6B6B'; ctx.fillText('(no interventions selected)', P, ly); }
+    plan.forEach(function (id, i) {
+      var pp = PLAY_BY_ID[id], n = res.notes[id] || {}, broke = !!n.muted;
+      ctx.fillStyle = broke ? '#C44536' : '#1F3A5F';
+      ctx.fillText((broke ? '✕' : '✓') + '  Wk ' + (1 + i * 2) + '  ' + pp.name, P, ly);
+      ly += rowH;
+    });
+    var rx = Math.round(W / 2) + 24, ry = dy + 6;
+    ctx.fillStyle = '#1F3A5F'; ctx.font = '600 12px Inter, Arial, sans-serif';
+    ctx.fillText('AT WEEK 16', rx, ry);
+    ry += 26; ctx.font = '13px Inter, Arial, sans-serif';
+    var rP = Math.round(res.series[16]), rB = Math.round(base.series[16]);
+    ctx.fillStyle = '#4A7C9E'; ctx.fillText('With your plan:  ' + rP + '%', rx, ry);
+    ry += 22; ctx.fillStyle = '#C44536'; ctx.fillText('Do nothing:  ' + rB + '%', rx, ry);
+    ry += 22; ctx.fillStyle = '#222222'; ctx.fillText('Adoption added:  +' + (rP - rB) + ' points', rx, ry);
+    ry += 30; ctx.font = '600 13px Inter, Arial, sans-serif';
+    if (res.crossedWeek !== null) { ctx.fillStyle = '#4A7C9E'; ctx.fillText('✓ Self-sustaining — crossed at week ' + res.crossedWeek, rx, ry); }
+    else { ctx.fillStyle = '#6B6B6B'; ctx.fillText('Below the threshold — still liminal', rx, ry); }
+    var fk = Object.keys(flagged);
+    ry += 28; ctx.font = '13px Inter, Arial, sans-serif'; ctx.fillStyle = '#6B6B6B';
+    ctx.fillText('Flagged as stalled: ' + (fk.length ? fk.length + ' cell' + (fk.length > 1 ? 's' : '') : 'none'), rx, ry);
+    ctx.fillStyle = '#9a9a9a'; ctx.font = '11px Inter, Arial, sans-serif';
+    ctx.fillText('Generated from the AI Transformation Simulation · illustrative model, not a forecast', P, H - 18);
+    return c;
+  }
+
+  (function wireLeadGen() {
+    var form = document.querySelector('#report form');
+    var fileInput = document.getElementById('f-attach');
+    if (!form || !fileInput) return;
+    var submitting = false;
+    form.addEventListener('submit', function (e) {
+      if (submitting) return;
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      var btn = form.querySelector('button[type=submit]');
+      var orig = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Preparing your summary…'; }
+      var finished = false;
+      function go() { submitting = true; if (btn) { btn.disabled = false; btn.textContent = orig; } form.submit(); }
+      var guard = setTimeout(function () { if (!finished) { finished = true; go(); } }, 4000);
+      chartToImage(function (img) {
+        if (finished) return;
+        var canvas; try { canvas = buildSummaryCanvas(img); } catch (err) { canvas = null; }
+        if (!canvas || !window.DataTransfer || !canvas.toBlob) { finished = true; clearTimeout(guard); go(); return; }
+        canvas.toBlob(function (blob) {
+          if (finished) return; finished = true; clearTimeout(guard);
+          try {
+            if (blob) { var dt = new DataTransfer(); dt.items.add(new File([blob], 'transformation-simulation-summary.png', { type: 'image/png' })); fileInput.files = dt.files; }
+          } catch (err) {}
+          go();
+        }, 'image/png');
+      });
+    });
+  })();
+
 })();
 </script>
 </body>
