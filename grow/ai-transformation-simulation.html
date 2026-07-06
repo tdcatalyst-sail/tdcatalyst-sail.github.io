@@ -306,6 +306,8 @@
 
   // short, imperative "get this right at this step" line for the left-side groundwork ladder.
   var GROUNDWORK = {
+    sponsor:  "Secure a sponsor who will use it visibly, fund it, and protect the time — not just endorse it.",
+    build:    "Design role-based capability — the prompting, judgment, and workflow redesign that turn usage into value.",
     proof:    "Pick genuinely respected first users, and clear real time for one true win.",
     manager:  "Give managers permission to localize and authority over the workflow — not just talking points.",
     whole:    "Name one owner to assemble the full kit — integrations, FAQ, templates — before rollout.",
@@ -319,6 +321,12 @@
   // for each play: the pitfall of doing it wrong / too early, and the prerequisite most orgs miss.
   // Tone: we've seen these fail; your team owns the groundwork, we own the sequencing judgment.
   var CAVEATS = {
+    sponsor: {
+      risk: "A sponsor in name only — a logo on a slide, no visible use, no funding — is worse than none; people read the gap in a week.",
+      prereq: "The sponsor has to go first, publicly and imperfectly, fund it, and hold the line on competing priorities. Delegated to IT, it is not sponsorship." },
+    build: {
+      risk: "Generic AI training that teaches features, not judgment — people finish the module and work exactly as before.",
+      prereq: "Requires role-level design: the real tasks, the prompting and judgment that create value, the workflow rebuilt around them. Fieldwork, not an LMS course." },
     proof: {
       risk: "Anoint the wrong “champions” — loud but not respected — and their advocacy reads as management astroturf, not proof.",
       prereq: "You need a real first win, not a demo: one team clearing time on a workflow worth switching to. Manufactured wins get spotted instantly." },
@@ -350,35 +358,46 @@
   // needsProof = overall adoption threshold below which the play is muted (peer-proof dependency).
   // cells = matrix cells this play addresses (for the flagged-cell targeting bonus).
   var PLAYS = [
-    { id: 'proof',    name: 'Proof Seeding',        framework: 'Diffusion of Innovations',
-      blurb: 'Recruit innovators, white-glove their first win, make it a visible story.',
-      raises: { ia: 0.30 }, push: { ia: 0.10 }, needsProof: 0,
-      cells: ['ia-pre','ia-con','ia-prp','ia-act'] },
-    { id: 'manager',  name: 'Manager-as-Channel',   framework: 'Switch · rider/elephant/path',
+    // ---- Opportunity: structural & social permission ----
+    { id: 'sponsor', name: 'Executive Sponsorship', framework: 'Prosci · active sponsorship', group: 'O',
+      blurb: 'Visible, funded, active executive ownership — going first and holding the line. The single strongest predictor of success.',
+      raises: { ia: 0.05, em: 0.06, lm: 0.06, lg: 0.05 }, push: {}, needsProof: 0, sponsor: true, capability: 0.10,
+      cells: ['em-pre','lm-pre','lg-pre'] },
+    { id: 'manager',  name: 'Manager-as-Channel',   framework: 'Switch · rider/elephant/path', group: 'O',
       blurb: 'Equip managers with talking points, permission to localize, a one-page path. Amplifies everything after.',
       raises: { ia: 0.04, em: 0.05, lm: 0.05, lg: 0.05 }, push: {}, needsProof: 0, manager: true, capability: 0.15,
       cells: ['ia-act','em-act','lm-act','lg-act'] },
-    { id: 'whole',    name: 'Whole-Product Kit',    framework: 'Diffusion · whole product',
+    { id: 'whole',    name: 'Whole-Product Kit',    framework: 'Diffusion · whole product', group: 'O',
       blurb: 'Ship the toolkit, integrations, FAQ, and function-specific success stories — remove every reason to wait.',
       raises: { em: 0.30 }, push: { em: 0.05 }, needsProof: 0.10, capability: 0.30, disrupt: 0.06,
       cells: ['em-con','em-prp'] },
-    { id: 'friction', name: 'Friction Kill',        framework: 'Fogg · B = MAP (ability)',
+    { id: 'friction', name: 'Friction Kill',        framework: 'Fogg · B = MAP (ability)', group: 'O',
       blurb: 'One-click flows, remove the old workflow, minimum-viable first step. Flip effort from motivation to ability.',
       raises: { em: 0.18, lm: 0.16 }, push: { em: 0.08, lm: 0.06 }, needsProof: 0, capability: 0.20, disrupt: 0.12,
       cells: ['em-prp','lm-prp'] },
-    { id: 'whenthen', name: 'When-Then Prompts',    framework: 'Implementation Intentions',
+    // ---- Capability: can they actually do it well ----
+    { id: 'build',    name: 'Capability Build',     framework: 'ADKAR · Ability / COM-B Capability', group: 'C',
+      blurb: 'Role-based skill-building — prompting, judgment, workflow redesign — so people get real value, not just log in.',
+      raises: { em: 0.12, lm: 0.10 }, push: { em: 0.05, lm: 0.04 }, needsProof: 0, capability: 0.40, disrupt: 0.08,
+      cells: ['em-prp','em-act','lm-prp'] },
+    { id: 'whenthen', name: 'When-Then Prompts',    framework: 'Implementation Intentions', group: 'C',
       blurb: '"When my Monday calendar opens, I run the review in the new tool." Converts intent into action.',
       raises: { em: 0.10, lm: 0.08 }, push: { em: 0.12, lm: 0.08 }, needsProof: 0, capability: 0.15,
       cells: ['em-prp','em-act'] },
-    { id: 'peer',     name: 'Peer Proof Relay',     framework: 'Diffusion · peer references',
+    // ---- Motivation: belief & desire ----
+    { id: 'proof',    name: 'Proof Seeding',        framework: 'Diffusion of Innovations', group: 'M',
+      blurb: 'Recruit innovators, white-glove their first win, make it a visible story.',
+      raises: { ia: 0.30 }, push: { ia: 0.10 }, needsProof: 0,
+      cells: ['ia-pre','ia-con','ia-prp','ia-act'] },
+    { id: 'peer',     name: 'Peer Proof Relay',     framework: 'Diffusion · peer references', group: 'M',
       blurb: 'Replace decks with 15-minute calls from someone in their function who already moved.',
       raises: { em: 0.22, lm: 0.14 }, push: { em: 0.05, lm: 0.03 }, needsProof: 0.28,
       cells: ['em-pre','em-con','lm-con'] },
-    { id: 'inaction', name: 'Inaction-Cost Reframe', framework: 'Social Norms · Late Majority',
+    { id: 'inaction', name: 'Inaction-Cost Reframe', framework: 'Social Norms · Late Majority', group: 'M',
       blurb: 'Make not-moving the risky choice; establish adoption as the norm ("70% of peers are already in").',
       raises: { lm: 0.40 }, push: { lm: 0.06 }, needsProof: 0.45,
       cells: ['lm-pre','lm-act'] },
-    { id: 'quiet',    name: 'Quiet Path for Laggards', framework: 'Self-Determination Theory',
+    { id: 'quiet',    name: 'Quiet Path for Laggards', framework: 'Self-Determination Theory', group: 'M',
       blurb: 'One-on-one, surface the real fear, pre-built path, sustained support — quiet recognition, never a spotlight.',
       raises: { lg: 0.48 }, push: { lg: 0.05 }, needsProof: 0.50,
       cells: ['lg-pre','lg-con','lg-prp','lg-act'] }
@@ -409,12 +428,12 @@
   // Returns { series:[overall per week 0..16], notes:{playId:{readiness,hits,muted}}, markers:[{week,overall}] }
   function simulate(planIds) {
     var st = initState();
-    var growth = 0.22, decay = 0.06, managerActive = false, inertiaActive = false;
+    var growth = 0.22, decay = 0.06, managerActive = false, inertiaActive = false, sponsorshipActive = false, NOSPONSOR_CAP = 0.50;
     var EROSION = 4.5, RWIN = 4, DIPSCALE = 60, lastLand = -99, dipEvents = [];
     var schedule = {};
     planIds.forEach(function (id, i) { schedule[planWeek(i)] = { id: id, slot: i }; });
     var notes = {}, markers = [], series = [], valueSeries = [];
-    var capStock = 0, value = 0, CAP_REF = 0.80, VGROWTH = 0.16;
+    var capStock = 0, value = 0, CAP_REF = 1.00, VGROWTH = 0.16;
 
     function dipAt(w) {
       var t = 0;
@@ -437,6 +456,7 @@
         for (var rk in p.raises) { st[rk].ceil = Math.min(0.95, st[rk].ceil + p.raises[rk] * eff); }
         for (var pk in p.push)   { st[pk].level = Math.min(st[pk].ceil, st[pk].level + p.push[pk] * eff); }
         if (p.manager) managerActive = true;
+        if (p.sponsor) sponsorshipActive = true;
         capStock += (p.capability || 0) * eff;
         if (p.disrupt) dipEvents.push({ week: w, mag: p.disrupt * DIPSCALE * eff });
         lastLand = w;
@@ -450,10 +470,12 @@
       var d = decay * (managerActive ? 0.4 : 1) * (inertiaActive ? 0.45 : 1) * (reinforced ? 1 : EROSION);
       SEGMENTS.forEach(function (s2) {
         var c = st[s2.key];
-        c.level += g * (c.ceil - c.level);
+        // without active executive sponsorship, ceilings are capped — no sequence reaches self-sustaining
+        var effCeil = sponsorshipActive ? c.ceil : Math.min(c.ceil, NOSPONSOR_CAP);
+        c.level += g * (effCeil - c.level);
         c.level -= d * (c.level - c.floor);
         if (c.level < 0) c.level = 0;
-        if (c.level > c.ceil) c.level = c.ceil;
+        if (c.level > effCeil) c.level = effCeil;
       });
       // J-curve: workflow-disrupting plays cause a transient dip before the payoff
       var rawOv = overallOf(st) * 100;
@@ -530,22 +552,34 @@
   });
 
   // ===== build the library =====
-  PLAYS.forEach(function (p) {
-    var card = document.createElement('div');
-    card.className = 'play-card';
-    card.dataset.id = p.id;
-    card.innerHTML =
-      '<span class="play-add">+</span>' +
-      '<div class="play-name">' + p.name + '</div>' +
-      '<div class="play-blurb">' + p.blurb + '</div>' +
-      '<div class="play-framework">' + p.framework + '</div>' +
-      '<span class="play-match">↳ Targets a stalled cell you flagged</span>';
-    card.addEventListener('click', function () {
-      if (plan.indexOf(p.id) !== -1) return;
-      plan.push(p.id);
-      render();
+  var GROUPS = [
+    { key: 'O', label: 'Opportunity', desc: 'structural & social permission' },
+    { key: 'C', label: 'Capability', desc: 'can they do it well' },
+    { key: 'M', label: 'Motivation', desc: 'belief & desire' }
+  ];
+  GROUPS.forEach(function (grp) {
+    var gh = document.createElement('div');
+    gh.className = 'lib-group-head';
+    gh.innerHTML = '<span class="lib-group-name">' + grp.label + '</span> <span class="lib-group-desc">' + grp.desc + '</span>';
+    el.lib.appendChild(gh);
+    PLAYS.filter(function (p) { return p.group === grp.key; }).forEach(function (p) {
+      var card = document.createElement('div');
+      card.className = 'play-card';
+      card.dataset.id = p.id;
+      card.innerHTML =
+        '<span class="play-add">+</span>' +
+        '<div class="play-name">' + p.name + '</div>' +
+        '<div class="play-blurb">' + p.blurb + '</div>' +
+        '<div class="play-framework">' + p.framework + '</div>' +
+        '<span class="play-match">↳ Targets a stalled cell you flagged</span>';
+      card.addEventListener('click', function () {
+        if (plan.indexOf(p.id) !== -1) return;
+        if (plan.length >= 8) return;   // 16-week / 2-week-cadence budget
+        plan.push(p.id);
+        render();
+      });
+      el.lib.appendChild(card);
     });
-    el.lib.appendChild(card);
   });
 
   // ===== render =====
@@ -555,11 +589,15 @@
     el.flagCount.textContent = flagKeys.length;
 
     // library: added-state + "matches a flagged cell" marker
+    var planFull = plan.length >= 8;
     Array.prototype.forEach.call(el.lib.children, function (card) {
+      if (!card.dataset.id) return;
       var pl = PLAY_BY_ID[card.dataset.id];
+      var added = plan.indexOf(card.dataset.id) !== -1;
       var matches = pl.cells.some(function (c) { return flagged[c]; });
       card.classList.toggle('matches', matches);
-      card.classList.toggle('added', plan.indexOf(card.dataset.id) !== -1);
+      card.classList.toggle('added', added);
+      card.classList.toggle('locked', planFull && !added);
     });
 
     // simulate
