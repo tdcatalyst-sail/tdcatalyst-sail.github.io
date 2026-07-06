@@ -777,6 +777,38 @@ hr.sign-rule {
 }
 .retainer-meta .engagement-price { font-size: 1.5rem; }
 
+/* --- Cross-practice signpost (reciprocal Sail <-> Grow handoff) --- */
+.practice-signpost {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 5px;
+  padding: 1.5rem 1.75rem 1.5rem 2.1rem;
+  box-shadow: 0 1px 2px rgba(31, 58, 95, 0.04), 0 14px 34px -18px rgba(31, 58, 95, 0.16);
+  overflow: hidden;
+  max-width: 72ch;
+}
+.practice-signpost::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 3px;
+}
+.practice-signpost p { margin: 0; font-size: 0.95rem; line-height: 1.6; color: var(--charcoal); }
+.practice-signpost p + p { margin-top: 0.5rem; color: var(--midgray); }
+.practice-signpost .signpost-go {
+  display: inline-block;
+  margin-top: 0.9rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border-bottom: 1px solid transparent;
+}
+/* Accent bar + link tinted to the DESTINATION practice */
+.practice-signpost--to-sail::before { background: var(--logo-gold); }
+.practice-signpost--to-sail .signpost-go { color: var(--terracotta); }
+.practice-signpost--to-grow::before { background: var(--logo-blue); }
+.practice-signpost--to-grow .signpost-go { color: var(--logo-blue); }
+
 /* 5-column method grid */
 .method-5 {
   display: grid;
