@@ -137,7 +137,7 @@
       <div class="sim-legend">
         <span><span class="swatch p"></span> Your sequenced plan</span>
         <span><span class="swatch v"></span> Value realized (depth of use)</span>
-        <span><span class="swatch b"></span> Do nothing (adoption stays stuck)</span>
+        <span><span class="swatch b"></span> Do nothing (adoption erodes without reinforcement)</span>
       </div>
       <div class="sim-readout">
         <div class="readout-item plan">
@@ -360,11 +360,11 @@
       cells: ['ia-act','em-act','lm-act','lg-act'] },
     { id: 'whole',    name: 'Whole-Product Kit',    framework: 'Diffusion · whole product',
       blurb: 'Ship the toolkit, integrations, FAQ, and function-specific success stories — remove every reason to wait.',
-      raises: { em: 0.30 }, push: { em: 0.05 }, needsProof: 0.10, capability: 0.30,
+      raises: { em: 0.30 }, push: { em: 0.05 }, needsProof: 0.10, capability: 0.30, disrupt: 0.06,
       cells: ['em-con','em-prp'] },
     { id: 'friction', name: 'Friction Kill',        framework: 'Fogg · B = MAP (ability)',
       blurb: 'One-click flows, remove the old workflow, minimum-viable first step. Flip effort from motivation to ability.',
-      raises: { em: 0.18, lm: 0.16 }, push: { em: 0.08, lm: 0.06 }, needsProof: 0, capability: 0.20,
+      raises: { em: 0.18, lm: 0.16 }, push: { em: 0.08, lm: 0.06 }, needsProof: 0, capability: 0.20, disrupt: 0.12,
       cells: ['em-prp','lm-prp'] },
     { id: 'whenthen', name: 'When-Then Prompts',    framework: 'Implementation Intentions',
       blurb: '"When my Monday calendar opens, I run the review in the new tool." Converts intent into action.',
@@ -410,10 +410,21 @@
   function simulate(planIds) {
     var st = initState();
     var growth = 0.22, decay = 0.06, managerActive = false, inertiaActive = false;
+    var EROSION = 4.5, RWIN = 4, DIPSCALE = 60, lastLand = -99, dipEvents = [];
     var schedule = {};
     planIds.forEach(function (id, i) { schedule[planWeek(i)] = { id: id, slot: i }; });
     var notes = {}, markers = [], series = [], valueSeries = [];
     var capStock = 0, value = 0, CAP_REF = 0.80, VGROWTH = 0.16;
+
+    function dipAt(w) {
+      var t = 0;
+      for (var k = 0; k < dipEvents.length; k++) {
+        var delta = w - dipEvents[k].week;
+        var kern = delta <= 0 ? 0 : (delta <= 1 ? delta : (delta < 4 ? (4 - delta) / 3 : 0));
+        t += dipEvents[k].mag * kern;
+      }
+      return t;
+    }
 
     for (var w = 0; w <= WEEKS; w++) {
       if (schedule[w]) {
@@ -427,11 +438,16 @@
         for (var pk in p.push)   { st[pk].level = Math.min(st[pk].ceil, st[pk].level + p.push[pk] * eff); }
         if (p.manager) managerActive = true;
         capStock += (p.capability || 0) * eff;
+        if (p.disrupt) dipEvents.push({ week: w, mag: p.disrupt * DIPSCALE * eff });
+        lastLand = w;
         notes[p.id] = { readiness: readiness, hits: hits, muted: readiness < 0.5 };
         markers.push({ week: w, overall: overallNow, id: p.id });
       }
+      // reinforcement: without a recent play, an active manager, or self-sustaining inertia,
+      // adoption erodes (novelty fades / shadow AI / silence-is-waiting).
+      var reinforced = managerActive || inertiaActive || (w - lastLand <= RWIN);
       var g = growth * (managerActive ? 1.6 : 1) * (inertiaActive ? 1.12 : 1);
-      var d = decay * (managerActive ? 0.4 : 1) * (inertiaActive ? 0.45 : 1);
+      var d = decay * (managerActive ? 0.4 : 1) * (inertiaActive ? 0.45 : 1) * (reinforced ? 1 : EROSION);
       SEGMENTS.forEach(function (s2) {
         var c = st[s2.key];
         c.level += g * (c.ceil - c.level);
@@ -439,11 +455,11 @@
         if (c.level < 0) c.level = 0;
         if (c.level > c.ceil) c.level = c.ceil;
       });
-      var adoptionFrac = overallOf(st);
-      var ov = adoptionFrac * 100;
+      // J-curve: workflow-disrupting plays cause a transient dip before the payoff
+      var rawOv = overallOf(st) * 100;
+      var ov = Math.max(3, rawOv - dipAt(w));
       series.push(ov);
-      // value realized lags adoption and only closes the gap as capability is built.
-      // With no capability plays, value caps at ~22% of adoption: "adopted but not valuable".
+      var adoptionFrac = ov / 100;
       var capNorm = Math.min(capStock / CAP_REF, 1);
       var valueCeil = adoptionFrac * (0.22 + 0.78 * capNorm);
       value += VGROWTH * (valueCeil - value);
