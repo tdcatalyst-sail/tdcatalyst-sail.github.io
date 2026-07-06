@@ -729,15 +729,17 @@ hr.sign-rule {
 .retainer-term { font-size: 0.85rem; color: var(--midgray); margin-top: 0.2rem; }
 @media (max-width: 620px) { .retainer-meta { text-align: left; } }
 
-/* --- Elevated Grow engagement cards, pricing, and retainer (grow only) --- */
-.brand-grow .outcomes-grid .outcome-item {
+/* --- Elevated engagement cards + colored accent bars (grow and advise) --- */
+.brand-grow .outcomes-grid .outcome-item,
+.brand-advise .outcomes-grid .outcome-item {
   position: relative;
   padding: 2.25rem 2rem 2rem;
   border-radius: 5px;
   box-shadow: 0 1px 2px rgba(31, 58, 95, 0.04), 0 14px 34px -18px rgba(31, 58, 95, 0.22);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.brand-grow .outcomes-grid .outcome-item::before {
+.brand-grow .outcomes-grid .outcome-item::before,
+.brand-advise .outcomes-grid .outcome-item::before {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -745,10 +747,15 @@ hr.sign-rule {
   border-radius: 5px 5px 0 0;
   background: var(--logo-blue);
 }
-.brand-grow .outcomes-grid .outcome-item:nth-child(1)::before { background: var(--logo-red); }
-.brand-grow .outcomes-grid .outcome-item:nth-child(2)::before { background: var(--logo-gold); }
-.brand-grow .outcomes-grid .outcome-item:nth-child(3)::before { background: var(--logo-blue); }
-.brand-grow .outcomes-grid .outcome-item:hover {
+.brand-grow .outcomes-grid .outcome-item:nth-child(1)::before,
+.brand-advise .outcomes-grid .outcome-item:nth-child(1)::before { background: var(--logo-red); }
+.brand-grow .outcomes-grid .outcome-item:nth-child(2)::before,
+.brand-advise .outcomes-grid .outcome-item:nth-child(2)::before { background: var(--logo-gold); }
+.brand-grow .outcomes-grid .outcome-item:nth-child(3)::before,
+.brand-advise .outcomes-grid .outcome-item:nth-child(3)::before { background: var(--logo-blue); }
+.brand-advise .outcomes-grid .outcome-item:nth-child(4)::before { background: var(--logo-red); }
+.brand-grow .outcomes-grid .outcome-item:hover,
+.brand-advise .outcomes-grid .outcome-item:hover {
   transform: translateY(-4px);
   box-shadow: 0 2px 4px rgba(31, 58, 95, 0.05), 0 22px 44px -20px rgba(31, 58, 95, 0.28);
 }
