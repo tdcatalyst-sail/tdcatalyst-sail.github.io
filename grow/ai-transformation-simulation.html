@@ -32,6 +32,7 @@
       <li><a href="/grow/#services">Engagements</a></li>
       <li><a href="/grow/#proof">Proof</a></li>
       <li><a href="/grow/#approach">How to start</a></li>
+      <li><a href="/sail/about.html">About</a></li>
       <li><a href="/grow/#begin" class="nav-cta">Book a Fit Call</a></li>
     </ul>
   </div>
@@ -83,7 +84,7 @@
       <div class="step-head">
         <span class="step-badge">2</span>
         <h3>Sequence your interventions</h3>
-        <span class="step-hint">Click a play to add it · reorder with ▲▼</span>
+        <span class="step-hint">Click a play to add it · drag to reorder</span>
       </div>
       <div class="build-grid">
         <div class="lib-grid" id="libGrid"><!-- play cards injected by JS --></div>
@@ -549,17 +550,15 @@
       var p = PLAY_BY_ID[id], n = res.notes[id] || {};
       var li = document.createElement('li');
       li.className = 'plan-item';
+      li.setAttribute('data-i', i);
       var badge = '';
       if (n.muted) badge = '<span class="plan-badge muted">⚠ deployed before its proof exists — muted</span>';
       else if (n.hits > 0) badge = '<span class="plan-badge good">✓ hits ' + n.hits + ' flagged cell' + (n.hits > 1 ? 's' : '') + '</span>';
       li.innerHTML =
+        '<span class="plan-drag" aria-hidden="true">⠿</span>' +
         '<span class="plan-week">Wk ' + planWeek(i) + '</span>' +
         '<span class="plan-name">' + p.name + badge + '</span>' +
-        '<span class="plan-ctrls">' +
-          '<button data-act="up" data-i="' + i + '" aria-label="Move earlier">▲</button>' +
-          '<button data-act="down" data-i="' + i + '" aria-label="Move later">▼</button>' +
-          '<button data-act="rm" data-i="' + i + '" aria-label="Remove">✕</button>' +
-        '</span>';
+        '<button class="plan-rm" data-act="rm" data-i="' + i + '" aria-label="Remove">✕</button>';
       el.planList.appendChild(li);
     });
 
@@ -676,16 +675,49 @@
     el.fThr.value = thrLabel;
   }
 
-  // plan controls (delegated)
+  // plan controls — remove (delegated)
   el.planList.addEventListener('click', function (e) {
     var btn = e.target.closest('button'); if (!btn) return;
-    var i = +btn.dataset.i, act = btn.dataset.act;
-    if (act === 'rm') plan.splice(i, 1);
-    else if (act === 'up' && i > 0) { var t = plan[i - 1]; plan[i - 1] = plan[i]; plan[i] = t; }
-    else if (act === 'down' && i < plan.length - 1) { var u = plan[i + 1]; plan[i + 1] = plan[i]; plan[i] = u; }
-    render();
+    if (btn.dataset.act === 'rm') { plan.splice(+btn.dataset.i, 1); render(); }
   });
   el.planClear.addEventListener('click', function () { plan = []; render(); });
+
+  // plan reorder — drag to slide (pointer events: mouse + touch)
+  var drag = null;
+  el.planList.addEventListener('pointerdown', function (e) {
+    if (e.button && e.button !== 0) return;          // primary button / touch only
+    var li = e.target.closest('.plan-item'); if (!li) return;
+    if (e.target.closest('.plan-rm')) return;        // let the remove button work
+    drag = { index: +li.getAttribute('data-i') };
+    li.classList.add('dragging');
+    document.body.classList.add('plan-dragging');
+    e.preventDefault();
+  });
+  document.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var items = Array.prototype.slice.call(el.planList.querySelectorAll('.plan-item'));
+    var target = items.length - 1;
+    for (var k = 0; k < items.length; k++) {
+      var r = items[k].getBoundingClientRect();
+      if (e.clientY < r.top + r.height / 2) { target = k; break; }
+    }
+    if (target !== drag.index) {
+      var moved = plan.splice(drag.index, 1)[0];
+      plan.splice(target, 0, moved);
+      drag.index = target;
+      render();
+      var now = el.planList.querySelector('.plan-item[data-i="' + target + '"]');
+      if (now) now.classList.add('dragging');
+    }
+  });
+  function endDrag() {
+    if (!drag) return;
+    drag = null;
+    document.body.classList.remove('plan-dragging');
+    render();
+  }
+  document.addEventListener('pointerup', endDrag);
+  document.addEventListener('pointercancel', endDrag);
 
   render();
 

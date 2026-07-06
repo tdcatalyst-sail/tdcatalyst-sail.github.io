@@ -1619,20 +1619,28 @@ footer .footer-practices i {
     .plan-list { list-style: none; margin: 0; padding: 0; }
     .plan-item {
       background: rgba(255,255,255,0.06); border-radius: 4px; padding: 0.6rem 0.7rem;
-      margin-bottom: 0.55rem; display: grid; grid-template-columns: auto 1fr auto; gap: 0.5rem; align-items: center;
+      margin-bottom: 0.55rem; display: grid; grid-template-columns: auto auto 1fr auto; gap: 0.5rem; align-items: center;
+      touch-action: none;
     }
+    .plan-item.dragging { background: rgba(255,255,255,0.16); box-shadow: 0 6px 18px rgba(0,0,0,0.35); opacity: 0.95; }
+    body.plan-dragging { cursor: grabbing; }
+    .plan-drag {
+      color: rgba(235,239,236,0.55); font-size: 0.95rem; line-height: 1; cursor: grab;
+      user-select: none; padding: 0 0.1rem;
+    }
+    .plan-item.dragging .plan-drag, body.plan-dragging .plan-drag { cursor: grabbing; }
+    .plan-drag:hover { color: #fff; }
     .plan-week { font-family: 'Fraunces', serif; font-size: 0.72rem; color: var(--seamist); background: rgba(255,255,255,0.1); border-radius: 3px; padding: 0.15rem 0.4rem; white-space: nowrap; }
     .plan-name { color: #fff; font-size: 0.82rem; line-height: 1.25; }
     .plan-badge { display: block; font-size: 0.68rem; margin-top: 0.15rem; }
     .plan-badge.good { color: #8FD4A8; }
     .plan-badge.muted { color: #E8A87C; }
-    .plan-ctrls { display: flex; gap: 0.15rem; }
-    .plan-ctrls button {
+    .plan-rm {
       background: rgba(255,255,255,0.1); border: none; color: var(--seamist);
       width: 22px; height: 22px; border-radius: 3px; cursor: pointer; font-size: 0.8rem; line-height: 1;
       display: inline-flex; align-items: center; justify-content: center;
     }
-    .plan-ctrls button:hover { background: rgba(255,255,255,0.22); color: #fff; }
+    .plan-rm:hover { background: rgba(255,255,255,0.22); color: #fff; }
     .plan-clear { margin-top: 0.6rem; background: none; border: none; color: rgba(235,239,236,0.55); font-size: 0.75rem; cursor: pointer; text-decoration: underline; padding: 0; }
     .plan-clear:hover { color: #fff; }
 
