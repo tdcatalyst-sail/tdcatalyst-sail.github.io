@@ -174,7 +174,7 @@
       <div id="thresholdStatus" class="threshold-status liminal"></div>
       <div class="groundwork">
         <h4>What to get right, in order</h4>
-        <p class="groundwork-sub">Left: the groundwork that lets the next step land. Right: how each move drives real outcomes (speed, quality, results) versus just widening reach. Run a play out of order, or before its proof exists, and the chain is flagged.</p>
+        <p class="groundwork-sub">Left: the groundwork that lets the next step land. Right: how each move drives real outcomes (speed, quality, results) versus just widening reach. Run a play out of order, before its proof exists, or without the foundation it leans on, and the chain is flagged.</p>
         <div id="groundworkLadder"></div>
       </div>
       </div><!-- /curve-col -->
@@ -453,21 +453,25 @@
     whenthen: ['build'],
     whole:    ['proof'],
     peer:     ['proof'],
-    inaction: ['peer'],
+    inaction: ['peer', 'proof'],
     quiet:    ['inaction'],
     policy:   ['build'],
     criteria: ['build'],
     ritual:   ['build']
   };
-  // detect prerequisites that appear LATER in the plan than the play that leans on them
-  function orderIssues(planIds, idx) {
-    var id = planIds[idx], reqs = ORDER_AFTER[id] || [], out = [];
+  // a play's foundation is broken if a prerequisite is missing from the plan entirely (absent) or
+  // placed later than the play that leans on it (late). Both mean the groundwork hasn't landed yet.
+  function missingPrereqs(planIds, idx) {
+    var id = planIds[idx], reqs = ORDER_AFTER[id] || [], late = [], absent = [];
     reqs.forEach(function (r) {
       var j = planIds.indexOf(r);
-      if (j > idx) out.push(PLAY_BY_ID[r].name);
+      if (j === -1) absent.push(PLAY_BY_ID[r].name);
+      else if (j > idx) late.push(PLAY_BY_ID[r].name);
     });
-    return out;
+    return { late: late, absent: absent };
   }
+  // back-compat: names of prerequisites placed later in the plan (used where only lateness matters)
+  function orderIssues(planIds, idx) { return missingPrereqs(planIds, idx).late; }
 
   // ===== the curated plays (from the 16-cell matrix) =====
   // weeks = how long the play occupies the 16-week timeline (some work is not a two-week activity).
@@ -598,7 +602,7 @@
     // out-of-order penalty: a play whose in-plan prerequisite hasn't fired yet still lands, but weaker.
     // MISORDER_FACTOR is the retained fraction of effect per missing-so-far prerequisite (matches the
     // "lands, but weaker" copy — the curve now reflects it, not just the annotation).
-    var fired = {}, MISORDER_FACTOR = 0.6;
+    var fired = {}, MISORDER_FACTOR = 0.6, NOPROOF = 0.5;
 
     function dipAt(w) {
       var t = 0;
@@ -625,12 +629,15 @@
           if (earlySustain) readiness = 0;
           var hits = p.cells.reduce(function (n, c) { return n + (flagged[c] ? 1 : 0); }, 0);
           var tBonus = 1 + 0.25 * Math.min(hits, 3);
-          // count prerequisites that are in the plan but haven't fired yet (i.e. placed later): each
-          // one docks the play's effect. Prereqs absent from the plan are handled elsewhere (the closer).
-          var reqs = ORDER_AFTER[entry.id] || [], lateReqs = 0;
-          for (var qi = 0; qi < reqs.length; qi++) { if (planIds.indexOf(reqs[qi]) !== -1 && !fired[reqs[qi]]) lateReqs++; }
-          var orderPenalty = Math.pow(MISORDER_FACTOR, lateReqs);
-          var eff = readiness * readiness * tBonus * orderPenalty;
+          // count prerequisites that haven't fired yet — whether missing from the plan or placed later.
+          // Either way the foundation this play leans on isn't there, so it lands weaker (docked per miss).
+          var reqs = ORDER_AFTER[entry.id] || [], missReqs = 0;
+          for (var qi = 0; qi < reqs.length; qi++) { if (!fired[reqs[qi]]) missReqs++; }
+          var orderPenalty = Math.pow(MISORDER_FACTOR, missReqs);
+          // proof gate: the two pure social-proof plays (peer relay, inaction-cost norm) fall flat without
+          // a real seeded win to point to — a relay with no one who has moved is a vendor demo in disguise.
+          var proofGate = ((entry.id === 'peer' || entry.id === 'inaction') && !proofClean) ? NOPROOF : 1;
+          var eff = readiness * readiness * tBonus * orderPenalty * proofGate;
           for (var rk in p.raises) { st[rk].ceil = Math.min(0.95, st[rk].ceil + p.raises[rk] * eff); }
           for (var pk in p.push)   { st[pk].level = Math.min(st[pk].ceil, st[pk].level + p.push[pk] * eff); }
           // sustainment: raise floors (lock in gains) and cut ongoing decay (the change stops leaking)
@@ -643,7 +650,7 @@
           if (p.disrupt) dipEvents.push({ week: w, mag: p.disrupt * DIPSCALE * eff });
           notes[p.id] = { readiness: readiness, hits: hits, muted: readiness < 0.5,
             reason: earlySustain ? 'timing' : (readiness < 0.5 ? 'proof' : null),
-            lateReqs: lateReqs, orderPenalty: orderPenalty, start: entry.start, end: entry.end };
+            missReqs: missReqs, orderPenalty: orderPenalty, proofGate: proofGate, start: entry.start, end: entry.end };
           markers.push({ week: w, overall: overallNow, id: p.id });
           fired[entry.id] = true;
         });
@@ -955,14 +962,16 @@
       var li = document.createElement('li');
       li.className = 'plan-item';
       li.setAttribute('data-i', i);
-      var issues = n.muted ? [] : orderIssues(plan, i);
+      var mp = n.muted ? { late: [], absent: [] } : missingPrereqs(plan, i);
       var badge = '';
       if (n.muted) {
         badge = n.reason === 'timing'
           ? '<span class="plan-badge muted">⚠ too early: sustainment lands only in the sustain phase (wk 16+)</span>'
           : '<span class="plan-badge muted">⚠ deployed before its proof exists, muted</span>';
-      } else if (issues.length) {
-        badge = '<span class="plan-badge warn">⧗ out of order, runs before ' + issues.join(' &amp; ') + '</span>';
+      } else if (mp.late.length) {
+        badge = '<span class="plan-badge warn">⧗ out of order, runs before ' + mp.late.join(' &amp; ') + '</span>';
+      } else if (mp.absent.length) {
+        badge = '<span class="plan-badge warn">⧗ missing foundation: ' + mp.absent.join(' &amp; ') + '</span>';
       } else if (n.hits > 0) {
         badge = '<span class="plan-badge good">✓ hits ' + n.hits + ' flagged cell' + (n.hits > 1 ? 's' : '') + '</span>';
       }
@@ -1119,8 +1128,9 @@
     } else {
       var steps = plan.map(function (id, i) {
         var p = PLAY_BY_ID[id], n = res.notes[id] || {}, broke = !!n.muted;
-        var issues = broke ? [] : orderIssues(plan, i);
-        var misordered = issues.length > 0;
+        var mp = broke ? { late: [], absent: [] } : missingPrereqs(plan, i);
+        var misordered = mp.late.length > 0 || mp.absent.length > 0;
+        var absentOnly = mp.absent.length > 0 && mp.late.length === 0;
         var next = i < plan.length - 1 ? PLAY_BY_ID[plan[i + 1]] : null;
         var tail;
         if (broke) {
@@ -1128,7 +1138,10 @@
             ? '<div class="gw-break-note">✕ Too early: sustainment can only land in the sustain phase (week 16 onward). Move it later, once adoption is real.</div>'
             : '<div class="gw-break-note">✕ Out of order: this runs before the proof it needs, so it can\'t land. The steps after it don\'t compound on it.</div>';
         } else if (misordered) {
-          tail = '<div class="gw-warn-note">⧗ Out of order: this leans on “' + issues.join('” and “') + ',” which you\'ve placed later. It still lands, but weaker than if that came first.</div>';
+          var parts = [];
+          if (mp.late.length) parts.push('leans on “' + mp.late.join('” and “') + ',” which you\'ve placed later');
+          if (mp.absent.length) parts.push('runs without “' + mp.absent.join('” and “') + ',” which isn\'t in your plan');
+          tail = '<div class="gw-warn-note">⧗ Foundation not in place: this ' + parts.join('; and it ') + '. It still lands, but weaker than if that came first.</div>';
         } else if (next) {
           tail = '<div class="gw-carry">→ Done right, this is what lets “' + next.name + '” land next.</div>';
         } else {
@@ -1144,7 +1157,7 @@
         if (offOrder && adv) {
           valEyebrow = broke
             ? (n.reason === 'timing' ? 'Adverse impact — fired too early' : 'Adverse impact — it doesn’t land')
-            : 'Adverse impact — runs out of order';
+            : (absentOnly ? 'Adverse impact — missing its foundation' : 'Adverse impact — runs out of order');
           valHead = adv.head;
           valBody = adv.body;
         } else {
