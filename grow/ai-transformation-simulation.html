@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=20260707c">
+  <link rel="stylesheet" href="/style.css?v=20260707d">
 </head>
 <body class="brand-grow">
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -76,7 +76,7 @@
         <!-- rows injected by JS -->
       </div>
       </div>
-      <p class="flag-note"><span class="flag-count" id="flagCount">0</span> cells flagged. These are the bottlenecks your sequence should target. Plays that hit a flagged cell land harder.</p>
+      <p class="flag-note"><span class="flag-count" id="flagCount">0</span> cells flagged. These are the bottlenecks your sequence should target. Plays that hit a flagged cell land harder — and the bigger the cell (its share of the org is shown on each), the harder they pull.</p>
     </div>
 
     <!-- STEP 2 -->
@@ -301,6 +301,18 @@
     { key: 'lg', label: 'Laggards',                     size: 16 }
   ];
   var STAGES = ['pre', 'con', 'prp', 'act'];
+
+  // Default population spread across the 16 cells, as a share of the whole org (sums to 100). ARBITRARY
+  // but plausible starting values — early in a rollout most people sit in precontemplation / contemplation,
+  // innovators skew to action, and the early-majority precontemplation cell is the single biggest block
+  // (the Adoption Matrix's canonical "largest cell"). Flagging a cell now weights the targeting bonus by
+  // its size, so the Matrix's core instruction — put the work where the biggest cell is — is in the math.
+  var CELL_POP = {
+    'ia-pre': 1.6, 'ia-con': 2.4, 'ia-prp': 4.0, 'ia-act': 8.0,
+    'em-pre': 17.0, 'em-con': 9.5, 'em-prp': 4.8, 'em-act': 2.7,
+    'lm-pre': 15.3, 'lm-con': 10.2, 'lm-prp': 5.1, 'lm-act': 3.4,
+    'lg-pre': 9.6, 'lg-con': 4.0, 'lg-prp': 1.6, 'lg-act': 0.8
+  };
 
   // symptom of each cell (segment × stage) — written in the Stall Diagnostic's voice
   // so a leader recognizes "that's us" and can flag it in one click.
@@ -636,7 +648,10 @@
           var earlySustain = p.sustain && entry.start < SUSTAIN_START;
           if (earlySustain) readiness = 0;
           var hits = p.cells.reduce(function (n, c) { return n + (flagged[c] ? 1 : 0); }, 0);
-          var tBonus = 1 + 0.25 * Math.min(hits, 3);
+          // targeting bonus is weighted by how much of the org sits in the flagged cells this play addresses:
+          // hitting a big flagged stall pulls far harder than a small one. Capped so it can't dominate.
+          var flaggedPop = p.cells.reduce(function (s, c) { return s + (flagged[c] ? (CELL_POP[c] || 0) : 0); }, 0);
+          var tBonus = 1 + Math.min(0.75, 0.025 * flaggedPop);
           // count prerequisites that haven't fired yet — whether missing from the plan or placed later.
           // Either way the foundation this play leans on isn't there, so it lands weaker (docked per miss).
           var reqs = ORDER_AFTER[entry.id] || [], missReqs = 0;
@@ -953,19 +968,22 @@
     var intro = flaggedKeys.length
       ? 'Given the ' + flaggedKeys.length + ' stall' + (flaggedKeys.length > 1 ? 's' : '') + ' you flagged and a fixed 24-week budget, these single interventions would have added the most:'
       : 'You haven’t flagged your stalls yet — flag your 2–3 biggest above to make this specific. In general, the single interventions with the most untapped impact here:';
-    function li(r) {
-      var pv = Math.round(base), nv = Math.round(base + r.gain), g = Math.max(1, Math.round(r.gain));
+    // relative magnitude, not a false-precision point count — direction and size, in words
+    function mag(g) { return g >= 8 ? 'a large lift' : (g >= 3.5 ? 'a solid lift' : 'a modest lift'); }
+    function li(r, idx) {
+      var lead = idx === 0 ? 'the biggest lever here' : mag(r.gain);
       if (r.kind === 'drop') {
-        return '<li><strong>Drop ' + PLAY_BY_ID[r.id].name + '.</strong> As placed it costs more trust than it adds — removing it alone lifts week-24 value to about ' + nv + '% (+' + g + ').</li>';
+        return '<li><strong>Drop ' + PLAY_BY_ID[r.id].name + '.</strong> As placed it costs more trust than it adds — removing it alone recovers real ground (' + (idx === 0 ? 'your biggest single fix' : mag(r.gain)) + ').</li>';
       }
-      var tgt = r.flagRec ? ' It hits the <em>' + cellLabel(r.hits[0]) + '</em> stall you flagged, and ' : ' ';
+      var tgt = r.flagRec ? ' It hits the <em>' + cellLabel(r.hits[0]) + '</em> stall you flagged — ' : ' — ';
       if (r.kind === 'swap') {
-        return '<li><strong>Swap ' + PLAY_BY_ID[r.id].name + ' in for ' + PLAY_BY_ID[r.out].name + '.</strong>' + tgt + 'you’re out of weeks, so this trade — not an addition — projects week-24 value ' + pv + '% → ' + nv + '% (+' + g + ').</li>';
+        return '<li><strong>Swap ' + PLAY_BY_ID[r.id].name + ' in for ' + PLAY_BY_ID[r.out].name + '.</strong>' + tgt + 'you’re out of weeks, so this is a trade, not an addition, and it looks like ' + lead + '.</li>';
       }
-      return '<li><strong>Add ' + PLAY_BY_ID[r.id].name + '.</strong>' + tgt + 'it fits your ' + weeksLeft + ' free week' + (weeksLeft > 1 ? 's' : '') + ' and projects week-24 value ' + pv + '% → ' + nv + '% (+' + g + ').</li>';
+      return '<li><strong>Add ' + PLAY_BY_ID[r.id].name + '.</strong>' + tgt + 'it fits your ' + weeksLeft + ' free week' + (weeksLeft > 1 ? 's' : '') + ', and it looks like ' + lead + '.</li>';
     }
     return '<div class="gw-leverage"><span class="gw-lev-head">Given your flags and 24 weeks — the single moves with the most untapped impact</span>' +
-      '<p class="gw-lev-intro">' + intro + '</p><ul>' + top.map(li).join('') + '</ul></div>';
+      '<p class="gw-lev-intro">' + intro + '</p><ul>' + top.map(function (r, idx) { return li(r, idx); }).join('') + '</ul>' +
+      '<p class="gw-lev-foot">Directions, not forecasts — relative size, not a promised number. Whether they land is about the people, not the model.</p></div>';
   }
 
   // ===== build the matrix grid =====
@@ -976,10 +994,12 @@
     el.matrix.appendChild(head);
     STAGES.forEach(function (stage) {
       var cell = document.createElement('div');
-      cell.className = 'cell';
-      cell.dataset.key = seg.key + '-' + stage;
-      cell.textContent = SYMPTOMS[seg.key + '-' + stage] || STAGE_ABBR[stage];
-      cell.title = seg.label + ' · ' + STAGE_ABBR[stage];
+      var ckey = seg.key + '-' + stage, pop = CELL_POP[ckey] || 0;
+      cell.className = 'cell' + (pop >= 12 ? ' big-cell' : '');
+      cell.dataset.key = ckey;
+      cell.innerHTML = '<span class="mx-cell-sym">' + (SYMPTOMS[ckey] || STAGE_ABBR[stage]) + '</span>' +
+        '<span class="mx-cell-pop">' + (pop >= 1 ? Math.round(pop) : pop) + '% of org</span>';
+      cell.title = seg.label + ' · ' + STAGE_ABBR[stage] + ' · ~' + (pop >= 1 ? Math.round(pop) : pop) + '% of the organization';
       cell.addEventListener('click', function () {
         if (flagged[cell.dataset.key]) { delete flagged[cell.dataset.key]; cell.classList.remove('flagged'); }
         else { flagged[cell.dataset.key] = true; cell.classList.add('flagged'); }
