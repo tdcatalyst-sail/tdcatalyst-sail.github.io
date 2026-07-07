@@ -421,6 +421,8 @@
   // exists), the organizational outcome inverts: instead of the value above, you get a specific adverse
   // result. Each entry names what the org actually gets, and the mechanism, grounded in change practice.
   var VALUE_ADVERSE = {
+    manager:  { head: "A channel with no mandate to carry",
+                body: "Managers can only amplify a change their own leadership has visibly backed. Equipped before the sponsor has gone first and set the priority, they are handed talking points with no air cover, so they soft-pedal the message and much of the amplification you were counting on never fires." },
     build:    { head: "Capability that never gets used",
                 body: "Run before a sponsor has cleared the time and reset priorities, skill-building competes with the unchanged day job and loses. People attend, then return to old workloads and old incentives, so the judgment is rarely exercised and most of the capability you paid for is never banked." },
     whenthen: { head: "Habit without the skill to cash it in",
@@ -446,6 +448,7 @@
   // soft ordering: plays that ideally land BEFORE this one. Used to flag ordering mismatches (not hard mutes).
   var ORDER_AFTER = {
     build:    ['sponsor'],
+    manager:  ['sponsor'],
     friction: ['build'],
     whenthen: ['build'],
     whole:    ['proof'],
@@ -583,7 +586,7 @@
   // Returns { series, valueSeries, notes, markers, crossedWeek, touched, milestones, totalWeeks }
   function simulate(planIds) {
     var st = initState();
-    var growth = 0.22, decay = 0.06, managerActive = false, inertiaActive = false, sponsorshipActive = false, NOSPONSOR_CAP = 0.50;
+    var growth = 0.22, decay = 0.06, managerActive = false, managerStrength = 1, inertiaActive = false, sponsorshipActive = false, NOSPONSOR_CAP = 0.50;
     var EROSION = 4.5, RWIN = 4, DIPSCALE = 60, lastActive = -99, dipEvents = [];
     var sched = scheduleOf(planIds);
     var byStart = {};
@@ -592,6 +595,10 @@
     var capStock = 0, value = 0, CAP_REF = 1.00, VGROWTH = 0.16, decayCut = 0;
     var sponsorClean = false, proofClean = false, phaseIdx = 0;
     var milestones = { vision: null, proof: null, redesign: null, identity: null, outcome: null };
+    // out-of-order penalty: a play whose in-plan prerequisite hasn't fired yet still lands, but weaker.
+    // MISORDER_FACTOR is the retained fraction of effect per missing-so-far prerequisite (matches the
+    // "lands, but weaker" copy — the curve now reflects it, not just the annotation).
+    var fired = {}, MISORDER_FACTOR = 0.6;
 
     function dipAt(w) {
       var t = 0;
@@ -618,20 +625,27 @@
           if (earlySustain) readiness = 0;
           var hits = p.cells.reduce(function (n, c) { return n + (flagged[c] ? 1 : 0); }, 0);
           var tBonus = 1 + 0.25 * Math.min(hits, 3);
-          var eff = readiness * readiness * tBonus;
+          // count prerequisites that are in the plan but haven't fired yet (i.e. placed later): each
+          // one docks the play's effect. Prereqs absent from the plan are handled elsewhere (the closer).
+          var reqs = ORDER_AFTER[entry.id] || [], lateReqs = 0;
+          for (var qi = 0; qi < reqs.length; qi++) { if (planIds.indexOf(reqs[qi]) !== -1 && !fired[reqs[qi]]) lateReqs++; }
+          var orderPenalty = Math.pow(MISORDER_FACTOR, lateReqs);
+          var eff = readiness * readiness * tBonus * orderPenalty;
           for (var rk in p.raises) { st[rk].ceil = Math.min(0.95, st[rk].ceil + p.raises[rk] * eff); }
           for (var pk in p.push)   { st[pk].level = Math.min(st[pk].ceil, st[pk].level + p.push[pk] * eff); }
           // sustainment: raise floors (lock in gains) and cut ongoing decay (the change stops leaking)
           if (p.floor) { for (var fk in p.floor) { st[fk].floor = Math.min(st[fk].ceil, st[fk].floor + p.floor[fk] * eff); } }
           if (p.decayCut) decayCut = Math.min(0.8, decayCut + p.decayCut * eff);
-          if (p.manager) managerActive = true;
+          if (p.manager) { managerActive = true; managerStrength = orderPenalty; }
           if (p.sponsor) { sponsorshipActive = true; if (readiness >= 0.5) sponsorClean = true; }
           if (p.id === 'proof' && readiness >= 0.5) proofClean = true;
           capStock += (p.capability || 0) * eff;
           if (p.disrupt) dipEvents.push({ week: w, mag: p.disrupt * DIPSCALE * eff });
           notes[p.id] = { readiness: readiness, hits: hits, muted: readiness < 0.5,
-            reason: earlySustain ? 'timing' : (readiness < 0.5 ? 'proof' : null), start: entry.start, end: entry.end };
+            reason: earlySustain ? 'timing' : (readiness < 0.5 ? 'proof' : null),
+            lateReqs: lateReqs, orderPenalty: orderPenalty, start: entry.start, end: entry.end };
           markers.push({ week: w, overall: overallNow, id: p.id });
+          fired[entry.id] = true;
         });
       }
       var activeNow = activeThisWeek(w);
@@ -639,8 +653,8 @@
       // reinforcement: without an active/recent play, an active manager, or self-sustaining inertia,
       // adoption erodes (novelty fades / shadow AI / silence-is-waiting). Sustainment plays cut the decay.
       var reinforced = managerActive || inertiaActive || (w - lastActive <= RWIN);
-      var g = growth * (managerActive ? 1.6 : 1) * (inertiaActive ? 1.12 : 1);
-      var d = decay * (managerActive ? 0.4 : 1) * (inertiaActive ? 0.45 : 1) * (reinforced ? 1 : EROSION) * (1 - decayCut);
+      var g = growth * (managerActive ? 1 + 0.6 * managerStrength : 1) * (inertiaActive ? 1.12 : 1);
+      var d = decay * (managerActive ? 1 - 0.6 * managerStrength : 1) * (inertiaActive ? 0.45 : 1) * (reinforced ? 1 : EROSION) * (1 - decayCut);
       SEGMENTS.forEach(function (s2) {
         var c = st[s2.key];
         // without active executive sponsorship, ceilings are capped — no sequence reaches self-sustaining
