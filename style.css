@@ -1742,7 +1742,8 @@ footer .footer-practices i {
     .gw-carry { font-size: 0.74rem; color: var(--midgray); margin-top: 0.35rem; }
     .gw-break-note { font-size: 0.76rem; color: var(--logo-red); font-weight: 500; margin-top: 0.35rem; line-height: 1.45; }
     .gw-closer { margin-top: 0.5rem; font-size: 0.8rem; line-height: 1.55; color: var(--charcoal); background: var(--seamist); border-radius: 5px; padding: 0.9rem 1rem; }
-    .gw-closer.crossed { background: rgba(74,124,158,0.12); }
+    .gw-closer.crossed { background: rgba(200,149,10,0.14); border-left: 3px solid var(--logo-gold); }
+    .gw-closer.crossed .gw-closer-tips li::before { color: var(--logo-gold); }
     .gw-closer strong { color: var(--navy); }
     .gw-closer-tips { margin-top: 0.75rem; padding-top: 0.7rem; border-top: 1px solid var(--hairline); }
     .gw-tips-head { display: block; font-family: 'Inter', sans-serif; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--navy); font-weight: 600; margin-bottom: 0.5rem; }
