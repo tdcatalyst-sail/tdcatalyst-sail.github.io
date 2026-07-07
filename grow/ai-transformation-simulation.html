@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=20260707b">
+  <link rel="stylesheet" href="/style.css?v=20260707c">
 </head>
 <body class="brand-grow">
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -873,7 +873,9 @@
       var affirm = topTips.length ? ''
         : '<div class="gw-closer-tips"><span class="gw-tips-head">Little left to sharpen</span>' +
           '<p class="gw-tips-clean">Sponsorship led, proof preceded the plays that lean on it, capability turned reach into value, and the gains are institutionalized. This is close to the ideal ordering.</p></div>';
-      return '<div class="gw-closer crossed"><strong>Why this reached escape velocity:</strong> ' + lead + tipsHtml + affirm + '</div>';
+      return '<div class="gw-closer crossed">' +
+        '<div class="gw-closer-head"><span class="gw-closer-badge">✓ Escape velocity</span>Why this reached escape velocity</div>' +
+        '<p class="gw-closer-lead">' + lead + '</p>' + tipsHtml + affirm + '</div>';
     }
 
     // ---- not escaped: name the specific gap, then the concrete reorderings that close it ----
@@ -886,7 +888,84 @@
       gapLead = 'This lit ' + ctx.phasesReached + ' of 5 phases; the next, <strong>' + ctx.nextLabel + '</strong>, is what stands between it and a change that holds. ';
     }
     var fallback = 'Seed proof with your innovators, redesign the workflow, and equip managers to coach — the phases that turn a rising line into a transformation that sticks. Push the proof-dependent or sustainment plays too soon and the chain breaks; the same interventions, in the right order, carry all five phases.';
-    return '<div class="gw-closer"><strong>How to reach escape velocity:</strong> ' + gapLead + (topTips.length ? '' : fallback) + tipsHtml + '</div>';
+    return '<div class="gw-closer">' +
+      '<div class="gw-closer-head">How to reach escape velocity</div>' +
+      '<p class="gw-closer-lead">' + gapLead + (topTips.length ? '' : fallback) + '</p>' + tipsHtml + '</div>';
+  }
+
+  // ---- flag-aware leverage: given the flagged stalls and the fixed 24-week budget, which single
+  // interventions NOT already working would add the most value. Shown as the final read, always. Runs the
+  // model a few dozen times (cheap) to project the real value lift of each candidate add / swap / drop.
+  function cellLabel(key) {
+    var q = key.split('-'), seg = key;
+    SEGMENTS.forEach(function (s) { if (s.key === q[0]) seg = s.label; });
+    return seg + ' · ' + (STAGE_ABBR[q[1]] || q[1]);
+  }
+  function flagLeverage(planIds, flagged, res) {
+    if (!planIds.length) return '';
+    var base = res.valueSeries[WEEKS];
+    var flaggedKeys = Object.keys(flagged);
+    var inPlan = {}; planIds.forEach(function (id) { inPlan[id] = 1; });
+    var weeksLeft = WEEKS - planWeeksUsed(planIds);
+    function valOf(pl) { return simulate(pl).valueSeries[WEEKS]; }
+    function bestInsert(basePlan, id) {
+      var best = -Infinity;
+      for (var i = 0; i <= basePlan.length; i++) {
+        var cand = basePlan.slice(); cand.splice(i, 0, id);
+        if (planWeeksUsed(cand) > WEEKS) continue;
+        var v = valOf(cand); if (v > best) best = v;
+      }
+      return best === -Infinity ? null : best;
+    }
+    // weakest current play: the one whose removal costs the least value (or even raises it)
+    var weakest = null, weakestDrop = Infinity;
+    planIds.forEach(function (id) {
+      var d = base - valOf(planIds.filter(function (x) { return x !== id; }));
+      if (d < weakestDrop) { weakestDrop = d; weakest = id; }
+    });
+    var recs = [];
+    // a current play that is net-negative (removing it RAISES value) is the single biggest fix
+    if (weakest && weakestDrop < -0.5) recs.push({ kind: 'drop', id: weakest, gain: -weakestDrop, flagRec: false });
+    PLAYS.forEach(function (p) {
+      if (inPlan[p.id]) return;
+      var cellsHit = p.cells.filter(function (c) { return flagged[c]; });
+      var gain = -Infinity, kind = null, out = null;
+      if (weeksLeft >= p.weeks) {
+        var a = bestInsert(planIds, p.id);
+        if (a !== null) { gain = a - base; kind = 'add'; }
+      } else if (weakest) {
+        var s = bestInsert(planIds.filter(function (x) { return x !== weakest; }), p.id);
+        if (s !== null) { gain = s - base; kind = 'swap'; out = weakest; }
+      }
+      if (gain > 0.5) recs.push({ kind: kind, id: p.id, gain: gain, out: out, hits: cellsHit, flagRec: cellsHit.length > 0 });
+    });
+    recs.sort(function (a, b) {
+      var ad = a.kind === 'drop' ? 1 : 0, bd = b.kind === 'drop' ? 1 : 0;
+      if (ad !== bd) return bd - ad;                              // a net-negative move to drop leads
+      if (a.flagRec !== b.flagRec) return a.flagRec ? -1 : 1;     // then flag-addressing moves
+      return b.gain - a.gain;                                     // then biggest projected lift
+    });
+    var top = recs.slice(0, 2);
+    if (!top.length) {
+      return '<div class="gw-leverage"><span class="gw-lev-head">Where the untapped impact is</span>' +
+        '<p class="gw-lev-clean">Within the stalls you flagged and a fixed 24 weeks, this plan is already near its value ceiling — the remaining lift is in the ordering above, not in adding another intervention.</p></div>';
+    }
+    var intro = flaggedKeys.length
+      ? 'Given the ' + flaggedKeys.length + ' stall' + (flaggedKeys.length > 1 ? 's' : '') + ' you flagged and a fixed 24-week budget, these single interventions would have added the most:'
+      : 'You haven’t flagged your stalls yet — flag your 2–3 biggest above to make this specific. In general, the single interventions with the most untapped impact here:';
+    function li(r) {
+      var pv = Math.round(base), nv = Math.round(base + r.gain), g = Math.max(1, Math.round(r.gain));
+      if (r.kind === 'drop') {
+        return '<li><strong>Drop ' + PLAY_BY_ID[r.id].name + '.</strong> As placed it costs more trust than it adds — removing it alone lifts week-24 value to about ' + nv + '% (+' + g + ').</li>';
+      }
+      var tgt = r.flagRec ? ' It hits the <em>' + cellLabel(r.hits[0]) + '</em> stall you flagged, and ' : ' ';
+      if (r.kind === 'swap') {
+        return '<li><strong>Swap ' + PLAY_BY_ID[r.id].name + ' in for ' + PLAY_BY_ID[r.out].name + '.</strong>' + tgt + 'you’re out of weeks, so this trade — not an addition — projects week-24 value ' + pv + '% → ' + nv + '% (+' + g + ').</li>';
+      }
+      return '<li><strong>Add ' + PLAY_BY_ID[r.id].name + '.</strong>' + tgt + 'it fits your ' + weeksLeft + ' free week' + (weeksLeft > 1 ? 's' : '') + ' and projects week-24 value ' + pv + '% → ' + nv + '% (+' + g + ').</li>';
+    }
+    return '<div class="gw-leverage"><span class="gw-lev-head">Given your flags and 24 weeks — the single moves with the most untapped impact</span>' +
+      '<p class="gw-lev-intro">' + intro + '</p><ul>' + top.map(li).join('') + '</ul></div>';
   }
 
   // ===== build the matrix grid =====
@@ -1207,7 +1286,8 @@
         trueEscape: trueEscape, adoptionCrossed: adoptionCrossed,
         phasesReached: phasesReached, nextLabel: nextLabel, nextKey: nextKey
       });
-      el.groundworkLadder.innerHTML = steps + closer;
+      var leverage = flagLeverage(plan, flagged, res);
+      el.groundworkLadder.innerHTML = steps + closer + leverage;
     }
 
     // hidden form fields
