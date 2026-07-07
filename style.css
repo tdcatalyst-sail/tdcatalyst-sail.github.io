@@ -1748,14 +1748,14 @@ footer .footer-practices i {
     /* break glyphs on the curve */
     .sim-chart .play-marker.break { stroke: var(--logo-red); opacity: 0.55; stroke-dasharray: 3 3; }
     .sim-chart .break-x { fill: var(--logo-red); font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif; }
-  
+  
 
 /* value-realized line + readout (AI Transformation Simulation) */
 .sim-chart .curve-value { fill: none; stroke: var(--value-green); stroke-width: 2; stroke-linecap: round; }
 .sim-chart .end-dot-v { fill: var(--value-green); }
 .sim-legend .swatch.v { background: var(--value-green); }
 .readout-item.value { background: var(--seamist); }
-.readout-item.value .readout-num { color: var(--value-green); }
+.readout-item.value .readout-num { color: var(--value-green); }
 
 /* COM-B library group headers + full-plan lock (AI Transformation Simulation) */
 .lib-group-head { grid-column: 1 / -1; margin: 0.4rem 0 0.1rem; display: flex; align-items: baseline; gap: 0.5rem; }
@@ -1763,3 +1763,109 @@ footer .footer-practices i {
 .lib-group-desc { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--midgray); }
 .play-card.locked { opacity: 0.4; cursor: not-allowed; }
 .play-card.locked:hover { border-color: var(--hairline); border-left-color: var(--logo-blue); box-shadow: none; }
+
+/* ============================================================
+   AI Transformation Simulation — v2 additions
+   Play durations · Sustainment category · Phase ladder · Report teaser
+   ============================================================ */
+
+/* --- Step 2: week-budget meter in the plan panel --- */
+.plan-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.6rem; margin-bottom: 0.6rem; }
+.plan-head h4 { margin-bottom: 0; }
+.plan-budget { font-family: 'Fraunces', serif; font-size: 0.8rem; color: var(--seamist); white-space: nowrap; }
+.plan-budget.full { color: var(--logo-gold); }
+.budget-bar { height: 5px; border-radius: 3px; background: rgba(255,255,255,0.12); overflow: hidden; margin-bottom: 0.9rem; }
+.budget-bar span { display: block; height: 100%; width: 0; border-radius: 3px; background: var(--logo-blue); transition: width 0.25s ease; }
+.budget-bar span.full { background: var(--logo-gold); }
+
+/* --- Step 2: play duration tag + sustainment cards --- */
+.play-weeks { display: inline-block; margin-left: 0.4rem; font-family: 'Inter', sans-serif; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--midgray); background: var(--offwhite); border: 1px solid var(--hairline); border-radius: 10px; padding: 0.05rem 0.4rem; vertical-align: middle; }
+.play-weeks.long { color: var(--logo-gold); border-color: rgba(200,149,10,0.4); background: rgba(200,149,10,0.08); }
+.lib-group-head.sustain .lib-group-name { color: var(--value-green); }
+.play-card.sustain-card { border-left-color: var(--value-green); }
+.play-card.sustain-card:hover { border-color: var(--value-green); }
+.play-sustain-hint { display: block; margin-top: 0.5rem; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--value-green); }
+
+/* --- Step 3: chart + readout side by side (uses the space, caps chart-text scaling) --- */
+.curve-top { display: flex; gap: 1.5rem; align-items: flex-start; }
+@media (max-width: 820px) { .curve-top { flex-direction: column; } }
+.chart-box { flex: 1 1 auto; min-width: 0; max-width: 900px; }
+.curve-top .sim-readout { flex: 0 0 188px; grid-template-columns: 1fr; gap: 0.7rem; margin-top: 0; }
+@media (max-width: 820px) { .curve-top .sim-readout { flex-basis: auto; width: 100%; grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 520px) { .curve-top .sim-readout { grid-template-columns: 1fr; } }
+.curve-top .readout-item { padding: 0.9rem 1rem; }
+.curve-top .readout-num { font-size: 1.8rem; }
+
+/* subtle step number beside each play dot — maps to the plan detail below */
+.sim-chart .play-num { fill: var(--navy); opacity: 0.45; font-size: 9px; font-weight: 600; font-family: 'Inter', sans-serif; }
+/* clickable play markers → jump to the step detail; the hit circle is an invisible, generous target */
+.sim-chart .play-mk { cursor: pointer; }
+.sim-chart .play-hit { fill: none; pointer-events: all; }
+.sim-chart .play-mk:hover .play-dot { r: 4.5; }
+.sim-chart .play-mk:hover .play-num { opacity: 0.9; }
+/* transient highlight on the step scrolled to */
+.gw-step.gw-flash { animation: gwflash 1.6s ease; border-radius: 6px; }
+@keyframes gwflash { 0%, 100% { background: transparent; } 18% { background: rgba(74,124,158,0.16); } }
+
+/* library card toggle affordance: + to add, ✓ when in plan, ✕ on hover to remove */
+.play-add::before { content: '+'; }
+.play-card.added { cursor: pointer; }
+.play-card.added .play-add::before { content: '✓'; }
+.play-card.added:hover { opacity: 0.72; }
+.play-card.added:hover .play-add::before { content: '✕'; color: var(--logo-red); }
+
+/* smaller chart type so nothing on the curve reads larger than body copy */
+.sim-chart .axis-label { font-size: 11px; }
+.sim-chart .threshold-label { font-size: 10px; }
+.sim-chart .phase-band-label { font-size: 9px; }
+.sim-chart .cross-flag { font-size: 10px; }
+.sim-chart .break-x { font-size: 12px; }
+
+/* report: compact "included in the report" teaser inside the form column */
+.teaser-callout { background: rgba(200,149,10,0.06); border: 1px solid rgba(200,149,10,0.28); border-radius: 6px; padding: 0.9rem 1.05rem; margin: 1.2rem 0; }
+.teaser-callout-tag { display: inline-block; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--logo-gold); margin-bottom: 0.35rem; }
+.teaser-callout p { margin: 0; font-size: 0.86rem; line-height: 1.55; color: var(--charcoal); }
+.teaser-callout strong { color: var(--navy); }
+
+/* groundwork ladder: two columns — groundwork (left) + value-curve impact (right) --- */
+.gw-step { display: grid; grid-template-columns: 1fr 0.82fr; gap: 0.4rem 1.4rem; align-items: start; }
+@media (max-width: 640px) { .gw-step { grid-template-columns: 1fr; } }
+.gw-step .gw-main { min-width: 0; }
+.gw-value { border-left: 2px solid var(--hairline); padding-left: 1rem; align-self: stretch; }
+@media (max-width: 640px) { .gw-value { border-left: none; padding-left: 0; margin-top: 0.4rem; } }
+.gw-value-eyebrow { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 700; color: var(--midgray); margin-bottom: 0.2rem; }
+.gw-value-head { font-family: 'Fraunces', serif; font-size: 0.92rem; line-height: 1.25; color: var(--value-green); margin-bottom: 0.35rem; }
+.gw-value-body { font-size: 0.78rem; line-height: 1.5; color: var(--charcoal); }
+.gw-step.misordered { border-left-color: var(--logo-gold); }
+.gw-step.misordered .gw-pip { border-color: var(--logo-gold); color: var(--logo-gold); }
+.gw-warn-note { font-size: 0.76rem; color: #9a6a00; font-weight: 500; margin-top: 0.35rem; line-height: 1.45; }
+.plan-badge.warn { color: #E8C87C; }
+
+/* --- Step 3: sustain-phase band on the chart --- */
+.sim-chart .phase-band-sustain { fill: var(--value-green); opacity: 0.05; }
+.sim-chart .phase-divider { stroke: var(--value-green); stroke-width: 1; stroke-dasharray: 2 4; opacity: 0.5; }
+.sim-chart .phase-band-label { fill: var(--value-green); font-size: 10px; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.04em; opacity: 0.85; }
+
+/* --- Step 3: transformation-phase nodes on the curve --- */
+.sim-chart .phase-node-line { stroke: var(--logo-gold); stroke-width: 1; opacity: 0.55; }
+.sim-chart .phase-node { fill: var(--logo-gold); stroke: #fff; stroke-width: 1.5; }
+.sim-chart .phase-node-num { fill: #fff; font-size: 10px; font-weight: 700; font-family: 'Inter', sans-serif; }
+
+/* --- Step 3: phase ladder (the revolution, in phases) --- */
+.phase-track { margin-top: 1.6rem; }
+.phase-track-head h4 { font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); margin-bottom: 0.3rem; }
+.phase-track-sub { font-size: 0.82rem; color: var(--midgray); font-style: italic; margin-bottom: 1rem; }
+.phase-ladder { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+@media (max-width: 720px) { .phase-ladder { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 400px) { .phase-ladder { grid-template-columns: 1fr; } }
+.phase-pill { position: relative; background: #fff; border: 1px solid var(--hairline); border-top: 3px solid var(--hairline); border-radius: 5px; padding: 0.7rem 0.75rem 0.8rem; }
+.phase-pill.reached { border-top-color: var(--logo-gold); background: rgba(200,149,10,0.05); }
+.phase-pip { display: inline-flex; align-items: center; justify-content: center; width: 1.25rem; height: 1.25rem; border-radius: 50%; font-size: 0.66rem; font-weight: 700; font-family: 'Inter', sans-serif; margin-bottom: 0.4rem; background: var(--offwhite); color: var(--midgray); border: 1px solid var(--hairline); }
+.phase-pill.reached .phase-pip { background: var(--logo-gold); color: #fff; border-color: var(--logo-gold); }
+.phase-label { font-family: 'Fraunces', serif; font-size: 0.9rem; color: var(--navy); line-height: 1.2; margin-bottom: 0.15rem; }
+.phase-pill.pending .phase-label { color: var(--midgray); }
+.phase-when { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--logo-gold); margin-bottom: 0.35rem; }
+.phase-pill.pending .phase-when { color: var(--midgray); opacity: 0.7; }
+.phase-note { font-size: 0.72rem; line-height: 1.4; color: var(--charcoal); }
+.phase-pill.pending .phase-note { color: var(--midgray); }
+
