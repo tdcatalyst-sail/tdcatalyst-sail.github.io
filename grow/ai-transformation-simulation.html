@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=20260706">
+  <link rel="stylesheet" href="/style.css?v=20260707">
 </head>
 <body class="brand-grow">
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -417,9 +417,36 @@
     ritual:   "Anchors the practice to cadences that already exist (standups, reviews, retros) so the outcome gains compound between launch pushes instead of leaking away. It is what keeps the improvement curve rising after the initial energy fades."
   };
 
+  // when a play runs OUT OF ORDER (before the prerequisite it leans on, or before its proof/maturity
+  // exists), the organizational outcome inverts: instead of the value above, you get a specific adverse
+  // result. Each entry names what the org actually gets, and the mechanism, grounded in change practice.
+  var VALUE_ADVERSE = {
+    build:    { head: "Capability that never gets used",
+                body: "Run before a sponsor has cleared the time and reset priorities, skill-building competes with the unchanged day job and loses. People attend, then return to old workloads and old incentives, so the judgment is rarely exercised and most of the capability you paid for is never banked." },
+    whenthen: { head: "Habit without the skill to cash it in",
+                body: "A cue to “use the tool now” only pays off for someone who already knows how to get value from it. Fired before the capability is built, it drives activity, not better output: logins on schedule, with no lift in quality or speed behind them." },
+    whole:    { head: "A finished kit belief hasn’t earned",
+                body: "Shipping every integration and template before a single visible win exists solves a problem the majority doesn’t yet feel. Budget goes into polish while belief is still zero, so uptake barely moves however complete the product is." },
+    friction: { head: "Effort added, not removed",
+                body: "Redesigning the workflow before people are bought in and capable bolts a new path onto an unwilling, unskilled team. The relearning dip arrives without the payoff on the far side, and the disruption reads as change for its own sake." },
+    peer:     { head: "A “peer story” skeptics see through",
+                body: "The relay works only when a credible, same-function colleague has genuinely succeeded. Run before proof is seeded, there is no real story to carry, so the reference reads as a staged demo, and the manufacture hardens the very doubt it was meant to soften." },
+    inaction: { head: "A norm claim that’s checkably false",
+                body: "“Most of your peers are already in” moves the late majority only if it is true. Invoked before real majority momentum exists, the claim is falsifiable and false, and once you are caught bluffing, trust converts into cynicism and the skeptics are lost for good." },
+    quiet:    { head: "Fear pushed into hard resistance",
+                body: "Approaching laggards before the majority has visibly moved makes the change feel like a spotlight on the unwilling. Pushed early, the honest 1:1 reads as a threat rather than support, and the underlying fear (often about the job itself) entrenches instead of easing." },
+    policy:   { head: "Compliance theater ahead of the behavior",
+                body: "Codifying a practice almost no one performs yet governs a behavior that doesn’t exist. Written ahead of real adoption, policy reads as coercion, breeds workarounds, and ages into a document nobody follows: reinforcement with nothing to reinforce." },
+    criteria: { head: "People judged on a bar you never built",
+                body: "Changing what’s measured before the capability has landed punishes people for a skill the organization hasn’t given them. Evaluation running ahead of enablement reads as a trap: the fastest way to breed cynicism and quiet resistance." },
+    ritual:   { head: "A ritual with nothing to carry",
+                body: "Anchoring a cadence around a practice that isn’t real yet turns the ritual into an empty slot on an already-crowded calendar. With no established behavior to reinforce, it is quietly skipped within weeks and signals the change is optional." }
+  };
+
   // soft ordering: plays that ideally land BEFORE this one. Used to flag ordering mismatches (not hard mutes).
   var ORDER_AFTER = {
     build:    ['sponsor'],
+    friction: ['build'],
     whenthen: ['build'],
     whole:    ['proof'],
     peer:     ['proof'],
@@ -716,6 +743,109 @@
     return lines.join('\n');
   }
 
+  // ===== the closing read: specific to THIS plan =====
+  // Names what actually carried the sequence (using the real milestone weeks and opening move), then
+  // surfaces up to three distinctive, actionable ways the SAME plays — reordered — would land harder.
+  // Every line keys off the actual plan: no generic copy.
+  function planCloser(planIds, res, ctx) {
+    var sched = scheduleOf(planIds);
+    var pos = {}, startOf = {};
+    planIds.forEach(function (id, i) { pos[id] = i; });
+    sched.forEach(function (e) { startOf[e.id] = e.start; });
+    var M = res.milestones;
+    function has(id) { return pos[id] !== undefined; }
+    function nt(id) { return res.notes[id] || {}; }
+    function landedId(id) { return has(id) && !nt(id).muted; }
+    function nm(id) { return PLAY_BY_ID[id].name; }
+    function wkOf(id) { return startOf[id]; }
+    function andList(ids) { return ids.map(nm).join(ids.length > 2 ? ', ' : ' and '); }
+
+    var endAdopt = Math.round(res.series[WEEKS]), endVal = Math.round(res.valueSeries[WEEKS]);
+
+    // ---- distinctive improvement insights, most valuable first ----
+    var tips = [];
+
+    // Executive sponsorship — the gate nothing crosses without. Missing, or placed after other work.
+    if (!has('sponsor')) {
+      tips.push('<strong>No executive sponsorship in the sequence.</strong> The model caps every segment’s ceiling without it — it’s the one play the whole curve leans on. A visible, funded sponsor move at the top is the highest-leverage change available.');
+    } else if (pos.sponsor > 0) {
+      tips.push('<strong>Executive sponsorship ran at week ' + wkOf('sponsor') + ', after ' + andList(planIds.slice(0, pos.sponsor)) + '.</strong> It’s the gate the rest depend on, so everything ahead of it worked without the air cover it grants. Lead with it and those plays compound instead of pushing uphill.');
+    }
+
+    // Proof before the plays that borrow its credibility.
+    var proofDeps = ['peer', 'whole', 'inaction'].filter(function (id) {
+      return has(id) && has('proof') && pos[id] < pos.proof;
+    });
+    if (proofDeps.length) {
+      tips.push('<strong>' + andList(proofDeps) + ' ran before Proof Seeding.</strong> Each stands on a visible early win that didn’t exist yet, so it lands weaker than it should. Seed proof first, then let them build on it.');
+    } else if (!has('proof') && (has('peer') || has('inaction'))) {
+      tips.push('<strong>No Proof Seeding, yet plays that need peer proof are in the mix.</strong> Peer and social-norm moves borrow their credibility from a real first win — without one they read as a vendor pitch. Add a proof step with your innovators early.');
+    }
+
+    // Capability — reach without the skill to convert it into output.
+    if (!has('build')) {
+      tips.push('<strong>No Capability Build.</strong> Adoption reaches ' + endAdopt + '% but value realized ends at ' + endVal + '% — the gap is people logging in without the skill to turn usage into output. Role-based capability is the single biggest driver of real results.');
+    }
+
+    // Manager-as-Channel placed late — it amplifies everything AFTER it, so late placement wastes it.
+    if (landedId('manager') && pos.manager > Math.floor(planIds.length / 2) && (planIds.length - 1 - pos.manager) <= 1) {
+      tips.push('<strong>Manager-as-Channel landed at week ' + wkOf('manager') + ', near the end.</strong> It multiplies every play that follows it — but here almost nothing does. Moved early, it would amplify the whole sequence behind it.');
+    }
+
+    // Sustainment fired before the sustain phase and couldn’t land.
+    var earlySust = planIds.filter(function (id) { return nt(id).muted && nt(id).reason === 'timing'; });
+    if (earlySust.length) {
+      tips.push('<strong>' + andList(earlySust) + ' fired before the sustain phase (week 16+) and didn’t land.</strong> Institutionalizing moves only bite once adoption is real — slot them last.');
+    }
+
+    // Proof-dependent play muted outright.
+    var mutedProof = planIds.filter(function (id) { return nt(id).muted && nt(id).reason === 'proof'; });
+    if (mutedProof.length) {
+      tips.push('<strong>' + andList(mutedProof) + ' deployed before the proof it needs and was muted — it added nothing.</strong> Delay it until overall adoption clears its threshold.');
+    }
+
+    // Nothing institutionalizes the gains, though there’s room (or the plan already crossed).
+    var hasSust = planIds.some(function (id) { return PLAY_BY_ID[id].sustain && landedId(id); });
+    var weeksLeft = WEEKS - planWeeksUsed(planIds);
+    if (!hasSust && (ctx.trueEscape || weeksLeft >= 2)) {
+      tips.push('<strong>Nothing institutionalizes the gains.</strong> No Policy, Performance Criteria, or Ritual lands in the sustain phase' + (weeksLeft >= 2 ? ' — and you have ' + weeksLeft + ' week' + (weeksLeft > 1 ? 's' : '') + ' free' : '') + '. Add one so the change survives the quarter after attention moves on.');
+    }
+
+    var topTips = tips.slice(0, 3);
+    var tipsHtml = topTips.length
+      ? '<div class="gw-closer-tips"><span class="gw-tips-head">Where the same sequence could land harder</span><ul>' +
+          topTips.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul></div>'
+      : '';
+
+    // ---- escaped: name what actually carried it, with the real phase weeks ----
+    if (ctx.trueEscape) {
+      var firstLanded = null;
+      for (var i = 0; i < planIds.length; i++) { if (landedId(planIds[i])) { firstLanded = planIds[i]; break; } }
+      var bits = [];
+      if (firstLanded) bits.push(nm(firstLanded) + ' opened the sequence at week ' + wkOf(firstLanded));
+      if (M.proof != null) bits.push('proof was visible by week ' + M.proof);
+      if (M.redesign != null) bits.push('the workflow was redesigned by week ' + M.redesign);
+      if (M.identity != null) bits.push('managers were coaching the shift by week ' + M.identity + ', the week the curve crossed and held');
+      var lead = 'The steps compounded — ' + bits.join('; ') + '. All five phases lit, so above the line the loop is self-reinforcing and the gains hold instead of decaying. Order, not effort, carried it across.';
+      var affirm = topTips.length ? ''
+        : '<div class="gw-closer-tips"><span class="gw-tips-head">Little left to sharpen</span>' +
+          '<p class="gw-tips-clean">Sponsorship led, proof preceded the plays that lean on it, capability turned reach into value, and the gains are institutionalized. This is close to the ideal ordering.</p></div>';
+      return '<div class="gw-closer crossed"><strong>Why this reached escape velocity:</strong> ' + lead + tipsHtml + affirm + '</div>';
+    }
+
+    // ---- not escaped: name the specific gap, then the concrete reorderings that close it ----
+    var gapLead;
+    if (ctx.phasesReached >= 5) {
+      gapLead = 'All five phases were touched, but the curve didn’t hold above the line — order, not coverage, is what’s missing. ';
+    } else if (ctx.phasesReached === 0) {
+      gapLead = 'The sequence hasn’t lit its first phase: nothing yet establishes that the change is real. ';
+    } else {
+      gapLead = 'This lit ' + ctx.phasesReached + ' of 5 phases; the next, <strong>' + ctx.nextLabel + '</strong>, is what stands between it and a change that holds. ';
+    }
+    var fallback = 'Seed proof with your innovators, redesign the workflow, and equip managers to coach — the phases that turn a rising line into a transformation that sticks. Push the proof-dependent or sustainment plays too soon and the chain breaks; the same interventions, in the right order, carry all five phases.';
+    return '<div class="gw-closer"><strong>How to reach escape velocity:</strong> ' + gapLead + (topTips.length ? '' : fallback) + tipsHtml + '</div>';
+  }
+
   // ===== build the matrix grid =====
   SEGMENTS.forEach(function (seg) {
     var head = document.createElement('div');
@@ -993,6 +1123,21 @@
         var gwSpan = n.start ? ('Week ' + n.start + (n.end > n.start ? '–' + n.end : '')) : 'Week —';
         var state = broke ? 'broke' : (misordered ? 'misordered' : 'landed');
         var pip = broke ? '✕' : (misordered ? '⧗' : (i + 1));
+        // out-of-order plays invert the organizational outcome: show the specific adverse result, in red.
+        var offOrder = broke || misordered;
+        var adv = VALUE_ADVERSE[id];
+        var valEyebrow, valHead, valBody;
+        if (offOrder && adv) {
+          valEyebrow = broke
+            ? (n.reason === 'timing' ? 'Adverse impact — fired too early' : 'Adverse impact — it doesn’t land')
+            : 'Adverse impact — runs out of order';
+          valHead = adv.head;
+          valBody = adv.body;
+        } else {
+          valEyebrow = 'Outcome for the organization';
+          valHead = VALUE_OUTCOME[id] || '';
+          valBody = VALUE_IMPACT[id] || '';
+        }
         return '<div class="gw-step ' + state + '" data-step="' + i + '">' +
           '<span class="gw-pip">' + pip + '</span>' +
           '<div class="gw-main">' +
@@ -1001,17 +1146,18 @@
             '<div class="gw-task"><strong>Get right:</strong> ' + GROUNDWORK[id] + '</div>' +
             tail +
           '</div>' +
-          '<div class="gw-value">' +
-            '<div class="gw-value-eyebrow">Outcome for the organization</div>' +
-            '<div class="gw-value-head">' + (VALUE_OUTCOME[id] || '') + '</div>' +
-            '<div class="gw-value-body">' + (VALUE_IMPACT[id] || '') + '</div>' +
+          '<div class="gw-value' + (offOrder && adv ? ' adverse' : '') + '">' +
+            '<div class="gw-value-eyebrow">' + valEyebrow + '</div>' +
+            '<div class="gw-value-head">' + valHead + '</div>' +
+            '<div class="gw-value-body">' + valBody + '</div>' +
           '</div>' +
         '</div>';
       }).join('');
-      // closing comment: how the sequence reaches escape velocity, and why
-      var closer = trueEscape
-        ? '<div class="gw-closer crossed"><strong>Why this reached escape velocity:</strong> the steps compounded: proof first, managers early to amplify, then the majority and laggards landing on real momentum. All five phases lit, so above the line the loop is self-reinforcing and the gains hold instead of decaying. Order, not effort, is what carried it across.</div>'
-        : '<div class="gw-closer"><strong>How to reach escape velocity:</strong> seed proof with your innovators, redesign the workflow, and equip managers to coach: those are the phases that turn a rising adoption line into a transformation that holds. Push the proof-dependent or sustainment plays too soon and the chain breaks; the same interventions, in the right order, are what carry all five phases and make the change self-sustaining.</div>';
+      // closing comment: specific to THIS plan — what carried it (or the gap), plus how it could be sharper
+      var closer = planCloser(plan, res, {
+        trueEscape: trueEscape, adoptionCrossed: adoptionCrossed,
+        phasesReached: phasesReached, nextLabel: nextLabel, nextKey: nextKey
+      });
       el.groundworkLadder.innerHTML = steps + closer;
     }
 
