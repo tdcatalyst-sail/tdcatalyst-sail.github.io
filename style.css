@@ -1592,12 +1592,17 @@ footer .footer-practices i {
       min-height: 68px; border: 1px solid var(--hairline); border-radius: 3px;
       background: var(--offwhite); cursor: pointer; padding: 0.55rem 0.6rem;
       font-size: 0.72rem; color: var(--charcoal); line-height: 1.38;
-      transition: all 0.15s; display: flex; align-items: flex-start; text-align: left;
+      transition: all 0.15s; display: flex; flex-direction: column; justify-content: space-between; gap: 0.35rem; text-align: left;
     }
     .cell:hover { border-color: var(--logo-blue); background: #fff; }
     .cell.flagged {
       background: var(--logo-red); border-color: var(--logo-red); color: #fff; font-weight: 500;
     }
+    .cell.big-cell:not(.flagged) { background: rgba(200,149,10,0.07); border-color: rgba(200,149,10,0.4); }
+    .mx-cell-sym { display: block; }
+    .mx-cell-pop { display: block; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--midgray); font-weight: 600; }
+    .cell.big-cell:not(.flagged) .mx-cell-pop { color: var(--terracotta); }
+    .cell.flagged .mx-cell-pop { color: rgba(255,255,255,0.85); }
     .flag-note { font-size: 0.8rem; color: var(--midgray); margin-top: 0.7rem; }
     .flag-count { color: var(--logo-red); font-weight: 600; }
 
@@ -1766,6 +1771,7 @@ footer .footer-practices i {
     .gw-leverage li strong { color: var(--navy); }
     .gw-leverage em { font-style: normal; font-weight: 600; color: var(--logo-blue); }
     .gw-lev-clean { margin: 0; font-size: 0.82rem; line-height: 1.5; color: var(--midgray); }
+    .gw-lev-foot { margin: 0.7rem 0 0; font-size: 0.72rem; font-style: italic; line-height: 1.45; color: var(--midgray); }
 
     /* break glyphs on the curve */
     .sim-chart .play-marker.break { stroke: var(--logo-red); opacity: 0.55; stroke-dasharray: 3 3; }
