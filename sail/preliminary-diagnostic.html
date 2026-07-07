@@ -375,6 +375,50 @@
       display: block;
       margin-top: 0.1rem;
     }
+
+    /* Intro: representative interventions surfaced by the diagnostic */
+    .diag-interventions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.6rem;
+    }
+    @media (max-width: 680px) { .diag-interventions { grid-template-columns: 1fr; } }
+    .diag-intervention {
+      background: #fff;
+      border: 1px solid var(--hairline);
+      border-radius: 2px;
+      padding: 1.3rem 1.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .diag-intervention::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .diag-intervention.accent-red::before  { background: var(--logo-red); }
+    .diag-intervention.accent-gold::before { background: var(--logo-gold); }
+    .diag-intervention.accent-blue::before { background: var(--logo-blue); }
+    .diag-intervention.accent-navy::before { background: var(--navy); }
+    .diag-intervention-tag {
+      font-family: 'Fraunces', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+    .diag-intervention.accent-red  .diag-intervention-tag { color: var(--logo-red); }
+    .diag-intervention.accent-gold .diag-intervention-tag { color: var(--logo-gold); }
+    .diag-intervention.accent-blue .diag-intervention-tag { color: var(--logo-blue); }
+    .diag-intervention.accent-navy .diag-intervention-tag { color: var(--navy); }
+    .diag-intervention-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--charcoal);
+    }
   </style>
 </head>
 <body class="brand-sail">
@@ -694,6 +738,31 @@ function renderIntro() {
           </div>
         </div>
         <p style="font-size: 0.85rem; color: var(--midgray); font-style: italic; margin-top: 1.5rem; margin-bottom: 0;">TDcatalyst</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap narrow">
+        <div class="eyebrow" style="color: var(--terracotta); margin-bottom: 0.6rem;">What the diagnostic surfaces</div>
+        <p style="font-size: 0.98rem; color: var(--midgray); max-width: 58ch; margin: 0 0 0.4rem;">Each archetype resolves to a specific organizational move — not more training or a better rollout. A few of the sharpest the diagnostic names:</p>
+        <div class="diag-interventions">
+          <div class="diag-intervention accent-red">
+            <span class="diag-intervention-tag">The Seam Organization</span>
+            <p class="diag-intervention-text">The 90-day work is not a better rollout campaign. It is redesigning the room the transformation is run from — the product, operations, and people disciplines rarely sit at the same table.</p>
+          </div>
+          <div class="diag-intervention accent-gold">
+            <span class="diag-intervention-tag">The Unmarked Passage</span>
+            <p class="diag-intervention-text">Name the transition explicitly at the leadership level — what the organization is moving away from, not just toward. The loss has to be acknowledged before the forward frame can hold.</p>
+          </div>
+          <div class="diag-intervention accent-blue">
+            <span class="diag-intervention-tag">The Operating Model Lag</span>
+            <p class="diag-intervention-text">Redesign the role before retraining the person. The sequence matters: operating model first, capability second. Most organizations have it inverted.</p>
+          </div>
+          <div class="diag-intervention accent-navy">
+            <span class="diag-intervention-tag">The Sensing Deficit</span>
+            <p class="diag-intervention-text">Design the sensing infrastructure explicitly: who reads which signals, at what cadence, with what authority to escalate and commit to action. Make the loop visible before improving it.</p>
+          </div>
+        </div>
       </div>
     </section>
 
