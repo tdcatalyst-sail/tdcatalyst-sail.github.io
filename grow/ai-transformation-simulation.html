@@ -539,6 +539,8 @@
   // capability = adds to the skill stock that converts adoption into real output (value).
   // structural = adds to the "workflow actually rebuilt around the tool" stock — the structural multiplier on
   //   value (cycle time, cost). Only Workflow Redesign and, partly, the Whole-Product Kit contribute.
+  // valueLift = unlocks value headroom that capability + redesign alone can't reach: institutionalizing the
+  //   output standard (Performance Criteria) pushes performance past the plateau instead of protecting it only.
   // cells = matrix cells this play addresses (for the flagged-cell targeting bonus).
   var PLAYS = [
     // ---- Opportunity: structural & social permission ----
@@ -592,7 +594,7 @@
       cells: ['em-act','lm-act'] },
     { id: 'criteria', name: 'Performance Criteria Redefined', framework: 'Prosci · Reinforcement / COM-B', group: 'S', weeks: 3, handoff: 1.0,
       blurb: 'Rewrite role expectations and review criteria so AI-augmented output is what gets evaluated and rewarded, not optional extra credit.',
-      raises: {}, push: {}, needsProof: 0.42, sustain: true,
+      raises: {}, push: {}, needsProof: 0.42, sustain: true, valueLift: 0.12,
       floor: { em: 0.12, lm: 0.12, lg: 0.08 }, decayCut: 0.45,
       cells: ['lm-act','lg-act'] },
     { id: 'ritual',   name: 'Ritual & Cadence', framework: 'Habit · cue → routine → reward', group: 'S', weeks: 2, handoff: 1.0,
@@ -715,7 +717,7 @@
       else notes[e.id] = { muted: true, reason: 'overflow', hits: 0, start: e.start, end: e.end,
                            readiness: 0, missReqs: 0, orderPenalty: 1, proofGate: 1, misplace: 0 };
     });
-    var capStock = 0, structStock = 0, value = 0, CAP_REF = 1.00, STRUCT_REF = 0.80, VGROWTH = 0.18, decayCut = 0;
+    var capStock = 0, structStock = 0, value = 0, valueLift = 0, CAP_REF = 1.00, STRUCT_REF = 0.80, VGROWTH = 0.18, decayCut = 0;
     // INSTITUTIONALIZATION is gated by the transformation's maturity, not the calendar: the "sustain phase"
     // opens once adoption is real enough that codifying the new way reinforces a behavior that already exists.
     // A fast/small transformation reaches that point early; a large one later. sustainStartWeek records it.
@@ -815,6 +817,7 @@
           if (p.id === 'proof' && gg.readiness >= 0.5) proofClean = true;
           capStock += (p.capability || 0) * eff;
           structStock += (p.structural || 0) * eff;
+          valueLift += (p.valueLift || 0) * eff;   // institutionalizing the output standard unlocks value headroom
           markers.push({ week: w, overall: overallOf(st), id: p.id });
         });
       }
@@ -851,8 +854,10 @@
       var structNorm = Math.min(structStock / STRUCT_REF, 1); // workflow actually redesigned around the tool
       // conversion of reach → real outcomes: pure usage converts poorly (adoption without capability is usage,
       // not value); capability is the core driver; a redesigned workflow is the structural multiplier that
-      // unlocks the hard operational gains (cycle time, cost).
-      var conversion = 0.10 + 0.90 * capNorm * (0.55 + 0.45 * structNorm);
+      // unlocks the hard operational gains (cycle time, cost). Capability + redesign alone plateau below the
+      // ceiling — institutionalizing the output standard (Performance Criteria's valueLift) unlocks the last
+      // headroom, so performance keeps compounding instead of flattening. Rewards drive what gets measured.
+      var conversion = Math.min(1, 0.10 + 0.78 * capNorm * (0.55 + 0.45 * structNorm) + Math.min(valueLift, 0.12));
       var valueCeil = adoptionFrac * conversion;
       // organizational impact COMPOUNDS: value builds slowly, then accelerates as the enabling stack completes,
       // rather than approaching an adoption-linear ceiling at a flat rate. The realization rate rises with the
