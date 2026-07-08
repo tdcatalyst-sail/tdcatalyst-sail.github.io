@@ -115,8 +115,8 @@
       <div class="chart-box">
       <svg class="sim-chart" viewBox="0 0 720 380" role="img" aria-label="Adoption over 24 weeks under your plan versus doing nothing">
         <rect class="sustain-zone" x="48" y="20" width="648" height="144"></rect>
-        <rect class="phase-band-sustain" x="480" y="20" width="216" height="320"></rect>
-        <line class="phase-divider" x1="480" y1="20" x2="480" y2="340"></line>
+        <rect class="phase-band-sustain" id="phaseBandSustain" x="480" y="20" width="216" height="320"></rect>
+        <line class="phase-divider" id="phaseDivider" x1="480" y1="20" x2="480" y2="340"></line>
         <line class="grid-line" x1="48" y1="20"  x2="696" y2="20"></line>
         <line class="grid-line" x1="48" y1="100" x2="696" y2="100"></line>
         <line class="grid-line" x1="48" y1="180" x2="696" y2="180"></line>
@@ -132,7 +132,7 @@
         <text class="axis-label" x="372" y="362" text-anchor="middle">Week 12</text>
         <text class="axis-label" x="534" y="362" text-anchor="middle">Week 18</text>
         <text class="axis-label" x="696" y="362" text-anchor="middle">Week 24</text>
-        <text class="phase-band-label" x="588" y="34" text-anchor="middle">Sustain phase · institutionalize</text>
+        <text class="phase-band-label" id="phaseBandLabel" x="588" y="34" text-anchor="middle">Sustain phase · institutionalize</text>
         <path class="gap-area" id="gapArea" d=""></path>
         <line class="threshold-line" x1="48" y1="164" x2="696" y2="164"></line>
         <text class="threshold-label" x="54" y="156" text-anchor="start">Self-sustaining transformation ↑</text>
@@ -536,6 +536,9 @@
   // floor = permanent lift to a segment's floor (sustainment: locks gains so decay can't erase them).
   // decayCut = fraction of ongoing decay removed (sustainment: the change stops leaking).
   // needsProof = overall adoption threshold below which the play is muted (peer-proof / maturity dependency).
+  // capability = adds to the skill stock that converts adoption into real output (value).
+  // structural = adds to the "workflow actually rebuilt around the tool" stock — the structural multiplier on
+  //   value (cycle time, cost). Only Workflow Redesign and, partly, the Whole-Product Kit contribute.
   // cells = matrix cells this play addresses (for the flagged-cell targeting bonus).
   var PLAYS = [
     // ---- Opportunity: structural & social permission ----
@@ -549,11 +552,11 @@
       cells: ['ia-act','em-act','lm-act','lg-act'] },
     { id: 'whole',    name: 'Whole-Product Kit',    framework: 'Diffusion · whole product', group: 'O', weeks: 4, handoff: 0.4,
       blurb: 'Ship the toolkit, integrations, FAQ, and function-specific success stories to remove every reason to wait.',
-      raises: { em: 0.30 }, push: { em: 0.05 }, needsProof: 0.10, capability: 0.30, disrupt: 0.06,
+      raises: { em: 0.30 }, push: { em: 0.05 }, needsProof: 0.10, capability: 0.30, structural: 0.25, disrupt: 0.06,
       cells: ['em-con','em-prp'] },
     { id: 'friction', name: 'Workflow Redesign',     framework: 'Fogg · ability + process redesign', group: 'O', weeks: 3, handoff: 1.0,
       blurb: 'Rebuild the task around the tool and retire the old path, not AI bolted onto the old process. People relearn the workflow, so adoption dips before it steps up durably.',
-      raises: { em: 0.18, lm: 0.16 }, push: { em: 0.08, lm: 0.06 }, needsProof: 0, capability: 0.22, disrupt: 0.20,
+      raises: { em: 0.18, lm: 0.16 }, push: { em: 0.08, lm: 0.06 }, needsProof: 0, capability: 0.22, structural: 0.70, disrupt: 0.20,
       cells: ['em-prp','lm-prp'] },
     // ---- Capability: can they actually do it well ----
     { id: 'build',    name: 'Capability Build',     framework: 'ADKAR · Ability / COM-B Capability', group: 'C', weeks: 6, handoff: 0.4,
@@ -617,7 +620,8 @@
   // next to start; the 24-week budget now measures CALENDAR time (the last completion), not the sum of
   // durations, so overlapping independent work frees weeks. =====
   var WEEKS = 24;
-  var SUSTAIN_START = 16;   // sustainment plays only land once they complete in the sustain phase (week 16+)
+  // (institutionalization is no longer gated to a fixed week — the sustain phase opens on adoption maturity;
+  //  see SUSTAIN_READY / sustainStartWeek inside simulate.)
   var THRESHOLD = 55;   // % adoption at which transformation becomes self-sustaining (crosses out of the liminal phase)
   var MAX_CONCURRENT = 2;   // bandwidth cap: at most this many plays active in any week (an org's real change capacity)
   var STAGGER = 1;          // min weeks between consecutive starts, so the chosen order stays a legible cascade
@@ -711,7 +715,11 @@
       else notes[e.id] = { muted: true, reason: 'overflow', hits: 0, start: e.start, end: e.end,
                            readiness: 0, missReqs: 0, orderPenalty: 1, proofGate: 1, misplace: 0 };
     });
-    var capStock = 0, value = 0, CAP_REF = 1.00, VGROWTH = 0.16, decayCut = 0;
+    var capStock = 0, structStock = 0, value = 0, CAP_REF = 1.00, STRUCT_REF = 0.80, VGROWTH = 0.18, decayCut = 0;
+    // INSTITUTIONALIZATION is gated by the transformation's maturity, not the calendar: the "sustain phase"
+    // opens once adoption is real enough that codifying the new way reinforces a behavior that already exists.
+    // A fast/small transformation reaches that point early; a large one later. sustainStartWeek records it.
+    var SUSTAIN_READY = 0.35, sustainStartWeek = null;
     var sponsorClean = false, proofClean = false, phaseIdx = 0;
     var milestones = { vision: null, proof: null, redesign: null, identity: null, outcome: null };
     // out-of-order penalty: a play whose prerequisite hasn't reached its handoff point by the time this play
@@ -749,10 +757,10 @@
         byStart[w].forEach(function (entry) {
           var p = PLAY_BY_ID[entry.id];
           var overallNow = overallOf(st);
+          // sustainment reads its readiness off adoption (needsProof ~0.35–0.42): institutionalizing before the
+          // behavior is real enough is theater. This is state-based, so it can land earlier in a fast transformation
+          // and later in a slow one — no fixed calendar gate.
           var readiness = p.needsProof > 0 ? Math.max(0, Math.min(1, overallNow / p.needsProof)) : 1;
-          // sustainment only lands if it COMPLETES in the sustain phase (week 16 onward)
-          var earlySustain = p.sustain && entry.end < SUSTAIN_START;
-          if (earlySustain) readiness = 0;
           var hits = p.cells.reduce(function (n, c) { return n + (flagged[c] ? 1 : 0); }, 0);
           // targeting bonus is weighted by how much of the org sits in the flagged cells this play addresses:
           // hitting a stall in a big (editable) segment pulls far harder than a small one. Capped so it can't dominate.
@@ -784,8 +792,10 @@
             dipEvents.push({ week: w, mag: misplace * BACKLASH_DIP });
             trust = Math.max(TRUST_FLOOR, trust - misplace * TRUST_SENS);
           }
+          // a muted sustainment play was institutionalized before adoption was real enough ('timing'); any other
+          // muted play was pushed before the proof/maturity it needs ('proof').
           notes[p.id] = { readiness: readiness, hits: hits, muted: muted,
-            reason: earlySustain ? 'timing' : (readiness < 0.5 ? 'proof' : null),
+            reason: muted ? (p.sustain ? 'timing' : 'proof') : null,
             missReqs: missReqs, orderPenalty: orderPenalty, proofGate: proofGate,
             misplace: misplace, start: entry.start, end: entry.end };
         });
@@ -804,6 +814,7 @@
           if (p.sponsor) { sponsorshipActive = true; if (gg.readiness >= 0.5) sponsorClean = true; }
           if (p.id === 'proof' && gg.readiness >= 0.5) proofClean = true;
           capStock += (p.capability || 0) * eff;
+          structStock += (p.structural || 0) * eff;
           markers.push({ week: w, overall: overallOf(st), id: p.id });
         });
       }
@@ -831,13 +842,28 @@
       var rawOv = overallOf(st) * 100;
       var ov = Math.max(3, rawOv - dipAt(w));
       series.push(ov);
+      // VALUE REALIZED — the organization actually getting better outcomes (speed, quality, cost). It is not a
+      // linear echo of adoption: it needs reach AND the capability to convert usage into output AND the workflow
+      // rebuilt around the tool. These MULTIPLY — a weak link caps the result — so value tracks the impact logic,
+      // not the headcount using the tool.
       var adoptionFrac = ov / 100;
-      var capNorm = Math.min(capStock / CAP_REF, 1);
-      var valueCeil = adoptionFrac * (0.22 + 0.78 * capNorm);
-      value += VGROWTH * (valueCeil - value);
+      var capNorm = Math.min(capStock / CAP_REF, 1);        // skill to turn usage into good output
+      var structNorm = Math.min(structStock / STRUCT_REF, 1); // workflow actually redesigned around the tool
+      // conversion of reach → real outcomes: pure usage converts poorly (adoption without capability is usage,
+      // not value); capability is the core driver; a redesigned workflow is the structural multiplier that
+      // unlocks the hard operational gains (cycle time, cost).
+      var conversion = 0.10 + 0.90 * capNorm * (0.55 + 0.45 * structNorm);
+      var valueCeil = adoptionFrac * conversion;
+      // organizational impact COMPOUNDS: value builds slowly, then accelerates as the enabling stack completes,
+      // rather than approaching an adoption-linear ceiling at a flat rate. The realization rate rises with the
+      // capability actually in place — so an S-curve, gated early, gathering pace once the pieces land.
+      var realizeRate = VGROWTH * (0.28 + 0.72 * capNorm);
+      value += realizeRate * (valueCeil - value);
       if (value < 0) value = 0;
       valueSeries.push(value * 100);
       if (!inertiaActive && ov >= THRESHOLD) inertiaActive = true;
+      // the sustain phase opens the first week adoption is mature enough to institutionalize (scope-dependent)
+      if (sustainStartWeek === null && ov >= SUSTAIN_READY * 100) sustainStartWeek = w;
       // EARNED sponsorship: a manager/team-led effort that has seeded real proof and climbed on its own past
       // EARN_SPONSOR_OV has demonstrated enough success to win the executive sponsorship it didn't start with.
       // The cap lifts from here — a slower, later route than leading with sponsorship, but a real bottom-up one.
@@ -849,7 +875,7 @@
       var phaseConds = [
         sponsorClean || (proofClean && managerActive),  // Vision set — a guiding coalition is visibly behind it (exec OR grassroots)
         proofClean || ov >= 30,                // Proof visible — seeded win, or the majority has visibly moved
-        capStock >= 0.35,                      // Workflow redesigned — real capability / process rebuild exists
+        structStock >= 0.35,                   // Workflow redesigned — the task was genuinely rebuilt (needs Workflow Redesign)
         managerActive && ov >= THRESHOLD,      // Work identity reimagined — managers coaching + across the line
         value * 100 >= 40                      // Outcome realized — durable, measurable output
       ];
@@ -869,7 +895,7 @@
     var touched = series.some(function (v) { return v >= THRESHOLD; });
     return { series: series, valueSeries: valueSeries, notes: notes, markers: markers,
              crossedWeek: crossedWeek, touched: touched, milestones: milestones, trustEnd: trust,
-             sponsorEarned: sponsorEarned, sponsorActive: sponsorshipActive,
+             sponsorEarned: sponsorEarned, sponsorActive: sponsorshipActive, sustainStartWeek: sustainStartWeek,
              totalWeeks: sched.reduce(function (m, e) { return Math.max(m, e.end); }, 0) };
   }
 
@@ -895,6 +921,7 @@
     curveB: document.getElementById('curveB'), curveP: document.getElementById('curveP'), curveV: document.getElementById('curveV'),
     gapArea: document.getElementById('gapArea'), markers: document.getElementById('markers'),
     phaseNodes: document.getElementById('phaseNodes'), phaseLadder: document.getElementById('phaseLadder'),
+    phaseBandSustain: document.getElementById('phaseBandSustain'), phaseDivider: document.getElementById('phaseDivider'), phaseBandLabel: document.getElementById('phaseBandLabel'),
     crossMarker: document.getElementById('crossMarker'), thresholdStatus: document.getElementById('thresholdStatus'),
     groundworkLadder: document.getElementById('groundworkLadder'),
     dotB: document.getElementById('dotB'), dotP: document.getElementById('dotP'), dotV: document.getElementById('dotV'),
@@ -984,7 +1011,7 @@
     // Sustainment fired before the sustain phase and couldn’t land.
     var earlySust = planIds.filter(function (id) { return nt(id).muted && nt(id).reason === 'timing'; });
     if (earlySust.length) {
-      tips.push('<strong>' + andList(earlySust) + ' fired before the sustain phase (week 16+) and didn’t land.</strong> Institutionalizing moves only bite once adoption is real, so slot them last.');
+      tips.push('<strong>' + andList(earlySust) + ' institutionalized before adoption was real enough, so it didn’t land.</strong> Codifying a behavior that barely exists reads as theater; run these once adoption has genuinely climbed, not on a fixed date.');
     }
 
     // Proof-dependent play muted outright.
@@ -1281,7 +1308,7 @@
       var badge = '';
       if (n.muted) {
         badge = n.reason === 'timing'
-          ? '<span class="plan-badge muted">⚠ too early: sustainment lands only in the sustain phase (wk 16+)</span>'
+          ? '<span class="plan-badge muted">⚠ too early: institutionalize only once adoption is real</span>'
           : (n.reason === 'overflow'
             ? '<span class="plan-badge muted">⚠ finishes past week 24, never lands, trim the plan</span>'
             : '<span class="plan-badge muted">⚠ deployed before its proof exists, muted</span>');
@@ -1341,6 +1368,29 @@
           '<div class="ptl-axis"><span>1</span><span>6</span><span>12</span><span>18</span><span>24</span></div>';
       }
     }
+
+    // sustain-phase band — positioned where THIS plan's adoption matured enough to institutionalize, not a
+    // fixed week. Earlier for a fast/small transformation, later for a large one; hidden if it never matures.
+    (function () {
+      var sw = res.sustainStartWeek;
+      if (el.phaseBandSustain && el.phaseDivider && el.phaseBandLabel) {
+        if (sw === null || sw === undefined) {
+          el.phaseBandSustain.setAttribute('width', '0');
+          el.phaseDivider.style.display = 'none';
+          el.phaseBandLabel.style.display = 'none';
+        } else {
+          var sx = x(sw);
+          el.phaseBandSustain.setAttribute('x', sx.toFixed(1));
+          el.phaseBandSustain.setAttribute('width', Math.max(0, (PADL + PW) - sx).toFixed(1));
+          el.phaseDivider.style.display = '';
+          el.phaseDivider.setAttribute('x1', sx.toFixed(1));
+          el.phaseDivider.setAttribute('x2', sx.toFixed(1));
+          el.phaseBandLabel.style.display = '';
+          var midx = Math.min(PADL + PW - 4, (sx + PADL + PW) / 2);
+          el.phaseBandLabel.setAttribute('x', midx.toFixed(1));
+        }
+      }
+    })();
 
     // curves
     el.curveB.setAttribute('d', pathFrom(base.series));
@@ -1496,7 +1546,7 @@
         var tail;
         if (broke) {
           tail = n.reason === 'timing'
-            ? '<div class="gw-break-note">✕ Too early: sustainment can only land in the sustain phase (week 16 onward). Pushed now it can\'t land, and codifying a change nobody lives yet reads as theater, spending trust the later steps need.</div>'
+            ? '<div class="gw-break-note">✕ Too early: institutionalization only lands once adoption is real enough to lock in — which arrives sooner in a fast transformation and later in a large one, not on a fixed date. Codifying a change nobody lives yet reads as theater, spending trust the later steps need.</div>'
             : (n.reason === 'overflow'
               ? '<div class="gw-break-note">✕ Runs past week 24: even with overlap the plan can\'t fit this in the window, so its benefit never lands. Trim or reorder so it completes inside the 24 weeks.</div>'
               : '<div class="gw-break-note">✕ Out of order: this runs before the proof it needs, so it can\'t land, and pushing people who aren\'t ready breeds quiet resistance, which drops how they respond to every move after.</div>');
