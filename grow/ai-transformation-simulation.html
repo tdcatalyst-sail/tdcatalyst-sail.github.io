@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=20260707e">
+  <link rel="stylesheet" href="/style.css?v=20260707f">
 </head>
 <body class="brand-grow">
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -55,7 +55,7 @@
     <!-- DEMO DISCLAIMER -->
     <div class="sim-demo-note">
       <span class="demo-tag">A note on this tool</span>
-      <p>This is a demonstration of a <strong>transformation simulation</strong>: a deliberately simplified model, not a forecast of your organization. Its purpose is to make the <em>dynamics</em> of transformation work visible: how interventions, their sequence, and their timing compound or stall, and how that plays out across a whole population over time. Use it to build intuition for the shape of the work.</p>
+      <p>A deliberately simplified model, not a forecast of your organization. It makes one thing visible: how the <em>order and timing</em> of your interventions compound or stall across a whole population. Use it to build intuition for the shape of the work.</p>
     </div>
 
     <!-- STEP 1 -->
@@ -63,7 +63,7 @@
       <div class="step-head">
         <span class="step-badge">1</span>
         <h3>Flag where the transformation is stalling</h3>
-        <span class="step-hint">Click the 2–3 cells holding the most people</span>
+        <span class="step-hint">Set each segment's share of your people on the left, then click the 2–3 cells where they're stuck</span>
       </div>
       <div class="matrix-scroll">
       <div class="matrix-grid" id="matrixGrid">
@@ -76,7 +76,7 @@
         <!-- rows injected by JS -->
       </div>
       </div>
-      <p class="flag-note"><span class="flag-count" id="flagCount">0</span> cells flagged. These are the bottlenecks your sequence should target. Plays that hit a flagged cell land harder, and the bigger the cell (its share of the org is shown on each), the harder they pull.</p>
+      <p class="flag-note"><span class="flag-count" id="flagCount">0</span> cells flagged. These are the bottlenecks your sequence should target. Plays that hit a flagged cell land harder, and the bigger that segment's share of your people (edit it on the left), the harder they pull.</p>
     </div>
 
     <!-- STEP 2 -->
@@ -174,7 +174,7 @@
       <div id="thresholdStatus" class="threshold-status liminal"></div>
       <div class="groundwork">
         <h4>What to get right, in order</h4>
-        <p class="groundwork-sub">Left: the groundwork that lets the next step land. Right: how each move drives real outcomes (speed, quality, results) versus just widening reach. Run a play out of order, before its proof exists, or without the foundation it leans on, and the chain is flagged.</p>
+        <p class="groundwork-sub">Left: the groundwork each step needs to land. Right: how it drives real outcomes (speed, quality, results), not just reach. A play run out of order, or without the foundation it leans on, gets flagged.</p>
         <div id="groundworkLadder"></div>
       </div>
       </div><!-- /curve-col -->
@@ -221,8 +221,8 @@
           <input type="hidden" name="_next" value="https://tdcatalyst.com/grow/ai-transformation-simulation.html?sent=1">
           <input type="hidden" name="flagged_cells"  id="f-flagged">
           <input type="hidden" name="plan_sequence"  id="f-plan">
-          <input type="hidden" name="result_week16_plan"      id="f-plan-res">
-          <input type="hidden" name="result_week16_donothing" id="f-base-res">
+          <input type="hidden" name="result_week24_plan"      id="f-plan-res">
+          <input type="hidden" name="result_week24_donothing" id="f-base-res">
           <input type="hidden" name="result_points_added"     id="f-gap-res">
           <input type="hidden" name="result_transformation_threshold" id="f-thr-res">
           <input type="hidden" name="result_phases_reached" id="f-phases">
@@ -302,17 +302,13 @@
   ];
   var STAGES = ['pre', 'con', 'prp', 'act'];
 
-  // Default population spread across the 16 cells, as a share of the whole org (sums to 100). ARBITRARY
-  // but plausible starting values — early in a rollout most people sit in precontemplation / contemplation,
-  // innovators skew to action, and the early-majority precontemplation cell is the single biggest block
-  // (the Adoption Matrix's canonical "largest cell"). Flagging a cell now weights the targeting bonus by
-  // its size, so the Matrix's core instruction — put the work where the biggest cell is — is in the math.
-  var CELL_POP = {
-    'ia-pre': 1.6, 'ia-con': 2.4, 'ia-prp': 4.0, 'ia-act': 8.0,
-    'em-pre': 17.0, 'em-con': 9.5, 'em-prp': 4.8, 'em-act': 2.7,
-    'lm-pre': 15.3, 'lm-con': 10.2, 'lm-prp': 5.1, 'lm-act': 3.4,
-    'lg-pre': 9.6, 'lg-con': 4.0, 'lg-prp': 1.6, 'lg-act': 0.8
-  };
+  // Segment sizes (SEGMENTS[].size) are the editable population weights. A flagged cell's pull scales with
+  // its segment's share of the org, so flagging a stall in a big segment matters more, and editing a
+  // segment's size changes both the overall-adoption weighting and the targeting bonus live.
+  function totalSegSize() { return SEGMENTS.reduce(function (s, g) { return s + g.size; }, 0) || 1; }
+  function segSizeOf(segKey) { for (var i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].key === segKey) return SEGMENTS[i].size; } return 0; }
+  // share of the whole org sitting in one cell, as a %, assuming an even split across the four stages
+  function cellShare(cellKey) { return 100 * (segSizeOf(cellKey.split('-')[0]) / totalSegSize()) / STAGES.length; }
 
   // symptom of each cell (segment × stage) — written in the Stall Diagnostic's voice
   // so a leader recognizes "that's us" and can flag it in one click.
@@ -596,7 +592,8 @@
     };
   }
   function overallOf(st) {
-    return SEGMENTS.reduce(function (sum, s) { return sum + (s.size / 100) * st[s.key].level; }, 0);
+    var t = totalSegSize();
+    return SEGMENTS.reduce(function (sum, s) { return sum + s.size * st[s.key].level; }, 0) / t;
   }
 
   // Returns { series, valueSeries, notes, markers, crossedWeek, touched, milestones, totalWeeks }
@@ -649,8 +646,8 @@
           if (earlySustain) readiness = 0;
           var hits = p.cells.reduce(function (n, c) { return n + (flagged[c] ? 1 : 0); }, 0);
           // targeting bonus is weighted by how much of the org sits in the flagged cells this play addresses:
-          // hitting a big flagged stall pulls far harder than a small one. Capped so it can't dominate.
-          var flaggedPop = p.cells.reduce(function (s, c) { return s + (flagged[c] ? (CELL_POP[c] || 0) : 0); }, 0);
+          // hitting a stall in a big (editable) segment pulls far harder than a small one. Capped so it can't dominate.
+          var flaggedPop = p.cells.reduce(function (s, c) { return s + (flagged[c] ? cellShare(c) : 0); }, 0);
           var tBonus = 1 + Math.min(0.75, 0.025 * flaggedPop);
           // count prerequisites that haven't fired yet — whether missing from the plan or placed later.
           // Either way the foundation this play leans on isn't there, so it lands weaker (docked per miss).
@@ -995,16 +992,16 @@
   SEGMENTS.forEach(function (seg) {
     var head = document.createElement('div');
     head.className = 'mx-row-head';
-    head.innerHTML = '<span class="mx-seg">' + seg.label + '</span><span class="mx-size">' + seg.size + '% of population</span>';
+    head.innerHTML = '<span class="mx-seg">' + seg.label + '</span>' +
+      '<span class="mx-size"><input type="number" class="mx-size-input" data-seg="' + seg.key + '" value="' + seg.size + '" min="1" max="80" step="1" aria-label="' + seg.label + ' share of your people, percent"><span class="mx-size-suffix">% of your people</span></span>';
     el.matrix.appendChild(head);
     STAGES.forEach(function (stage) {
       var cell = document.createElement('div');
-      var ckey = seg.key + '-' + stage, pop = CELL_POP[ckey] || 0;
-      cell.className = 'cell' + (pop >= 12 ? ' big-cell' : '');
+      var ckey = seg.key + '-' + stage;
+      cell.className = 'cell';
       cell.dataset.key = ckey;
-      cell.innerHTML = '<span class="mx-cell-sym">' + (SYMPTOMS[ckey] || STAGE_ABBR[stage]) + '</span>' +
-        '<span class="mx-cell-pop">' + (pop >= 1 ? Math.round(pop) : pop) + '% of org</span>';
-      cell.title = seg.label + ' · ' + STAGE_ABBR[stage] + ' · ~' + (pop >= 1 ? Math.round(pop) : pop) + '% of the organization';
+      cell.textContent = SYMPTOMS[ckey] || STAGE_ABBR[stage];
+      cell.title = seg.label + ' · ' + STAGE_ABBR[stage];
       cell.addEventListener('click', function () {
         if (flagged[cell.dataset.key]) { delete flagged[cell.dataset.key]; cell.classList.remove('flagged'); }
         else { flagged[cell.dataset.key] = true; cell.classList.add('flagged'); }
@@ -1012,6 +1009,21 @@
       });
       el.matrix.appendChild(cell);
     });
+  });
+
+  // editable segment sizes: retype a segment's share of your people and the model re-runs on the new weights
+  el.matrix.addEventListener('input', function (e) {
+    var inp = e.target.closest('.mx-size-input'); if (!inp) return;
+    var key = inp.getAttribute('data-seg'), v = parseInt(inp.value, 10);
+    if (isNaN(v)) return;
+    v = Math.max(1, Math.min(80, v));
+    for (var i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].key === key) SEGMENTS[i].size = v; }
+    render();
+  });
+  el.matrix.addEventListener('change', function (e) {
+    var inp = e.target.closest('.mx-size-input'); if (!inp) return;   // reconcile the field to the clamped value on blur
+    var key = inp.getAttribute('data-seg');
+    for (var i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].key === key) inp.value = SEGMENTS[i].size; }
   });
 
   // ===== build the library =====
@@ -1060,7 +1072,7 @@
     var res = simulate(plan);
     var base = simulate([]);
 
-    // week budget — longer plays spend more of the 16 weeks
+    // week budget — longer plays spend more of the 24 weeks
     var weeksUsed = res.totalWeeks;
     var planFull = weeksUsed >= WEEKS;
     el.planBudget.textContent = weeksUsed + ' / ' + WEEKS + ' weeks';
