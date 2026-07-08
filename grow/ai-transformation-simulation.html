@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=20260707f">
+  <link rel="stylesheet" href="/style.css?v=20260707g">
 </head>
 <body class="brand-grow">
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -173,8 +173,11 @@
       </div>
       <div id="thresholdStatus" class="threshold-status liminal"></div>
       <div class="groundwork">
-        <h4>What to get right, in order</h4>
-        <p class="groundwork-sub">Left: the groundwork each step needs to land. Right: how it drives real outcomes (speed, quality, results), not just reach. A play run out of order, or without the foundation it leans on, gets flagged.</p>
+        <div class="gw-head-row">
+          <h4>What to get right, in order</h4>
+          <button type="button" class="gw-outcomes-toggle" id="gwOutcomesToggle" aria-expanded="false">Show organizational outcomes</button>
+        </div>
+        <p class="groundwork-sub">The groundwork each step needs, in order. A play run out of order, or without the foundation it leans on, gets flagged. Use the toggle to see the real outcome each move drives (speed, quality, results), not just reach.</p>
         <div id="groundworkLadder"></div>
       </div>
       </div><!-- /curve-col -->
@@ -1367,6 +1370,17 @@
     render();
     if (el.groundworkLadder.scrollIntoView) el.groundworkLadder.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
+
+  // collapse the per-step "Outcome for the organization" column by default; toggle keeps the ladder scannable
+  (function () {
+    var panel = document.querySelector('.groundwork'), tog = document.getElementById('gwOutcomesToggle');
+    if (!panel || !tog) return;
+    tog.addEventListener('click', function () {
+      var on = panel.classList.toggle('show-outcomes');
+      tog.setAttribute('aria-expanded', on ? 'true' : 'false');
+      tog.textContent = on ? 'Hide organizational outcomes' : 'Show organizational outcomes';
+    });
+  })();
 
   // plan reorder — drag to slide (pointer events: mouse + touch)
   var drag = null;
