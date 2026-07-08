@@ -1766,9 +1766,13 @@ footer .footer-practices i {
     .gw-lev-head { display: block; font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--logo-blue); margin-bottom: 0.5rem; }
     .gw-lev-intro { margin: 0 0 0.6rem; font-size: 0.82rem; line-height: 1.5; color: var(--charcoal); }
     .gw-leverage ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
-    .gw-leverage li { position: relative; padding-left: 1.3rem; font-size: 0.82rem; line-height: 1.5; color: var(--charcoal); }
-    .gw-leverage li::before { content: "\2191"; position: absolute; left: 0; top: 0; color: var(--logo-blue); font-weight: 700; }
+    .gw-leverage li { position: relative; padding-left: 1.3rem; font-size: 0.82rem; line-height: 1.5; color: var(--charcoal); display: flex; align-items: flex-start; gap: 0.7rem; }
+    .gw-leverage li::before { content: "\2191"; position: absolute; left: 0; top: 0.05rem; color: var(--logo-blue); font-weight: 700; }
     .gw-leverage li strong { color: var(--navy); }
+    .lev-text { flex: 1; }
+    .lev-apply { flex-shrink: 0; margin-top: 0.05rem; font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; color: #fff; background: var(--logo-blue); border: 1px solid var(--logo-blue); border-radius: 999px; padding: 0.28rem 0.8rem; cursor: pointer; transition: background 0.15s, transform 0.05s; }
+    .lev-apply:hover { background: var(--navy); border-color: var(--navy); }
+    .lev-apply:active { transform: translateY(1px); }
     .gw-leverage em { font-style: normal; font-weight: 600; color: var(--logo-blue); }
     .gw-lev-clean { margin: 0; font-size: 0.82rem; line-height: 1.5; color: var(--midgray); }
     .gw-lev-foot { margin: 0.7rem 0 0; font-size: 0.72rem; font-style: italic; line-height: 1.45; color: var(--midgray); }
