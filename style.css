@@ -1602,7 +1602,11 @@ footer .footer-practices i {
     .cell.flagged {
       background: var(--logo-red); border-color: var(--logo-red); color: #fff; font-weight: 500;
     }
-    .flag-note { font-size: 0.8rem; color: var(--midgray); margin-top: 0.7rem; }
+    .seg-total-note { font-size: 0.78rem; color: var(--midgray); margin-top: 0.8rem; }
+    .seg-total-note #segTotal { font-weight: 700; color: var(--logo-blue); }
+    .seg-total-note.under #segTotal { color: var(--terracotta); }
+    .seg-total-hint { font-style: italic; opacity: 0.85; }
+    .flag-note { font-size: 0.8rem; color: var(--midgray); margin-top: 0.4rem; }
     .flag-count { color: var(--logo-red); font-weight: 600; }
 
     /* --- Step 2: library + plan --- */
