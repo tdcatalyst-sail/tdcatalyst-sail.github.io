@@ -1697,25 +1697,30 @@ footer .footer-practices i {
     .plan-clear:hover { color: #fff; }
     /* calendar vs effort readout under the budget bar */
     .plan-compress { color: rgba(235,239,236,0.62); font-size: 0.68rem; letter-spacing: 0.02em; margin: -0.5rem 0 0.9rem; font-variant-numeric: tabular-nums; }
-    /* timeline strip — one bar per play on a 24-week track, overlaps visible across rows */
+    /* timeline strip — a Gantt grouped by workstream, readable name in a left column, bars on a shared track */
     .plan-timeline { margin-top: 1rem; }
     .plan-timeline:empty { display: none; }
     .ptl-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6rem; margin-bottom: 0.5rem; }
-    .ptl-head > span:first-child { color: #fff; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; }
+    .ptl-head > span:first-child { color: #fff; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 500; }
     .ptl-axis-note { color: rgba(235,239,236,0.5); font-size: 0.62rem; text-align: right; line-height: 1.3; }
-    .ptl-track-wrap { position: relative; display: flex; flex-direction: column; gap: 3px; }
-    .ptl-gridlines { position: absolute; inset: 0; display: flex; justify-content: space-between; pointer-events: none; }
-    .ptl-gridlines span { width: 1px; background: rgba(255,255,255,0.08); }
-    .ptl-row { position: relative; height: 20px; background: rgba(255,255,255,0.05); border-radius: 3px; }
+    .ptl-body { display: flex; flex-direction: column; gap: 2px; }
+    .ptl-stream { display: flex; align-items: baseline; gap: 0.4rem; margin: 0.55rem 0 0.15rem; color: var(--logo-blue); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
+    .ptl-stream:first-child { margin-top: 0; }
+    .ptl-stream.sustain { color: var(--value-green, #4E8B72); }
+    .ptl-stream i { color: rgba(235,239,236,0.45); font-style: normal; text-transform: none; letter-spacing: 0; font-weight: 400; font-size: 0.6rem; }
+    .ptl-row { display: grid; grid-template-columns: 100px 1fr; gap: 6px; align-items: center; height: 19px; }
+    .ptl-name { color: var(--seamist); font-size: 0.63rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ptl-name b { color: rgba(235,239,236,0.55); font-weight: 600; margin-right: 0.15rem; }
+    .ptl-track { position: relative; height: 100%; background: rgba(255,255,255,0.05); border-radius: 3px; }
     .ptl-bar {
       position: absolute; top: 0; bottom: 0; background: var(--logo-blue); border-radius: 3px;
-      display: flex; align-items: center; padding: 0 0.45rem; overflow: hidden; min-width: 0;
+      display: flex; align-items: center; padding: 0 0.35rem; overflow: hidden; min-width: 0;
     }
     .ptl-bar.sustain { background: var(--value-green, #4E8B72); }
     .ptl-bar.broke { background: var(--logo-red); }
     .ptl-bar.overruns { background: repeating-linear-gradient(45deg, var(--logo-red), var(--logo-red) 5px, rgba(196,69,54,0.6) 5px, rgba(196,69,54,0.6) 10px); }
-    .ptl-label { color: #fff; font-size: 0.64rem; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .ptl-axis { display: flex; justify-content: space-between; margin-top: 0.35rem; color: rgba(235,239,236,0.5); font-size: 0.6rem; font-variant-numeric: tabular-nums; }
+    .ptl-span { color: #fff; font-size: 0.57rem; line-height: 1; white-space: nowrap; overflow: hidden; opacity: 0.92; }
+    .ptl-axis { display: flex; justify-content: space-between; margin-top: 0.35rem; padding-left: 106px; color: rgba(235,239,236,0.5); font-size: 0.6rem; font-variant-numeric: tabular-nums; }
 
     /* --- Step 3: curve --- */
     .sim-chart { width: 100%; height: auto; display: block; }

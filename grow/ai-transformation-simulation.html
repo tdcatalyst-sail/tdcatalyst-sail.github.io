@@ -184,7 +184,7 @@
         <div id="groundworkLadder"></div>
       </div>
       </div><!-- /curve-col -->
-      <p class="sim-disclaimer">Illustrative model, not a forecast. <strong>What it isolates:</strong> the sequencing of a transformation, namely who moves first, how proof gates the next play, why sponsorship is the gate nothing crosses without, why adoption without capability is usage rather than value, and how a mistimed move breaks trust and breeds quiet resistance. It renders the logic of the <a href="/sail/field-note-the-adoption-matrix.html" target="_blank" rel="noopener">Adoption Matrix</a> and the <a href="/sail/field-note-adaptability-as-a-discipline.html" target="_blank" rel="noopener">Adaptability field note</a>. <strong>What it can't see:</strong> a simulation moves averages; real change turns on specific people. One leader with the capital to fund it and go first, or to quietly starve it, can decide the outcome, and no curve names that person, or tells you whether a sponsor truly leads or a manager truly coaches. That human work, with your real people and data, is what the <a href="/grow/#services">Adoption Reset</a> builds. The tool is the map; the people who walk the terrain are the engagement.</p>
+      <p class="sim-disclaimer">Illustrative model, not a forecast. <strong>What it isolates:</strong> the sequencing of a transformation, namely who moves first, how proof gates the next play, why sponsorship sets the ceiling on how far change spreads (won directly, or earned by a bottom-up win that demonstrates results), why adoption without capability is usage rather than value, and how a mistimed move breaks trust and breeds quiet resistance. It renders the logic of the <a href="/sail/field-note-the-adoption-matrix.html" target="_blank" rel="noopener">Adoption Matrix</a> and the <a href="/sail/field-note-adaptability-as-a-discipline.html" target="_blank" rel="noopener">Adaptability field note</a>. <strong>What it can't see:</strong> a simulation moves averages; real change turns on specific people. One leader with the capital to fund it and go first, or to quietly starve it, can decide the outcome, and no curve names that person, or tells you whether a sponsor truly leads or a manager truly coaches. That human work, with your real people and data, is what the <a href="/grow/#services">Adoption Reset</a> builds. The tool is the map; the people who walk the terrain are the engagement.</p>
     </div>
 
   </div>
@@ -285,7 +285,7 @@
       <p class="eyebrow" style="color: var(--logo-blue); margin: 1.7rem 0 0.7rem;">Developed by TDcatalyst</p>
       <ul style="list-style: none; padding-left: 0; margin: 0; display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.9rem; line-height: 1.55;">
         <li><strong style="color: var(--navy);">The Adoption Matrix.</strong> The operational grid that crosses Rogers' diffusion segments with Prochaska's stages of change, so a leader can locate exactly where a population is stuck and match the play to the cell. Set out in the <a href="/sail/field-note-the-adoption-matrix.html" target="_blank" rel="noopener">Adoption Matrix field note</a>.</li>
-        <li><strong style="color: var(--navy);">The sequencing logic.</strong> The dependency graph the model enforces: executive sponsorship as the gate nothing crosses without, proof before the plays that borrow its credibility, capability as what converts adoption into value, and institutionalization held for the sustain phase. Distilled from what holds and what decays in real rollouts.</li>
+        <li><strong style="color: var(--navy);">The sequencing logic.</strong> The dependency graph the model enforces: sponsorship as the ceiling on how far change spreads — won directly or earned by a demonstrated bottom-up win — proof before the plays that borrow its credibility, capability as what converts adoption into value, and institutionalization held for the sustain phase. Distilled from what holds and what decays in real rollouts.</li>
         <li><strong style="color: var(--navy);">The trust-and-relapse model.</strong> Treating a mistimed intervention as active harm: it breaks trust, dampens how people respond to everything after, and can bend the adoption curve back down into performative relapse. TDcatalyst's modeling of a pattern seen repeatedly in the field, read through self-determination theory and Turner's liminal collapse.</li>
         <li><strong style="color: var(--navy);">Transformation as a marked passage.</strong> The five phases and the escape-velocity threshold, framing a transformation as a set of thresholds an organization crosses and holds. TDcatalyst's application of rites-of-passage theory to the AI transition, set out in the <a href="/sail/field-note-adaptability-as-a-discipline.html" target="_blank" rel="noopener">Adaptability field note</a>.</li>
       </ul>
@@ -605,6 +605,14 @@
   var flagged = {};        // "seg-stage" -> true
   var plan = [];           // ordered list of play ids
 
+  // short, readable labels for the timeline strip (full names truncate on narrow bars)
+  var SHORT = {
+    sponsor: 'Exec Sponsorship', manager: 'Manager Channel', whole: 'Whole-Product Kit',
+    friction: 'Workflow Redesign', build: 'Capability Build', whenthen: 'When-Then Prompts',
+    proof: 'Proof Seeding', peer: 'Peer Proof Relay', inaction: 'Inaction-Cost',
+    quiet: 'Quiet Path', policy: 'Policy & SOPs', criteria: 'Perf. Criteria', ritual: 'Ritual & Cadence'
+  };
+
   // ===== scheduling: dependency-aware overlap — plays run concurrently where one needn't finish for the
   // next to start; the 24-week budget now measures CALENDAR time (the last completion), not the sum of
   // durations, so overlapping independent work frees weeks. =====
@@ -682,16 +690,24 @@
   // Returns { series, valueSeries, notes, markers, crossedWeek, touched, milestones, totalWeeks }
   function simulate(planIds) {
     var st = initState();
-    var growth = 0.22, decay = 0.06, managerActive = false, managerStrength = 1, inertiaActive = false, sponsorshipActive = false, NOSPONSOR_CAP = 0.50;
+    var growth = 0.22, decay = 0.06, managerActive = false, managerStrength = 1, inertiaActive = false;
+    // SPONSORSHIP is the strongest single lever, but not the only route. Until it's active — won directly (the
+    // Executive Sponsorship play) or EARNED bottom-up — ceilings are capped, so the change can't reach self-
+    // sustaining. A manager/team-led effort that seeds real proof and climbs on its own earns that sponsorship
+    // once it has visibly worked (see the earned-sponsorship check in the loop). Prosci: active sponsorship is
+    // the top predictor of success; Kotter: the guiding coalition and short-term wins can form bottom-up.
+    var sponsorshipActive = false, sponsorEarned = false, NOSPONSOR_CAP = 0.52, EARN_SPONSOR_OV = 42;
     var EROSION = 4.5, RWIN = 4, DIPSCALE = 60, lastActive = -99, dipEvents = [];
     var sched = scheduleOf(planIds);
-    var notes = {}, markers = [], series = [], valueSeries = [];
-    // a play's benefit lands at COMPLETION (not at kickoff): fire its effects on the week it ends.
-    // plays that would finish past the 24-week window never land — flag them so the UI can say so.
-    var byEnd = {}, startAt = {};
+    var notes = {}, markers = [], series = [], valueSeries = [], effOf = {};
+    // TIMING: a play's DISRUPTION (relearning cost) is felt while the work is underway — a dip anchored at its
+    // start; its BENEFIT (reach, capability, reinforcement) is realized at COMPLETION. Readiness and the out-of-
+    // order penalty are judged when the play is deployed (start), and that same eff scales the payoff that lands
+    // at the end. Plays that would finish past the 24-week window never land — flag them so the UI can say so.
+    var byStart = {}, byEnd = {}, startAt = {};
     sched.forEach(function (e) {
       startAt[e.id] = e.start;
-      if (e.end <= WEEKS) (byEnd[e.end] = byEnd[e.end] || []).push(e);
+      if (e.end <= WEEKS) { (byStart[e.start] = byStart[e.start] || []).push(e); (byEnd[e.end] = byEnd[e.end] || []).push(e); }
       else notes[e.id] = { muted: true, reason: 'overflow', hits: 0, start: e.start, end: e.end,
                            readiness: 0, missReqs: 0, orderPenalty: 1, proofGate: 1, misplace: 0 };
     });
@@ -726,8 +742,11 @@
     }
 
     for (var w = 0; w <= WEEKS; w++) {
-      if (byEnd[w]) {
-        byEnd[w].forEach(function (entry) {
+      // 1) DEPLOYMENTS — gate each play as it STARTS: readiness now, foundations in place, current trust.
+      // This is where the relearning dip and any misplacement backlash land (during the work), and where the
+      // play's eff is fixed. The payoff that eff scales is banked later, at completion.
+      if (byStart[w]) {
+        byStart[w].forEach(function (entry) {
           var p = PLAY_BY_ID[entry.id];
           var overallNow = overallOf(st);
           var readiness = p.needsProof > 0 ? Math.max(0, Math.min(1, overallNow / p.needsProof)) : 1;
@@ -752,15 +771,9 @@
           var proofGate = ((entry.id === 'peer' || entry.id === 'inaction') && !proofClean) ? NOPROOF : 1;
           // a burned organization responds less to everything — this play's own force is scaled by current trust
           var eff = readiness * readiness * tBonus * orderPenalty * proofGate * trust;
-          for (var rk in p.raises) { st[rk].ceil = Math.min(0.95, st[rk].ceil + p.raises[rk] * eff); }
-          for (var pk in p.push)   { st[pk].level = Math.min(st[pk].ceil, st[pk].level + p.push[pk] * eff); }
-          // sustainment: raise floors (lock in gains) and cut ongoing decay (the change stops leaking)
-          if (p.floor) { for (var fk in p.floor) { st[fk].floor = Math.min(st[fk].ceil, st[fk].floor + p.floor[fk] * eff); } }
-          if (p.decayCut) decayCut = Math.min(0.8, decayCut + p.decayCut * eff);
-          if (p.manager) { managerActive = true; managerStrength = orderPenalty; }
-          if (p.sponsor) { sponsorshipActive = true; if (readiness >= 0.5) sponsorClean = true; }
-          if (p.id === 'proof' && readiness >= 0.5) proofClean = true;
-          capStock += (p.capability || 0) * eff;
+          effOf[entry.id] = { eff: eff, orderPenalty: orderPenalty, readiness: readiness };
+          // the relearning dip lands NOW, during the work — a transient cost that recovers before the payoff
+          // (the classic J-curve / change curve). It scales with how much real change is actually underway.
           if (p.disrupt) dipEvents.push({ week: w, mag: p.disrupt * DIPSCALE * eff });
           // trust cost of misplacement: a play pushed on people who plainly aren't ready (muted — the
           // wrong-stage move) breeds the most resistance; a weak-foundation move (missing/late prerequisite)
@@ -775,7 +788,23 @@
             reason: earlySustain ? 'timing' : (readiness < 0.5 ? 'proof' : null),
             missReqs: missReqs, orderPenalty: orderPenalty, proofGate: proofGate,
             misplace: misplace, start: entry.start, end: entry.end };
-          markers.push({ week: w, overall: overallNow, id: p.id });
+        });
+      }
+      // 2) COMPLETIONS — a play's benefit is realized when it FINISHES, scaled by the eff it earned at deploy time.
+      if (byEnd[w]) {
+        byEnd[w].forEach(function (entry) {
+          var p = PLAY_BY_ID[entry.id], gg = effOf[entry.id] || { eff: 0, orderPenalty: 1, readiness: 0 };
+          var eff = gg.eff;
+          for (var rk in p.raises) { st[rk].ceil = Math.min(0.95, st[rk].ceil + p.raises[rk] * eff); }
+          for (var pk in p.push)   { st[pk].level = Math.min(st[pk].ceil, st[pk].level + p.push[pk] * eff); }
+          // sustainment: raise floors (lock in gains) and cut ongoing decay (the change stops leaking)
+          if (p.floor) { for (var fk in p.floor) { st[fk].floor = Math.min(st[fk].ceil, st[fk].floor + p.floor[fk] * eff); } }
+          if (p.decayCut) decayCut = Math.min(0.8, decayCut + p.decayCut * eff);
+          if (p.manager) { managerActive = true; managerStrength = gg.orderPenalty; }
+          if (p.sponsor) { sponsorshipActive = true; if (gg.readiness >= 0.5) sponsorClean = true; }
+          if (p.id === 'proof' && gg.readiness >= 0.5) proofClean = true;
+          capStock += (p.capability || 0) * eff;
+          markers.push({ week: w, overall: overallOf(st), id: p.id });
         });
       }
       var activeNow = activeThisWeek(w);
@@ -790,7 +819,8 @@
       var d = decay * (managerActive ? 1 - 0.6 * managerStrength : 1) * (inertiaActive ? 0.45 : 1) * (reinforced ? 1 : EROSION) * (1 - decayCut) * (1 + (1 - trust) * DISTRUST_DECAY);
       SEGMENTS.forEach(function (s2) {
         var c = st[s2.key];
-        // without active executive sponsorship, ceilings are capped — no sequence reaches self-sustaining
+        // until sponsorship is active (won directly or earned bottom-up), ceilings are capped — the change
+        // can climb, but can't yet reach self-sustaining
         var effCeil = sponsorshipActive ? c.ceil : Math.min(c.ceil, NOSPONSOR_CAP);
         c.level += g * (effCeil - c.level);
         c.level -= d * (c.level - c.floor);
@@ -808,10 +838,16 @@
       if (value < 0) value = 0;
       valueSeries.push(value * 100);
       if (!inertiaActive && ov >= THRESHOLD) inertiaActive = true;
+      // EARNED sponsorship: a manager/team-led effort that has seeded real proof and climbed on its own past
+      // EARN_SPONSOR_OV has demonstrated enough success to win the executive sponsorship it didn't start with.
+      // The cap lifts from here — a slower, later route than leading with sponsorship, but a real bottom-up one.
+      if (!sponsorshipActive && proofClean && managerActive && ov >= EARN_SPONSOR_OV) {
+        sponsorshipActive = true; sponsorClean = true; sponsorEarned = true;
+      }
       // transformation phases advance strictly in order — a later phase can't be reached before an earlier one.
       // conditions key on achieved STATE (not specific plays), so a phase lights for work actually done by any route.
       var phaseConds = [
-        sponsorClean,                          // Vision set — a sponsor is visibly behind it
+        sponsorClean || (proofClean && managerActive),  // Vision set — a guiding coalition is visibly behind it (exec OR grassroots)
         proofClean || ov >= 30,                // Proof visible — seeded win, or the majority has visibly moved
         capStock >= 0.35,                      // Workflow redesigned — real capability / process rebuild exists
         managerActive && ov >= THRESHOLD,      // Work identity reimagined — managers coaching + across the line
@@ -833,6 +869,7 @@
     var touched = series.some(function (v) { return v >= THRESHOLD; });
     return { series: series, valueSeries: valueSeries, notes: notes, markers: markers,
              crossedWeek: crossedWeek, touched: touched, milestones: milestones, trustEnd: trust,
+             sponsorEarned: sponsorEarned, sponsorActive: sponsorshipActive,
              totalWeeks: sched.reduce(function (m, e) { return Math.max(m, e.end); }, 0) };
   }
 
@@ -913,9 +950,13 @@
     // ---- distinctive improvement insights, most valuable first ----
     var tips = [];
 
-    // Executive sponsorship — the gate nothing crosses without. Missing, or placed after other work.
+    // Executive sponsorship — the ceiling on how far change spreads. Won directly, earned bottom-up, or missing.
     if (!has('sponsor')) {
-      tips.push('<strong>No executive sponsorship in the sequence.</strong> The model caps every segment’s ceiling without it, since it’s the one play the whole curve leans on. A visible, funded sponsor move at the top is the highest-leverage change available.');
+      if (res.sponsorEarned) {
+        tips.push('<strong>No executive sponsorship up front — but the plan earned it.</strong> Proof plus active managers carried adoption far enough that sponsorship was won on demonstrated results. That bottom-up route is real, but it runs under a ceiling until the win lands, so it’s slower; leading with a visible, funded sponsor gets there sooner.');
+      } else {
+        tips.push('<strong>No executive sponsorship, and the plan hasn’t earned it.</strong> Until sponsorship is active the model caps every segment’s ceiling, so the curve can climb but not cross. Two routes open it: add a visible, funded sponsor at the top (fastest), or earn it bottom-up — seed real proof and put managers in the channel so a climbing, demonstrated win pulls sponsorship in.');
+      }
     } else if (pos.sponsor > 0) {
       tips.push('<strong>Executive sponsorship ran at week ' + wkOf('sponsor') + ', after ' + andList(planIds.slice(0, pos.sponsor)) + '.</strong> It’s the gate the rest depend on, so everything ahead of it worked without the air cover it grants. Lead with it and those plays compound instead of pushing uphill.');
     }
@@ -1260,32 +1301,43 @@
       el.planList.appendChild(li);
     });
 
-    // timeline strip — one bar per play on a 24-week track, so overlaps and staggers are visible at a glance
+    // timeline strip — a Gantt grouped by workstream (the COM-B intervention categories). Each play is a bar
+    // on a shared 24-week track with a readable name in the left column, so overlaps and staggers are legible.
     if (el.planTimeline) {
       if (!plan.length) {
         el.planTimeline.innerHTML = '';
       } else {
         var TLW = WEEKS;   // track spans weeks 1..24
-        var rows = plan.map(function (id, i) {
+        function barRow(id, i) {
           var p = PLAY_BY_ID[id], n = res.notes[id] || {};
           var s = n.start || 1, e = n.end || s;
           var vizEnd = Math.min(e, WEEKS);
           var left = ((s - 1) / TLW) * 100;
-          var width = Math.max(3, ((vizEnd - (s - 1)) / TLW) * 100);
+          var width = Math.max(2.5, ((vizEnd - (s - 1)) / TLW) * 100);
           var mods = (n.muted ? ' broke' : (p.sustain ? ' sustain' : '')) + (e > WEEKS ? ' overruns' : '');
-          var lab = (i + 1) + '. ' + p.name;
-          return '<div class="ptl-row" title="' + lab + ' · weeks ' + s + '–' + e + '">' +
-                   '<span class="ptl-bar' + mods + '" style="left:' + left.toFixed(1) + '%;width:' + width.toFixed(1) + '%;">' +
-                     '<span class="ptl-label">' + lab + '</span>' +
+          var name = SHORT[id] || p.name;
+          // only label the bar itself when it's wide enough to read; the name column + tooltip carry the rest
+          var spanTxt = width >= 15 ? ('wk ' + s + (e > s ? '–' + e : '')) : '';
+          return '<div class="ptl-row" title="' + (i + 1) + '. ' + p.name + ' · weeks ' + s + '–' + e + '">' +
+                   '<span class="ptl-name"><b>' + (i + 1) + '</b> ' + name + '</span>' +
+                   '<span class="ptl-track">' +
+                     '<span class="ptl-bar' + mods + '" style="left:' + left.toFixed(1) + '%;width:' + width.toFixed(1) + '%;">' +
+                       (spanTxt ? '<span class="ptl-span">' + spanTxt + '</span>' : '') +
+                     '</span>' +
                    '</span>' +
                  '</div>';
+        }
+        // group by workstream, preserving plan order within each; skip empty streams
+        var blocks = GROUPS.map(function (grp) {
+          var ids = plan.filter(function (id) { return PLAY_BY_ID[id].group === grp.key; });
+          if (!ids.length) return '';
+          var rows = ids.map(function (id) { return barRow(id, plan.indexOf(id)); }).join('');
+          return '<div class="ptl-stream ' + (grp.key === 'S' ? 'sustain' : '') + '">' + grp.label +
+                   '<i>' + grp.desc + '</i></div>' + rows;
         }).join('');
         el.planTimeline.innerHTML =
-          '<div class="ptl-head"><span>Timeline</span><span class="ptl-axis-note">weeks 1 → 24 · bars overlap where plays run in parallel</span></div>' +
-          '<div class="ptl-track-wrap">' +
-            '<div class="ptl-gridlines"><span></span><span></span><span></span><span></span></div>' +
-            rows +
-          '</div>' +
+          '<div class="ptl-head"><span>Timeline · by workstream</span><span class="ptl-axis-note">bars overlap where plays run in parallel</span></div>' +
+          '<div class="ptl-body">' + blocks + '</div>' +
           '<div class="ptl-axis"><span>1</span><span>6</span><span>12</span><span>18</span><span>24</span></div>';
       }
     }
@@ -1383,13 +1435,16 @@
     var nextKey = phasesReached < PHASE_ORDER.length ? PHASE_ORDER[phasesReached] : null;
     var nextLabel = ''; MILESTONES.forEach(function (m) { if (m.key === nextKey) nextLabel = m.label; });
     var MISSING = {
-      vision:   'no executive sponsor is visibly backing it, so the change still reads as optional',
+      vision:   'no guiding coalition is visibly behind it yet — neither an executive sponsor nor a proof-plus-managers grassroots base — so the change still reads as optional',
       proof:    'there\'s no visible early-adopter win for the majority\'s belief to stand on',
       redesign: 'the workflow itself hasn\'t been redesigned: adoption is riding on the old process, so it\'s a faster old way, not a new one',
       identity: 'managers aren\'t yet coaching the shift from using the tool to exercising judgment: usage crossed the line, but work identity didn\'t',
       outcome:  'the value isn\'t durable yet'
     };
     var ts = el.thresholdStatus, thrLabel;
+    // a plan with no Executive Sponsorship play that still lifted the cap did it the hard way: it earned it.
+    var earnedTag = (res.sponsorEarned && plan.indexOf('sponsor') === -1)
+      ? ' <em>Sponsorship here was earned bottom-up: proof and active managers demonstrated results that won it, with no executive mandate up front — the slower, harder route.</em>' : '';
 
     // escape-velocity flag on the curve — only when the transformation (not just adoption) crossed
     if (trueEscape) {
@@ -1411,12 +1466,12 @@
       thrLabel = 'no plan yet';
     } else if (trueEscape) {
       ts.className = 'threshold-status crossed';
-      ts.innerHTML = '<span class="ts-head">Escape velocity · week ' + identityWeek + '</span>' + landed + ' of ' + plan.length + ' interventions landed cleanly, all five phases through <strong>Work identity reimagined</strong> are lit, and the curve crossed the line and held. The belief flips from deployment to transformation. The role itself is redrawn: what AI replaces, what it augments, and what must stay durably human. Managers coach that judgment instead of enforcing compliance, and adoption reinforces itself. The seams close. This is no longer a project you manage, it is a change that holds on its own.';
-      thrLabel = 'ESCAPE VELOCITY · work identity reimagined & sustained at week ' + identityWeek + ' (' + landed + '/' + plan.length + ' plays landed)';
+      ts.innerHTML = '<span class="ts-head">Escape velocity · week ' + identityWeek + '</span>' + landed + ' of ' + plan.length + ' interventions landed cleanly, all five phases through <strong>Work identity reimagined</strong> are lit, and the curve crossed the line and held. The belief flips from deployment to transformation. The role itself is redrawn: what AI replaces, what it augments, and what must stay durably human. Managers coach that judgment instead of enforcing compliance, and adoption reinforces itself. The seams close. This is no longer a project you manage, it is a change that holds on its own.' + earnedTag;
+      thrLabel = 'ESCAPE VELOCITY · work identity reimagined & sustained at week ' + identityWeek + ' (' + landed + '/' + plan.length + ' plays landed)' + (earnedTag ? ' · sponsorship earned bottom-up' : '');
     } else if (adoptionCrossed !== null) {
       // the curve crosses, but the transformation phases haven't completed — the fragile, misleading case
       ts.className = 'threshold-status fragile';
-      ts.innerHTML = '<span class="ts-head">Adoption crossed the line, but the transformation hasn\'t</span>Your curve holds above the self-sustaining line, yet the change underneath it hasn\'t caught up: you\'ve reached <strong>' + phasesReached + ' of 5 phases</strong>, and the next, <strong>' + nextLabel + '</strong>, hasn\'t happened because ' + (MISSING[nextKey] || 'a phase is still open') + '. Above-the-line adoption without it is the fragile kind (a faster old process, not a reimagined one) that slips back the moment attention moves. Light that phase and the crossing becomes real escape velocity.';
+      ts.innerHTML = '<span class="ts-head">Adoption crossed the line, but the transformation hasn\'t</span>Your curve holds above the self-sustaining line, yet the change underneath it hasn\'t caught up: you\'ve reached <strong>' + phasesReached + ' of 5 phases</strong>, and the next, <strong>' + nextLabel + '</strong>, hasn\'t happened because ' + (MISSING[nextKey] || 'a phase is still open') + '. Above-the-line adoption without it is the fragile kind (a faster old process, not a reimagined one) that slips back the moment attention moves. Light that phase and the crossing becomes real escape velocity.' + earnedTag;
       thrLabel = 'adoption crossed but stalled at phase ' + phasesReached + ' of 5 (' + (nextKey || '') + ' not reached)';
     } else if (res.touched) {
       ts.className = 'threshold-status fragile';
