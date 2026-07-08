@@ -7,6 +7,23 @@
   banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
 })();
 
+// Practice-switcher dropdown: close on outside click, Escape, or scroll-away
+function closeBrandMenu() {
+  var b = document.querySelector('.nav-brand.open');
+  if (!b) return;
+  b.classList.remove('open');
+  var btn = b.querySelector('.brand-switch');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+(function () {
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.nav-brand')) closeBrandMenu();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeBrandMenu();
+  });
+})();
+
 // Auto-hide nav on scroll down, reveal on scroll up
 (function () {
   var nav = document.querySelector('nav');
@@ -22,9 +39,10 @@
       nav.classList.remove('nav--hidden');
     } else if (delta > 0) {
       nav.classList.add('nav--hidden');
-      // also close the mobile menu if open
+      // also close the mobile menu and brand dropdown if open
       var inner = document.getElementById('nav');
       if (inner) inner.classList.remove('open');
+      closeBrandMenu();
     } else {
       nav.classList.remove('nav--hidden');
     }
