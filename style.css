@@ -165,11 +165,11 @@ body:not(.brand-sail):not(.brand-grow):not(.brand-advise) .brand-menu a[href="/"
 
 /* Marker signalling an interactive tool (Diagnostic, Simulation) — a muted, slightly raised ↗ */
 .tool-tag {
-  font-size: 0.72em;
-  vertical-align: 0.35em;
-  margin-left: 0.12em;
-  opacity: 0.6;
-  font-weight: 400;
+  font-size: 0.8em;
+  vertical-align: 0.32em;
+  margin-left: 0.14em;
+  opacity: 0.9;
+  font-weight: 500;
 }
 
 .nav-cta {
