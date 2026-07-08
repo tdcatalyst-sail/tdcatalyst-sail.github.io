@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=20260707d">
+  <link rel="stylesheet" href="/style.css?v=20260707e">
 </head>
 <body class="brand-grow">
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -76,7 +76,7 @@
         <!-- rows injected by JS -->
       </div>
       </div>
-      <p class="flag-note"><span class="flag-count" id="flagCount">0</span> cells flagged. These are the bottlenecks your sequence should target. Plays that hit a flagged cell land harder — and the bigger the cell (its share of the org is shown on each), the harder they pull.</p>
+      <p class="flag-note"><span class="flag-count" id="flagCount">0</span> cells flagged. These are the bottlenecks your sequence should target. Plays that hit a flagged cell land harder, and the bigger the cell (its share of the org is shown on each), the harder they pull.</p>
     </div>
 
     <!-- STEP 2 -->
@@ -178,7 +178,7 @@
         <div id="groundworkLadder"></div>
       </div>
       </div><!-- /curve-col -->
-      <p class="sim-disclaimer">Illustrative model, not a forecast. <strong>What it isolates:</strong> the sequencing of a transformation — who moves first, how proof gates the next play, why sponsorship is the gate nothing crosses without, why adoption without capability is usage not value, and how a mistimed move breaks trust and breeds quiet resistance. It renders the logic of the <a href="/sail/field-note-the-adoption-matrix.html" target="_blank" rel="noopener">Adoption Matrix</a> and the <a href="/sail/field-note-adaptability-as-a-discipline.html" target="_blank" rel="noopener">Adaptability field note</a>. <strong>What it can't see:</strong> a simulation moves averages; real change turns on specific people. One leader with the capital to fund it and go first — or quietly starve it — can decide the outcome, and no curve names that person, or tells you whether a sponsor truly leads or a manager truly coaches. That human work, with your real people and data, is what the <a href="/grow/#services">Adoption Reset</a> builds. The tool is the map; the people who walk the terrain are the engagement.</p>
+      <p class="sim-disclaimer">Illustrative model, not a forecast. <strong>What it isolates:</strong> the sequencing of a transformation, namely who moves first, how proof gates the next play, why sponsorship is the gate nothing crosses without, why adoption without capability is usage rather than value, and how a mistimed move breaks trust and breeds quiet resistance. It renders the logic of the <a href="/sail/field-note-the-adoption-matrix.html" target="_blank" rel="noopener">Adoption Matrix</a> and the <a href="/sail/field-note-adaptability-as-a-discipline.html" target="_blank" rel="noopener">Adaptability field note</a>. <strong>What it can't see:</strong> a simulation moves averages; real change turns on specific people. One leader with the capital to fund it and go first, or to quietly starve it, can decide the outcome, and no curve names that person, or tells you whether a sponsor truly leads or a manager truly coaches. That human work, with your real people and data, is what the <a href="/grow/#services">Adoption Reset</a> builds. The tool is the map; the people who walk the terrain are the engagement.</p>
     </div>
 
   </div>
@@ -825,7 +825,7 @@
 
     // Executive sponsorship — the gate nothing crosses without. Missing, or placed after other work.
     if (!has('sponsor')) {
-      tips.push('<strong>No executive sponsorship in the sequence.</strong> The model caps every segment’s ceiling without it — it’s the one play the whole curve leans on. A visible, funded sponsor move at the top is the highest-leverage change available.');
+      tips.push('<strong>No executive sponsorship in the sequence.</strong> The model caps every segment’s ceiling without it, since it’s the one play the whole curve leans on. A visible, funded sponsor move at the top is the highest-leverage change available.');
     } else if (pos.sponsor > 0) {
       tips.push('<strong>Executive sponsorship ran at week ' + wkOf('sponsor') + ', after ' + andList(planIds.slice(0, pos.sponsor)) + '.</strong> It’s the gate the rest depend on, so everything ahead of it worked without the air cover it grants. Lead with it and those plays compound instead of pushing uphill.');
     }
@@ -837,36 +837,36 @@
     if (proofDeps.length) {
       tips.push('<strong>' + andList(proofDeps) + ' ran before Proof Seeding.</strong> Each stands on a visible early win that didn’t exist yet, so it lands weaker than it should. Seed proof first, then let them build on it.');
     } else if (!has('proof') && (has('peer') || has('inaction'))) {
-      tips.push('<strong>No Proof Seeding, yet plays that need peer proof are in the mix.</strong> Peer and social-norm moves borrow their credibility from a real first win — without one they read as a vendor pitch. Add a proof step with your innovators early.');
+      tips.push('<strong>No Proof Seeding, yet plays that need peer proof are in the mix.</strong> Peer and social-norm moves borrow their credibility from a real first win, and without one they read as a vendor pitch. Add a proof step with your innovators early.');
     }
 
     // Capability — reach without the skill to convert it into output.
     if (!has('build')) {
-      tips.push('<strong>No Capability Build.</strong> Adoption reaches ' + endAdopt + '% but value realized ends at ' + endVal + '% — the gap is people logging in without the skill to turn usage into output. Role-based capability is the single biggest driver of real results.');
+      tips.push('<strong>No Capability Build.</strong> Adoption reaches ' + endAdopt + '% but value realized ends at ' + endVal + '%. That gap is people logging in without the skill to turn usage into output. Role-based capability is the single biggest driver of real results.');
     }
 
     // Manager-as-Channel placed late — it amplifies everything AFTER it, so late placement wastes it.
     if (landedId('manager') && pos.manager > Math.floor(planIds.length / 2) && (planIds.length - 1 - pos.manager) <= 1) {
-      tips.push('<strong>Manager-as-Channel landed at week ' + wkOf('manager') + ', near the end.</strong> It multiplies every play that follows it — but here almost nothing does. Moved early, it would amplify the whole sequence behind it.');
+      tips.push('<strong>Manager-as-Channel landed at week ' + wkOf('manager') + ', near the end.</strong> It multiplies every play that follows it, but here almost nothing does. Moved early, it would amplify the whole sequence behind it.');
     }
 
     // Sustainment fired before the sustain phase and couldn’t land.
     var earlySust = planIds.filter(function (id) { return nt(id).muted && nt(id).reason === 'timing'; });
     if (earlySust.length) {
-      tips.push('<strong>' + andList(earlySust) + ' fired before the sustain phase (week 16+) and didn’t land.</strong> Institutionalizing moves only bite once adoption is real — slot them last.');
+      tips.push('<strong>' + andList(earlySust) + ' fired before the sustain phase (week 16+) and didn’t land.</strong> Institutionalizing moves only bite once adoption is real, so slot them last.');
     }
 
     // Proof-dependent play muted outright.
     var mutedProof = planIds.filter(function (id) { return nt(id).muted && nt(id).reason === 'proof'; });
     if (mutedProof.length) {
-      tips.push('<strong>' + andList(mutedProof) + ' deployed before the proof it needs and was muted — it added nothing.</strong> Delay it until overall adoption clears its threshold.');
+      tips.push('<strong>' + andList(mutedProof) + ' deployed before the proof it needs and was muted, so it added nothing.</strong> Delay it until overall adoption clears its threshold.');
     }
 
     // Nothing institutionalizes the gains, though there’s room (or the plan already crossed).
     var hasSust = planIds.some(function (id) { return PLAY_BY_ID[id].sustain && landedId(id); });
     var weeksLeft = WEEKS - planWeeksUsed(planIds);
     if (!hasSust && (ctx.trueEscape || weeksLeft >= 2)) {
-      tips.push('<strong>Nothing institutionalizes the gains.</strong> No Policy, Performance Criteria, or Ritual lands in the sustain phase' + (weeksLeft >= 2 ? ' — and you have ' + weeksLeft + ' week' + (weeksLeft > 1 ? 's' : '') + ' free' : '') + '. Add one so the change survives the quarter after attention moves on.');
+      tips.push('<strong>Nothing institutionalizes the gains.</strong> No Policy, Performance Criteria, or Ritual lands in the sustain phase' + (weeksLeft >= 2 ? ', and you have ' + weeksLeft + ' week' + (weeksLeft > 1 ? 's' : '') + ' free' : '') + '. Add one so the change survives the quarter after attention moves on.');
     }
 
     var topTips = tips.slice(0, 3);
@@ -884,7 +884,7 @@
       if (M.proof != null) bits.push('proof was visible by week ' + M.proof);
       if (M.redesign != null) bits.push('the workflow was redesigned by week ' + M.redesign);
       if (M.identity != null) bits.push('managers were coaching the shift by week ' + M.identity + ', the week the curve crossed and held');
-      var lead = 'The steps compounded — ' + bits.join('; ') + '. All five phases lit, so above the line the loop is self-reinforcing and the gains hold instead of decaying. Order, not effort, carried it across.';
+      var lead = 'The steps compounded: ' + bits.join('; ') + '. All five phases lit, so above the line the loop reinforces itself and the gains hold instead of decaying. Order, not effort, carried it across.';
       var affirm = topTips.length ? ''
         : '<div class="gw-closer-tips"><span class="gw-tips-head">Little left to sharpen</span>' +
           '<p class="gw-tips-clean">Sponsorship led, proof preceded the plays that lean on it, capability turned reach into value, and the gains are institutionalized. This is close to the ideal ordering.</p></div>';
@@ -896,13 +896,13 @@
     // ---- not escaped: name the specific gap, then the concrete reorderings that close it ----
     var gapLead;
     if (ctx.phasesReached >= 5) {
-      gapLead = 'All five phases were touched, but the curve didn’t hold above the line — order, not coverage, is what’s missing. ';
+      gapLead = 'All five phases were touched, but the curve didn’t hold above the line. Order, not coverage, is what’s missing. ';
     } else if (ctx.phasesReached === 0) {
       gapLead = 'The sequence hasn’t lit its first phase: nothing yet establishes that the change is real. ';
     } else {
       gapLead = 'This lit ' + ctx.phasesReached + ' of 5 phases; the next, <strong>' + ctx.nextLabel + '</strong>, is what stands between it and a change that holds. ';
     }
-    var fallback = 'Seed proof with your innovators, redesign the workflow, and equip managers to coach — the phases that turn a rising line into a transformation that sticks. Push the proof-dependent or sustainment plays too soon and the chain breaks; the same interventions, in the right order, carry all five phases.';
+    var fallback = 'Seed proof with your innovators, redesign the workflow, and equip managers to coach. Those are the phases that turn a rising line into a transformation that sticks. Push the proof-dependent or sustainment plays too soon and the chain breaks; the same interventions, in the right order, carry all five phases.';
     return '<div class="gw-closer">' +
       '<div class="gw-closer-head">How to reach escape velocity</div>' +
       '<p class="gw-closer-lead">' + gapLead + (topTips.length ? '' : fallback) + '</p>' + tipsHtml + '</div>';
@@ -924,13 +924,13 @@
     var weeksLeft = WEEKS - planWeeksUsed(planIds);
     function valOf(pl) { return simulate(pl).valueSeries[WEEKS]; }
     function bestInsert(basePlan, id) {
-      var best = -Infinity;
+      var best = -Infinity, bestPlan = null;
       for (var i = 0; i <= basePlan.length; i++) {
         var cand = basePlan.slice(); cand.splice(i, 0, id);
         if (planWeeksUsed(cand) > WEEKS) continue;
-        var v = valOf(cand); if (v > best) best = v;
+        var v = valOf(cand); if (v > best) { best = v; bestPlan = cand; }
       }
-      return best === -Infinity ? null : best;
+      return bestPlan === null ? null : { value: best, plan: bestPlan };
     }
     // weakest current play: the one whose removal costs the least value (or even raises it)
     var weakest = null, weakestDrop = Infinity;
@@ -940,19 +940,19 @@
     });
     var recs = [];
     // a current play that is net-negative (removing it RAISES value) is the single biggest fix
-    if (weakest && weakestDrop < -0.5) recs.push({ kind: 'drop', id: weakest, gain: -weakestDrop, flagRec: false });
+    if (weakest && weakestDrop < -0.5) recs.push({ kind: 'drop', id: weakest, gain: -weakestDrop, flagRec: false, applyPlan: planIds.filter(function (x) { return x !== weakest; }) });
     PLAYS.forEach(function (p) {
       if (inPlan[p.id]) return;
       var cellsHit = p.cells.filter(function (c) { return flagged[c]; });
-      var gain = -Infinity, kind = null, out = null;
+      var gain = -Infinity, kind = null, out = null, applyPlan = null;
       if (weeksLeft >= p.weeks) {
         var a = bestInsert(planIds, p.id);
-        if (a !== null) { gain = a - base; kind = 'add'; }
+        if (a) { gain = a.value - base; kind = 'add'; applyPlan = a.plan; }
       } else if (weakest) {
         var s = bestInsert(planIds.filter(function (x) { return x !== weakest; }), p.id);
-        if (s !== null) { gain = s - base; kind = 'swap'; out = weakest; }
+        if (s) { gain = s.value - base; kind = 'swap'; out = weakest; applyPlan = s.plan; }
       }
-      if (gain > 0.5) recs.push({ kind: kind, id: p.id, gain: gain, out: out, hits: cellsHit, flagRec: cellsHit.length > 0 });
+      if (gain > 0.5) recs.push({ kind: kind, id: p.id, gain: gain, out: out, hits: cellsHit, flagRec: cellsHit.length > 0, applyPlan: applyPlan });
     });
     recs.sort(function (a, b) {
       var ad = a.kind === 'drop' ? 1 : 0, bd = b.kind === 'drop' ? 1 : 0;
@@ -963,27 +963,32 @@
     var top = recs.slice(0, 2);
     if (!top.length) {
       return '<div class="gw-leverage"><span class="gw-lev-head">Where the untapped impact is</span>' +
-        '<p class="gw-lev-clean">Within the stalls you flagged and a fixed 24 weeks, this plan is already near its value ceiling — the remaining lift is in the ordering above, not in adding another intervention.</p></div>';
+        '<p class="gw-lev-clean">Within the stalls you flagged and a fixed 24 weeks, this plan is already near its value ceiling. The remaining lift is in the ordering above, not in adding another intervention.</p></div>';
     }
     var intro = flaggedKeys.length
       ? 'Given the ' + flaggedKeys.length + ' stall' + (flaggedKeys.length > 1 ? 's' : '') + ' you flagged and a fixed 24-week budget, these single interventions would have added the most:'
-      : 'You haven’t flagged your stalls yet — flag your 2–3 biggest above to make this specific. In general, the single interventions with the most untapped impact here:';
-    // relative magnitude, not a false-precision point count — direction and size, in words
+      : 'You haven’t flagged your stalls yet. Flag your 2–3 biggest above to make this specific. In general, the single interventions with the most untapped impact here:';
+    // relative magnitude, in words, rather than a false-precision point count
     function mag(g) { return g >= 8 ? 'a large lift' : (g >= 3.5 ? 'a solid lift' : 'a modest lift'); }
     function li(r, idx) {
       var lead = idx === 0 ? 'the biggest lever here' : mag(r.gain);
+      var apply = '<button class="lev-apply" data-plan="' + r.applyPlan.join(',') + '" title="Apply this move to your plan">Apply</button>';
+      var text;
       if (r.kind === 'drop') {
-        return '<li><strong>Drop ' + PLAY_BY_ID[r.id].name + '.</strong> As placed it costs more trust than it adds — removing it alone recovers real ground (' + (idx === 0 ? 'your biggest single fix' : mag(r.gain)) + ').</li>';
+        text = '<strong>Drop ' + PLAY_BY_ID[r.id].name + '.</strong> As placed it costs more trust than it adds. Removing it on its own recovers real ground (' + (idx === 0 ? 'your biggest single fix' : mag(r.gain)) + ').';
+      } else {
+        var tgt = r.flagRec ? ' It hits the <em>' + cellLabel(r.hits[0]) + '</em> stall you flagged. ' : ' ';
+        if (r.kind === 'swap') {
+          text = '<strong>Swap ' + PLAY_BY_ID[r.id].name + ' in for ' + PLAY_BY_ID[r.out].name + '.</strong>' + tgt + 'You are out of weeks, so this is a trade rather than an addition, and it looks like ' + lead + '.';
+        } else {
+          text = '<strong>Add ' + PLAY_BY_ID[r.id].name + '.</strong>' + tgt + 'It fits your ' + weeksLeft + ' free week' + (weeksLeft > 1 ? 's' : '') + ', and it looks like ' + lead + '.';
+        }
       }
-      var tgt = r.flagRec ? ' It hits the <em>' + cellLabel(r.hits[0]) + '</em> stall you flagged — ' : ' — ';
-      if (r.kind === 'swap') {
-        return '<li><strong>Swap ' + PLAY_BY_ID[r.id].name + ' in for ' + PLAY_BY_ID[r.out].name + '.</strong>' + tgt + 'you’re out of weeks, so this is a trade, not an addition, and it looks like ' + lead + '.</li>';
-      }
-      return '<li><strong>Add ' + PLAY_BY_ID[r.id].name + '.</strong>' + tgt + 'it fits your ' + weeksLeft + ' free week' + (weeksLeft > 1 ? 's' : '') + ', and it looks like ' + lead + '.</li>';
+      return '<li><span class="lev-text">' + text + '</span>' + apply + '</li>';
     }
-    return '<div class="gw-leverage"><span class="gw-lev-head">Given your flags and 24 weeks — the single moves with the most untapped impact</span>' +
+    return '<div class="gw-leverage"><span class="gw-lev-head">Given your flags and 24 weeks: the biggest untapped moves</span>' +
       '<p class="gw-lev-intro">' + intro + '</p><ul>' + top.map(function (r, idx) { return li(r, idx); }).join('') + '</ul>' +
-      '<p class="gw-lev-foot">Directions, not forecasts — relative size, not a promised number. Whether they land is about the people, not the model.</p></div>';
+      '<p class="gw-lev-foot">These are directions, not forecasts. Whether any of them lands depends on the people doing the work, not on the model.</p></div>';
   }
 
   // ===== build the matrix grid =====
@@ -1256,13 +1261,13 @@
         var tail;
         if (broke) {
           tail = n.reason === 'timing'
-            ? '<div class="gw-break-note">✕ Too early: sustainment can only land in the sustain phase (week 16 onward). Pushed now it can\'t land — and codifying a change nobody lives yet reads as theater, spending trust the later steps need.</div>'
-            : '<div class="gw-break-note">✕ Out of order: this runs before the proof it needs, so it can\'t land — and pushing people who aren\'t ready breeds quiet resistance, dropping how they respond to every move after.</div>';
+            ? '<div class="gw-break-note">✕ Too early: sustainment can only land in the sustain phase (week 16 onward). Pushed now it can\'t land, and codifying a change nobody lives yet reads as theater, spending trust the later steps need.</div>'
+            : '<div class="gw-break-note">✕ Out of order: this runs before the proof it needs, so it can\'t land, and pushing people who aren\'t ready breeds quiet resistance, which drops how they respond to every move after.</div>';
         } else if (misordered) {
           var parts = [];
           if (mp.late.length) parts.push('leans on “' + mp.late.join('” and “') + ',” which you\'ve placed later');
           if (mp.absent.length) parts.push('runs without “' + mp.absent.join('” and “') + ',” which isn\'t in your plan');
-          tail = '<div class="gw-warn-note">⧗ Foundation not in place: this ' + parts.join('; and it ') + '. It still lands, but weaker — and a visible misfire spends trust, so the moves after it land weaker too.</div>';
+          tail = '<div class="gw-warn-note">⧗ Foundation not in place: this ' + parts.join('; and it ') + '. It still lands, but weaker, and a visible misfire spends trust, so the moves after it land weaker too.</div>';
         } else if (next) {
           tail = '<div class="gw-carry">→ Done right, this is what lets “' + next.name + '” land next.</div>';
         } else {
@@ -1277,8 +1282,8 @@
         var valEyebrow, valHead, valBody;
         if (offOrder && adv) {
           valEyebrow = broke
-            ? (n.reason === 'timing' ? 'Adverse impact — fired too early' : 'Adverse impact — it doesn’t land')
-            : (absentOnly ? 'Adverse impact — missing its foundation' : 'Adverse impact — runs out of order');
+            ? (n.reason === 'timing' ? 'Adverse impact: fired too early' : 'Adverse impact: it doesn’t land')
+            : (absentOnly ? 'Adverse impact: missing its foundation' : 'Adverse impact: runs out of order');
           valHead = adv.head;
           valBody = adv.body;
         } else {
@@ -1340,6 +1345,15 @@
     target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     target.classList.add('gw-flash');
     setTimeout(function () { target.classList.remove('gw-flash'); }, 1600);
+  });
+
+  // one-click apply for a leverage recommendation: adopt the exact plan the model projected for that move
+  el.groundworkLadder.addEventListener('click', function (e) {
+    var btn = e.target.closest('.lev-apply'); if (!btn) return;
+    var ids = btn.getAttribute('data-plan');
+    plan = ids ? ids.split(',').filter(Boolean) : [];
+    render();
+    if (el.groundworkLadder.scrollIntoView) el.groundworkLadder.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 
   // plan reorder — drag to slide (pointer events: mouse + touch)
