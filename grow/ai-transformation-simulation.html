@@ -955,6 +955,27 @@
       }
       if (gain > 0.5) recs.push({ kind: kind, id: p.id, gain: gain, out: out, hits: cellsHit, flagRec: cellsHit.length > 0, applyPlan: applyPlan });
     });
+    // reordering the SAME plays (no add / swap / drop) can itself lift value — verify with a small hill-climb,
+    // so we never claim "the lift is in the ordering" without checking whether a better order actually exists
+    if (planIds.length >= 2) {
+      var cur = planIds.slice(), cv = base, improved = true;
+      while (improved) {
+        improved = false;
+        for (var si = 0; si < cur.length - 1; si++) {
+          var sw = cur.slice(); var tmp = sw[si]; sw[si] = sw[si + 1]; sw[si + 1] = tmp;
+          var sv = valOf(sw); if (sv > cv + 1e-9) { cur = sw; cv = sv; improved = true; }
+        }
+        for (var ma = 0; ma < cur.length; ma++) {
+          for (var mb = 0; mb <= cur.length; mb++) {
+            var mvp = cur.slice(); var it = mvp.splice(ma, 1)[0]; mvp.splice(mb > ma ? mb - 1 : mb, 0, it);
+            var vv = valOf(mvp); if (vv > cv + 1e-9) { cur = mvp; cv = vv; improved = true; }
+          }
+        }
+      }
+      if (cv - base > 0.8 && cur.join(',') !== planIds.join(',')) {
+        recs.push({ kind: 'reorder', gain: cv - base, flagRec: false, applyPlan: cur });
+      }
+    }
     recs.sort(function (a, b) {
       var ad = a.kind === 'drop' ? 1 : 0, bd = b.kind === 'drop' ? 1 : 0;
       if (ad !== bd) return bd - ad;                              // a net-negative move to drop leads
@@ -964,7 +985,7 @@
     var top = recs.slice(0, 2);
     if (!top.length) {
       return '<div class="gw-leverage"><span class="gw-lev-head">Where the untapped impact is</span>' +
-        '<p class="gw-lev-clean">Within the stalls you flagged and a fixed 24 weeks, this plan is already near its value ceiling. The remaining lift is in the ordering above, not in adding another intervention.</p></div>';
+        '<p class="gw-lev-clean">Within the stalls you flagged and a fixed 24 weeks, this plan is near its value ceiling. Reordering these plays, or adding another intervention, both test out to little more here. What is left is execution, not the plan.</p></div>';
     }
     var intro = flaggedKeys.length
       ? 'Given the ' + flaggedKeys.length + ' stall' + (flaggedKeys.length > 1 ? 's' : '') + ' you flagged and a fixed 24-week budget, these single interventions would have added the most:'
@@ -975,7 +996,9 @@
       var lead = idx === 0 ? 'the biggest lever here' : mag(r.gain);
       var apply = '<button class="lev-apply" data-plan="' + r.applyPlan.join(',') + '" title="Apply this move to your plan">Apply</button>';
       var text;
-      if (r.kind === 'drop') {
+      if (r.kind === 'reorder') {
+        text = '<strong>Reorder what you already have.</strong> The same plays in a better sequence would help, and it looks like ' + lead + '. The notes above point to which step is out of place.';
+      } else if (r.kind === 'drop') {
         text = '<strong>Drop ' + PLAY_BY_ID[r.id].name + '.</strong> As placed it costs more trust than it adds. Removing it on its own recovers real ground (' + (idx === 0 ? 'your biggest single fix' : mag(r.gain)) + ').';
       } else {
         var tgt = r.flagRec ? ' It hits the <em>' + cellLabel(r.hits[0]) + '</em> stall you flagged. ' : ' ';
