@@ -737,6 +737,33 @@ hr.sign-rule {
 .retainer-meta .engagement-price { margin: 0; }
 .retainer-meta .price-unit { font-size: 0.85rem; color: var(--midgray); }
 .retainer-term { font-size: 0.85rem; color: var(--midgray); margin-top: 0.2rem; }
+.retainer-body { flex: 1 1 340px; }
+.retainer-mandate {
+  list-style: none;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+  max-width: 66ch;
+}
+.retainer-mandate li {
+  position: relative;
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--midgray);
+}
+.retainer-mandate li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.58em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--logo-blue);
+}
+.retainer-mandate li strong { color: var(--navy); font-weight: 500; }
 @media (max-width: 620px) { .retainer-meta { text-align: left; } }
 
 /* --- Elevated engagement cards + colored accent bars (grow and advise) --- */
