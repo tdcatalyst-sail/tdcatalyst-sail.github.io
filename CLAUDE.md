@@ -151,8 +151,10 @@ tdcatalyst-sail.github.io/
      <link rel="preconnect" href="https://fonts.googleapis.com">
      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
      <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="style.css">
+     <link rel="stylesheet" href="/style.css">
    </head>
+   <!-- Also add <script src="/script.js"></script> before </body>. Then run
+        scripts/version-assets.py to stamp the ?v=<hash> cache-buster. -->
    <body>
    <a href="#main-content" class="skip-link">Skip to content</a>
    <!-- NAV BLOCK (copy from any page) -->
@@ -259,6 +261,17 @@ When adding a new field note essay:
    ```
 
 2. **Make changes** to HTML, CSS, or JS files (no build needed)
+
+   **If you edited `style.css` or `script.js`, run the cache-buster before committing:**
+   ```bash
+   python scripts/version-assets.py
+   ```
+   This stamps a content hash onto every `/style.css` and `/script.js` reference
+   (`href="/style.css?v=<hash>"`) so returning visitors fetch the new asset
+   immediately instead of a stale cached copy — GitHub Pages caches assets ~10 min
+   and allows no custom `Cache-Control` headers, so the query hash is the fix. It
+   touches all HTML files (commit them together) and is idempotent — a no-op when
+   the assets are unchanged. Do **not** hand-edit the `?v=` values.
 
 3. **Commit with a clear message:**
    ```bash
