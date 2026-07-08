@@ -178,7 +178,7 @@
           <h4>What to get right, in order</h4>
           <button type="button" class="gw-outcomes-toggle" id="gwOutcomesToggle" aria-expanded="false">Show organizational outcomes</button>
         </div>
-        <p class="groundwork-sub">The groundwork each step needs, in order. A play run out of order, or without the foundation it leans on, gets flagged. Use the toggle to see the real outcome each move drives (speed, quality, results), not just reach.</p>
+        <p class="groundwork-sub">The groundwork each step needs, in order. A play run out of order, or without the foundation it leans on, gets flagged. Use the toggle to see the real outcome each move drives (speed, quality, results) alongside how far it widens reach.</p>
         <div id="groundworkLadder"></div>
       </div>
       </div><!-- /curve-col -->
@@ -275,7 +275,7 @@
 <section class="alt">
   <div class="wrap narrow">
     <details class="sources-collapsible">
-      <summary><span class="eyebrow" style="margin: 0;">Sources &amp; frameworks the model is built on</span></summary>
+      <summary><span class="eyebrow" style="margin: 0;">Sources</span></summary>
       <ol class="fn-notes" style="margin-top: 1.2rem; padding-left: 1.8rem;">
         <li id="src-rogers"><strong>Everett M. Rogers,</strong> <em>Diffusion of Innovations</em> (5th ed., 2003). The population's split into innovators/early adopters, early majority, late majority, and laggards (the 16 / 34 / 34 / 16 segment sizes), the chasm between early adopters and the majority, and the &ldquo;whole product&rdquo; requirement all come from Rogers. In the model this is the matrix's row axis and the reason proof must precede the majority-belief plays.</li>
         <li id="src-prochaska"><strong>James O. Prochaska and Carlo C. DiClemente,</strong> &ldquo;Transtheoretical Therapy: Toward a More Integrative Model of Change,&rdquo; <em>Psychotherapy</em> (1982). The five stages of change &mdash; precontemplation, contemplation, preparation, action, maintenance &mdash; are the matrix's column axis, and the finding that a <em>mismatched</em> intervention (right message, wrong stage) is a leading cause of underperformance is the basis for the trust penalty.</li>
@@ -602,7 +602,7 @@
   // ===== transformation phases (Seams: a revolution crosses thresholds; it isn't a project you finish) =====
   var MILESTONES = [
     { key: 'vision',   label: 'Vision set',               note: 'Leadership goes first; the change reads as real, not a memo.' },
-    { key: 'proof',    label: 'Proof visible',            note: 'Early adopters have a real, visible win peers can point to.' },
+    { key: 'proof',    label: 'Proof visible',            note: 'A real, visible win peers can point to: a seeded early-adopter story, or enough of the population has moved that the proof is self-evident.' },
     { key: 'redesign', label: 'Workflow redesigned',      note: 'The work itself changes: AI is built in, not bolted on.' },
     { key: 'identity', label: 'Work identity reimagined', note: 'The role is redrawn: what AI replaces, what it augments, and what must stay durably human. Managers coach that judgment instead of enforcing compliance.' },
     { key: 'outcome',  label: 'Outcome realized',         note: 'The work is measurably better (speed, quality, output) and it holds. The change pays for itself.' }
@@ -907,7 +907,7 @@
       if (M.proof != null) bits.push('proof was visible by week ' + M.proof);
       if (M.redesign != null) bits.push('the workflow was redesigned by week ' + M.redesign);
       if (M.identity != null) bits.push('managers were coaching the shift by week ' + M.identity + ', the week the curve crossed and held');
-      var lead = 'The steps compounded: ' + bits.join('; ') + '. All five phases lit, so above the line the loop reinforces itself and the gains hold instead of decaying. Order, not effort, carried it across.';
+      var lead = 'The steps compounded: ' + bits.join('; ') + '. All five phases lit, so above the line the loop reinforces itself and the gains hold instead of decaying. The order it ran in is what carried it across.';
       var affirm = topTips.length ? ''
         : '<div class="gw-closer-tips"><span class="gw-tips-head">Little left to sharpen</span>' +
           '<p class="gw-tips-clean">Sponsorship led, proof preceded the plays that lean on it, capability turned reach into value, and the gains are institutionalized. This is close to the ideal ordering.</p></div>';
@@ -919,7 +919,7 @@
     // ---- not escaped: name the specific gap, then the concrete reorderings that close it ----
     var gapLead;
     if (ctx.phasesReached >= 5) {
-      gapLead = 'All five phases were touched, but the curve didn’t hold above the line. Order, not coverage, is what’s missing. ';
+      gapLead = 'All five phases were touched, but the curve didn’t hold above the line. The order these run in is what’s still missing. ';
     } else if (ctx.phasesReached === 0) {
       gapLead = 'The sequence hasn’t lit its first phase: nothing yet establishes that the change is real. ';
     } else {
@@ -1007,7 +1007,7 @@
     var top = recs.slice(0, 2);
     if (!top.length) {
       return '<div class="gw-leverage"><span class="gw-lev-head">Where the untapped impact is</span>' +
-        '<p class="gw-lev-clean">Within the stalls you flagged and a fixed 24 weeks, this plan is near its value ceiling. Reordering these plays, or adding another intervention, both test out to little more here. What is left is execution, not the plan.</p></div>';
+        '<p class="gw-lev-clean">Within the stalls you flagged and a fixed 24 weeks, this plan is near its value ceiling. Reordering these plays, or adding another intervention, both test out to little more here. What is left is execution.</p></div>';
     }
     var intro = flaggedKeys.length
       ? 'Given the ' + flaggedKeys.length + ' stall' + (flaggedKeys.length > 1 ? 's' : '') + ' you flagged and a fixed 24-week budget, these single interventions would have added the most:'
@@ -1034,7 +1034,7 @@
     }
     return '<div class="gw-leverage"><span class="gw-lev-head">Given your flags and 24 weeks: the biggest untapped moves</span>' +
       '<p class="gw-lev-intro">' + intro + '</p><ul>' + top.map(function (r, idx) { return li(r, idx); }).join('') + '</ul>' +
-      '<p class="gw-lev-foot">These are directions, not forecasts. Whether any of them lands depends on the people doing the work, not on the model.</p></div>';
+      '<p class="gw-lev-foot">These point a direction rather than promise a number. Whether any of them lands comes down to the people doing the work.</p></div>';
   }
 
   // ===== build the matrix grid =====
