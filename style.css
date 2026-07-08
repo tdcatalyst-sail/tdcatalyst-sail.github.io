@@ -170,10 +170,10 @@ body:not(.brand-sail):not(.brand-grow):not(.brand-advise) .brand-menu a[href="/"
    strokes in-browser, so we hide it (font-size:0) and paint our own. */
 .tool-tag {
   display: inline-block;
-  width: 0.64em;
-  height: 0.64em;
-  margin-left: 0.24em;
-  vertical-align: 0.04em;
+  width: 0.82em;
+  height: 0.82em;
+  margin-left: 0.22em;
+  vertical-align: 0em;
   overflow: hidden;
   text-indent: 200%;
   white-space: nowrap;
