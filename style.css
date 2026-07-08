@@ -120,6 +120,15 @@ nav.nav--hidden { transform: translateY(-100%); }
 }
 .nav-links a:hover, .nav-links a.active { border-bottom-color: var(--terracotta); color: var(--navy); }
 
+/* Marker signalling an interactive tool (Diagnostic, Simulation) — a muted, slightly raised ↗ */
+.tool-tag {
+  font-size: 0.72em;
+  vertical-align: 0.35em;
+  margin-left: 0.12em;
+  opacity: 0.6;
+  font-weight: 400;
+}
+
 .nav-cta {
   display: inline-flex;
   align-items: center;
