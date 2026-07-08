@@ -1732,6 +1732,14 @@ footer .footer-practices i {
     /* --- left-side groundwork ladder --- */
     .groundwork { background: #fff; border: 1px solid var(--hairline); border-radius: 8px; padding: 1.3rem 1.4rem; }
     .groundwork h4 { font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); margin-bottom: 0.3rem; }
+    .gw-head-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .gw-head-row h4 { margin-bottom: 0; }
+    .gw-outcomes-toggle { flex-shrink: 0; font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; color: var(--logo-blue); background: none; border: 1px solid var(--hairline); border-radius: 999px; padding: 0.3rem 0.85rem; cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+    .gw-outcomes-toggle:hover { border-color: var(--logo-blue); background: rgba(74,124,158,0.06); }
+    .gw-outcomes-toggle[aria-expanded="true"] { color: #fff; background: var(--logo-blue); border-color: var(--logo-blue); }
+    /* default: the organizational-outcome column is collapsed so the ladder stays scannable */
+    .groundwork:not(.show-outcomes) .gw-step { grid-template-columns: 1fr; }
+    .groundwork:not(.show-outcomes) .gw-value { display: none; }
     .groundwork-sub { font-size: 0.82rem; color: var(--midgray); font-style: italic; margin-bottom: 1.1rem; }
     .gw-empty { font-size: 0.85rem; color: var(--midgray); background: #fff; border: 1px dashed var(--hairline); border-radius: 5px; padding: 1.1rem; line-height: 1.5; }
     .gw-step { position: relative; padding-left: 1.5rem; padding-bottom: 1.1rem; border-left: 2px solid var(--hairline); margin-left: 0.5rem; }
