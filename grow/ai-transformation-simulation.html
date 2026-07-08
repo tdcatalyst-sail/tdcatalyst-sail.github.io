@@ -85,7 +85,7 @@
       <div class="step-head">
         <span class="step-badge">2</span>
         <h3>Sequence your interventions</h3>
-        <span class="step-hint">Click a play to add it · drag to reorder · longer plays spend more of the 24 weeks</span>
+        <span class="step-hint">Click a play to add it · drag to reorder · independent plays overlap automatically, so the calendar compresses below the sum of their durations</span>
       </div>
       <div class="build-grid">
         <div class="lib-grid" id="libGrid"><!-- play cards injected by JS --></div>
@@ -95,8 +95,10 @@
             <div class="plan-budget" id="planBudget">0 / 24 weeks</div>
           </div>
           <div class="budget-bar" id="budgetBar"><span id="budgetFill"></span></div>
-          <div id="planEmpty" class="plan-empty">Click plays on the left to build a sequence. Order, and how long each play runs, both matter.</div>
+          <div class="plan-compress" id="planCompress"></div>
+          <div id="planEmpty" class="plan-empty">Click plays on the left to build a sequence. Order, and how long each play runs, both matter — independent plays overlap automatically, so calendar time is less than the sum of their durations.</div>
           <ol class="plan-list" id="planList"></ol>
+          <div class="plan-timeline" id="planTimeline"></div>
           <button class="plan-clear" id="planClear" style="display:none;">Clear plan</button>
         </div>
       </div>
@@ -499,8 +501,8 @@
   var ORDER_AFTER = {
     build:    ['sponsor'],
     manager:  ['sponsor'],
-    friction: ['build'],
-    whenthen: ['build'],
+    friction: ['build', 'whole'],
+    whenthen: ['build', 'whole'],
     whole:    ['proof'],
     peer:     ['proof'],
     inaction: ['peer', 'proof'],
@@ -524,7 +526,12 @@
   function orderIssues(planIds, idx) { return missingPrereqs(planIds, idx).late; }
 
   // ===== the curated plays (from the 16-cell matrix) =====
-  // weeks = how long the play occupies the 16-week timeline (some work is not a two-week activity).
+  // weeks = how long the play occupies the 24-week timeline (some work is not a two-week activity).
+  // handoff = fraction of the play that must elapse before a dependent play can start (and before its own
+  //   foundation counts as available). 1.0 = finish-to-start: the play must fully complete before anything
+  //   leans on it (e.g. Executive Sponsorship must be secured AND executed). <1 = early-leverage: its early
+  //   output (scoping, curriculum, integrations) is usable while the rest is still being built, so dependents
+  //   can overlap it (e.g. Capability Build at 0.4 — the manager playbook can begin ~2–3 weeks in).
   // raises = permanent lift to a segment's sustainable ceiling; push = one-time bump to current level.
   // floor = permanent lift to a segment's floor (sustainment: locks gains so decay can't erase them).
   // decayCut = fraction of ongoing decay removed (sustainment: the change stops leaking).
@@ -532,60 +539,60 @@
   // cells = matrix cells this play addresses (for the flagged-cell targeting bonus).
   var PLAYS = [
     // ---- Opportunity: structural & social permission ----
-    { id: 'sponsor', name: 'Executive Sponsorship', framework: 'Prosci · active sponsorship', group: 'O', weeks: 2,
+    { id: 'sponsor', name: 'Executive Sponsorship', framework: 'Prosci · active sponsorship', group: 'O', weeks: 2, handoff: 1.0,
       blurb: 'Visible, funded, active executive ownership: going first and holding the line. The single strongest predictor of success.',
       raises: { ia: 0.05, em: 0.06, lm: 0.06, lg: 0.05 }, push: {}, needsProof: 0, sponsor: true, capability: 0.10,
       cells: ['em-pre','lm-pre','lg-pre'] },
-    { id: 'manager',  name: 'Manager-as-Channel',   framework: 'Switch · rider/elephant/path', group: 'O', weeks: 3,
+    { id: 'manager',  name: 'Manager-as-Channel',   framework: 'Switch · rider/elephant/path', group: 'O', weeks: 3, handoff: 0.5,
       blurb: 'Equip managers with talking points, permission to localize, a one-page path. Amplifies everything after.',
       raises: { ia: 0.04, em: 0.05, lm: 0.05, lg: 0.05 }, push: {}, needsProof: 0, manager: true, capability: 0.15,
       cells: ['ia-act','em-act','lm-act','lg-act'] },
-    { id: 'whole',    name: 'Whole-Product Kit',    framework: 'Diffusion · whole product', group: 'O', weeks: 4,
+    { id: 'whole',    name: 'Whole-Product Kit',    framework: 'Diffusion · whole product', group: 'O', weeks: 4, handoff: 0.4,
       blurb: 'Ship the toolkit, integrations, FAQ, and function-specific success stories to remove every reason to wait.',
       raises: { em: 0.30 }, push: { em: 0.05 }, needsProof: 0.10, capability: 0.30, disrupt: 0.06,
       cells: ['em-con','em-prp'] },
-    { id: 'friction', name: 'Workflow Redesign',     framework: 'Fogg · ability + process redesign', group: 'O', weeks: 3,
+    { id: 'friction', name: 'Workflow Redesign',     framework: 'Fogg · ability + process redesign', group: 'O', weeks: 3, handoff: 1.0,
       blurb: 'Rebuild the task around the tool and retire the old path, not AI bolted onto the old process. People relearn the workflow, so adoption dips before it steps up durably.',
       raises: { em: 0.18, lm: 0.16 }, push: { em: 0.08, lm: 0.06 }, needsProof: 0, capability: 0.22, disrupt: 0.20,
       cells: ['em-prp','lm-prp'] },
     // ---- Capability: can they actually do it well ----
-    { id: 'build',    name: 'Capability Build',     framework: 'ADKAR · Ability / COM-B Capability', group: 'C', weeks: 6,
+    { id: 'build',    name: 'Capability Build',     framework: 'ADKAR · Ability / COM-B Capability', group: 'C', weeks: 6, handoff: 0.4,
       blurb: 'Role-based skill-building (prompting, judgment, workflow redesign) so people get real value, not just log in. Not a two-week push.',
       raises: { em: 0.12, lm: 0.10 }, push: { em: 0.05, lm: 0.04 }, needsProof: 0, capability: 0.40, disrupt: 0.08,
       cells: ['em-prp','em-act','lm-prp'] },
-    { id: 'whenthen', name: 'When-Then Prompts',    framework: 'Implementation Intentions', group: 'C', weeks: 1,
+    { id: 'whenthen', name: 'When-Then Prompts',    framework: 'Implementation Intentions', group: 'C', weeks: 1, handoff: 1.0,
       blurb: '"When my Monday calendar opens, I run the review in the new tool." Converts intent into action.',
       raises: { em: 0.10, lm: 0.08 }, push: { em: 0.12, lm: 0.08 }, needsProof: 0, capability: 0.15,
       cells: ['em-prp','em-act'] },
     // ---- Motivation: belief & desire ----
-    { id: 'proof',    name: 'Proof Seeding',        framework: 'Diffusion of Innovations', group: 'M', weeks: 3,
+    { id: 'proof',    name: 'Proof Seeding',        framework: 'Diffusion of Innovations', group: 'M', weeks: 3, handoff: 1.0,
       blurb: 'Recruit innovators, white-glove their first win, make it a visible story.',
       raises: { ia: 0.30 }, push: { ia: 0.10 }, needsProof: 0,
       cells: ['ia-pre','ia-con','ia-prp','ia-act'] },
-    { id: 'peer',     name: 'Peer Proof Relay',     framework: 'Diffusion · peer references', group: 'M', weeks: 2,
+    { id: 'peer',     name: 'Peer Proof Relay',     framework: 'Diffusion · peer references', group: 'M', weeks: 2, handoff: 0.5,
       blurb: 'Replace decks with 15-minute calls from someone in their function who already moved.',
       raises: { em: 0.22, lm: 0.14 }, push: { em: 0.05, lm: 0.03 }, needsProof: 0.28,
       cells: ['em-pre','em-con','lm-con'] },
-    { id: 'inaction', name: 'Inaction-Cost Reframe', framework: 'Social Norms · Late Majority', group: 'M', weeks: 2,
+    { id: 'inaction', name: 'Inaction-Cost Reframe', framework: 'Social Norms · Late Majority', group: 'M', weeks: 2, handoff: 0.5,
       blurb: 'Make not-moving the risky choice; establish adoption as the norm ("70% of peers are already in").',
       raises: { lm: 0.40 }, push: { lm: 0.06 }, needsProof: 0.45,
       cells: ['lm-pre','lm-act'] },
-    { id: 'quiet',    name: 'Quiet Path for Laggards', framework: 'Self-Determination Theory', group: 'M', weeks: 4,
+    { id: 'quiet',    name: 'Quiet Path for Laggards', framework: 'Self-Determination Theory', group: 'M', weeks: 4, handoff: 1.0,
       blurb: 'One-on-one, surface the real fear, pre-built path, sustained support, quiet recognition, never a spotlight.',
       raises: { lg: 0.48 }, push: { lg: 0.05 }, needsProof: 0.50,
       cells: ['lg-pre','lg-con','lg-prp','lg-act'] },
     // ---- Sustainment: make the change stick (institutionalization; belongs in the sustain phase) ----
-    { id: 'policy',   name: 'Policy & Standards Codified', framework: 'ADKAR · Reinforcement', group: 'S', weeks: 3,
+    { id: 'policy',   name: 'Policy & Standards Codified', framework: 'ADKAR · Reinforcement', group: 'S', weeks: 3, handoff: 1.0,
       blurb: 'Write AI use into policy, data governance, and the standard operating procedure: the new way becomes the documented way.',
       raises: {}, push: {}, needsProof: 0.38, sustain: true, capability: 0.05,
       floor: { em: 0.10, lm: 0.08, lg: 0.04 }, decayCut: 0.35,
       cells: ['em-act','lm-act'] },
-    { id: 'criteria', name: 'Performance Criteria Redefined', framework: 'Prosci · Reinforcement / COM-B', group: 'S', weeks: 3,
+    { id: 'criteria', name: 'Performance Criteria Redefined', framework: 'Prosci · Reinforcement / COM-B', group: 'S', weeks: 3, handoff: 1.0,
       blurb: 'Rewrite role expectations and review criteria so AI-augmented output is what gets evaluated and rewarded, not optional extra credit.',
       raises: {}, push: {}, needsProof: 0.42, sustain: true,
       floor: { em: 0.12, lm: 0.12, lg: 0.08 }, decayCut: 0.45,
       cells: ['lm-act','lg-act'] },
-    { id: 'ritual',   name: 'Ritual & Cadence', framework: 'Habit · cue → routine → reward', group: 'S', weeks: 2,
+    { id: 'ritual',   name: 'Ritual & Cadence', framework: 'Habit · cue → routine → reward', group: 'S', weeks: 2, handoff: 1.0,
       blurb: 'Bake the new workflow into recurring rituals (standups, reviews, retros) so it is carried by the calendar, not by campaigns.',
       raises: {}, push: {}, needsProof: 0.35, sustain: true,
       floor: { em: 0.06, lm: 0.06, lg: 0.03 }, decayCut: 0.30,
@@ -598,20 +605,54 @@
   var flagged = {};        // "seg-stage" -> true
   var plan = [];           // ordered list of play ids
 
-  // ===== scheduling: plays run back-to-back; a play's duration eats the 24-week budget =====
+  // ===== scheduling: dependency-aware overlap — plays run concurrently where one needn't finish for the
+  // next to start; the 24-week budget now measures CALENDAR time (the last completion), not the sum of
+  // durations, so overlapping independent work frees weeks. =====
   var WEEKS = 24;
-  var SUSTAIN_START = 16;   // sustainment plays only land once they start in the sustain phase (week 16+)
+  var SUSTAIN_START = 16;   // sustainment plays only land once they complete in the sustain phase (week 16+)
   var THRESHOLD = 55;   // % adoption at which transformation becomes self-sustaining (crosses out of the liminal phase)
+  var MAX_CONCURRENT = 2;   // bandwidth cap: at most this many plays active in any week (an org's real change capacity)
+  var STAGGER = 1;          // min weeks between consecutive starts, so the chosen order stays a legible cascade
+  // how many weeks into a play before a dependent may start / its foundation counts as available.
+  // handoff 1.0 → leadWeeks == duration → finish-to-start (dependent waits for completion).
+  function leadWeeks(p) { return Math.max(1, Math.round(p.weeks * (p.handoff != null ? p.handoff : 1))); }
+
+  // Assign each play the earliest start that respects: (1) its in-plan prerequisites' handoff points,
+  // (2) the chosen order (never before the previous play, min one-week stagger), and (3) the bandwidth cap.
+  // Only prerequisites scheduled EARLIER in the plan constrain the start; a prerequisite placed later or
+  // missing doesn't hold the schedule (it surfaces as an out-of-order penalty in the simulation instead).
   function scheduleOf(planIds) {
-    var out = [], wk = 1;
+    var out = [], startById = {};
     planIds.forEach(function (id, i) {
       var p = PLAY_BY_ID[id];
-      out.push({ id: id, slot: i, start: wk, end: wk + p.weeks - 1 });
-      wk += p.weeks;
+      var earliest = 1;
+      (ORDER_AFTER[id] || []).forEach(function (r) {
+        if (startById[r] !== undefined) earliest = Math.max(earliest, startById[r] + leadWeeks(PLAY_BY_ID[r]));
+      });
+      if (i > 0) earliest = Math.max(earliest, out[i - 1].start + STAGGER);
+      // slide forward until the play's whole span fits under the concurrency cap
+      var s = earliest, guard = 0;
+      while (guard++ < 500) {
+        var ok = true;
+        for (var wk = s; wk <= s + p.weeks - 1 && ok; wk++) {
+          var n = 0;
+          for (var k = 0; k < out.length; k++) { if (wk >= out[k].start && wk <= out[k].end) n++; }
+          if (n >= MAX_CONCURRENT) ok = false;
+        }
+        if (ok) break;
+        s++;
+      }
+      out.push({ id: id, slot: i, start: s, end: s + p.weeks - 1 });
+      startById[id] = s;
     });
     return out;
   }
-  function planWeeksUsed(planIds) {
+  // calendar weeks = the last play's completion week (wall-clock span of the plan)
+  function planCalendarWeeks(planIds) {
+    return scheduleOf(planIds).reduce(function (m, e) { return Math.max(m, e.end); }, 0);
+  }
+  // effort weeks = total person-time across all plays (the sum that used to be the whole budget)
+  function planEffortWeeks(planIds) {
     return planIds.reduce(function (n, id) { return n + PLAY_BY_ID[id].weeks; }, 0);
   }
 
@@ -644,16 +685,23 @@
     var growth = 0.22, decay = 0.06, managerActive = false, managerStrength = 1, inertiaActive = false, sponsorshipActive = false, NOSPONSOR_CAP = 0.50;
     var EROSION = 4.5, RWIN = 4, DIPSCALE = 60, lastActive = -99, dipEvents = [];
     var sched = scheduleOf(planIds);
-    var byStart = {};
-    sched.forEach(function (e) { (byStart[e.start] = byStart[e.start] || []).push(e); });
     var notes = {}, markers = [], series = [], valueSeries = [];
+    // a play's benefit lands at COMPLETION (not at kickoff): fire its effects on the week it ends.
+    // plays that would finish past the 24-week window never land — flag them so the UI can say so.
+    var byEnd = {}, startAt = {};
+    sched.forEach(function (e) {
+      startAt[e.id] = e.start;
+      if (e.end <= WEEKS) (byEnd[e.end] = byEnd[e.end] || []).push(e);
+      else notes[e.id] = { muted: true, reason: 'overflow', hits: 0, start: e.start, end: e.end,
+                           readiness: 0, missReqs: 0, orderPenalty: 1, proofGate: 1, misplace: 0 };
+    });
     var capStock = 0, value = 0, CAP_REF = 1.00, VGROWTH = 0.16, decayCut = 0;
     var sponsorClean = false, proofClean = false, phaseIdx = 0;
     var milestones = { vision: null, proof: null, redesign: null, identity: null, outcome: null };
-    // out-of-order penalty: a play whose in-plan prerequisite hasn't fired yet still lands, but weaker.
-    // MISORDER_FACTOR is the retained fraction of effect per missing-so-far prerequisite (matches the
-    // "lands, but weaker" copy — the curve now reflects it, not just the annotation).
-    var fired = {}, MISORDER_FACTOR = 0.6, NOPROOF = 0.5;
+    // out-of-order penalty: a play whose prerequisite hasn't reached its handoff point by the time this play
+    // starts still lands, but weaker. MISORDER_FACTOR is the retained fraction of effect per missing
+    // prerequisite (matches the "lands, but weaker" copy — the curve reflects it, not just the annotation).
+    var MISORDER_FACTOR = 0.6, NOPROOF = 0.5;
     // ORGANIZATIONAL TRUST (responsiveness), 1 = full. A misplaced intervention doesn't just do less good —
     // it does harm: "mismatched intervention is the most common reason change campaigns underperform"
     // (Adoption Matrix), producing "quiet resistance" (self-determination theory) and performative adoption
@@ -678,23 +726,26 @@
     }
 
     for (var w = 0; w <= WEEKS; w++) {
-      if (byStart[w]) {
-        byStart[w].forEach(function (entry) {
+      if (byEnd[w]) {
+        byEnd[w].forEach(function (entry) {
           var p = PLAY_BY_ID[entry.id];
           var overallNow = overallOf(st);
           var readiness = p.needsProof > 0 ? Math.max(0, Math.min(1, overallNow / p.needsProof)) : 1;
-          // sustainment plays only land in the sustain phase (start at week 16 or later)
-          var earlySustain = p.sustain && entry.start < SUSTAIN_START;
+          // sustainment only lands if it COMPLETES in the sustain phase (week 16 onward)
+          var earlySustain = p.sustain && entry.end < SUSTAIN_START;
           if (earlySustain) readiness = 0;
           var hits = p.cells.reduce(function (n, c) { return n + (flagged[c] ? 1 : 0); }, 0);
           // targeting bonus is weighted by how much of the org sits in the flagged cells this play addresses:
           // hitting a stall in a big (editable) segment pulls far harder than a small one. Capped so it can't dominate.
           var flaggedPop = p.cells.reduce(function (s, c) { return s + (flagged[c] ? cellShare(c) : 0); }, 0);
           var tBonus = 1 + Math.min(0.75, 0.025 * flaggedPop);
-          // count prerequisites that haven't fired yet — whether missing from the plan or placed later.
-          // Either way the foundation this play leans on isn't there, so it lands weaker (docked per miss).
+          // a prerequisite's foundation is available only once it passed its handoff point before this play
+          // began; a prerequisite missing from the plan or placed later misses, docking effect per miss.
           var reqs = ORDER_AFTER[entry.id] || [], missReqs = 0;
-          for (var qi = 0; qi < reqs.length; qi++) { if (!fired[reqs[qi]]) missReqs++; }
+          for (var qi = 0; qi < reqs.length; qi++) {
+            var rq = reqs[qi];
+            if (startAt[rq] === undefined || startAt[rq] + leadWeeks(PLAY_BY_ID[rq]) > entry.start) missReqs++;
+          }
           var orderPenalty = Math.pow(MISORDER_FACTOR, missReqs);
           // proof gate: the two pure social-proof plays (peer relay, inaction-cost norm) fall flat without
           // a real seeded win to point to — a relay with no one who has moved is a vendor demo in disguise.
@@ -725,7 +776,6 @@
             missReqs: missReqs, orderPenalty: orderPenalty, proofGate: proofGate,
             misplace: misplace, start: entry.start, end: entry.end };
           markers.push({ week: w, overall: overallNow, id: p.id });
-          fired[entry.id] = true;
         });
       }
       var activeNow = activeThisWeek(w);
@@ -783,7 +833,7 @@
     var touched = series.some(function (v) { return v >= THRESHOLD; });
     return { series: series, valueSeries: valueSeries, notes: notes, markers: markers,
              crossedWeek: crossedWeek, touched: touched, milestones: milestones, trustEnd: trust,
-             totalWeeks: sched.length ? sched[sched.length - 1].end : 0 };
+             totalWeeks: sched.reduce(function (m, e) { return Math.max(m, e.end); }, 0) };
   }
 
   // ===== chart geometry =====
@@ -803,6 +853,7 @@
     planEmpty: document.getElementById('planEmpty'),
     planClear: document.getElementById('planClear'),
     planBudget: document.getElementById('planBudget'), budgetFill: document.getElementById('budgetFill'),
+    planCompress: document.getElementById('planCompress'), planTimeline: document.getElementById('planTimeline'),
     teaserLine: document.getElementById('teaserLine'),
     curveB: document.getElementById('curveB'), curveP: document.getElementById('curveP'), curveV: document.getElementById('curveV'),
     gapArea: document.getElementById('gapArea'), markers: document.getElementById('markers'),
@@ -903,7 +954,7 @@
 
     // Nothing institutionalizes the gains, though there’s room (or the plan already crossed).
     var hasSust = planIds.some(function (id) { return PLAY_BY_ID[id].sustain && landedId(id); });
-    var weeksLeft = WEEKS - planWeeksUsed(planIds);
+    var weeksLeft = Math.max(0, WEEKS - planCalendarWeeks(planIds));
     if (!hasSust && (ctx.trueEscape || weeksLeft >= 2)) {
       tips.push('<strong>Nothing institutionalizes the gains.</strong> No Policy, Performance Criteria, or Ritual lands in the sustain phase' + (weeksLeft >= 2 ? ', and you have ' + weeksLeft + ' week' + (weeksLeft > 1 ? 's' : '') + ' free' : '') + '. Add one so the change survives the quarter after attention moves on.');
     }
@@ -960,13 +1011,13 @@
     var base = res.valueSeries[WEEKS];
     var flaggedKeys = Object.keys(flagged);
     var inPlan = {}; planIds.forEach(function (id) { inPlan[id] = 1; });
-    var weeksLeft = WEEKS - planWeeksUsed(planIds);
+    var weeksLeft = Math.max(0, WEEKS - planCalendarWeeks(planIds));
     function valOf(pl) { return simulate(pl).valueSeries[WEEKS]; }
     function bestInsert(basePlan, id) {
       var best = -Infinity, bestPlan = null;
       for (var i = 0; i <= basePlan.length; i++) {
         var cand = basePlan.slice(); cand.splice(i, 0, id);
-        if (planWeeksUsed(cand) > WEEKS) continue;
+        if (planCalendarWeeks(cand) > WEEKS) continue;
         var v = valOf(cand); if (v > best) { best = v; bestPlan = cand; }
       }
       return bestPlan === null ? null : { value: best, plan: bestPlan };
@@ -984,10 +1035,9 @@
       if (inPlan[p.id]) return;
       var cellsHit = p.cells.filter(function (c) { return flagged[c]; });
       var gain = -Infinity, kind = null, out = null, applyPlan = null;
-      if (weeksLeft >= p.weeks) {
-        var a = bestInsert(planIds, p.id);
-        if (a) { gain = a.value - base; kind = 'add'; applyPlan = a.plan; }
-      } else if (weakest) {
+      var a = bestInsert(planIds, p.id);              // does it fit within 24 calendar weeks anywhere (with overlap)?
+      if (a) { gain = a.value - base; kind = 'add'; applyPlan = a.plan; }
+      else if (weakest) {                              // out of calendar room → trade it for the weakest play
         var s = bestInsert(planIds.filter(function (x) { return x !== weakest; }), p.id);
         if (s) { gain = s.value - base; kind = 'swap'; out = weakest; applyPlan = s.plan; }
       }
@@ -1131,7 +1181,7 @@
       card.addEventListener('click', function () {
         var i = plan.indexOf(p.id);
         if (i !== -1) { plan.splice(i, 1); render(); return; }   // already in plan → click removes it
-        if (planWeeksUsed(plan) >= WEEKS) return;                // out of 24-week budget
+        if (planCalendarWeeks(plan.concat([p.id])) > WEEKS) return;   // adding it would overrun the 24 calendar weeks
         plan.push(p.id);
         render();
       });
@@ -1149,15 +1199,24 @@
     var res = simulate(plan);
     var base = simulate([]);
 
-    // week budget — longer plays spend more of the 24 weeks
+    // week budget — now CALENDAR time (last completion), since overlap lets plays share weeks.
+    // effort = total person-weeks; the difference is what overlap saved you.
     var weeksUsed = res.totalWeeks;
+    var effortUsed = planEffortWeeks(plan);
+    var saved = Math.max(0, effortUsed - weeksUsed);
     var planFull = weeksUsed >= WEEKS;
     el.planBudget.textContent = weeksUsed + ' / ' + WEEKS + ' weeks';
     el.planBudget.classList.toggle('full', planFull);
     el.budgetFill.style.width = Math.min(100, (weeksUsed / WEEKS) * 100).toFixed(1) + '%';
     el.budgetFill.classList.toggle('full', planFull);
+    if (el.planCompress) {
+      el.planCompress.textContent = plan.length
+        ? weeksUsed + ' calendar · ' + effortUsed + ' effort-weeks' + (saved > 0 ? ' · ' + saved + ' saved by overlap' : '')
+        : '';
+    }
 
-    // library: added-state + "matches a flagged cell" marker + out-of-budget lock
+    // library: added-state + "matches a flagged cell" marker + out-of-budget lock.
+    // a card is locked only if adding THAT play would overrun the 24 calendar weeks (overlap may still fit it).
     Array.prototype.forEach.call(el.lib.children, function (card) {
       if (!card.dataset.id) return;
       var pl = PLAY_BY_ID[card.dataset.id];
@@ -1165,7 +1224,7 @@
       var matches = pl.cells.some(function (c) { return flagged[c]; });
       card.classList.toggle('matches', matches);
       card.classList.toggle('added', added);
-      card.classList.toggle('locked', planFull && !added);
+      card.classList.toggle('locked', !added && planCalendarWeeks(plan.concat([card.dataset.id])) > WEEKS);
     });
 
     // plan list — each play shows the span it occupies (Wk start–end)
@@ -1182,7 +1241,9 @@
       if (n.muted) {
         badge = n.reason === 'timing'
           ? '<span class="plan-badge muted">⚠ too early: sustainment lands only in the sustain phase (wk 16+)</span>'
-          : '<span class="plan-badge muted">⚠ deployed before its proof exists, muted</span>';
+          : (n.reason === 'overflow'
+            ? '<span class="plan-badge muted">⚠ finishes past week 24, never lands, trim the plan</span>'
+            : '<span class="plan-badge muted">⚠ deployed before its proof exists, muted</span>');
       } else if (mp.late.length) {
         badge = '<span class="plan-badge warn">⧗ out of order, runs before ' + mp.late.join(' &amp; ') + '</span>';
       } else if (mp.absent.length) {
@@ -1198,6 +1259,36 @@
         '<button class="plan-rm" data-act="rm" data-i="' + i + '" aria-label="Remove">✕</button>';
       el.planList.appendChild(li);
     });
+
+    // timeline strip — one bar per play on a 24-week track, so overlaps and staggers are visible at a glance
+    if (el.planTimeline) {
+      if (!plan.length) {
+        el.planTimeline.innerHTML = '';
+      } else {
+        var TLW = WEEKS;   // track spans weeks 1..24
+        var rows = plan.map(function (id, i) {
+          var p = PLAY_BY_ID[id], n = res.notes[id] || {};
+          var s = n.start || 1, e = n.end || s;
+          var vizEnd = Math.min(e, WEEKS);
+          var left = ((s - 1) / TLW) * 100;
+          var width = Math.max(3, ((vizEnd - (s - 1)) / TLW) * 100);
+          var mods = (n.muted ? ' broke' : (p.sustain ? ' sustain' : '')) + (e > WEEKS ? ' overruns' : '');
+          var lab = (i + 1) + '. ' + p.name;
+          return '<div class="ptl-row" title="' + lab + ' · weeks ' + s + '–' + e + '">' +
+                   '<span class="ptl-bar' + mods + '" style="left:' + left.toFixed(1) + '%;width:' + width.toFixed(1) + '%;">' +
+                     '<span class="ptl-label">' + lab + '</span>' +
+                   '</span>' +
+                 '</div>';
+        }).join('');
+        el.planTimeline.innerHTML =
+          '<div class="ptl-head"><span>Timeline</span><span class="ptl-axis-note">weeks 1 → 24 · bars overlap where plays run in parallel</span></div>' +
+          '<div class="ptl-track-wrap">' +
+            '<div class="ptl-gridlines"><span></span><span></span><span></span><span></span></div>' +
+            rows +
+          '</div>' +
+          '<div class="ptl-axis"><span>1</span><span>6</span><span>12</span><span>18</span><span>24</span></div>';
+      }
+    }
 
     // curves
     el.curveB.setAttribute('d', pathFrom(base.series));
@@ -1351,7 +1442,9 @@
         if (broke) {
           tail = n.reason === 'timing'
             ? '<div class="gw-break-note">✕ Too early: sustainment can only land in the sustain phase (week 16 onward). Pushed now it can\'t land, and codifying a change nobody lives yet reads as theater, spending trust the later steps need.</div>'
-            : '<div class="gw-break-note">✕ Out of order: this runs before the proof it needs, so it can\'t land, and pushing people who aren\'t ready breeds quiet resistance, which drops how they respond to every move after.</div>';
+            : (n.reason === 'overflow'
+              ? '<div class="gw-break-note">✕ Runs past week 24: even with overlap the plan can\'t fit this in the window, so its benefit never lands. Trim or reorder so it completes inside the 24 weeks.</div>'
+              : '<div class="gw-break-note">✕ Out of order: this runs before the proof it needs, so it can\'t land, and pushing people who aren\'t ready breeds quiet resistance, which drops how they respond to every move after.</div>');
         } else if (misordered) {
           var parts = [];
           if (mp.late.length) parts.push('leans on “' + mp.late.join('” and “') + ',” which you\'ve placed later');
@@ -1371,7 +1464,7 @@
         var valEyebrow, valHead, valBody;
         if (offOrder && adv) {
           valEyebrow = broke
-            ? (n.reason === 'timing' ? 'Adverse impact: fired too early' : 'Adverse impact: it doesn’t land')
+            ? (n.reason === 'timing' ? 'Adverse impact: fired too early' : (n.reason === 'overflow' ? 'Adverse impact: runs past week 24' : 'Adverse impact: it doesn’t land'))
             : (absentOnly ? 'Adverse impact: missing its foundation' : 'Adverse impact: runs out of order');
           valHead = adv.head;
           valBody = adv.body;
