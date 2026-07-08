@@ -709,6 +709,8 @@ hr.sign-rule {
 
 .outcome-item h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
 .outcome-item p { color: var(--midgray); font-size: 0.93rem; margin: 0; }
+/* Key-word emphasis inside engagement/outcome cards: darker + slightly heavier, not raw bold */
+.outcome-item p strong { color: var(--navy); font-weight: 600; }
 
 /* Visible price on Grow engagement cards */
 .engagement-price {
