@@ -217,14 +217,14 @@
 <section class="alt" id="report">
   <div class="wrap">
     <div id="sent-banner" style="display:none; padding:1rem 1.2rem; margin-bottom:2rem; background:#fff; border-left:3px solid var(--logo-blue); border-radius:4px;">
-      <strong>Request received.</strong> Tom will send your simulation summary (the curve, your sequence, and a short read on where it holds or breaks) usually within two business days.
+      <strong>Request received.</strong> Tom will send your simulation briefing (the curve, your sequence, and a short read on where it holds or breaks) usually within two business days.
     </div>
 
     <div class="grid-2" id="report-form">
       <div>
-        <div class="eyebrow">Get your simulation summary</div>
-        <h2>Get the finished summary sent to you.</h2>
-        <p>You've built a working model. Request the finished summary and Tom sends it to you personally: a single sheet with your curve, your sequence, and the read on where the transformation holds or breaks, plus a short take on what it means for your actual rollout. The simulation you built is attached automatically.</p>
+        <div class="eyebrow">Get your simulation briefing</div>
+        <h2>Get the finished briefing sent to you.</h2>
+        <p>You've built a working model. Request the finished briefing and Tom sends it to you personally: a formatted PDF with your curve, your sequence, the read on where the transformation holds or breaks, and a short take on what it means for your actual rollout — written so you can circulate it internally as it stands. The scenario you built is attached automatically.</p>
         <div class="teaser-callout">
           <span class="teaser-callout-tag">Included in the report</span>
           <p id="teaserLine">Build a sequence above and your report will include a plain-English read on the common pitfalls hiding inside it: the traps most teams underestimate, written to read on its own and share with your team.</p>
@@ -262,7 +262,7 @@
             <label for="context">The deployment (optional)</label>
             <textarea id="context" name="context" placeholder="What was rolled out, to whom, and where adoption is now."></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Request my summary</button>
+          <button type="submit" class="btn btn-primary">Request my briefing</button>
           <p style="font-size:0.82rem; color:var(--midgray); margin-top:0.4rem;">Messages route to sail@tdcatalyst.com. Prefer to talk? <a href="https://cal.com/tdcatalyst" target="_blank" rel="noopener">Book a Fit Call →</a></p>
         </form>
       </div>
@@ -1775,7 +1775,7 @@
     if (!src) { cb(null); return; }
     var svg = src.cloneNode(true);
     svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    svg.setAttribute('width', '720'); svg.setAttribute('height', '380');
+    svg.setAttribute('width', '2160'); svg.setAttribute('height', '1140');   // 3× raster so the curve stays crisp in the PDF
     var st = document.createElementNS('http://www.w3.org/2000/svg', 'style');
     st.textContent = CHART_CSS; svg.insertBefore(st, svg.firstChild);
     var str = new XMLSerializer().serializeToString(svg);
@@ -1786,127 +1786,381 @@
     img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(str);
   }
 
-  function buildSummaryCanvas(chartImg) {
+  // ===== the emailed briefing: a paginated, letter-size PDF the lead can circulate internally =====
+  // Pages are painted on canvas at 150dpi-equivalent (1275×1650, rastered at 2×) using the site's own
+  // typography, then assembled client-side into a real multi-page PDF (JPEG pages, DCTDecode) — no library,
+  // nothing loaded from a CDN. If any step fails, the form still submits without the attachment.
+  var PG_W = 1275, PG_H = 1650, PG_M = 113, PG_SCALE = 2, PG_CW = PG_W - PG_M * 2;
+  var DOC_INK = '#222222', DOC_NAVY = '#1F3A5F', DOC_GRAY = '#6B6B6B', DOC_BLUE = '#4A7C9E',
+      DOC_RED = '#C44536', DOC_GREEN = '#4E8B72', DOC_GOLD = '#C8950A', DOC_LINE = '#D9D3CA', DOC_PAPER = '#F7F5F1';
+  var F_BODY = '400 21px Inter, Arial, sans-serif',
+      F_BODY_SB = '600 21px Inter, Arial, sans-serif',
+      F_SMALL = '400 17px Inter, Arial, sans-serif',
+      F_SMALL_SB = '600 17px Inter, Arial, sans-serif',
+      F_LABEL = '600 15px Inter, Arial, sans-serif',
+      F_SECTION = '600 20px Inter, Arial, sans-serif',
+      F_TITLE = '400 54px Fraunces, Georgia, serif',
+      F_BRAND = '500 30px Fraunces, Georgia, serif',
+      F_STAT = '500 40px Fraunces, Georgia, serif';
+
+  function trySpacing(x, v) { try { x.letterSpacing = v; } catch (e) {} }
+
+  // wrap runs of differently-styled words into lines that fit maxW → [[{text,font,color},…],…]
+  function wrapRuns(x, runs, maxW) {
+    var lines = [], cur = [], curW = 0;
+    runs.forEach(function (r) {
+      if (!r.text) return;
+      x.font = r.font;
+      r.text.split(' ').forEach(function (word) {
+        if (!word) return;
+        var piece = (curW ? ' ' : '') + word;
+        var w = x.measureText(piece).width;
+        if (curW && curW + w > maxW) { lines.push(cur); cur = []; curW = 0; piece = word; w = x.measureText(word).width; }
+        cur.push({ text: piece, font: r.font, color: r.color });
+        curW += w;
+      });
+    });
+    if (cur.length) lines.push(cur);
+    return lines;
+  }
+
+  function newBriefingDoc() {
+    var doc = { pages: [], ctx: null, y: 0, bottom: PG_H - PG_M - 58, secN: 0 };
+    doc.addPage = function () {
+      var c = document.createElement('canvas');
+      c.width = PG_W * PG_SCALE; c.height = PG_H * PG_SCALE;
+      var x = c.getContext('2d'); x.scale(PG_SCALE, PG_SCALE);
+      x.fillStyle = '#ffffff'; x.fillRect(0, 0, PG_W, PG_H);
+      doc.pages.push({ c: c, x: x }); doc.ctx = x;
+      if (doc.pages.length > 1) {
+        x.fillStyle = DOC_GRAY; x.font = F_LABEL; trySpacing(x, '2px');
+        x.fillText('ADOPTION SCENARIO BRIEFING', PG_M, 88); trySpacing(x, '0px');
+        x.font = F_SMALL; x.textAlign = 'right'; x.fillText('TDcatalyst · Grow', PG_W - PG_M, 88); x.textAlign = 'left';
+        x.strokeStyle = DOC_LINE; x.lineWidth = 1;
+        x.beginPath(); x.moveTo(PG_M, 106); x.lineTo(PG_W - PG_M, 106); x.stroke();
+        doc.y = 164;
+      } else doc.y = PG_M;
+      return x;
+    };
+    doc.ensure = function (h) { if (doc.y + h > doc.bottom) doc.addPage(); };
+    // paragraph of mixed-style runs; wraps, splits across pages, advances the cursor
+    doc.para = function (runs, opts) {
+      opts = opts || {};
+      if (typeof runs === 'string') runs = [{ text: runs }];
+      runs = runs.map(function (r) { return { text: r.text, font: r.font || opts.font || F_BODY, color: r.color || opts.color || DOC_INK }; });
+      var maxW = opts.width || PG_CW, lh = opts.lh || 33, left = opts.x || PG_M;
+      wrapRuns(doc.ctx, runs, maxW).forEach(function (line) {
+        doc.ensure(lh);
+        var px = left;
+        line.forEach(function (run) {
+          doc.ctx.font = run.font; doc.ctx.fillStyle = run.color;
+          doc.ctx.fillText(run.text, px, doc.y + lh - 10);
+          px += doc.ctx.measureText(run.text).width;
+        });
+        doc.y += lh;
+      });
+      doc.y += (opts.after != null ? opts.after : 16);
+    };
+    doc.section = function (title) {
+      doc.secN++;
+      doc.ensure(170);   // keep the heading attached to at least a first line of its content
+      var x = doc.ctx, fresh = doc.y <= 164;
+      if (!fresh) {
+        doc.y += 8;
+        x.strokeStyle = DOC_LINE; x.lineWidth = 1;
+        x.beginPath(); x.moveTo(PG_M, doc.y); x.lineTo(PG_W - PG_M, doc.y); x.stroke();
+        doc.y += 42;
+      } else doc.y += 16;
+      x.font = F_SECTION; trySpacing(x, '2px');
+      var num = (doc.secN < 10 ? '0' : '') + doc.secN;
+      x.fillStyle = DOC_BLUE; x.fillText(num, PG_M, doc.y);
+      var nw = x.measureText(num + '  ').width;
+      x.fillStyle = DOC_NAVY; x.fillText(title.toUpperCase(), PG_M + nw, doc.y);
+      trySpacing(x, '0px');
+      doc.y += 34;
+    };
+    doc.addPage();
+    return doc;
+  }
+
+  function paintBriefingPages(chartImg) {
     var res = simulate(plan), base = simulate([]);
-    var W = 1000, P = 44, scale = 2, rowH = 25;
-    var chartW = W - P * 2, chartH = Math.round(chartW * 380 / 720);
-    var contentW = W - P * 2;
+    var rP = Math.round(res.series[WEEKS]), rB = Math.round(base.series[WEEKS]), rV = Math.round(res.valueSeries[WEEKS]);
+    var leadName = (document.getElementById('name').value || '').trim();
+    var leadOrg = (document.getElementById('company').value || '').trim();
+    var leadCtx = (document.getElementById('context').value || '').trim();
+    if (leadCtx.length > 700) leadCtx = leadCtx.slice(0, 700) + '…';
+    var fl = Object.keys(flagged);
+    var dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     function segLabel(k) { for (var i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].key === k) return SEGMENTS[i].label; } return k; }
     function cellName(key) { var q = key.split('-'); return segLabel(q[0]) + ' · ' + (STAGE_FULL[q[1]] || q[1]); }
-    // wrap a string to fit maxW at the currently-set font (uses a throwaway measuring context)
-    function wrapLines(mctx, text, maxW) {
-      var words = text.split(' '), lines = [], cur = '';
-      for (var i = 0; i < words.length; i++) {
-        var test = cur ? cur + ' ' + words[i] : words[i];
-        if (mctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = words[i]; }
-        else cur = test;
+    function weeksSpan(n) { return n.start ? ('Weeks ' + n.start + (n.end > n.start ? '–' + n.end : '')) : ''; }
+    function seqStatus(n) {
+      if (n.muted) {
+        if (n.reason === 'overflow') return { c: DOC_RED, t: '✕ Does not finish inside the 24-week window' };
+        if (n.reason === 'timing') return { c: DOC_RED, t: '✕ Ran before adoption was mature enough to institutionalize' };
+        return { c: DOC_RED, t: '✕ Deployed before the proof it depends on existed' };
       }
-      if (cur) lines.push(cur);
-      return lines;
+      if ((n.orderPenalty != null && n.orderPenalty < 0.99) || (n.proofGate != null && n.proofGate < 0.99) || (n.readiness != null && n.readiness < 0.85))
+        return { c: DOC_GOLD, t: '✓ Landed at reduced effect — sequencing left part of its impact behind' };
+      return { c: DOC_GREEN, t: '✓ Landed at full effect' };
     }
-    var fl = Object.keys(flagged);
-    var fRows = Math.max(fl.length, 1), pRows = Math.max(plan.length, 1);
-    var leftH = 26 + fRows * rowH + 16 + 26 + pRows * rowH;
-    var rightH = 26 + 4 * 22 + 30 + 32 + 24 + MILESTONES.length * 22;   // results + phases block
-    var detailsH = Math.max(leftH, rightH, 176) + 8;
 
-    // pre-measure the standalone pitfalls section so the canvas is tall enough for it
-    var measure = document.createElement('canvas').getContext('2d');
-    var introLines = [], pitBlocks = [], pitH = 0;
+    var doc = newBriefingDoc(), x = doc.ctx;
+
+    // ---- masthead ----
+    x.fillStyle = DOC_NAVY; x.font = F_BRAND; x.fillText('TDcatalyst', PG_M, 152);
+    var bw = x.measureText('TDcatalyst').width;
+    x.fillStyle = DOC_BLUE; x.font = '400 26px Fraunces, Georgia, serif'; x.fillText('/grow', PG_M + bw + 2, 152);
+    x.fillStyle = DOC_GRAY; x.font = F_SMALL; x.textAlign = 'right'; x.fillText(dateStr, PG_W - PG_M, 152); x.textAlign = 'left';
+    x.fillStyle = DOC_BLUE; x.fillRect(PG_M, 176, 84, 3);
+    x.strokeStyle = DOC_LINE; x.lineWidth = 1;
+    x.beginPath(); x.moveTo(PG_M + 84, 177.5); x.lineTo(PG_W - PG_M, 177.5); x.stroke();
+
+    x.fillStyle = DOC_BLUE; x.font = F_LABEL; trySpacing(x, '3px');
+    x.fillText('AI TRANSFORMATION SIMULATION', PG_M, 248); trySpacing(x, '0px');
+    x.fillStyle = DOC_NAVY; x.font = F_TITLE;
+    x.fillText('Adoption Scenario Briefing', PG_M, 316);
+    doc.y = 348;
+    doc.para('A sequenced set of adoption interventions, modeled over 24 weeks against the trajectory the organization follows if nothing changes.', { color: DOC_GRAY, after: 30 });
+
+    // prepared-for band
+    var bandTop = doc.y, bandH = 112, col2 = PG_M + Math.round(PG_CW * 0.56);
+    x.fillStyle = DOC_PAPER; x.fillRect(PG_M, bandTop, PG_CW, bandH);
+    x.fillStyle = DOC_GRAY; x.font = F_LABEL; trySpacing(x, '1px');
+    x.fillText('PREPARED FOR', PG_M + 28, bandTop + 42);
+    x.fillText('PREPARED BY', col2, bandTop + 42);
+    trySpacing(x, '0px');
+    var pf = leadName + (leadOrg ? ' · ' + leadOrg : '');
+    x.fillStyle = DOC_NAVY; x.font = F_BODY_SB;
+    if (x.measureText(pf).width > col2 - PG_M - 60) x.font = F_SMALL_SB;
+    x.fillText(pf, PG_M + 28, bandTop + 80);
+    x.font = F_BODY_SB;
+    x.fillText('Thomas Delaporte · TDcatalyst', col2, bandTop + 80);
+    doc.y = bandTop + bandH + 26;
+
+    // ---- executive summary ----
+    doc.section('Executive summary');
     if (plan.length) {
-      measure.font = '13px Inter, Arial, sans-serif';
-      introLines = wrapLines(measure, 'Each intervention you chose carries a trap most teams walk into, and a condition it quietly depends on. In order, this is the groundwork your team owns.', contentW);
-      pitH = 26 + 22 + introLines.length * 18 + 10;
-      plan.forEach(function (id, i) {
-        var p = PLAY_BY_ID[id], c = CAVEATS[id], n = res.notes[id] || {};
-        var span = n.start ? ('Weeks ' + n.start + (n.end > n.start ? '–' + n.end : '')) : '';
-        var head = (i + 1) + '. ' + p.name + (span ? '   (' + span + ')' : '');
-        var body = wrapLines(measure, 'The pitfall: ' + c.risk, contentW - 16);
-        var dep  = wrapLines(measure, 'What it depends on: ' + c.prereq, contentW - 16);
-        pitBlocks.push({ head: head, body: body, dep: dep });
-        pitH += 20 + body.length * 18 + dep.length * 18 + 12;
+      doc.para('This briefing summarizes an AI adoption scenario built with the TDcatalyst transformation simulation' + (leadOrg ? ' for ' + leadOrg : '') + '. It models a sequence of ' + plan.length + ' intervention' + (plan.length > 1 ? 's' : '') + ' over ' + res.totalWeeks + ' calendar weeks' + (fl.length ? ', aimed at ' + fl.length + ' adoption stall' + (fl.length > 1 ? 's' : '') + ' flagged on the segment-by-stage matrix' : '') + '.');
+      doc.para('With the sequence in place, modeled adoption reaches ' + rP + '% of the organization at week 24; the same organization reaches ' + rB + '% if nothing changes. The sequence adds ' + (rP - rB) + ' points of adoption and ends with ' + rV + '% of the attainable value realized — a measure that combines reach with the capability to convert usage into output.');
+      if (res.crossedWeek !== null) doc.para('The model projects the transformation crossing the self-sustaining threshold (' + THRESHOLD + '% adoption) at week ' + res.crossedWeek + ' — the point where the new way of working starts to carry itself.');
+      else doc.para('The modeled curve ends below the self-sustaining threshold of ' + THRESHOLD + '% adoption, which means the gains remain reversible and the plan needs further reinforcement to hold.');
+      doc.para('The pages that follow show the modeled trajectory, the sequence and its timing, the transformation phases the plan reaches, and the conditions each step depends on. The plan is explicit and has been tested against the model; what remains is execution.', { after: 28 });
+    } else {
+      doc.para('This briefing summarizes a baseline scenario from the TDcatalyst transformation simulation' + (leadOrg ? ' for ' + leadOrg : '') + '. No intervention sequence was selected, so the model shows the trajectory the organization follows on its own: adoption reaches ' + rB + '% at week 24 and stays below the ' + THRESHOLD + '% self-sustaining threshold.', { after: 28 });
+    }
+
+    var tiles = [
+      { label: 'WITH THIS PLAN', value: rP + '%', cap: 'adoption at week 24', color: DOC_BLUE },
+      { label: 'IF NOTHING CHANGES', value: rB + '%', cap: 'adoption at week 24', color: DOC_RED },
+      { label: 'ADOPTION ADDED', value: '+' + (rP - rB) + ' pts', cap: 'gained by the sequence', color: DOC_NAVY },
+      { label: 'VALUE REALIZED', value: rV + '%', cap: 'reach × capability', color: DOC_GREEN }
+    ];
+    var tGap = 22, tw = Math.floor((PG_CW - tGap * 3) / 4);
+    doc.ensure(170);
+    tiles.forEach(function (t, i) {
+      var xo = PG_M + i * (tw + tGap), top = doc.y, tx = doc.ctx;
+      tx.strokeStyle = DOC_LINE; tx.lineWidth = 1; tx.strokeRect(xo + 0.5, top + 0.5, tw, 140);
+      tx.fillStyle = t.color; tx.fillRect(xo, top, tw, 4);
+      tx.fillStyle = DOC_GRAY; tx.font = F_LABEL; trySpacing(tx, '1px'); tx.fillText(t.label, xo + 20, top + 42); trySpacing(tx, '0px');
+      tx.fillStyle = t.color; tx.font = F_STAT; tx.fillText(t.value, xo + 20, top + 98);
+      tx.fillStyle = DOC_GRAY; tx.font = F_SMALL; tx.fillText(t.cap, xo + 20, top + 126);
+    });
+    doc.y += 166;
+    if (res.crossedWeek !== null) doc.para([{ text: '✓  Self-sustaining: ', font: F_BODY_SB, color: DOC_GREEN }, { text: 'the modeled curve crosses the ' + THRESHOLD + '% threshold at week ' + res.crossedWeek + ' and holds above it.', font: F_BODY, color: DOC_INK }], { after: 24 });
+    else doc.para([{ text: '○  Below threshold: ', font: F_BODY_SB, color: DOC_GRAY }, { text: 'the modeled curve ends under the ' + THRESHOLD + '% self-sustaining line at week 24.', font: F_BODY, color: DOC_INK }], { after: 24 });
+
+    if (leadCtx) {
+      doc.ensure(120);
+      var qTop = doc.y, qPage = doc.pages.length;
+      doc.para([{ text: 'DEPLOYMENT CONTEXT, AS DESCRIBED IN THE REQUEST', font: F_LABEL, color: DOC_GRAY }], { x: PG_M + 26, width: PG_CW - 26, lh: 24, after: 6 });
+      doc.para(leadCtx, { font: 'italic 400 20px Inter, Arial, sans-serif', color: DOC_INK, x: PG_M + 26, width: PG_CW - 26, lh: 31, after: 8 });
+      if (doc.pages.length === qPage) { doc.ctx.fillStyle = DOC_BLUE; doc.ctx.fillRect(PG_M, qTop + 4, 3, doc.y - qTop - 18); }
+      doc.y += 14;
+    }
+
+    // ---- the curve ----
+    doc.section('The modeled trajectory');
+    var chW = PG_CW, chH = Math.round(chW * 380 / 720);
+    doc.ensure(chH + 24);
+    var cx = doc.ctx;
+    if (chartImg) cx.drawImage(chartImg, PG_M, doc.y, chW, chH);
+    else {
+      cx.fillStyle = DOC_GRAY; cx.font = F_SMALL; cx.textAlign = 'center';
+      cx.fillText('The interactive curve is available at tdcatalyst.com/grow/ai-transformation-simulation', PG_M + chW / 2, doc.y + chH / 2);
+      cx.textAlign = 'left';
+    }
+    cx.strokeStyle = DOC_LINE; cx.lineWidth = 1; cx.strokeRect(PG_M + 0.5, doc.y + 0.5, chW, chH);
+    doc.y += chH + 18;
+    doc.para('Modeled adoption over 24 weeks: the planned sequence in blue, the same organization with no intervention in dashed red, and value realized in green. Numbered markers show where each intervention starts; gold nodes mark the transformation phases as they are reached.', { font: F_SMALL, color: DOC_GRAY, lh: 26, after: 10 });
+
+    // ---- flagged stalls ----
+    doc.section('Where adoption is stalled');
+    if (!fl.length) doc.para('No stalled cells were flagged on the adoption matrix for this scenario.');
+    else {
+      doc.para('The scenario flags ' + fl.length + ' cell' + (fl.length > 1 ? 's' : '') + ' of the adoption matrix — a population segment at a specific stage of change — as stalled today. Interventions that hit a flagged cell pull harder in the model, weighted by how much of the organization sits there.', { after: 14 });
+      fl.forEach(function (k) {
+        doc.ensure(70);
+        doc.para([{ text: '◆  ', font: F_BODY, color: DOC_RED }, { text: cellName(k), font: F_BODY_SB, color: DOC_NAVY }, { text: '    ≈ ' + Math.round(cellShare(k)) + '% of the organization', font: F_SMALL, color: DOC_GRAY }], { after: 0, lh: 34 });
+        doc.para(SYMPTOMS[k] || '', { font: F_SMALL, color: DOC_GRAY, x: PG_M + 34, width: PG_CW - 34, lh: 26, after: 12 });
       });
     }
 
-    var H = P + 52 + chartH + 26 + detailsH + (plan.length ? 24 + pitH : 0) + 34;
-    var c = document.createElement('canvas');
-    c.width = W * scale; c.height = H * scale;
-    var ctx = c.getContext('2d'); ctx.scale(scale, scale);
-    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = '#1F3A5F'; ctx.font = '600 15px Inter, Arial, sans-serif';
-    ctx.fillText('AI TRANSFORMATION SIMULATION · SUMMARY REPORT', P, P + 4);
-    ctx.fillStyle = '#6B6B6B'; ctx.font = '13px Inter, Arial, sans-serif';
-    ctx.fillText('TDcatalyst Grow · Deploy · tdcatalyst.com/grow', P, P + 26);
-    var cy = P + 52;
-    if (chartImg) ctx.drawImage(chartImg, P, cy, chartW, chartH);
-    var dy = cy + chartH + 26;
-    ctx.strokeStyle = '#D9D3CA'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(P, dy - 14); ctx.lineTo(W - P, dy - 14); ctx.stroke();
-    // LEFT COLUMN — where the transformation is stalling, then the interventions in order
-    var lx = P, ly = dy + 4;
-    ctx.fillStyle = '#1F3A5F'; ctx.font = '600 12px Inter, Arial, sans-serif';
-    ctx.fillText('FLAGGED AS STALLED', lx, ly);
-    ly += 26; ctx.font = '13px Inter, Arial, sans-serif';
-    if (!fl.length) { ctx.fillStyle = '#6B6B6B'; ctx.fillText('(none flagged)', lx, ly); ly += rowH; }
-    else fl.forEach(function (k) { ctx.fillStyle = '#C44536'; ctx.fillText('◆  ' + cellName(k), lx, ly); ly += rowH; });
-    ly += 16;
-    ctx.fillStyle = '#1F3A5F'; ctx.font = '600 12px Inter, Arial, sans-serif';
-    ctx.fillText('INTERVENTIONS, IN ORDER', lx, ly);
-    ly += 26; ctx.font = '13px Inter, Arial, sans-serif';
-    if (!plan.length) { ctx.fillStyle = '#6B6B6B'; ctx.fillText('(none selected)', lx, ly); ly += rowH; }
-    plan.forEach(function (id, i) {
-      var pp = PLAY_BY_ID[id], n = res.notes[id] || {}, broke = !!n.muted;
-      var sp = n.start ? ('Weeks ' + n.start + (n.end > n.start ? '–' + n.end : '')) : 'Weeks —';
-      ctx.fillStyle = broke ? '#C44536' : '#1F3A5F';
-      ctx.fillText((broke ? '✕' : '✓') + '  ' + sp + '  ' + pp.name, lx, ly);
-      ly += rowH;
-    });
-    // RIGHT COLUMN — results and the transformation phases
-    var rx = Math.round(W / 2) + 40, ry = dy + 4;
-    ctx.fillStyle = '#1F3A5F'; ctx.font = '600 12px Inter, Arial, sans-serif';
-    ctx.fillText('AT WEEK 24', rx, ry);
-    ry += 26; ctx.font = '13px Inter, Arial, sans-serif';
-    var rP = Math.round(res.series[WEEKS]), rB = Math.round(base.series[WEEKS]);
-    ctx.fillStyle = '#4A7C9E'; ctx.fillText('With your plan:  ' + rP + '%', rx, ry);
-    ry += 22; ctx.fillStyle = '#C44536'; ctx.fillText('Do nothing:  ' + rB + '%', rx, ry);
-    ry += 22; ctx.fillStyle = '#222222'; ctx.fillText('Adoption added:  +' + (rP - rB) + ' points', rx, ry);
-    ry += 22; ctx.fillStyle = '#4E8B72'; ctx.fillText('Value realized:  ' + Math.round(res.valueSeries[WEEKS]) + '%', rx, ry);
-    ry += 30; ctx.font = '600 13px Inter, Arial, sans-serif';
-    if (res.crossedWeek !== null) { ctx.fillStyle = '#4A7C9E'; ctx.fillText('✓ Self-sustaining, crossed at week ' + res.crossedWeek, rx, ry); }
-    else { ctx.fillStyle = '#6B6B6B'; ctx.fillText('Below the threshold, still reversible', rx, ry); }
-    ry += 32; ctx.fillStyle = '#1F3A5F'; ctx.font = '600 12px Inter, Arial, sans-serif';
-    ctx.fillText('TRANSFORMATION PHASES REACHED', rx, ry);
-    ry += 24; ctx.font = '13px Inter, Arial, sans-serif';
+    // ---- the sequence ----
+    doc.section('The intervention sequence');
+    if (!plan.length) doc.para('No interventions were selected in this scenario.');
+    else {
+      doc.para('The schedule below is order-aware: each intervention starts at the earliest week that respects its prerequisites, the chosen order, and a bandwidth cap of ' + MAX_CONCURRENT + ' concurrent workstreams. The result column reports how each move landed in the simulation.', { after: 18 });
+      doc.ensure(140);
+      var hx = doc.ctx;
+      hx.fillStyle = DOC_GRAY; hx.font = F_LABEL; trySpacing(hx, '1px');
+      hx.fillText('#', PG_M, doc.y + 14);
+      hx.fillText('INTERVENTION', PG_M + 46, doc.y + 14);
+      hx.fillText('TIMING', PG_M + 620, doc.y + 14);
+      hx.fillText('MODELED RESULT', PG_M + 782, doc.y + 14);
+      trySpacing(hx, '0px');
+      doc.y += 26;
+      hx.strokeStyle = DOC_LINE; hx.beginPath(); hx.moveTo(PG_M, doc.y); hx.lineTo(PG_W - PG_M, doc.y); hx.stroke();
+      doc.y += 4;
+      plan.forEach(function (id, i) {
+        var p = PLAY_BY_ID[id], n = res.notes[id] || {};
+        var stt = seqStatus(n), wStatus = PG_CW - 782;
+        var fwLines = wrapRuns(doc.ctx, [{ text: p.framework, font: F_SMALL, color: DOC_GRAY }], 540);
+        var stLines = wrapRuns(doc.ctx, [{ text: stt.t, font: F_SMALL_SB, color: stt.c }], wStatus);
+        var rowH = Math.max(34 + fwLines.length * 24, 10 + stLines.length * 24) + 22;
+        doc.ensure(rowH);
+        var top = doc.y, rx = doc.ctx;
+        rx.fillStyle = DOC_GRAY; rx.font = F_SMALL; rx.fillText(String(i + 1), PG_M, top + 28);
+        rx.fillStyle = DOC_NAVY; rx.font = F_BODY_SB; rx.fillText(p.name, PG_M + 46, top + 28);
+        var fy = top + 54;
+        fwLines.forEach(function (line) {
+          var px = PG_M + 46;
+          line.forEach(function (r) { rx.font = r.font; rx.fillStyle = r.color; rx.fillText(r.text, px, fy); px += rx.measureText(r.text).width; });
+          fy += 24;
+        });
+        rx.fillStyle = DOC_INK; rx.font = F_SMALL; rx.fillText(weeksSpan(n) || '—', PG_M + 620, top + 28);
+        var sy = top + 28;
+        stLines.forEach(function (line) {
+          var px = PG_M + 782;
+          line.forEach(function (r) { rx.font = r.font; rx.fillStyle = r.color; rx.fillText(r.text, px, sy); px += rx.measureText(r.text).width; });
+          sy += 24;
+        });
+        rx.strokeStyle = DOC_LINE; rx.beginPath(); rx.moveTo(PG_M, top + rowH - 8); rx.lineTo(PG_W - PG_M, top + rowH - 8); rx.stroke();
+        doc.y += rowH;
+      });
+      doc.y += 10;
+    }
+
+    // ---- transformation phases ----
+    doc.section('Transformation phases reached');
+    doc.para('The model tracks five phases a transformation crosses in order, keyed to the state the organization has actually reached. Phases the plan reaches inside the 24-week window are marked with their arrival week.', { after: 18 });
     MILESTONES.forEach(function (m) {
       var wk = res.milestones[m.key], hit = wk !== null && wk !== undefined;
-      ctx.fillStyle = hit ? '#4E8B72' : '#9a9a9a';
-      ctx.fillText((hit ? '✓' : '○') + '  ' + m.label + (hit ? '  · week ' + wk : '  · not yet'), rx, ry);
-      ry += 22;
+      doc.ensure(96);
+      doc.para([
+        { text: (hit ? '✓  ' : '○  ') + m.label, font: F_BODY_SB, color: hit ? DOC_GREEN : DOC_GRAY },
+        { text: hit ? '    week ' + wk : '    beyond the 24-week window', font: F_SMALL, color: DOC_GRAY }
+      ], { after: 0, lh: 32 });
+      doc.para(m.note, { font: F_SMALL, color: DOC_GRAY, x: PG_M + 34, width: PG_CW - 34, lh: 26, after: 14 });
     });
-    // FULL-WIDTH — the common pitfalls, written to read on their own (shareable, no abbreviations)
+
+    // ---- execution risks (the standalone pitfalls read) ----
     if (plan.length) {
-      var py = dy + detailsH;
-      ctx.strokeStyle = '#D9D3CA'; ctx.beginPath(); ctx.moveTo(P, py); ctx.lineTo(W - P, py); ctx.stroke();
-      py += 24;
-      ctx.fillStyle = '#1F3A5F'; ctx.font = '600 12px Inter, Arial, sans-serif';
-      ctx.fillText('WHAT MOST TEAMS UNDERESTIMATE: COMMON PITFALLS IN YOUR SEQUENCE', P, py);
-      py += 22; ctx.fillStyle = '#6B6B6B'; ctx.font = '13px Inter, Arial, sans-serif';
-      introLines.forEach(function (ln) { ctx.fillText(ln, P, py); py += 18; });
-      py += 10;
-      pitBlocks.forEach(function (b) {
-        ctx.fillStyle = '#1F3A5F'; ctx.font = '600 13px Inter, Arial, sans-serif';
-        ctx.fillText(b.head, P, py); py += 20;
-        ctx.font = '13px Inter, Arial, sans-serif'; ctx.fillStyle = '#333333';
-        b.body.forEach(function (ln) { ctx.fillText(ln, P + 16, py); py += 18; });
-        ctx.fillStyle = '#4A7C9E';
-        b.dep.forEach(function (ln) { ctx.fillText(ln, P + 16, py); py += 18; });
-        py += 12;
+      doc.section('Execution risks and dependencies');
+      doc.para('Each intervention in the sequence carries a trap most teams walk into, and a condition it quietly depends on. In order, this is the groundwork the plan assumes — and where execution is won or lost.', { after: 20 });
+      plan.forEach(function (id, i) {
+        var p = PLAY_BY_ID[id], cv = CAVEATS[id], n = res.notes[id] || {};
+        doc.ensure(150);
+        doc.para([
+          { text: (i + 1) + ' · ' + p.name, font: F_BODY_SB, color: DOC_NAVY },
+          { text: n.start ? '    ' + weeksSpan(n) : '', font: F_SMALL, color: DOC_GRAY }
+        ], { after: 6, lh: 34 });
+        doc.para([{ text: 'The pitfall: ', font: F_BODY_SB, color: DOC_INK }, { text: cv.risk, font: F_BODY, color: DOC_INK }], { x: PG_M + 26, width: PG_CW - 26, after: 6 });
+        doc.para([{ text: 'What it depends on: ', font: F_BODY_SB, color: DOC_BLUE }, { text: cv.prereq, font: F_BODY, color: DOC_INK }], { x: PG_M + 26, width: PG_CW - 26, after: 24 });
       });
     }
-    ctx.fillStyle = '#9a9a9a'; ctx.font = '11px Inter, Arial, sans-serif';
-    ctx.fillText('Generated from the AI Transformation Simulation · illustrative model, not a forecast', P, H - 16);
-    return c;
+
+    // ---- the handoff to delivery ----
+    doc.section('From simulation to execution');
+    doc.para('The value of this scenario is that the thinking is already done. The sequence is explicit about order, timing, and the conditions each intervention depends on, and it has been stress-tested against a model grounded in established adoption research. What the model cannot supply is the delivery: the sponsor who visibly goes first, the managers equipped to localize the change, the champions who are genuinely respected, and the workflow redesign that someone has to own.');
+    doc.para('That delivery is the work TDcatalyst does. The Adoption Reset engagement (60–90 days) takes a scenario like this one into the organization: diagnosis by role and workflow, the population mapped onto the adoption matrix, a sequenced set of interventions for the cells where adoption is actually stalled, and enablement delivered through workshops for leaders and champions. The result is a rollout run against a plan the organization has already seen, understood, and pressure-tested.', { after: 28 });
+
+    var boxPad = 28;
+    var nsText = 'A 30-minute fit call to test this sequence against the actual rollout: what was deployed, to whom, and where adoption stands today.';
+    var nsLines = wrapRuns(doc.ctx, [{ text: nsText, font: F_BODY, color: DOC_INK }], PG_CW - boxPad * 2);
+    var boxH = 60 + nsLines.length * 33 + 62;
+    doc.ensure(boxH + 12);
+    var bTop = doc.y, bx = doc.ctx;
+    bx.fillStyle = DOC_PAPER; bx.fillRect(PG_M, bTop, PG_CW, boxH);
+    bx.fillStyle = DOC_BLUE; bx.fillRect(PG_M, bTop, 4, boxH);
+    bx.font = F_LABEL; trySpacing(bx, '1px'); bx.fillStyle = DOC_BLUE; bx.fillText('NEXT STEP', PG_M + boxPad, bTop + 44); trySpacing(bx, '0px');
+    var ny = bTop + 82;
+    nsLines.forEach(function (line) {
+      var px = PG_M + boxPad;
+      line.forEach(function (r) { bx.font = r.font; bx.fillStyle = r.color; bx.fillText(r.text, px, ny); px += bx.measureText(r.text).width; });
+      ny += 33;
+    });
+    bx.fillStyle = DOC_NAVY; bx.font = F_SMALL_SB;
+    bx.fillText('Thomas Delaporte · TDcatalyst      sail@tdcatalyst.com      cal.com/tdcatalyst      tdcatalyst.com/grow', PG_M + boxPad, ny + 14);
+    doc.y = bTop + boxH + 28;
+
+    doc.para('About the model: the simulation draws on Diffusion of Innovations, Prosci and ADKAR, the transtheoretical stages of change, COM-B, implementation-intention research, and social-norms theory. It is an illustrative planning model and its figures are directional; sources are listed on the simulation page at tdcatalyst.com/grow.', { font: F_SMALL, color: DOC_GRAY, lh: 26, after: 0 });
+
+    // ---- footers (need the final page count) ----
+    var total = doc.pages.length;
+    doc.pages.forEach(function (pg, i) {
+      var fx = pg.x, fy = PG_H - 74;
+      fx.strokeStyle = DOC_LINE; fx.lineWidth = 1;
+      fx.beginPath(); fx.moveTo(PG_M, fy); fx.lineTo(PG_W - PG_M, fy); fx.stroke();
+      fx.fillStyle = DOC_GRAY; fx.font = '400 15px Inter, Arial, sans-serif';
+      fx.fillText('TDcatalyst · Grow — Adoption Scenario Briefing', PG_M, fy + 30);
+      fx.textAlign = 'center'; fx.fillText('Illustrative simulation · directional figures', PG_W / 2, fy + 30);
+      fx.textAlign = 'right'; fx.fillText('Page ' + (i + 1) + ' of ' + total, PG_W - PG_M, fy + 30);
+      fx.textAlign = 'left';
+    });
+    return doc.pages.map(function (pg) { return pg.c; });
   }
+
+  // assemble the painted pages into a real multi-page PDF: each page a JPEG XObject on US Letter (612×792pt)
+  function pagesToPdfBlob(canvases) {
+    var jpegs = canvases.map(function (c) {
+      return { data: atob(c.toDataURL('image/jpeg', 0.85).split(',')[1]), w: c.width, h: c.height };
+    });
+    var parts = [], pos = 0, offsets = [];
+    function out(s) { parts.push(s); pos += s.length; }
+    function obj(n, body) { offsets[n] = pos; out(n + ' 0 obj\n' + body + '\nendobj\n'); }
+    var N = jpegs.length;
+    out('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+    obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+    var kids = [];
+    for (var i = 0; i < N; i++) kids.push((4 + i * 3) + ' 0 R');
+    obj(2, '<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + N + ' >>');
+    var dt = new Date();
+    function p2(v) { return (v < 10 ? '0' : '') + v; }
+    obj(3, '<< /Title (AI Transformation Simulation - Adoption Scenario Briefing) /Author (TDcatalyst) /Producer (tdcatalyst.com/grow) /CreationDate (D:' + dt.getFullYear() + p2(dt.getMonth() + 1) + p2(dt.getDate()) + p2(dt.getHours()) + p2(dt.getMinutes()) + p2(dt.getSeconds()) + ') >>');
+    jpegs.forEach(function (j, k) {
+      var po = 4 + k * 3, co = po + 1, io = po + 2;
+      obj(po, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /XObject << /Im' + k + ' ' + io + ' 0 R >> /ProcSet [/PDF /ImageC] >> /Contents ' + co + ' 0 R >>');
+      var stream = 'q 612 0 0 792 0 0 cm /Im' + k + ' Do Q';
+      obj(co, '<< /Length ' + stream.length + ' >>\nstream\n' + stream + '\nendstream');
+      offsets[io] = pos;
+      out(io + ' 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + j.w + ' /Height ' + j.h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + j.data.length + ' >>\nstream\n');
+      out(j.data);
+      out('\nendstream\nendobj\n');
+    });
+    var maxObj = 3 + N * 3, xrefPos = pos;
+    var xref = 'xref\n0 ' + (maxObj + 1) + '\n0000000000 65535 f \n';
+    for (var n = 1; n <= maxObj; n++) xref += ('0000000000' + offsets[n]).slice(-10) + ' 00000 n \n';
+    out(xref);
+    out('trailer\n<< /Size ' + (maxObj + 1) + ' /Root 1 0 R /Info 3 0 R >>\nstartxref\n' + xrefPos + '\n%%EOF');
+    var full = parts.join('');
+    var bytes = new Uint8Array(full.length);
+    for (var b = 0; b < full.length; b++) bytes[b] = full.charCodeAt(b) & 0xFF;
+    return new Blob([bytes], { type: 'application/pdf' });
+  }
+
+  function buildBriefingPdf(chartImg) { return pagesToPdfBlob(paintBriefingPages(chartImg)); }
 
   (function wireLeadGen() {
     var form = document.querySelector('#report form');
@@ -1919,25 +2173,62 @@
       if (!form.checkValidity()) { form.reportValidity(); return; }
       var btn = form.querySelector('button[type=submit]');
       var orig = btn ? btn.textContent : '';
-      if (btn) { btn.disabled = true; btn.textContent = 'Preparing your summary…'; }
+      if (btn) { btn.disabled = true; btn.textContent = 'Preparing your briefing…'; }
+      // subject line Tom can triage from the inbox list
+      var subj = form.querySelector('input[name=_subject]');
+      var org = (document.getElementById('company').value || '').trim();
+      var who = (document.getElementById('name').value || '').trim();
+      if (subj) subj.value = 'Simulation briefing request — ' + (org || who || 'new scenario');
       var finished = false;
       function go() { submitting = true; if (btn) { btn.disabled = false; btn.textContent = orig; } form.submit(); }
-      var guard = setTimeout(function () { if (!finished) { finished = true; go(); } }, 4000);
+      var guard = setTimeout(function () { if (!finished) { finished = true; go(); } }, 5000);
       chartToImage(function (img) {
         if (finished) return;
-        var canvas; try { canvas = buildSummaryCanvas(img); } catch (err) { canvas = null; }
-        if (!canvas || !window.DataTransfer || !canvas.toBlob) { finished = true; clearTimeout(guard); go(); return; }
-        canvas.toBlob(function (blob) {
-          if (finished) return; finished = true; clearTimeout(guard);
-          try {
-            if (blob) { var dt = new DataTransfer(); dt.items.add(new File([blob], 'transformation-simulation-summary.png', { type: 'image/png' })); fileInput.files = dt.files; }
-          } catch (err) {}
-          go();
-        }, 'image/png');
+        finished = true; clearTimeout(guard);
+        try {
+          var blob = buildBriefingPdf(img);
+          if (blob && window.DataTransfer) {
+            var dtf = new DataTransfer();
+            dtf.items.add(new File([blob], 'TDcatalyst-adoption-scenario-briefing.pdf', { type: 'application/pdf' }));
+            fileInput.files = dtf.files;
+          }
+        } catch (err) {}
+        go();
       });
     });
   })();
 
+  // dev harness: ?debugreport=1 builds a sample scenario, renders the briefing pages inline, and exposes
+  // the assembled PDF as base64 (hidden textarea #pdf64) so the document can be checked without submitting.
+  if (/[?&]debugreport=1/.test(location.search)) {
+    setTimeout(function () {
+      flagged = { 'em-con': true, 'lm-pre': true, 'ia-act': true };
+      plan = ['sponsor', 'proof', 'manager', 'build', 'peer', 'policy'];
+      document.getElementById('name').value = 'Jordan Example';
+      document.getElementById('company').value = 'Acme Industries';
+      document.getElementById('context').value = 'We rolled out an AI copilot to a 900-person claims organization in March. Innovators are active but the early majority stalled after the pilot, and managers have no talking points.';
+      render();
+      var ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+      ready.then(function () {
+        chartToImage(function (img) {
+          var host = document.createElement('div');
+          host.id = 'debug-report';
+          host.style.cssText = 'background:#555;padding:20px;display:grid;gap:20px;justify-content:center;';
+          var pages = paintBriefingPages(img);
+          pages.forEach(function (c) { c.style.width = PG_W + 'px'; c.style.height = 'auto'; c.style.background = '#fff'; host.appendChild(c); });
+          document.body.insertBefore(host, document.body.firstChild);
+          var fr = new FileReader();
+          fr.onload = function () {
+            var ta = document.createElement('textarea');
+            ta.id = 'pdf64'; ta.style.display = 'none'; ta.textContent = fr.result;
+            host.appendChild(ta);
+            document.title = 'DEBUGREPORT-READY-' + pages.length;
+          };
+          fr.readAsDataURL(pagesToPdfBlob(pages));
+        });
+      });
+    }, 400);
+  }
 })();
 </script>
 </body>
