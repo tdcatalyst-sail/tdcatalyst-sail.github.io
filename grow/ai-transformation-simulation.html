@@ -483,21 +483,49 @@
   // when a play runs OUT OF ORDER (before the prerequisite it leans on, or before its proof/maturity
   // exists), the organizational outcome inverts: instead of the value above, you get a specific adverse
   // result. Each entry names what the org actually gets, and the mechanism, grounded in change practice.
+  // A play with more than one prerequisite carries a variant PER prerequisite (byReq) plus a combined
+  // default for when several are missing at once — so the callout always names the foundation that is
+  // actually absent, never one the plan already satisfies (see adverseFor). Single-prerequisite plays
+  // stay flat: their one body can only surface when that prerequisite is the gap.
   var VALUE_ADVERSE = {
     manager:  { head: "A channel with no mandate to carry",
                 body: "Managers can only amplify a change their own leadership has visibly backed. Equipped before the sponsor has gone first and set the priority, they are handed talking points with no air cover, so they soft-pedal the message and much of the amplification you were counting on never fires." },
     build:    { head: "Capability that never gets used",
                 body: "Run before a sponsor has cleared the time and reset priorities, skill-building competes with the unchanged day job and loses. People attend, then return to old workloads and old incentives, so the judgment is rarely exercised and most of the capability you paid for is never banked." },
-    whenthen: { head: "Habit without the skill to cash it in",
-                body: "A cue to “use the tool now” only pays off for someone who already knows how to get value from it. Fired before the capability is built, it drives activity, not better output: logins on schedule, with no lift in quality or speed behind them." },
+    whenthen: {
+      byReq: {
+        build: { head: "Habit without the skill to cash it in",
+                 body: "A cue to “use the tool now” only pays off for someone who already knows how to get value from it. Fired before the capability is built, it drives activity, not better output: logins on schedule, with no lift in quality or speed behind them." },
+        whole: { head: "A cue that fires into an unfinished tool",
+                 body: "The cue lands people in the tool at the right moment, and the skill is there — but with the kit unfinished, the integrations, templates, and function-specific guides aren’t there to meet them. Each firing hits a rough edge, so the loop never closes into a reward, and the habit decays before it sets." }
+      },
+      default: { head: "Habit without the skill to cash it in",
+                 body: "A cue to “use the tool now” only pays off for someone who can already get value from it and has a finished tool to get it from. Fired before the capability is built and before the kit exists, it drives activity, not better output: logins on schedule, with no lift in quality or speed behind them." }
+    },
     whole:    { head: "A finished kit belief hasn’t earned",
                 body: "Shipping every integration and template before a single visible win exists solves a problem the majority doesn’t yet feel. Budget goes into polish while belief is still zero, so uptake barely moves however complete the product is." },
-    friction: { head: "Effort added, not removed",
-                body: "Redesigning the workflow before people are bought in and capable bolts a new path onto an unwilling, unskilled team. The relearning dip arrives without the payoff on the far side, and the disruption reads as change for its own sake." },
+    friction: {
+      byReq: {
+        build: { head: "A rebuilt path the team can’t yet walk",
+                 body: "Rebuilding the task around the tool before people can operate it hands a redesigned workflow to a team still learning the basics. The disruption is immediate; the payoff waits on skill that hasn’t landed, so the change reads as churn and spends trust before the method can prove out." },
+        whole: { head: "A rebuilt path, nothing laid on it",
+                 body: "Retiring the old workflow before the kit exists — integrations, templates, the function-specific guides — sends a capable team down a new path with nothing laid on it. The relearning dip arrives and no equipped route is waiting on the far side, so the workaround becomes the real process and the redesign quietly reverts." }
+      },
+      default: { head: "Effort added, not removed",
+                 body: "Rebuilding the task around the tool before people are capable and before the kit exists lays a new path on a team that can’t yet walk it and has nothing to walk it with. The relearning dip arrives without the payoff on the far side, and the disruption reads as change for its own sake." }
+    },
     peer:     { head: "A “peer story” skeptics see through",
                 body: "The relay works only when a credible, same-function colleague has genuinely succeeded. Run before proof is seeded, there is no real story to carry, so the reference reads as a staged demo, and the manufacture hardens the very doubt it was meant to soften." },
-    inaction: { head: "A norm claim that’s checkably false",
-                body: "“Most of your peers are already in” moves the late majority only if it is true. Invoked before real majority momentum exists, the claim is falsifiable and false, and once you are caught bluffing, trust converts into cynicism and the skeptics are lost for good." },
+    inaction: {
+      byReq: {
+        proof: { head: "A norm claim with no first movers behind it",
+                 body: "“Most of your peers are already in” needs real early adopters to point at. Invoked before proof is even seeded, there are no first wins to cite, so the claim is manufactured whole, and the moment a skeptic checks and finds nothing, the bluff hardens into cynicism." },
+        peer:  { head: "A norm claim that has outrun its proof",
+                 body: "“Most of your peers are already in” only carries when same-function peers have moved and can vouch. Invoked before the relay has spread the early wins, the norm is real in pockets but not yet where this audience can see it, so the claim reads as inflated and the skeptics discount it." }
+      },
+      default: { head: "A norm claim that’s checkably false",
+                 body: "“Most of your peers are already in” moves the late majority only if it is true. Invoked before real majority momentum exists, the claim is falsifiable and false, and once you are caught bluffing, trust converts into cynicism and the skeptics are lost for good." }
+    },
     quiet:    { head: "Fear pushed into hard resistance",
                 body: "Approaching laggards before the majority has visibly moved makes the change feel like a spotlight on the unwilling. Pushed early, the honest 1:1 reads as a threat rather than support, and the underlying fear (often about the job itself) entrenches instead of easing." },
     policy:   { head: "Compliance theater ahead of the behavior",
@@ -525,16 +553,28 @@
   // a play's foundation is broken if a prerequisite is missing from the plan entirely (absent) or
   // placed later than the play that leans on it (late). Both mean the groundwork hasn't landed yet.
   function missingPrereqs(planIds, idx) {
-    var id = planIds[idx], reqs = ORDER_AFTER[id] || [], late = [], absent = [];
+    var id = planIds[idx], reqs = ORDER_AFTER[id] || [], late = [], absent = [], lateIds = [], absentIds = [];
     reqs.forEach(function (r) {
       var j = planIds.indexOf(r);
-      if (j === -1) absent.push(PLAY_BY_ID[r].name);
-      else if (j > idx) late.push(PLAY_BY_ID[r].name);
+      if (j === -1) { absent.push(PLAY_BY_ID[r].name); absentIds.push(r); }
+      else if (j > idx) { late.push(PLAY_BY_ID[r].name); lateIds.push(r); }
     });
-    return { late: late, absent: absent };
+    return { late: late, absent: absent, lateIds: lateIds, absentIds: absentIds };
   }
   // back-compat: names of prerequisites placed later in the plan (used where only lateness matters)
   function orderIssues(planIds, idx) { return missingPrereqs(planIds, idx).late; }
+  // pick the adverse narrative that matches the foundation actually missing. A play with several
+  // prerequisites carries a variant per prerequisite (byReq); when exactly one is absent/late we name
+  // that one, and when more than one is missing (or none is pinpointed, e.g. a muted play) we fall back
+  // to the combined default. Flat entries — single-prerequisite plays — are returned unchanged.
+  function adverseFor(id, mp) {
+    var e = VALUE_ADVERSE[id];
+    if (!e) return null;
+    if (e.head) return e;
+    var miss = (mp && mp.absentIds ? mp.absentIds : []).concat(mp && mp.lateIds ? mp.lateIds : []);
+    if (miss.length === 1 && e.byReq[miss[0]]) return e.byReq[miss[0]];
+    return e.default;
+  }
 
   // ===== the curated plays (from the 16-cell matrix) =====
   // weeks = how long the play occupies the 24-week timeline (some work is not a two-week activity).
@@ -1581,7 +1621,7 @@
         var pip = broke ? '✕' : (misordered ? '⧗' : (i + 1));
         // out-of-order plays invert the organizational outcome: show the specific adverse result, in red.
         var offOrder = broke || misordered;
-        var adv = VALUE_ADVERSE[id];
+        var adv = adverseFor(id, mp);
         var valEyebrow, valHead, valBody;
         if (offOrder && adv) {
           valEyebrow = broke
