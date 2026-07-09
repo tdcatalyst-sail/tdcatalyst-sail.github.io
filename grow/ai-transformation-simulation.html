@@ -571,15 +571,6 @@
       blurb: 'Rebuild the task around the tool and retire the old path, not AI bolted onto the old process. People relearn the workflow, so adoption dips before it steps up durably.',
       raises: { em: 0.18, lm: 0.16 }, push: { em: 0.08, lm: 0.06 }, needsProof: 0, capability: 0.22, structural: 0.70, disrupt: 0.20,
       cells: ['em-prp','lm-prp'] },
-    // ---- Capability: can they actually do it well ----
-    { id: 'build',    name: 'Capability Build',     framework: 'ADKAR · Ability / COM-B Capability', group: 'C', weeks: 6, handoff: 0.4,
-      blurb: 'Role-based skill-building (prompting, judgment, workflow redesign) so people get real value, not just log in. Not a two-week push.',
-      raises: { em: 0.12, lm: 0.10 }, push: { em: 0.05, lm: 0.04 }, needsProof: 0, capability: 0.40, disrupt: 0.08,
-      cells: ['em-prp','em-act','lm-prp'] },
-    { id: 'whenthen', name: 'When-Then Prompts',    framework: 'Implementation Intentions', group: 'C', weeks: 1, handoff: 1.0,
-      blurb: '"When my Monday calendar opens, I run the review in the new tool." Converts intent into action.',
-      raises: { em: 0.10, lm: 0.08 }, push: { em: 0.12, lm: 0.08 }, needsProof: 0, capability: 0.15,
-      cells: ['em-prp','em-act'] },
     // ---- Motivation: belief & desire ----
     { id: 'proof',    name: 'Proof Seeding',        framework: 'Diffusion of Innovations', group: 'M', weeks: 3, handoff: 1.0,
       blurb: 'Recruit innovators, white-glove their first win, make it a visible story.',
@@ -597,6 +588,15 @@
       blurb: 'One-on-one, surface the real fear, pre-built path, sustained support, quiet recognition, never a spotlight.',
       raises: { lg: 0.48 }, push: { lg: 0.05 }, needsProof: 0.50,
       cells: ['lg-pre','lg-con','lg-prp','lg-act'] },
+    // ---- Capability: can they actually do it well ----
+    { id: 'build',    name: 'Capability Build',     framework: 'ADKAR · Ability / COM-B Capability', group: 'C', weeks: 6, handoff: 0.4,
+      blurb: 'Role-based skill-building (prompting, judgment, workflow redesign) so people get real value, not just log in. Not a two-week push.',
+      raises: { em: 0.12, lm: 0.10 }, push: { em: 0.05, lm: 0.04 }, needsProof: 0, capability: 0.40, disrupt: 0.08,
+      cells: ['em-prp','em-act','lm-prp'] },
+    { id: 'whenthen', name: 'When-Then Prompts',    framework: 'Implementation Intentions', group: 'C', weeks: 1, handoff: 1.0,
+      blurb: '"When my Monday calendar opens, I run the review in the new tool." Converts intent into action.',
+      raises: { em: 0.10, lm: 0.08 }, push: { em: 0.12, lm: 0.08 }, needsProof: 0, capability: 0.15,
+      cells: ['em-prp','em-act'] },
     // ---- Sustainment: make the change stick (institutionalization; belongs in the sustain phase) ----
     { id: 'policy',   name: 'Policy & Standards Codified', framework: 'ADKAR · Reinforcement', group: 'S', weeks: 3, handoff: 1.0,
       blurb: 'Write AI use into policy, data governance, and the standard operating procedure: the new way becomes the documented way.',
@@ -1240,8 +1240,8 @@
   // ===== build the library =====
   var GROUPS = [
     { key: 'O', label: 'Opportunity', desc: 'structural & social permission' },
-    { key: 'C', label: 'Capability', desc: 'can they do it well' },
     { key: 'M', label: 'Motivation', desc: 'belief & desire' },
+    { key: 'C', label: 'Capability', desc: 'can they do it well' },
     { key: 'S', label: 'Sustainment', desc: 'make the change stick' }
   ];
   GROUPS.forEach(function (grp) {
