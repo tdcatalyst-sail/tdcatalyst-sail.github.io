@@ -43,7 +43,7 @@
 
     body {
       font-family: var(--sans);
-      font-size: 17px;
+      font-size: 17.5px;
       line-height: 1.65;
       color: var(--charcoal);
       background: var(--offwhite);
@@ -51,19 +51,18 @@
     }
 
     h1, h2, h3 { font-family: var(--serif); font-weight: 500; color: var(--navy); letter-spacing: 0; }
-    h1 { font-size: clamp(2rem, 4.6vw, 3rem); line-height: 1.12; }
-    h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1.2; margin-bottom: 0.9rem; }
+    h1 { font-size: clamp(2.1rem, 4.8vw, 3.15rem); line-height: 1.12; }
+    h2 { font-size: clamp(1.55rem, 3.1vw, 2.15rem); line-height: 1.2; margin-bottom: 0.9rem; }
     p { margin-bottom: 1rem; }
 
     a { color: var(--navy); text-decoration: none; }
 
     .wrap { max-width: 1180px; margin: 0 auto; padding: 0 1.75rem; }
-    .narrow { max-width: 880px; }
 
     .eyebrow {
       font-family: var(--mono);
       font-weight: 500;
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--gold);
@@ -84,7 +83,11 @@
       background: rgba(242, 244, 241, 0.93);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--hairline);
+      transform: translateY(0);
+      transition: transform 0.3s ease;
+      will-change: transform;
     }
+    nav.nav--hidden { transform: translateY(-100%); }
     .nav-inner {
       max-width: 1180px; margin: 0 auto;
       padding: 0.95rem 1.75rem;
@@ -94,11 +97,11 @@
     .nav-logo .mark-td { font-weight: 700; }
     .nav-logo .mark-cat { font-weight: 400; color: var(--charcoal); }
     .nav-links { display: flex; gap: 1.6rem; margin-left: auto; align-items: center; list-style: none; }
-    .nav-links a { font-size: 0.9rem; color: var(--charcoal); padding-bottom: 2px; border-bottom: 1px solid transparent; }
+    .nav-links a { font-size: 0.92rem; color: var(--charcoal); padding-bottom: 2px; border-bottom: 1px solid transparent; transition: border-color 0.2s, color 0.2s; }
     .nav-links a:hover { border-bottom-color: var(--gold); color: var(--navy); }
     .nav-cta {
       background: var(--navy); color: var(--paper) !important;
-      font-family: var(--mono); font-size: 0.78rem !important; letter-spacing: 0.08em;
+      font-family: var(--mono); font-size: 0.8rem !important; letter-spacing: 0.08em;
       padding: 0.55rem 1.1rem; border-radius: 2px; border: none !important;
       transition: background 0.2s;
     }
@@ -110,12 +113,12 @@
     .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
     .hero-inner { position: relative; padding: clamp(4rem, 9vw, 7.5rem) 0 clamp(3.5rem, 8vw, 6.5rem); }
     .hero h1 { max-width: 17ch; margin-bottom: 1.2rem; text-wrap: balance; }
-    .hero-sub { font-size: 1.12rem; line-height: 1.6; color: #40505c; max-width: 54ch; margin-bottom: 2rem; }
+    .hero-sub { font-size: 1.16rem; line-height: 1.62; color: #40505c; max-width: 54ch; margin-bottom: 2rem; }
     .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
 
     .btn {
-      display: inline-block; padding: 0.75rem 1.5rem; border-radius: 2px;
-      font-size: 0.92rem; font-weight: 500; letter-spacing: 0.02em;
+      display: inline-block; padding: 0.78rem 1.55rem; border-radius: 2px;
+      font-size: 0.95rem; font-weight: 500; letter-spacing: 0.02em;
       transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
     .btn-primary { background: var(--navy); color: var(--paper); border: 1px solid var(--navy); }
@@ -123,54 +126,73 @@
     .btn-ghost { border: 1px solid var(--hairline); color: var(--navy); background: transparent; }
     .btn-ghost:hover { border-color: var(--gold); }
 
-    /* ===== PRACTICES TRIPTYCH ===== */
-    .practices { background: #fff; padding: clamp(3.5rem, 7vw, 5.5rem) 0; }
+    /* ===== PRACTICE CARDS ===== */
+    .practices { background: var(--offwhite); padding: clamp(3.5rem, 7vw, 5.5rem) 0; }
     .section-head { margin-bottom: clamp(2rem, 4vw, 3rem); }
-    .triptych { display: grid; grid-template-columns: 1fr 1fr 1fr; }
-    .prac {
-      display: block; padding: 0.4rem 2.2rem 0.6rem;
-      border-left: 1px solid var(--hairline);
-      transition: background 0.2s;
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.1rem, 2.2vw, 1.8rem); }
+    .prac-card {
+      position: relative;
+      display: flex; flex-direction: column;
+      background: #fff;
+      border: 1px solid var(--hairline);
+      border-radius: 3px;
+      padding: 1.9rem 1.9rem 1.6rem;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(22, 40, 63, 0.05);
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
     }
-    .prac:first-child { border-left: none; padding-left: 0; }
-    .prac:last-child { padding-right: 0; }
-    .prac:hover { background: var(--paper); }
-    .prac-rule { display: block; width: 30px; border-top: 2px solid; margin-bottom: 1rem; }
-    .prac.sail .prac-rule { border-color: var(--gold); }
-    .prac.grow .prac-rule { border-color: var(--logo-blue); }
-    .prac.advise .prac-rule { border-color: var(--logo-red); }
-    .prac h3 { font-size: 1.55rem; font-weight: 500; margin-bottom: 0.35rem; }
+    .prac-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px rgba(22, 40, 63, 0.07), 0 18px 40px rgba(22, 40, 63, 0.13);
+    }
+    .prac-card.sail:hover { border-color: var(--gold); }
+    .prac-card.grow:hover { border-color: var(--logo-blue); }
+    .prac-card.advise:hover { border-color: var(--logo-red); }
+    /* each card carries its own faint terrain, in its practice tint */
+    .card-terrain {
+      position: absolute; left: 0; right: 0; bottom: 0;
+      height: 130px; width: 100%;
+      pointer-events: none;
+      opacity: 0.75;
+      transition: opacity 0.3s ease;
+    }
+    .prac-card:hover .card-terrain { opacity: 1; }
+    .prac-card > *:not(.card-terrain) { position: relative; }
+    .prac-rule { display: block; width: 30px; border-top: 2px solid; margin-bottom: 1.1rem; transition: width 0.3s ease; }
+    .prac-card:hover .prac-rule { width: 52px; }
+    .prac-card.sail .prac-rule { border-color: var(--gold); }
+    .prac-card.grow .prac-rule { border-color: var(--logo-blue); }
+    .prac-card.advise .prac-rule { border-color: var(--logo-red); }
+    .prac-card h3 { font-size: 1.6rem; font-weight: 500; margin-bottom: 0.3rem; }
     .prac-tag {
-      font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.13em;
+      font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em;
       text-transform: uppercase; margin-bottom: 1rem;
     }
-    .prac.sail .prac-tag { color: var(--gold); }
-    .prac.grow .prac-tag { color: var(--logo-blue); }
-    .prac.advise .prac-tag { color: var(--logo-red); }
-    .prac-desc { font-size: 0.95rem; line-height: 1.6; color: var(--charcoal); }
-    .prac-who { font-size: 0.85rem; color: var(--midgray); }
-    .prac-go { font-weight: 600; font-size: 0.92rem; }
-    .prac.sail .prac-go { color: var(--gold); }
-    .prac.grow .prac-go { color: var(--logo-blue); }
-    .prac.advise .prac-go { color: var(--logo-red); }
-    @media (max-width: 860px) {
-      .triptych { grid-template-columns: 1fr; }
-      .prac { border-left: none; border-top: 1px solid var(--hairline); padding: 1.8rem 0 1.4rem; }
-      .prac:first-child { border-top: none; padding-top: 0; }
-    }
+    .prac-card.sail .prac-tag { color: var(--gold); }
+    .prac-card.grow .prac-tag { color: var(--logo-blue); }
+    .prac-card.advise .prac-tag { color: var(--logo-red); }
+    .prac-desc { font-size: 0.99rem; line-height: 1.6; color: var(--charcoal); }
+    .prac-who { font-size: 0.88rem; color: var(--midgray); }
+    .prac-go { font-weight: 600; font-size: 0.95rem; margin-top: auto; padding-top: 0.9rem; }
+    .prac-go .arr { display: inline-block; transition: transform 0.25s ease; }
+    .prac-card:hover .prac-go .arr { transform: translateX(5px); }
+    .prac-card.sail .prac-go { color: var(--gold); }
+    .prac-card.grow .prac-go { color: var(--logo-blue); }
+    .prac-card.advise .prac-go { color: var(--logo-red); }
+    @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
 
     /* ===== PHOTO BAND ===== */
     .photo-band { position: relative; }
     .photo-band img { display: block; width: 100%; height: clamp(300px, 44vw, 470px); object-fit: cover; }
     .band-note {
       position: absolute; right: 1.2rem; bottom: 1rem;
-      font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+      font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
       color: #F2F4F1; background: rgba(22, 40, 63, 0.55);
       padding: 0.35rem 0.7rem; border-radius: 2px;
     }
 
     /* ===== THROUGH-LINE ===== */
-    .through { background: var(--offwhite); padding: clamp(3.5rem, 7vw, 5.5rem) 0; }
+    .through { background: var(--paper); padding: clamp(3.5rem, 7vw, 5.5rem) 0; }
     .through-grid { display: grid; grid-template-columns: 5fr 1px 7fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
     .seam-rule { width: 1px; height: 100%; background: linear-gradient(to bottom, var(--gold), rgba(200, 149, 10, 0.15)); }
     .through h2 { max-width: 14ch; }
@@ -188,7 +210,7 @@
       position: relative; padding: clamp(3.5rem, 7vw, 5.5rem) 0;
       display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;
     }
-    .cta-sentence { font-family: var(--serif); font-weight: 400; font-size: clamp(1.3rem, 2.6vw, 1.7rem); line-height: 1.35; color: var(--paper); max-width: 24ch; margin: 0; }
+    .cta-sentence { font-family: var(--serif); font-weight: 400; font-size: clamp(1.35rem, 2.7vw, 1.75rem); line-height: 1.35; color: var(--paper); max-width: 24ch; margin: 0; }
     .btn-gold { background: var(--gold); color: var(--navy-deep); border: 1px solid var(--gold); font-weight: 600; }
     .btn-gold:hover { background: var(--paper); border-color: var(--paper); }
 
@@ -196,12 +218,22 @@
     footer { background: var(--offwhite); border-top: 1px solid var(--hairline); padding: 2.8rem 0 3.2rem; }
     footer .wrap { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; }
     footer .tagline { font-family: var(--serif); font-weight: 500; font-size: 1.15rem; color: var(--navy); margin-bottom: 0.3rem; }
-    footer .fine { font-size: 0.82rem; color: var(--midgray); }
-    footer h4 { font-family: var(--mono); font-weight: 500; font-size: 0.68rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.7rem; }
-    footer a { display: block; font-size: 0.9rem; color: var(--charcoal); margin-bottom: 0.35rem; }
+    footer .fine { font-size: 0.84rem; color: var(--midgray); }
+    footer h4 { font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.7rem; }
+    footer a { display: block; font-size: 0.92rem; color: var(--charcoal); margin-bottom: 0.35rem; }
     footer a:hover { color: var(--navy); }
-    footer .land { grid-column: 1 / -1; font-size: 0.78rem; color: var(--midgray); border-top: 1px solid var(--hairline); padding-top: 1.2rem; margin-top: 0.6rem; }
+    footer .land { grid-column: 1 / -1; font-size: 0.8rem; color: var(--midgray); border-top: 1px solid var(--hairline); padding-top: 1.2rem; margin-top: 0.6rem; }
     @media (max-width: 680px) { footer .wrap { grid-template-columns: 1fr; } }
+
+    /* ===== SCROLL REVEALS (JS adds .in; no-JS never hides content) ===== */
+    html.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    html.js .reveal.in { opacity: 1; transform: none; }
+    html.js .cards .reveal:nth-child(2) { transition-delay: 0.1s; }
+    html.js .cards .reveal:nth-child(3) { transition-delay: 0.2s; }
+    @media (prefers-reduced-motion: reduce) {
+      html.js .reveal { opacity: 1; transform: none; transition: none; }
+      .prac-card, .prac-rule, .prac-go .arr { transition: none; }
+    }
 
     /* ===== LAB COMPARE PILL ===== */
     .lab-pill {
@@ -213,11 +245,12 @@
     }
     .lab-pill:hover { background: var(--gold); color: var(--navy-deep); }
   </style>
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to content</a>
 
-<nav>
+<nav id="labnav">
   <div class="nav-inner">
     <a href="/brand-lab/" class="nav-logo"><span class="mark-td">TD</span><span class="mark-cat">catalyst</span></a>
     <ul class="nav-links">
@@ -232,7 +265,7 @@
 
 <!-- HERO -->
 <section class="hero" id="main-content">
-  <canvas class="terrain" data-seed="19" data-line="#1F3A5F" data-index="#C8950A" data-alpha="0.14" data-index-alpha="0.30" data-fade="left" data-fade-color="242,244,241" aria-hidden="true"></canvas>
+  <canvas class="terrain" data-seed="19" data-line="#1F3A5F" data-index="#C8950A" data-alpha="0.14" data-index-alpha="0.30" data-fade="left" data-fade-color="242,244,241" data-animate="1" aria-hidden="true"></canvas>
   <div class="wrap hero-inner">
     <div class="eyebrow">An advisory practice by Tom Delaporte</div>
     <h1>One question, three ways to work it.</h1>
@@ -247,34 +280,37 @@
 <!-- THE THREE PRACTICES -->
 <section class="practices" id="practices">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">The practices</div>
       <h2>Choose your way in.</h2>
     </div>
-    <div class="triptych">
-      <a href="/sail/" class="prac sail">
+    <div class="cards">
+      <a href="/sail/" class="prac-card sail reveal">
+        <canvas class="card-terrain" data-seed="311" data-line="#C8950A" data-index="#C8950A" data-alpha="0.10" data-index-alpha="0.22" data-fade="top" data-fade-color="255,255,255" aria-hidden="true"></canvas>
         <span class="prac-rule" aria-hidden="true"></span>
         <h3>Sail</h3>
         <div class="prac-tag">Executive field sessions</div>
         <p class="prac-desc">Adaptability advisory for senior executives, delivered on foot in specific landscapes on the Pacific coast and the Skyline ridge. A five-framework method for naming the adaptive challenge AI puts in front of your leadership, and a written diagnostic to act on it.</p>
         <p class="prac-who">For senior executives and transformation leaders who need strategic clarity.</p>
-        <span class="prac-go">Enter Sail &rarr;</span>
+        <span class="prac-go">Enter Sail <span class="arr">&rarr;</span></span>
       </a>
-      <a href="/grow/" class="prac grow">
+      <a href="/grow/" class="prac-card grow reveal">
+        <canvas class="card-terrain" data-seed="422" data-line="#4A7C9E" data-index="#4A7C9E" data-alpha="0.10" data-index-alpha="0.22" data-fade="top" data-fade-color="255,255,255" aria-hidden="true"></canvas>
         <span class="prac-rule" aria-hidden="true"></span>
         <h3>Grow</h3>
         <div class="prac-tag">Deploy &middot; enterprise transformation</div>
         <p class="prac-desc">AI transformation consulting for enterprises and public-sector organizations. Portfolio management for AI deployments, change management and adoption, and the reorganization work that follows when AI changes what the work is.</p>
         <p class="prac-who">For enterprises and public-sector organizations deploying AI at scale.</p>
-        <span class="prac-go">Enter Grow &rarr;</span>
+        <span class="prac-go">Enter Grow <span class="arr">&rarr;</span></span>
       </a>
-      <a href="/advise/" class="prac advise">
+      <a href="/advise/" class="prac-card advise reveal">
+        <canvas class="card-terrain" data-seed="533" data-line="#C44536" data-index="#C44536" data-alpha="0.10" data-index-alpha="0.22" data-fade="top" data-fade-color="255,255,255" aria-hidden="true"></canvas>
         <span class="prac-rule" aria-hidden="true"></span>
         <h3>Advise</h3>
         <div class="prac-tag">Founder advisory &amp; board work</div>
         <p class="prac-desc">A retainer and advisory-board offering for startup founders moving upmarket. Enterprise buyers evaluate AI products differently than early adopters do. Advise brings the operator-side view of how those deals are actually won, adopted, and renewed.</p>
         <p class="prac-who">For founders taking an AI product into enterprise accounts.</p>
-        <span class="prac-go">Enter Advise &rarr;</span>
+        <span class="prac-go">Enter Advise <span class="arr">&rarr;</span></span>
       </a>
     </div>
   </div>
@@ -289,7 +325,7 @@
 <!-- THE THROUGH-LINE -->
 <section class="through">
   <div class="wrap">
-    <div class="through-grid">
+    <div class="through-grid reveal">
       <div>
         <div class="eyebrow">The through-line</div>
         <h2>Three positions on the same seam.</h2>
@@ -307,7 +343,7 @@
 <!-- FOOTER CTA -->
 <section class="cta-panel">
   <canvas class="terrain" data-seed="66" data-line="#3d5a7c" data-index="#d8a838" data-alpha="0.35" data-index-alpha="0.55" aria-hidden="true"></canvas>
-  <div class="wrap cta-inner">
+  <div class="wrap cta-inner reveal">
     <p class="cta-sentence">Not sure which practice fits? A thirty-minute conversation sorts it quickly.</p>
     <a href="https://cal.com/tdcatalyst" class="btn btn-gold" target="_blank" rel="noopener">Book a Fit Call</a>
   </div>
@@ -342,6 +378,8 @@
 
 <script>
 (function () {
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   function makeNoise(seed) {
     function hash(x, y) {
       var h = Math.sin(x * 127.1 + y * 311.7 + seed * 74.7) * 43758.5453;
@@ -362,7 +400,8 @@
     };
   }
 
-  function drawTerrain(canvas) {
+  // t drifts the noise field slowly — the terrain "breathes"
+  function drawTerrain(canvas, t) {
     var d = canvas.dataset;
     var seed = parseFloat(d.seed || '1');
     var alpha = parseFloat(d.alpha || '0.15');
@@ -370,17 +409,20 @@
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
+    if (canvas.width !== Math.round(w * dpr)) {
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+    }
     var ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
     var fbm = makeNoise(seed);
     var cell = 6, scale = 210;
     var cols = Math.ceil(w / cell) + 1, rows = Math.ceil(h / cell) + 1;
     var field = [];
     for (var j = 0; j < rows; j++) {
       field[j] = [];
-      for (var i = 0; i < cols; i++) field[j][i] = fbm(i * cell / scale, j * cell / scale);
+      for (var i = 0; i < cols; i++) field[j][i] = fbm(i * cell / scale + t, j * cell / scale + t * 0.4);
     }
     var levels = 14;
     for (var li = 0; li < levels; li++) {
@@ -420,8 +462,8 @@
       ctx.stroke();
     }
     ctx.globalAlpha = 1;
-    if (d.fade === 'left') {
-      var g = ctx.createLinearGradient(w, 0, 0, 0);
+    if (d.fade === 'left' || d.fade === 'top') {
+      var g = d.fade === 'left' ? ctx.createLinearGradient(w, 0, 0, 0) : ctx.createLinearGradient(0, h, 0, 0);
       g.addColorStop(0, 'rgba(' + d.fadeColor + ',0)');
       g.addColorStop(1, 'rgba(' + d.fadeColor + ',0.92)');
       ctx.fillStyle = g;
@@ -429,13 +471,55 @@
     }
   }
 
-  function renderAll() { document.querySelectorAll('canvas.terrain').forEach(drawTerrain); }
+  var canvases = document.querySelectorAll('canvas.terrain, canvas.card-terrain');
+  function renderAll() { canvases.forEach(function (c) { drawTerrain(c, 0); }); }
   var raf = null;
   window.addEventListener('resize', function () {
     if (raf) cancelAnimationFrame(raf);
     raf = requestAnimationFrame(renderAll);
   });
   renderAll();
+
+  // Slow drift on the hero terrain only — paused offscreen, off under reduced motion
+  var heroCanvas = document.querySelector('canvas[data-animate]');
+  if (heroCanvas && !reducedMotion && window.matchMedia('(min-width: 700px)').matches) {
+    var driftT = 0, heroVisible = true, lastFrame = 0;
+    new IntersectionObserver(function (entries) {
+      heroVisible = entries[0].isIntersecting;
+    }).observe(heroCanvas);
+    function tick(now) {
+      if (heroVisible && !document.hidden && now - lastFrame > 50) { // ~20fps is plenty for a drift
+        lastFrame = now;
+        driftT += 0.0018;
+        drawTerrain(heroCanvas, driftT);
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Scroll reveals
+  var revealEls = document.querySelectorAll('.reveal');
+  if (reducedMotion || !('IntersectionObserver' in window)) {
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(function (el) { io.observe(el); });
+  }
+
+  // Auto-hiding nav (same behavior as production script.js)
+  var navEl = document.getElementById('labnav');
+  var lastY = window.scrollY;
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY;
+    if (y > lastY && y > 80) navEl.classList.add('nav--hidden');
+    else navEl.classList.remove('nav--hidden');
+    lastY = y;
+  }, { passive: true });
 })();
 </script>
 </body>
