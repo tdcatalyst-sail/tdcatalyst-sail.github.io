@@ -554,7 +554,7 @@ footer {
   background: var(--navy);
   color: var(--offwhite);
   padding: 3.5rem 0 2rem;
-  margin-top: 4rem;
+  margin-top: 0; /* was 4rem; showed as a stray body-bg strip after dark bands */
 }
 footer .wrap { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 2rem; }
 @media (max-width: 780px) { footer .wrap { grid-template-columns: 1fr; } }
