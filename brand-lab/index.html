@@ -102,9 +102,13 @@
     .nav-links a { font-size: 0.92rem; color: var(--charcoal); padding-bottom: 2px; border-bottom: 1px solid transparent; transition: border-color 0.2s, color 0.2s; }
     .nav-links a:hover { border-bottom-color: var(--gold); color: var(--navy); }
     .nav-cta {
+      display: inline-flex; align-items: center; justify-content: center;
       background: var(--navy); color: var(--paper) !important;
       font-family: var(--mono); font-size: 0.8rem !important; letter-spacing: 0.08em;
-      padding: 0.55rem 1.1rem; border-radius: 2px; border: none !important;
+      line-height: 1 !important;
+      /* extra left padding offsets the phantom letter-space after the last glyph */
+      padding: 0.6rem calc(1.1rem - 0.04em) 0.6rem calc(1.1rem + 0.04em);
+      border-radius: 2px; border: none !important;
       transition: background 0.2s;
     }
     .nav-cta:hover { background: var(--gold); color: var(--navy-deep) !important; }
