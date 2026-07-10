@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Brand Lab — TDcatalyst</title>
+  <meta name="description" content="Internal brand exploration. Not a public page." />
+  <!--
+    BRAND LAB — Direction C "Trailhead": Besley + Archivo + IBM Plex Mono,
+    with the generative contour (terrain) device.
+    Self-contained on purpose: inline CSS/JS so production style.css and
+    script.js are untouched. If this direction is adopted, the tokens and
+    components here get folded into the shared stylesheet and this page is
+    deleted. Unlinked + noindex — for side-by-side comparison with "/" only.
+  -->
+  <style>
+    @font-face { font-family: 'Besley'; src: url('/fonts/besley-var-latin.woff2') format('woff2'); font-weight: 400 900; font-display: swap; }
+    @font-face { font-family: 'Archivo'; src: url('/fonts/archivo-var-latin.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+    @font-face { font-family: 'IBM Plex Mono'; src: url('/fonts/plexmono-400-latin.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+    @font-face { font-family: 'IBM Plex Mono'; src: url('/fonts/plexmono-500-latin.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+
+    :root {
+      --offwhite: #EBEFEC;
+      --paper: #F2F4F1;
+      --navy: #1F3A5F;
+      --navy-deep: #16283F;
+      --charcoal: #222222;
+      --midgray: #5d6a70;
+      --gold: #C8950A;
+      --logo-red: #C44536;
+      --logo-blue: #4A7C9E;
+      --hairline: #D9D3CA;
+      --serif: 'Besley', Georgia, serif;
+      --sans: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    body {
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--charcoal);
+      background: var(--offwhite);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3 { font-family: var(--serif); font-weight: 500; color: var(--navy); letter-spacing: 0; }
+    h1 { font-size: clamp(2rem, 4.6vw, 3rem); line-height: 1.12; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1.2; margin-bottom: 0.9rem; }
+    p { margin-bottom: 1rem; }
+
+    a { color: var(--navy); text-decoration: none; }
+
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 1.75rem; }
+    .narrow { max-width: 880px; }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.9rem;
+    }
+
+    .skip-link {
+      position: absolute; top: -40px; left: 0;
+      background: var(--navy); color: #fff;
+      padding: 0.5rem 1rem; z-index: 1100;
+      font-size: 0.9rem; transition: top 0.1s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(242, 244, 241, 0.93);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .nav-inner {
+      max-width: 1180px; margin: 0 auto;
+      padding: 0.95rem 1.75rem;
+      display: flex; align-items: center; gap: 1.5rem;
+    }
+    .nav-logo { font-family: var(--serif); font-size: 1.3rem; color: var(--navy); white-space: nowrap; }
+    .nav-logo .mark-td { font-weight: 700; }
+    .nav-logo .mark-cat { font-weight: 400; color: var(--charcoal); }
+    .nav-links { display: flex; gap: 1.6rem; margin-left: auto; align-items: center; list-style: none; }
+    .nav-links a { font-size: 0.9rem; color: var(--charcoal); padding-bottom: 2px; border-bottom: 1px solid transparent; }
+    .nav-links a:hover { border-bottom-color: var(--gold); color: var(--navy); }
+    .nav-cta {
+      background: var(--navy); color: var(--paper) !important;
+      font-family: var(--mono); font-size: 0.78rem !important; letter-spacing: 0.08em;
+      padding: 0.55rem 1.1rem; border-radius: 2px; border: none !important;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--gold); }
+    @media (max-width: 680px) { .nav-links li:not(:last-child) { display: none; } }
+
+    /* ===== HERO ===== */
+    .hero { position: relative; background: var(--paper); overflow: hidden; border-bottom: 1px solid var(--hairline); }
+    .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .hero-inner { position: relative; padding: clamp(4rem, 9vw, 7.5rem) 0 clamp(3.5rem, 8vw, 6.5rem); }
+    .hero h1 { max-width: 17ch; margin-bottom: 1.2rem; text-wrap: balance; }
+    .hero-sub { font-size: 1.12rem; line-height: 1.6; color: #40505c; max-width: 54ch; margin-bottom: 2rem; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+
+    .btn {
+      display: inline-block; padding: 0.75rem 1.5rem; border-radius: 2px;
+      font-size: 0.92rem; font-weight: 500; letter-spacing: 0.02em;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn-primary { background: var(--navy); color: var(--paper); border: 1px solid var(--navy); }
+    .btn-primary:hover { background: var(--gold); border-color: var(--gold); color: var(--navy-deep); }
+    .btn-ghost { border: 1px solid var(--hairline); color: var(--navy); background: transparent; }
+    .btn-ghost:hover { border-color: var(--gold); }
+
+    /* ===== PRACTICES TRIPTYCH ===== */
+    .practices { background: #fff; padding: clamp(3.5rem, 7vw, 5.5rem) 0; }
+    .section-head { margin-bottom: clamp(2rem, 4vw, 3rem); }
+    .triptych { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+    .prac {
+      display: block; padding: 0.4rem 2.2rem 0.6rem;
+      border-left: 1px solid var(--hairline);
+      transition: background 0.2s;
+    }
+    .prac:first-child { border-left: none; padding-left: 0; }
+    .prac:last-child { padding-right: 0; }
+    .prac:hover { background: var(--paper); }
+    .prac-rule { display: block; width: 30px; border-top: 2px solid; margin-bottom: 1rem; }
+    .prac.sail .prac-rule { border-color: var(--gold); }
+    .prac.grow .prac-rule { border-color: var(--logo-blue); }
+    .prac.advise .prac-rule { border-color: var(--logo-red); }
+    .prac h3 { font-size: 1.55rem; font-weight: 500; margin-bottom: 0.35rem; }
+    .prac-tag {
+      font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.13em;
+      text-transform: uppercase; margin-bottom: 1rem;
+    }
+    .prac.sail .prac-tag { color: var(--gold); }
+    .prac.grow .prac-tag { color: var(--logo-blue); }
+    .prac.advise .prac-tag { color: var(--logo-red); }
+    .prac-desc { font-size: 0.95rem; line-height: 1.6; color: var(--charcoal); }
+    .prac-who { font-size: 0.85rem; color: var(--midgray); }
+    .prac-go { font-weight: 600; font-size: 0.92rem; }
+    .prac.sail .prac-go { color: var(--gold); }
+    .prac.grow .prac-go { color: var(--logo-blue); }
+    .prac.advise .prac-go { color: var(--logo-red); }
+    @media (max-width: 860px) {
+      .triptych { grid-template-columns: 1fr; }
+      .prac { border-left: none; border-top: 1px solid var(--hairline); padding: 1.8rem 0 1.4rem; }
+      .prac:first-child { border-top: none; padding-top: 0; }
+    }
+
+    /* ===== PHOTO BAND ===== */
+    .photo-band { position: relative; }
+    .photo-band img { display: block; width: 100%; height: clamp(300px, 44vw, 470px); object-fit: cover; }
+    .band-note {
+      position: absolute; right: 1.2rem; bottom: 1rem;
+      font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #F2F4F1; background: rgba(22, 40, 63, 0.55);
+      padding: 0.35rem 0.7rem; border-radius: 2px;
+    }
+
+    /* ===== THROUGH-LINE ===== */
+    .through { background: var(--offwhite); padding: clamp(3.5rem, 7vw, 5.5rem) 0; }
+    .through-grid { display: grid; grid-template-columns: 5fr 1px 7fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+    .seam-rule { width: 1px; height: 100%; background: linear-gradient(to bottom, var(--gold), rgba(200, 149, 10, 0.15)); }
+    .through h2 { max-width: 14ch; }
+    .through-copy p { max-width: 62ch; }
+    .through-copy a { font-weight: 600; border-bottom: 1px solid var(--gold); }
+    @media (max-width: 780px) {
+      .through-grid { grid-template-columns: 1fr; }
+      .seam-rule { width: 60px; height: 1px; background: linear-gradient(to right, var(--gold), rgba(200, 149, 10, 0.15)); }
+    }
+
+    /* ===== CTA PANEL ===== */
+    .cta-panel { position: relative; background: var(--navy-deep); overflow: hidden; }
+    .cta-panel canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .cta-inner {
+      position: relative; padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+    }
+    .cta-sentence { font-family: var(--serif); font-weight: 400; font-size: clamp(1.3rem, 2.6vw, 1.7rem); line-height: 1.35; color: var(--paper); max-width: 24ch; margin: 0; }
+    .btn-gold { background: var(--gold); color: var(--navy-deep); border: 1px solid var(--gold); font-weight: 600; }
+    .btn-gold:hover { background: var(--paper); border-color: var(--paper); }
+
+    /* ===== FOOTER ===== */
+    footer { background: var(--offwhite); border-top: 1px solid var(--hairline); padding: 2.8rem 0 3.2rem; }
+    footer .wrap { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; }
+    footer .tagline { font-family: var(--serif); font-weight: 500; font-size: 1.15rem; color: var(--navy); margin-bottom: 0.3rem; }
+    footer .fine { font-size: 0.82rem; color: var(--midgray); }
+    footer h4 { font-family: var(--mono); font-weight: 500; font-size: 0.68rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.7rem; }
+    footer a { display: block; font-size: 0.9rem; color: var(--charcoal); margin-bottom: 0.35rem; }
+    footer a:hover { color: var(--navy); }
+    footer .land { grid-column: 1 / -1; font-size: 0.78rem; color: var(--midgray); border-top: 1px solid var(--hairline); padding-top: 1.2rem; margin-top: 0.6rem; }
+    @media (max-width: 680px) { footer .wrap { grid-template-columns: 1fr; } }
+
+    /* ===== LAB COMPARE PILL ===== */
+    .lab-pill {
+      position: fixed; right: 1rem; bottom: 1rem; z-index: 200;
+      font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em;
+      background: var(--navy-deep); color: var(--paper);
+      padding: 0.55rem 0.9rem; border-radius: 3px;
+      box-shadow: 0 8px 22px rgba(22, 40, 63, 0.35);
+    }
+    .lab-pill:hover { background: var(--gold); color: var(--navy-deep); }
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/brand-lab/" class="nav-logo"><span class="mark-td">TD</span><span class="mark-cat">catalyst</span></a>
+    <ul class="nav-links">
+      <li><a href="/sail/">Sail</a></li>
+      <li><a href="/grow/">Grow</a></li>
+      <li><a href="/advise/">Advise</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/sail/begin" class="nav-cta">BEGIN</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="main-content">
+  <canvas class="terrain" data-seed="19" data-line="#1F3A5F" data-index="#C8950A" data-alpha="0.14" data-index-alpha="0.30" data-fade="left" data-fade-color="242,244,241" aria-hidden="true"></canvas>
+  <div class="wrap hero-inner">
+    <div class="eyebrow">An advisory practice by Tom Delaporte</div>
+    <h1>One question, three ways to work it.</h1>
+    <p class="hero-sub">Every organization in the AI transition is answering the same question: how do the people and the structure adapt when AI enters the work? TDcatalyst works that question from three positions &mdash; with executives in the field, with enterprises in the operating model, and with founders crossing into enterprise adoption.</p>
+    <div class="hero-ctas">
+      <a href="https://cal.com/tdcatalyst" class="btn btn-primary" target="_blank" rel="noopener">Book a Fit Call</a>
+      <a href="#practices" class="btn btn-ghost">The practices &darr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- THE THREE PRACTICES -->
+<section class="practices" id="practices">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The practices</div>
+      <h2>Choose your way in.</h2>
+    </div>
+    <div class="triptych">
+      <a href="/sail/" class="prac sail">
+        <span class="prac-rule" aria-hidden="true"></span>
+        <h3>Sail</h3>
+        <div class="prac-tag">Executive field sessions</div>
+        <p class="prac-desc">Adaptability advisory for senior executives, delivered on foot in specific landscapes on the Pacific coast and the Skyline ridge. A five-framework method for naming the adaptive challenge AI puts in front of your leadership, and a written diagnostic to act on it.</p>
+        <p class="prac-who">For senior executives and transformation leaders who need strategic clarity.</p>
+        <span class="prac-go">Enter Sail &rarr;</span>
+      </a>
+      <a href="/grow/" class="prac grow">
+        <span class="prac-rule" aria-hidden="true"></span>
+        <h3>Grow</h3>
+        <div class="prac-tag">Deploy &middot; enterprise transformation</div>
+        <p class="prac-desc">AI transformation consulting for enterprises and public-sector organizations. Portfolio management for AI deployments, change management and adoption, and the reorganization work that follows when AI changes what the work is.</p>
+        <p class="prac-who">For enterprises and public-sector organizations deploying AI at scale.</p>
+        <span class="prac-go">Enter Grow &rarr;</span>
+      </a>
+      <a href="/advise/" class="prac advise">
+        <span class="prac-rule" aria-hidden="true"></span>
+        <h3>Advise</h3>
+        <div class="prac-tag">Founder advisory &amp; board work</div>
+        <p class="prac-desc">A retainer and advisory-board offering for startup founders moving upmarket. Enterprise buyers evaluate AI products differently than early adopters do. Advise brings the operator-side view of how those deals are actually won, adopted, and renewed.</p>
+        <p class="prac-who">For founders taking an AI product into enterprise accounts.</p>
+        <span class="prac-go">Enter Advise &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FIELD PHOTO BAND -->
+<section class="photo-band" aria-label="Field photography">
+  <img src="/images/pacifica-ridge-trail.jpg" alt="Trail winding along the coastal ridge toward the fog-covered Pacific" loading="lazy" style="object-position: center 55%;">
+  <div class="band-note">37.61&deg; N &middot; 122.49&deg; W &mdash; The field, Pacifica coastal ridge</div>
+</section>
+
+<!-- THE THROUGH-LINE -->
+<section class="through">
+  <div class="wrap">
+    <div class="through-grid">
+      <div>
+        <div class="eyebrow">The through-line</div>
+        <h2>Three positions on the same seam.</h2>
+      </div>
+      <div class="seam-rule" aria-hidden="true"></div>
+      <div class="through-copy">
+        <p>AI programs stall in the same place regardless of who runs them: at the seam between AI product, operations, and people. Executives feel it as a leadership question. Enterprises feel it as an adoption and structure question. Founders feel it as a sales and readiness question. It is one seam, seen from three sides.</p>
+        <p>Tom Delaporte has worked all three sides &mdash; AI product leadership at an enterprise AI company, organizational design and change consulting at a global firm, and operator-side HR and transformation across five countries &mdash; with commercial accountability throughout. The three practices exist because the work arrives in three forms. The judgment behind them is the same.</p>
+        <p style="margin-bottom:0;"><a href="/about">About Tom and the practice &rarr;</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section class="cta-panel">
+  <canvas class="terrain" data-seed="66" data-line="#3d5a7c" data-index="#d8a838" data-alpha="0.35" data-index-alpha="0.55" aria-hidden="true"></canvas>
+  <div class="wrap cta-inner">
+    <p class="cta-sentence">Not sure which practice fits? A thirty-minute conversation sorts it quickly.</p>
+    <a href="https://cal.com/tdcatalyst" class="btn btn-gold" target="_blank" rel="noopener">Book a Fit Call</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="tagline">TDcatalyst</div>
+      <div class="fine">Independent advisory. No affiliation with prior employers.</div>
+    </div>
+    <div>
+      <h4>Practices</h4>
+      <a href="/sail/">Sail</a>
+      <a href="/grow/">Grow</a>
+      <a href="/advise/">Advise</a>
+    </div>
+    <div>
+      <h4>Engage</h4>
+      <a href="/sail/begin">Begin</a>
+      <a href="https://cal.com/tdcatalyst" target="_blank" rel="noopener">Book a call</a>
+      <a href="/sail/field-notes">Field Notes</a>
+      <a href="/about">About</a>
+    </div>
+    <div class="land">
+      TDcatalyst operates on the ancestral lands of the Aramai band of the Ramaytush Ohlone people. A Yunakin Land Tax is paid annually in acknowledgment.
+    </div>
+  </div>
+</footer>
+
+<a href="/" class="lab-pill">compare: current live site &#8599;</a>
+
+<script>
+(function () {
+  function makeNoise(seed) {
+    function hash(x, y) {
+      var h = Math.sin(x * 127.1 + y * 311.7 + seed * 74.7) * 43758.5453;
+      return h - Math.floor(h);
+    }
+    function smooth(t) { return t * t * (3 - 2 * t); }
+    function noise(x, y) {
+      var xi = Math.floor(x), yi = Math.floor(y);
+      var xf = x - xi, yf = y - yi;
+      var a = hash(xi, yi), b = hash(xi + 1, yi), c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
+      var u = smooth(xf), v = smooth(yf);
+      return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+    }
+    return function (x, y) {
+      var val = 0, amp = 0.5, f = 1;
+      for (var i = 0; i < 4; i++) { val += amp * noise(x * f, y * f); f *= 2; amp *= 0.5; }
+      return val;
+    };
+  }
+
+  function drawTerrain(canvas) {
+    var d = canvas.dataset;
+    var seed = parseFloat(d.seed || '1');
+    var alpha = parseFloat(d.alpha || '0.15');
+    var indexAlpha = parseFloat(d.indexAlpha || alpha * 2);
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    var fbm = makeNoise(seed);
+    var cell = 6, scale = 210;
+    var cols = Math.ceil(w / cell) + 1, rows = Math.ceil(h / cell) + 1;
+    var field = [];
+    for (var j = 0; j < rows; j++) {
+      field[j] = [];
+      for (var i = 0; i < cols; i++) field[j][i] = fbm(i * cell / scale, j * cell / scale);
+    }
+    var levels = 14;
+    for (var li = 0; li < levels; li++) {
+      var iso = 0.18 + (li / (levels - 1)) * 0.62;
+      var isIndex = li % 5 === 0;
+      ctx.strokeStyle = isIndex ? (d.index || '#C8950A') : (d.line || '#1F3A5F');
+      ctx.lineWidth = isIndex ? 1.4 : 0.6;
+      ctx.globalAlpha = isIndex ? indexAlpha : alpha;
+      ctx.beginPath();
+      for (j = 0; j < rows - 1; j++) {
+        for (i = 0; i < cols - 1; i++) {
+          var tl = field[j][i], tr = field[j][i + 1], br = field[j + 1][i + 1], bl = field[j + 1][i];
+          var c = 0;
+          if (tl > iso) c |= 8;
+          if (tr > iso) c |= 4;
+          if (br > iso) c |= 2;
+          if (bl > iso) c |= 1;
+          if (c === 0 || c === 15) continue;
+          var x = i * cell, y = j * cell;
+          var top = [x + cell * (iso - tl) / (tr - tl), y];
+          var right = [x + cell, y + cell * (iso - tr) / (br - tr)];
+          var bottom = [x + cell * (iso - bl) / (br - bl), y + cell];
+          var left = [x, y + cell * (iso - tl) / (bl - tl)];
+          function seg(p, q) { ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); }
+          switch (c) {
+            case 1: case 14: seg(left, bottom); break;
+            case 2: case 13: seg(bottom, right); break;
+            case 3: case 12: seg(left, right); break;
+            case 4: case 11: seg(top, right); break;
+            case 6: case 9: seg(top, bottom); break;
+            case 7: case 8: seg(left, top); break;
+            case 5: seg(left, top); seg(bottom, right); break;
+            case 10: seg(top, right); seg(left, bottom); break;
+          }
+        }
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    if (d.fade === 'left') {
+      var g = ctx.createLinearGradient(w, 0, 0, 0);
+      g.addColorStop(0, 'rgba(' + d.fadeColor + ',0)');
+      g.addColorStop(1, 'rgba(' + d.fadeColor + ',0.92)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+    }
+  }
+
+  function renderAll() { document.querySelectorAll('canvas.terrain').forEach(drawTerrain); }
+  var raf = null;
+  window.addEventListener('resize', function () {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(renderAll);
+  });
+  renderAll();
+})();
+</script>
+</body>
+</html>
