@@ -64,13 +64,15 @@ h1, h2, h3, h4 {
   color: var(--navy);
   letter-spacing: 0;
 }
+/* balanced headline rag: keeps phrases like "communications problem" on one line */
+h1, h2, h3 { text-wrap: balance; }
 
 h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.1; }
 h2 { font-size: clamp(1.7rem, 3.2vw, 2.4rem); line-height: 1.2; margin-bottom: 0.9rem; }
 h3 { font-size: 1.25rem; line-height: 1.3; margin-bottom: 0.5rem; }
 
 p { margin-bottom: 1rem; color: var(--charcoal); }
-p.lead { font-size: 1.15rem; color: var(--midgray); max-width: 56ch; }
+p.lead { font-size: 1.15rem; color: var(--midgray); }
 
 a { color: var(--navy); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
 a:hover { border-bottom-color: var(--logo-gold); }
@@ -256,8 +258,8 @@ body:not(.brand-sail):not(.brand-grow):not(.brand-advise) .brand-menu a[href="/"
   margin-left: max(calc((100% - 1180px) / 2), 0px);
   margin-right: auto;
 }
-/* photo-overlay wraps join the axis too */
-.hero-photo-bg .wrap { margin-left: max(calc((100% - 1180px) / 2), 0px); margin-right: auto; }
+/* the sail thesis band joins the axis; the standalone one-pager keeps its centered document layout */
+.thesis-photo .wrap { margin-left: max(calc((100% - 1180px) / 2), 0px); margin-right: auto; }
 section { padding: 5rem 0; }
 @media (max-width: 780px) { section { padding: 3.5rem 0; } }
 
@@ -320,8 +322,13 @@ section:has(+ .hero) {
 }
 
 /* Stacked variant: the three challenge boxes as a vertical rail beside hero text */
-.challenges-boxes--stack { grid-template-columns: 1fr; gap: 1.6rem; margin: 0; }
-@media (max-width: 900px) { .challenges-boxes--stack { margin-top: 0.5rem; } }
+.challenges-boxes--stack { grid-template-columns: 1fr; gap: 1.9rem; margin: 0; align-content: start; }
+/* Two-column hero: text 7 / rail 5, both top-aligned so the rail reads as a sidebar */
+.hero-grid--top { grid-template-columns: 7fr 5fr; align-items: start; gap: clamp(2rem, 5vw, 4.5rem); margin-top: 0.5rem; }
+.hero-grid--top .hero-sub { max-width: none; }
+/* nudge the rail down so its first title sits on the h1's cap line, not the eyebrow's */
+.hero-grid--top .challenges-boxes--stack { margin-top: 2.4rem; }
+@media (max-width: 900px) { .hero-grid--top .challenges-boxes--stack { margin-top: 0.5rem; } }
 
 .hero-grid {
   display: grid;
@@ -482,7 +489,7 @@ section:has(+ .hero) {
 .tier:first-child { border-top: 1px solid var(--hairline); }
 .tier-name { font-family: 'Besley', Georgia, serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 0.4rem; }
 .tier-meta { font-size: 0.85rem; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.9rem; }
-.tier-desc { color: var(--charcoal); max-width: 58ch; margin-bottom: 0.8rem; }
+.tier-desc { color: var(--charcoal); margin-bottom: 0.8rem; }
 .tier-list { list-style: none; color: var(--midgray); font-size: 0.92rem; }
 .tier-list li { padding: 0.2rem 0; padding-left: 1.1rem; position: relative; }
 .tier-list li::before { content: "·"; position: absolute; left: 0; color: var(--terracotta); font-weight: 700; }
@@ -588,7 +595,6 @@ hr.rule { border: none; border-top: 1px solid var(--hairline); margin: 2.5rem 0;
   color: var(--navy);
   line-height: 1.3;
   font-style: italic;
-  max-width: 38ch;
 }
 
 /* Client logo + caption stack */
@@ -821,7 +827,7 @@ hr.sign-rule {
   flex-wrap: wrap;
 }
 .retainer-block h3 { font-size: 1.05rem; margin: 0.35rem 0 0.6rem; }
-.retainer-block p { color: var(--midgray); font-size: 0.93rem; margin: 0; max-width: 62ch; }
+.retainer-block p { color: var(--midgray); font-size: 0.93rem; margin: 0; }
 .retainer-meta { text-align: right; }
 .retainer-meta .engagement-price { margin: 0; }
 .retainer-meta .price-unit { font-size: 0.85rem; color: var(--midgray); }
@@ -833,7 +839,6 @@ hr.sign-rule {
   padding: 0;
   display: grid;
   gap: 0.55rem;
-  max-width: 66ch;
 }
 .retainer-mandate li {
   position: relative;
@@ -919,7 +924,7 @@ hr.sign-rule {
   padding: 1.5rem 1.75rem 1.5rem 2.1rem;
   box-shadow: 0 1px 2px rgba(31, 58, 95, 0.04), 0 14px 34px -18px rgba(31, 58, 95, 0.16);
   overflow: hidden;
-  max-width: 72ch;
+  /* full content width — long lines, short box (Tom's preference) */
 }
 .practice-signpost::before {
   content: "";
@@ -937,8 +942,8 @@ hr.sign-rule {
   border-bottom: 1px solid transparent;
 }
 /* Accent bar + link tinted to the DESTINATION practice */
-.practice-signpost--to-sail::before { background: var(--logo-gold); }
-.practice-signpost--to-sail .signpost-go { color: var(--terracotta); }
+.practice-signpost--to-sail::before { background: var(--logo-blue); }
+.practice-signpost--to-sail .signpost-go { color: var(--logo-blue); }
 .practice-signpost--to-grow::before { background: var(--logo-blue); }
 .practice-signpost--to-grow .signpost-go { color: var(--logo-blue); }
 
@@ -1144,7 +1149,7 @@ hr.sign-rule {
   margin: 2rem 0;
 }
 .land-ack-eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--terracotta); font-weight: 500; margin-bottom: 0.8rem; }
-.land-ack p { font-size: 1.05rem; color: var(--charcoal); max-width: 62ch; margin: 0; }
+.land-ack p { font-size: 1.05rem; color: var(--charcoal); margin: 0; }
 
 /* What could surface — sign cards */
 .sign-surface { font-style: italic; font-size: 0.88rem; color: var(--midgray); margin-top: 0.6rem; margin-bottom: 0; border-top: 1px solid var(--hairline); padding-top: 0.6rem; }
@@ -1406,7 +1411,6 @@ section.article-section { padding-top: 2rem; }
 
 .tcard-desc {
   color: var(--charcoal);
-  max-width: 58ch;
   margin-bottom: 0.9rem;
   font-size: 0.97rem;
 }
@@ -1500,7 +1504,6 @@ section.article-section { padding-top: 2rem; }
   font-size: 0.95rem;
   line-height: 1.7;
   color: var(--charcoal);
-  max-width: 64ch;
 }
 
 .sources-collapsible-content p {
@@ -1519,8 +1522,8 @@ section.article-section { padding-top: 2rem; }
   font-size: 0.85em;
   margin-left: 0.15em;
 }
-body.brand-sail .nav-logo .mark-practice { color: var(--logo-gold); }
-body.brand-grow .nav-logo .mark-practice { color: var(--logo-blue); }
+body.brand-sail .nav-logo .mark-practice { color: var(--logo-blue); }
+body.brand-grow .nav-logo .mark-practice { color: var(--terracotta); }
 body.brand-advise .nav-logo .mark-practice { color: var(--logo-red); }
 
 /* Hub: practice cards */
@@ -1846,7 +1849,7 @@ footer .footer-practices i {
     .readout-label { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--midgray); margin-top: 0.5rem; line-height: 1.35; }
     .readout-item.gap .readout-label { color: var(--seamist); }
 
-    .sim-disclaimer { font-size: 0.78rem; color: var(--midgray); font-style: italic; margin-top: 1.4rem; max-width: 66ch; }
+    .sim-disclaimer { font-size: 0.78rem; color: var(--midgray); font-style: italic; margin-top: 1.4rem; }
 
     /* --- Step 3: curve + risks side by side --- */
     .curve-and-risks { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.8rem; align-items: start; }
@@ -2111,8 +2114,8 @@ footer .footer-practices i {
   box-shadow: 0 4px 10px rgba(22, 40, 63, 0.07), 0 18px 40px rgba(22, 40, 63, 0.13);
   border-bottom-color: var(--hairline); /* cards are <a>; keep the link underline off */
 }
-.prac-card.sail:hover { border-color: var(--logo-gold); }
-.prac-card.grow:hover { border-color: var(--logo-blue); }
+.prac-card.sail:hover { border-color: var(--logo-blue); }
+.prac-card.grow:hover { border-color: var(--logo-gold); }
 .prac-card.advise:hover { border-color: var(--logo-red); }
 .card-terrain {
   position: absolute; left: 0; right: 0; bottom: 0;
@@ -2125,24 +2128,24 @@ footer .footer-practices i {
 .prac-card > *:not(.card-terrain) { position: relative; }
 .prac-rule { display: block; width: 30px; border-top: 2px solid; margin-bottom: 1.1rem; transition: width 0.3s ease; }
 .prac-card:hover .prac-rule { width: 52px; }
-.prac-card.sail .prac-rule { border-color: var(--logo-gold); }
-.prac-card.grow .prac-rule { border-color: var(--logo-blue); }
+.prac-card.sail .prac-rule { border-color: var(--logo-blue); }
+.prac-card.grow .prac-rule { border-color: var(--logo-gold); }
 .prac-card.advise .prac-rule { border-color: var(--logo-red); }
 .prac-card h3 { font-size: 1.6rem; margin-bottom: 0.3rem; }
 .prac-tag {
   font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.12em;
   text-transform: uppercase; margin-bottom: 1rem;
 }
-.prac-card.sail .prac-tag { color: var(--terracotta); }
-.prac-card.grow .prac-tag { color: var(--logo-blue); }
+.prac-card.sail .prac-tag { color: var(--logo-blue); }
+.prac-card.grow .prac-tag { color: var(--terracotta); }
 .prac-card.advise .prac-tag { color: var(--logo-red); }
 .prac-desc { font-size: 0.99rem; line-height: 1.6; color: var(--charcoal); }
 .prac-who { font-size: 0.88rem; color: var(--midgray); }
 .prac-go { font-weight: 600; font-size: 0.95rem; margin-top: auto; padding-top: 0.9rem; }
 .prac-go .arr { display: inline-block; transition: transform 0.25s ease; }
 .prac-card:hover .prac-go .arr { transform: translateX(5px); }
-.prac-card.sail .prac-go { color: var(--terracotta); }
-.prac-card.grow .prac-go { color: var(--logo-blue); }
+.prac-card.sail .prac-go { color: var(--logo-blue); }
+.prac-card.grow .prac-go { color: var(--terracotta); }
 .prac-card.advise .prac-go { color: var(--logo-red); }
 @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
 

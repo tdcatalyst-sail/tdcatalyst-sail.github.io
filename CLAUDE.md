@@ -53,7 +53,7 @@ tdcatalyst-sail.github.io/
 - The hub (`/`) links to everything — it is the umbrella.
 - **Sail ↔ Grow are an intentional diagnostic→implementation pathway** and may carry *curated, contextual* cross-links both ways: Sail frames the adaptive challenge and delivers the 90-day roadmap; Grow executes it (portfolio decisions, adoption systems, org redesign). Current curated links — Sail→Grow: the Enterprise Engagement tier card CTA and the end-of-"engagement pathway" handoff on `sail/sessions.html`; Grow→Sail: the "Catalyst Field Session" pointer just after the engagements block on `grow/index.html`. Keep these as deliberate handoffs at decision points — do **not** add blanket cross-practice links to nav or scatter them through body copy.
 - **Advise stays self-sufficient** — no body cross-links into or out of it. The shared footer's practice list (the small `.footer-practices` block linking the sibling sub-sites) and the "All TDcatalyst practices →" link (to `/`) are the only cross-practice links every page carries; those are the umbrella affordance and are fine everywhere.
-- The nav logo on every page reads `TDcatalyst/sail` (or `/grow`, `/advise`) via `<span class="mark-practice">`, colored by the `body.brand-*` class (sail=gold, grow=blue, advise=red). **Logo link target = that page's own practice home** (`/sail/`, `/grow/`, `/advise/`); umbrella pages (root `index.html`, root `about.html`) link to `/`. The logo sits inside a `.nav-brand` cluster with a caret **practice switcher** (`.brand-switch` button → `.brand-menu` dropdown) linking to every home — TDcatalyst (`/`), Sail, Grow, Advise — with the current practice (or the hub, on umbrella pages) highlighted. The dropdown markup is identical on all 18 pages; only the logo `href` and `mark-practice` suffix vary. Toggle is an inline `onclick`; `closeBrandMenu()` in `script.js` closes it on outside-click / Escape / scroll-away. Like the rest of the nav, this brand block is copy-pasted across all pages — edit one and propagate.
+- The nav logo on every page reads `TDcatalyst/sail` (or `/grow`, `/advise`) via `<span class="mark-practice">`, colored by the `body.brand-*` class (sail=blue, grow=gold, advise=red). **Logo link target = that page's own practice home** (`/sail/`, `/grow/`, `/advise/`); umbrella pages (root `index.html`, root `about.html`) link to `/`. The logo sits inside a `.nav-brand` cluster with a caret **practice switcher** (`.brand-switch` button → `.brand-menu` dropdown) linking to every home — TDcatalyst (`/`), Sail, Grow, Advise — with the current practice (or the hub, on umbrella pages) highlighted. The dropdown markup is identical on all 18 pages; only the logo `href` and `mark-practice` suffix vary. Toggle is an inline `onclick`; `closeBrandMenu()` in `script.js` closes it on outside-click / Escape / scroll-away. Like the rest of the nav, this brand block is copy-pasted across all pages — edit one and propagate.
 
 **Sail sub-site (sail/), main pages:**
 - `index.html` — Hero/home page with thesis, engagement outcomes, CTA
@@ -82,10 +82,10 @@ tdcatalyst-sail.github.io/
 - `--navy` (`#1F3A5F`), `--navy-soft`, `--navy-deep` (`#16283F`): Text, headings, field CTA panels
 - `--charcoal` (`#222222`): Body text
 - `--offwhite` (`#EBEFEC`), `--seamist` (`#D9E2E6`): Alternating page grounds
-- `--logo-gold` (`#E8B003`): Exact logo gold — graphics only (bars, rules, terrain, buttons); Sail accent
+- `--logo-gold` (`#E8B003`): Exact logo gold — graphics only (bars, rules, terrain, buttons); Grow accent
 - `--terracotta` (`#8A6302`): The SAME gold hue deepened for small text on light grounds (WCAG) — gold text/hover accents use this, never `--logo-gold`
 - `--terracotta-soft` (`#E8B003`): Bright gold for text on dark grounds
-- `--logo-red` (`#DB160E`), `--logo-blue` (`#0348CA`): Logo-exact; Advise / Grow accents
+- `--logo-red` (`#DB160E`), `--logo-blue` (`#0348CA`): Logo-exact; Advise / Sail accents
 - `--midgray` (`#6B6B6B`): Secondary text
 - `--hairline` (`#D9D3CA`): Borders
 
