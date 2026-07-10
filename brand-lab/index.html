@@ -28,9 +28,11 @@
       --navy-deep: #16283F;
       --charcoal: #222222;
       --midgray: #5d6a70;
-      --gold: #C8950A;
-      --logo-red: #C44536;
-      --logo-blue: #4A7C9E;
+      /* logo-exact accents, sampled from images/logo-v2.jpg stroke cores */
+      --gold: #E8B003;
+      --gold-text: #8A6302;   /* same hue deepened for small text on light grounds (WCAG) */
+      --logo-red: #DB160E;
+      --logo-blue: #0348CA;
       --hairline: #D9D3CA;
       --serif: 'Besley', Georgia, serif;
       --sans: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -65,7 +67,7 @@
       font-size: 0.74rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--gold-text);
       margin-bottom: 0.9rem;
     }
 
@@ -105,13 +107,14 @@
       padding: 0.55rem 1.1rem; border-radius: 2px; border: none !important;
       transition: background 0.2s;
     }
-    .nav-cta:hover { background: var(--gold); }
+    .nav-cta:hover { background: var(--gold); color: var(--navy-deep) !important; }
     @media (max-width: 680px) { .nav-links li:not(:last-child) { display: none; } }
 
     /* ===== HERO ===== */
     .hero { position: relative; background: var(--paper); overflow: hidden; border-bottom: 1px solid var(--hairline); }
     .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .hero-inner { position: relative; padding: clamp(4rem, 9vw, 7.5rem) 0 clamp(3.5rem, 8vw, 6.5rem); }
+    /* padding-top/bottom only — a shorthand here would zero out .wrap's side padding (mobile margin bug) */
+    .hero-inner { position: relative; padding-top: clamp(4rem, 9vw, 7.5rem); padding-bottom: clamp(3.5rem, 8vw, 6.5rem); }
     .hero h1 { max-width: 17ch; margin-bottom: 1.2rem; text-wrap: balance; }
     .hero-sub { font-size: 1.16rem; line-height: 1.62; color: #40505c; max-width: 54ch; margin-bottom: 2rem; }
     .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
@@ -168,7 +171,7 @@
       font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em;
       text-transform: uppercase; margin-bottom: 1rem;
     }
-    .prac-card.sail .prac-tag { color: var(--gold); }
+    .prac-card.sail .prac-tag { color: var(--gold-text); }
     .prac-card.grow .prac-tag { color: var(--logo-blue); }
     .prac-card.advise .prac-tag { color: var(--logo-red); }
     .prac-desc { font-size: 0.99rem; line-height: 1.6; color: var(--charcoal); }
@@ -176,7 +179,7 @@
     .prac-go { font-weight: 600; font-size: 0.95rem; margin-top: auto; padding-top: 0.9rem; }
     .prac-go .arr { display: inline-block; transition: transform 0.25s ease; }
     .prac-card:hover .prac-go .arr { transform: translateX(5px); }
-    .prac-card.sail .prac-go { color: var(--gold); }
+    .prac-card.sail .prac-go { color: var(--gold-text); }
     .prac-card.grow .prac-go { color: var(--logo-blue); }
     .prac-card.advise .prac-go { color: var(--logo-red); }
     @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
@@ -207,7 +210,7 @@
     .cta-panel { position: relative; background: var(--navy-deep); overflow: hidden; }
     .cta-panel canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
     .cta-inner {
-      position: relative; padding: clamp(3.5rem, 7vw, 5.5rem) 0;
+      position: relative; padding-top: clamp(3.5rem, 7vw, 5.5rem); padding-bottom: clamp(3.5rem, 7vw, 5.5rem);
       display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;
     }
     .cta-sentence { font-family: var(--serif); font-weight: 400; font-size: clamp(1.35rem, 2.7vw, 1.75rem); line-height: 1.35; color: var(--paper); max-width: 24ch; margin: 0; }
@@ -219,7 +222,7 @@
     footer .wrap { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; }
     footer .tagline { font-family: var(--serif); font-weight: 500; font-size: 1.15rem; color: var(--navy); margin-bottom: 0.3rem; }
     footer .fine { font-size: 0.84rem; color: var(--midgray); }
-    footer h4 { font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.7rem; }
+    footer h4 { font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--gold-text); margin-bottom: 0.7rem; }
     footer a { display: block; font-size: 0.92rem; color: var(--charcoal); margin-bottom: 0.35rem; }
     footer a:hover { color: var(--navy); }
     footer .land { grid-column: 1 / -1; font-size: 0.8rem; color: var(--midgray); border-top: 1px solid var(--hairline); padding-top: 1.2rem; margin-top: 0.6rem; }
@@ -265,7 +268,7 @@
 
 <!-- HERO -->
 <section class="hero" id="main-content">
-  <canvas class="terrain" data-seed="19" data-line="#1F3A5F" data-index="#C8950A" data-alpha="0.14" data-index-alpha="0.30" data-fade="left" data-fade-color="242,244,241" data-animate="1" aria-hidden="true"></canvas>
+  <canvas class="terrain" data-seed="19" data-line="#1F3A5F" data-index="#E8B003" data-alpha="0.14" data-index-alpha="0.35" data-fade="left" data-fade-color="242,244,241" data-animate="1" aria-hidden="true"></canvas>
   <div class="wrap hero-inner">
     <div class="eyebrow">An advisory practice by Tom Delaporte</div>
     <h1>One question, three ways to work it.</h1>
@@ -286,7 +289,7 @@
     </div>
     <div class="cards">
       <a href="/sail/" class="prac-card sail reveal">
-        <canvas class="card-terrain" data-seed="311" data-line="#C8950A" data-index="#C8950A" data-alpha="0.10" data-index-alpha="0.22" data-fade="top" data-fade-color="255,255,255" aria-hidden="true"></canvas>
+        <canvas class="card-terrain" data-seed="273" data-scale="170" data-line="#E8B003" data-index="#E8B003" data-alpha="0.13" data-index-alpha="0.30" data-fade="top" data-fade-color="255,255,255" aria-hidden="true"></canvas>
         <span class="prac-rule" aria-hidden="true"></span>
         <h3>Sail</h3>
         <div class="prac-tag">Executive field sessions</div>
@@ -295,7 +298,7 @@
         <span class="prac-go">Enter Sail <span class="arr">&rarr;</span></span>
       </a>
       <a href="/grow/" class="prac-card grow reveal">
-        <canvas class="card-terrain" data-seed="422" data-line="#4A7C9E" data-index="#4A7C9E" data-alpha="0.10" data-index-alpha="0.22" data-fade="top" data-fade-color="255,255,255" aria-hidden="true"></canvas>
+        <canvas class="card-terrain" data-seed="358" data-scale="170" data-line="#0348CA" data-index="#0348CA" data-alpha="0.09" data-index-alpha="0.20" data-fade="top" data-fade-color="255,255,255" aria-hidden="true"></canvas>
         <span class="prac-rule" aria-hidden="true"></span>
         <h3>Grow</h3>
         <div class="prac-tag">Deploy &middot; enterprise transformation</div>
@@ -304,7 +307,7 @@
         <span class="prac-go">Enter Grow <span class="arr">&rarr;</span></span>
       </a>
       <a href="/advise/" class="prac-card advise reveal">
-        <canvas class="card-terrain" data-seed="533" data-line="#C44536" data-index="#C44536" data-alpha="0.10" data-index-alpha="0.22" data-fade="top" data-fade-color="255,255,255" aria-hidden="true"></canvas>
+        <canvas class="card-terrain" data-seed="212" data-scale="170" data-line="#DB160E" data-index="#DB160E" data-alpha="0.09" data-index-alpha="0.20" data-fade="top" data-fade-color="255,255,255" aria-hidden="true"></canvas>
         <span class="prac-rule" aria-hidden="true"></span>
         <h3>Advise</h3>
         <div class="prac-tag">Founder advisory &amp; board work</div>
@@ -342,7 +345,7 @@
 
 <!-- FOOTER CTA -->
 <section class="cta-panel">
-  <canvas class="terrain" data-seed="66" data-line="#3d5a7c" data-index="#d8a838" data-alpha="0.35" data-index-alpha="0.55" aria-hidden="true"></canvas>
+  <canvas class="terrain" data-seed="66" data-line="#3d5a7c" data-index="#E8B003" data-alpha="0.35" data-index-alpha="0.5" aria-hidden="true"></canvas>
   <div class="wrap cta-inner reveal">
     <p class="cta-sentence">Not sure which practice fits? A thirty-minute conversation sorts it quickly.</p>
     <a href="https://cal.com/tdcatalyst" class="btn btn-gold" target="_blank" rel="noopener">Book a Fit Call</a>
@@ -417,7 +420,7 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
     var fbm = makeNoise(seed);
-    var cell = 6, scale = 210;
+    var cell = 6, scale = parseFloat(d.scale || '210');
     var cols = Math.ceil(w / cell) + 1, rows = Math.ceil(h / cell) + 1;
     var field = [];
     for (var j = 0; j < rows; j++) {
@@ -428,7 +431,7 @@
     for (var li = 0; li < levels; li++) {
       var iso = 0.18 + (li / (levels - 1)) * 0.62;
       var isIndex = li % 5 === 0;
-      ctx.strokeStyle = isIndex ? (d.index || '#C8950A') : (d.line || '#1F3A5F');
+      ctx.strokeStyle = isIndex ? (d.index || '#E8B003') : (d.line || '#1F3A5F');
       ctx.lineWidth = isIndex ? 1.4 : 0.6;
       ctx.globalAlpha = isIndex ? indexAlpha : alpha;
       ctx.beginPath();
