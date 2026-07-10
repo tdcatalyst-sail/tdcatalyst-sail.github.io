@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /contact-card.html
 Disallow: /calling-card.html
+Disallow: /templates/
 
 Sitemap: https://tdcatalyst.com/sitemap.xml
