@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css?v=950fcfb4">
+  <link rel="stylesheet" href="/style.css?v=3e7ec830">
 </head>
 <body class="brand-grow">
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -85,7 +85,10 @@
       <div class="matrix-scroll">
       <div class="matrix-grid" id="matrixGrid">
         <!-- header row -->
-        <div></div>
+        <div class="mx-corner">
+          <label class="mx-persona-label" for="personaTitle">This simulation is about</label>
+          <input type="text" class="mx-persona-input" id="personaTitle" placeholder="Persona / role…" maxlength="80" autocomplete="off">
+        </div>
         <div class="mx-col-head">Precontemplation<span style="font-weight:400;text-transform:none;letter-spacing:0">"no problem here"</span></div>
         <div class="mx-col-head">Contemplation<span style="font-weight:400;text-transform:none;letter-spacing:0">"maybe there is"</span></div>
         <div class="mx-col-head">Preparation<span style="font-weight:400;text-transform:none;letter-spacing:0">"I'll try"</span></div>
@@ -1897,6 +1900,9 @@
     var leadOrg = (document.getElementById('company').value || '').trim();
     var leadCtx = (document.getElementById('context').value || '').trim();
     if (leadCtx.length > 700) leadCtx = leadCtx.slice(0, 700) + '…';
+    var persona = (document.getElementById('personaTitle').value || '').trim();
+    // "for <persona> at <org>" / "for <persona>" / "for <org>" — whichever pieces exist
+    var scopeStr = (persona ? ' for ' + persona : '') + (leadOrg ? (persona ? ' at ' : ' for ') + leadOrg : '');
     var fl = Object.keys(flagged);
     var dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     function segLabel(k) { for (var i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].key === k) return SEGMENTS[i].label; } return k; }
@@ -1929,7 +1935,7 @@
     x.fillStyle = DOC_NAVY; x.font = F_TITLE;
     x.fillText('Adoption Scenario Briefing', PG_M, 316);
     doc.y = 348;
-    doc.para('A sequenced set of adoption interventions, modeled over 24 weeks against the trajectory the organization follows if nothing changes.', { color: DOC_GRAY, after: 30 });
+    doc.para('A sequenced set of adoption interventions' + (persona ? ' for ' + persona : '') + ', modeled over 24 weeks against the trajectory the organization follows if nothing changes.', { color: DOC_GRAY, after: 30 });
 
     // prepared-for band
     var bandTop = doc.y, bandH = 112, col2 = PG_M + Math.round(PG_CW * 0.56);
@@ -1949,13 +1955,13 @@
     // ---- executive summary ----
     doc.section('Executive summary');
     if (plan.length) {
-      doc.para('This briefing summarizes an AI adoption scenario built with the TDcatalyst transformation simulation' + (leadOrg ? ' for ' + leadOrg : '') + '. It models a sequence of ' + plan.length + ' intervention' + (plan.length > 1 ? 's' : '') + ' over ' + res.totalWeeks + ' calendar weeks' + (fl.length ? ', aimed at ' + fl.length + ' adoption stall' + (fl.length > 1 ? 's' : '') + ' flagged on the segment-by-stage matrix' : '') + '.');
+      doc.para('This briefing summarizes an AI adoption scenario built with the TDcatalyst transformation simulation' + scopeStr + '. It models a sequence of ' + plan.length + ' intervention' + (plan.length > 1 ? 's' : '') + ' over ' + res.totalWeeks + ' calendar weeks' + (fl.length ? ', aimed at ' + fl.length + ' adoption stall' + (fl.length > 1 ? 's' : '') + ' flagged on the segment-by-stage matrix' : '') + '.');
       doc.para('With the sequence in place, modeled adoption reaches ' + rP + '% of the organization at week 24; the same organization reaches ' + rB + '% if nothing changes. The sequence adds ' + (rP - rB) + ' points of adoption and ends with ' + rV + '% of the attainable value realized — a measure that combines reach with the capability to convert usage into output.');
       if (res.crossedWeek !== null) doc.para('The model projects the transformation crossing the self-sustaining threshold (' + THRESHOLD + '% adoption) at week ' + res.crossedWeek + ' — the point where the new way of working starts to carry itself.');
       else doc.para('The modeled curve ends below the self-sustaining threshold of ' + THRESHOLD + '% adoption, which means the gains remain reversible and the plan needs further reinforcement to hold.');
       doc.para('The pages that follow show the modeled trajectory, the sequence and its timing, the transformation phases the plan reaches, and the conditions each step depends on. The plan is explicit and has been tested against the model; what remains is execution.', { after: 28 });
     } else {
-      doc.para('This briefing summarizes a baseline scenario from the TDcatalyst transformation simulation' + (leadOrg ? ' for ' + leadOrg : '') + '. No intervention sequence was selected, so the model shows the trajectory the organization follows on its own: adoption reaches ' + rB + '% at week 24 and stays below the ' + THRESHOLD + '% self-sustaining threshold.', { after: 28 });
+      doc.para('This briefing summarizes a baseline scenario from the TDcatalyst transformation simulation' + scopeStr + '. No intervention sequence was selected, so the model shows the trajectory the organization follows on its own: adoption reaches ' + rB + '% at week 24 and stays below the ' + THRESHOLD + '% self-sustaining threshold.', { after: 28 });
     }
 
     var tiles = [
