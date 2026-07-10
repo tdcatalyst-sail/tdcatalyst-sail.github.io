@@ -249,7 +249,15 @@ body:not(.brand-sail):not(.brand-grow):not(.brand-advise) .brand-menu a[href="/"
 
 /* ===== LAYOUT ===== */
 .wrap { max-width: 1180px; margin: 0 auto; padding: 0 1.75rem; }
-.narrow { max-width: 780px; }
+/* .narrow keeps its 780px reading measure but anchors to the same left axis as
+   .wrap content instead of centering, so pages read on one axis (Tom, 2026-07) */
+.narrow {
+  max-width: 780px;
+  margin-left: max(calc((100% - 1180px) / 2), 0px);
+  margin-right: auto;
+}
+/* photo-overlay wraps join the axis too */
+.hero-photo-bg .wrap { margin-left: max(calc((100% - 1180px) / 2), 0px); margin-right: auto; }
 section { padding: 5rem 0; }
 @media (max-width: 780px) { section { padding: 3.5rem 0; } }
 
@@ -311,6 +319,10 @@ section:has(+ .hero) {
   .challenges-boxes { grid-template-columns: 1fr; gap: 1.5rem; }
 }
 
+/* Stacked variant: the three challenge boxes as a vertical rail beside hero text */
+.challenges-boxes--stack { grid-template-columns: 1fr; gap: 1.6rem; margin: 0; }
+@media (max-width: 900px) { .challenges-boxes--stack { margin-top: 0.5rem; } }
+
 .hero-grid {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
@@ -321,7 +333,8 @@ section:has(+ .hero) {
   .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
 }
 .hero h1 { margin-bottom: 1.5rem; }
-.hero-sub { font-size: 1.1rem; color: var(--midgray); margin-bottom: 2rem; max-width: 52ch; }
+/* 70ch ≈ the rendered width of a 20ch hero headline, so the standfirst reads as one column with it */
+.hero-sub { font-size: 1.1rem; color: var(--midgray); margin-bottom: 2rem; max-width: 70ch; }
 .hero-image {
   aspect-ratio: 4/5;
   background: var(--seamist);
