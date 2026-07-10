@@ -522,6 +522,7 @@ footer a { color: var(--seamist); font-size: 0.9rem; display: block; padding: 0.
 footer a:hover { color: var(--terracotta-soft); }
 footer .tagline { font-family: 'Fraunces', serif; font-size: 1rem; margin-bottom: 0.4rem; font-weight: 400; }
 footer .fine { font-size: 0.8rem; color: var(--seamist); opacity: 0.7; margin-top: 0.4rem; margin-bottom: 1rem; }
+footer .fine a { display: inline; padding: 0; font-size: inherit; }
 footer .land {
   grid-column: 1 / -1;
   border-top: 1px solid rgba(217, 226, 230, 0.2);
