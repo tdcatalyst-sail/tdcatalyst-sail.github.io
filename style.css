@@ -1,19 +1,31 @@
-/* TDcatalyst v2 — shared stylesheet
-   Palette per brief v2.0 */
+/* TDcatalyst v3 — shared stylesheet
+   Brand reshape 2026-07: Besley / Archivo / IBM Plex Mono (self-hosted),
+   logo-exact accents, terrain device. Fonts live in /fonts/. */
+@font-face { font-family: 'Besley'; src: url('/fonts/besley-var-latin.woff2') format('woff2'); font-weight: 400 900; font-display: swap; }
+@font-face { font-family: 'Archivo'; src: url('/fonts/archivo-var-latin.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('/fonts/plexmono-400-latin.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('/fonts/plexmono-500-latin.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+
 :root {
   --offwhite: #EBEFEC;           /* warm pale blue-grey ground (was warm off-white) */
   --seamist: #D9E2E6;
   --navy: #1F3A5F;
   --navy-soft: #2a4a75;
+  --navy-deep: #16283F;
   --charcoal: #222222;
   --midgray: #6B6B6B;
-  --terracotta: #C8950A;         /* logo yellow — accent color throughout */
-  --terracotta-soft: #D4A830;
+  /* Accents are logo-exact, sampled from images/logo-v2.jpg stroke cores.
+     Logo gold (#E8B003) fails contrast as small text on light grounds, so
+     --terracotta holds a deepened same-hue tone for text/hover accents while
+     --logo-gold stays exact for graphics (bars, rules, terrain, buttons). */
+  --terracotta: #8A6302;
+  --terracotta-soft: #E8B003;
   --hairline: #D9D3CA;
-  --logo-red: #C44536;
-  --logo-gold: #C8950A;
-  --logo-blue: #4A7C9E;
+  --logo-red: #DB160E;
+  --logo-gold: #E8B003;
+  --logo-blue: #0348CA;
   --value-green: #4E8B72;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
   /* North-east "opens a tool" arrow, drawn crisply as SVG (see .tool-tag) */
   --tool-tag-arrow: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='black'%20stroke-width='2.75'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cline%20x1='7'%20y1='17'%20x2='17'%20y2='7'/%3E%3Cpolyline%20points='7%207%2017%207%2017%2017'/%3E%3C/svg%3E");
 }
@@ -37,8 +49,8 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 17px;
+  font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 17.5px;
   line-height: 1.6;
   color: var(--charcoal);
   background: var(--offwhite);
@@ -47,10 +59,10 @@ body {
 }
 
 h1, h2, h3, h4 {
-  font-family: 'Fraunces', Georgia, serif;
-  font-weight: 400;
+  font-family: 'Besley', Georgia, serif;
+  font-weight: 500;
   color: var(--navy);
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.1; }
@@ -61,7 +73,7 @@ p { margin-bottom: 1rem; color: var(--charcoal); }
 p.lead { font-size: 1.15rem; color: var(--midgray); max-width: 56ch; }
 
 a { color: var(--navy); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
-a:hover { border-bottom-color: var(--terracotta); }
+a:hover { border-bottom-color: var(--logo-gold); }
 
 .tabular { font-variant-numeric: tabular-nums; }
 
@@ -88,7 +100,7 @@ nav.nav--hidden { transform: translateY(-100%); }
 }
 .nav-logo {
   display: inline-block;
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 1.35rem;
   color: var(--navy);
   border: none;
@@ -128,7 +140,7 @@ nav.nav--hidden { transform: translateY(-100%); }
 .nav-brand.open .brand-menu { opacity: 1; visibility: visible; transform: translateY(0); }
 .brand-menu a {
   display: block; padding: 0.5rem 0.7rem;
-  font-family: 'Inter', sans-serif; font-size: 0.92rem;
+  font-family: 'Archivo', sans-serif; font-size: 0.92rem;
   color: var(--charcoal); border: none; border-radius: 6px;
   white-space: nowrap;
 }
@@ -163,7 +175,7 @@ body:not(.brand-sail):not(.brand-grow):not(.brand-advise) .brand-menu a[href="/"
   padding-bottom: 2px;
   border-bottom: 1px solid transparent;
 }
-.nav-links a:hover, .nav-links a.active { border-bottom-color: var(--terracotta); color: var(--navy); }
+.nav-links a:hover, .nav-links a.active { border-bottom-color: var(--logo-gold); color: var(--navy); }
 
 /* Marker signalling an interactive tool (Diagnostic, Simulation) — a crisp raised ↗.
    Drawn as an SVG masked to the link color; the font glyph renders as hairline
@@ -184,20 +196,26 @@ body:not(.brand-sail):not(.brand-grow):not(.brand-advise) .brand-menu a[href="/"
 }
 
 .nav-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
   background: var(--navy);
   color: var(--offwhite) !important;
-  padding: 0.55rem 1.2rem !important;
-  border-radius: 2px;
-  font-size: 0.88rem;
-  letter-spacing: 0.02em;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   line-height: 1 !important;
+  /* trim the line box to the capitals so equal padding = true vertical centering;
+     the !importants (and this comment) guard against .nav-links a's padding-bottom:2px */
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+  text-box: trim-both cap alphabetic;
+  /* extra left padding offsets the trailing letter-space after the last glyph */
+  padding: 0.6rem calc(1.2rem - 0.04em) 0.6rem calc(1.2rem + 0.04em) !important;
+  border-radius: 999px;
   border: none !important;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
-.nav-cta:hover { background: var(--terracotta); }
+.nav-cta:hover { background: var(--logo-gold); color: var(--navy-deep) !important; }
 
 .nav-toggle {
   display: none;
@@ -236,9 +254,10 @@ section { padding: 5rem 0; }
 @media (max-width: 780px) { section { padding: 3.5rem 0; } }
 
 .eyebrow {
-  font-size: 0.78rem;
+  font-family: var(--mono);
+  font-size: 0.74rem;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.15em;
   color: var(--terracotta);
   margin-bottom: 1rem;
   font-weight: 500;
@@ -274,7 +293,7 @@ section:has(+ .hero) {
 .challenge-box-gold { border-left-color: var(--logo-gold); }
 .challenge-box-blue { border-left-color: var(--logo-blue); }
 .challenge-box-title {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 1rem;
   font-weight: 500;
   color: var(--navy);
@@ -383,17 +402,17 @@ section:has(+ .hero) {
 /* ===== BUTTONS ===== */
 .btn {
   display: inline-block;
-  padding: 0.85rem 1.6rem;
+  padding: 0.85rem 1.75rem;
   font-size: 0.95rem;
   font-weight: 500;
   letter-spacing: 0.01em;
-  border-radius: 2px;
+  border-radius: 999px;
   border: none;
   cursor: pointer;
   transition: all 0.2s;
 }
 .btn-primary { background: var(--navy); color: var(--offwhite); }
-.btn-primary:hover { background: var(--terracotta); border: none; }
+.btn-primary:hover { background: var(--logo-gold); color: var(--navy-deep); border: none; }
 .btn-ghost {
   background: transparent;
   color: var(--navy);
@@ -421,7 +440,7 @@ section:has(+ .hero) {
 }
 .card h3 { color: var(--navy); margin-bottom: 0.5rem; }
 .card .num {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 0.85rem;
   color: var(--terracotta);
   letter-spacing: 0.15em;
@@ -446,7 +465,7 @@ section:has(+ .hero) {
   align-items: start;
 }
 .tier:first-child { border-top: 1px solid var(--hairline); }
-.tier-name { font-family: 'Fraunces', serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 0.4rem; }
+.tier-name { font-family: 'Besley', Georgia, serif; font-size: 1.5rem; color: var(--navy); margin-bottom: 0.4rem; }
 .tier-meta { font-size: 0.85rem; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.9rem; }
 .tier-desc { color: var(--charcoal); max-width: 58ch; margin-bottom: 0.8rem; }
 .tier-list { list-style: none; color: var(--midgray); font-size: 0.92rem; }
@@ -457,7 +476,7 @@ section:has(+ .hero) {
   min-width: 160px;
 }
 .tier-price .amount {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 1.5rem;
   color: var(--navy);
   font-variant-numeric: tabular-nums;
@@ -517,10 +536,10 @@ footer {
 }
 footer .wrap { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 2rem; }
 @media (max-width: 780px) { footer .wrap { grid-template-columns: 1fr; } }
-footer h4 { color: var(--seamist); font-size: 0.9rem; font-weight: 500; margin-bottom: 1rem; font-family: 'Inter', sans-serif; }
+footer h4 { color: var(--seamist); font-size: 0.9rem; font-weight: 500; margin-bottom: 1rem; font-family: 'Archivo', sans-serif; }
 footer a { color: var(--seamist); font-size: 0.9rem; display: block; padding: 0.25rem 0; border: none; }
 footer a:hover { color: var(--terracotta-soft); }
-footer .tagline { font-family: 'Fraunces', serif; font-size: 1rem; margin-bottom: 0.4rem; font-weight: 400; }
+footer .tagline { font-family: 'Besley', Georgia, serif; font-size: 1rem; margin-bottom: 0.4rem; font-weight: 400; }
 footer .fine { font-size: 0.8rem; color: var(--seamist); opacity: 0.7; margin-top: 0.4rem; margin-bottom: 1rem; }
 footer .fine a { display: inline; padding: 0; font-size: inherit; }
 footer .land {
@@ -549,7 +568,7 @@ hr.rule { border: none; border-top: 1px solid var(--hairline); margin: 2.5rem 0;
 .meta-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
 .meta-tag { font-size: 0.78rem; background: var(--seamist); color: var(--navy); padding: 0.3rem 0.7rem; border-radius: 2px; letter-spacing: 0.02em; }
 .positioning {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: clamp(1.3rem, 2.6vw, 1.8rem);
   color: var(--navy);
   line-height: 1.3;
@@ -714,11 +733,11 @@ hr.sign-rule {
 }
 
 .mini-card-logo { height: 48px; width: auto; display: block; margin-bottom: 0.6rem; }
-.mini-card-name { font-family: 'Fraunces', serif; font-size: 1.05rem; color: var(--navy); font-weight: 400; }
+.mini-card-name { font-family: 'Besley', Georgia, serif; font-size: 1.05rem; color: var(--navy); font-weight: 400; }
 .mini-card-role { font-size: 0.72rem; letter-spacing: 0.06em; color: var(--midgray); margin-top: 0.2rem; }
 
 .mini-card-tagline {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-style: italic; font-weight: 300;
   font-size: 0.9rem; color: var(--navy); line-height: 1.5;
 }
@@ -751,7 +770,7 @@ hr.sign-rule {
 }
 
 .outcome-num {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 0.82rem;
   letter-spacing: 0.15em;
   margin-bottom: 0.7rem;
@@ -767,7 +786,7 @@ hr.sign-rule {
 
 /* Visible price on Grow engagement cards */
 .engagement-price {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 1.15rem;
   color: var(--navy);
   margin: 0 0 0.7rem;
@@ -955,9 +974,9 @@ hr.sign-rule {
 }
 .scard.recommended .scard-tag { color: var(--logo-red); }
 .scard-tag { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--logo-red); font-weight: 600; margin-bottom: 0.5rem; }
-.scard-name { font-family: 'Fraunces', serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 0.3rem; }
+.scard-name { font-family: 'Besley', Georgia, serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 0.3rem; }
 .scard-meta { font-size: 0.82rem; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
-.scard-price { font-family: 'Fraunces', serif; font-size: 1.5rem; color: var(--navy); font-variant-numeric: tabular-nums; margin-bottom: 0.9rem; }
+.scard-price { font-family: 'Besley', Georgia, serif; font-size: 1.5rem; color: var(--navy); font-variant-numeric: tabular-nums; margin-bottom: 0.9rem; }
 .scard-outcome { font-size: 0.95rem; color: var(--charcoal); flex: 1; margin-bottom: 1rem; }
 .scard-delivers {
   font-size: 0.82rem;
@@ -975,7 +994,7 @@ hr.sign-rule {
 /* Proof points name plates */
 .proof-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
 .proof-plate {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 1.1rem;
   color: var(--navy);
   padding: 0.6rem 1.4rem;
@@ -1000,7 +1019,7 @@ hr.sign-rule {
 .fn-featured-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .fn-featured-body { padding: 2.5rem; display: flex; flex-direction: column; }
 .fn-pillar { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--terracotta); margin-bottom: 0.8rem; font-weight: 500; }
-.fn-title { font-family: 'Fraunces', serif; font-size: 1.5rem; color: var(--navy); line-height: 1.25; margin-bottom: 0.9rem; }
+.fn-title { font-family: 'Besley', Georgia, serif; font-size: 1.5rem; color: var(--navy); line-height: 1.25; margin-bottom: 0.9rem; }
 .fn-excerpt { color: var(--midgray); font-size: 0.95rem; flex: 1; margin-bottom: 1.2rem; }
 .fn-meta { font-size: 0.78rem; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
 .fn-read { color: var(--navy); font-size: 0.9rem; font-weight: 500; }
@@ -1010,7 +1029,7 @@ hr.sign-rule {
 /* Footer CTA panel — uses standard alt section spacing, just centered */
 .cta-panel { background: var(--seamist); text-align: center; }
 .cta-panel p.cta-sentence {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: clamp(1.2rem, 2.6vw, 1.75rem);
   color: var(--navy);
   font-style: italic;
@@ -1028,7 +1047,7 @@ hr.sign-rule {
   border: none;
   text-align: left;
   padding: 1.2rem 0;
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 1.05rem;
   color: var(--navy);
   cursor: pointer;
@@ -1045,7 +1064,7 @@ hr.sign-rule {
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 1.1rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-weight: 300;
   color: var(--terracotta);
   margin-top: 2px;
@@ -1061,10 +1080,10 @@ hr.sign-rule {
   font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
   color: var(--midgray); text-align: left; padding: 0.7rem 1rem;
   background: var(--seamist); border-bottom: 2px solid var(--hairline);
-  font-weight: 500; font-family: 'Inter', sans-serif;
+  font-weight: 500; font-family: 'Archivo', sans-serif;
 }
 .pathway-table td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--hairline); vertical-align: top; }
-.step-label { font-family: 'Fraunces', serif; color: var(--navy); font-size: 1rem; display: block; margin-top: 0.15rem; }
+.step-label { font-family: 'Besley', Georgia, serif; color: var(--navy); font-size: 1rem; display: block; margin-top: 0.15rem; }
 .step-num { font-size: 0.72rem; color: var(--terracotta); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; }
 .time-col { color: var(--midgray); white-space: nowrap; font-size: 0.88rem; }
 @media (max-width: 680px) {
@@ -1092,7 +1111,7 @@ hr.sign-rule {
   align-items: start;
 }
 @media (max-width: 600px) { .choose-block { grid-template-columns: 1fr; gap: 0.3rem; } }
-.choose-tier { font-family: 'Fraunces', serif; font-size: 0.9rem; color: var(--terracotta); padding-top: 0.1rem; }
+.choose-tier { font-family: 'Besley', Georgia, serif; font-size: 0.9rem; color: var(--terracotta); padding-top: 0.1rem; }
 .choose-block p { margin: 0; font-size: 0.95rem; color: var(--charcoal); }
 .choose-block p strong { font-weight: 600; color: var(--navy); }
 
@@ -1220,7 +1239,7 @@ section.article-section { padding-top: 2rem; }
   text-align: center;
 }
 .stat-num {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 2.6rem;
   font-weight: 400;
   color: var(--navy);
@@ -1232,7 +1251,7 @@ section.article-section { padding-top: 2rem; }
 
 /* Pull quote */
 .pull-quote {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 1.3rem;
   font-weight: 300;
   color: var(--navy);
@@ -1354,7 +1373,7 @@ section.article-section { padding-top: 2rem; }
 }
 
 .tcard-name {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 1.85rem;
   color: var(--navy);
   line-height: 1.1;
@@ -1408,7 +1427,7 @@ section.article-section { padding-top: 2rem; }
 }
 
 .tcard-amount {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 1.75rem;
   color: var(--navy);
   font-variant-numeric: tabular-nums;
@@ -1526,7 +1545,7 @@ body.brand-advise .nav-logo .mark-practice { color: var(--logo-red); }
 .practice-card.advise .practice-bar { background: var(--logo-red); }
 
 .practice-name {
-  font-family: 'Fraunces', serif;
+  font-family: 'Besley', Georgia, serif;
   font-size: 1.55rem;
   color: var(--navy);
   margin-bottom: 0.2rem;
@@ -1656,7 +1675,7 @@ footer .footer-practices i {
       flex-shrink: 0;
       width: 26px; height: 26px; border-radius: 50%;
       background: var(--navy); color: #fff;
-      font-family: 'Fraunces', serif; font-size: 0.9rem;
+      font-family: 'Besley', Georgia, serif; font-size: 0.9rem;
       display: inline-flex; align-items: center; justify-content: center;
     }
     .step-head h3 { margin: 0; font-size: 1.15rem; }
@@ -1678,14 +1697,14 @@ footer .footer-practices i {
     .mx-col-head { flex-direction: column; justify-content: flex-end; text-align: left; padding: 0.3rem 0.2rem; gap: 0.1rem; }
     .mx-corner { display: flex; flex-direction: column; justify-content: flex-end; padding: 0.3rem 0.2rem; }
     /* typography mirrors .mx-row-head .mx-seg so the persona title reads as part of the matrix */
-    .mx-persona-input { width: 100%; font-family: 'Fraunces', serif; font-size: 0.9rem; font-weight: 700; color: var(--navy); line-height: 1.2; padding: 0.25rem 0.1rem; border: none; border-bottom: 1px dashed var(--hairline); border-radius: 0; background: transparent; }
-    .mx-persona-input::placeholder { font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 400; color: var(--midgray); font-style: italic; }
+    .mx-persona-input { width: 100%; font-family: 'Besley', Georgia, serif; font-size: 0.9rem; font-weight: 700; color: var(--navy); line-height: 1.2; padding: 0.25rem 0.1rem; border: none; border-bottom: 1px dashed var(--hairline); border-radius: 0; background: transparent; }
+    .mx-persona-input::placeholder { font-family: 'Archivo', sans-serif; font-size: 0.78rem; font-weight: 400; color: var(--midgray); font-style: italic; }
     .mx-persona-input:hover { border-bottom-color: var(--logo-blue); }
     .mx-persona-input:focus { outline: none; border-bottom: 1px solid var(--logo-blue); }
     .mx-row-head { flex-direction: column; align-items: flex-start; justify-content: center; gap: 0.15rem; }
-    .mx-row-head .mx-seg { color: var(--navy); font-family: 'Fraunces', serif; font-size: 0.9rem; text-transform: none; letter-spacing: 0; line-height: 1.2; }
+    .mx-row-head .mx-seg { color: var(--navy); font-family: 'Besley', Georgia, serif; font-size: 0.9rem; text-transform: none; letter-spacing: 0; line-height: 1.2; }
     .mx-row-head .mx-size { display: flex; align-items: baseline; gap: 0.25rem; text-transform: none; letter-spacing: 0; }
-    .mx-size-input { width: 3.2rem; font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; color: var(--logo-blue); text-align: right; padding: 0.15rem 0.3rem; border: 1px solid var(--hairline); border-radius: 4px; background: #fff; }
+    .mx-size-input { width: 3.2rem; font-family: 'Archivo', sans-serif; font-size: 0.82rem; font-weight: 600; color: var(--logo-blue); text-align: right; padding: 0.15rem 0.3rem; border: 1px solid var(--hairline); border-radius: 4px; background: #fff; }
     .mx-size-input:hover { border-color: var(--logo-blue); }
     .mx-size-input:focus { outline: none; border-color: var(--logo-blue); box-shadow: 0 0 0 2px rgba(74,124,158,0.18); }
     .mx-size-suffix { font-size: 0.66rem; color: var(--midgray); }
@@ -1720,14 +1739,14 @@ footer .footer-practices i {
     .play-card:hover { border-color: var(--navy); box-shadow: 0 6px 16px -10px rgba(31,58,95,0.4); }
     .play-card.added { opacity: 0.45; cursor: default; }
     .play-card.added:hover { box-shadow: none; border-color: var(--hairline); border-left-color: var(--logo-blue); }
-    .play-name { font-family: 'Fraunces', serif; font-size: 0.98rem; color: var(--navy); margin-bottom: 0.2rem; }
+    .play-name { font-family: 'Besley', Georgia, serif; font-size: 0.98rem; color: var(--navy); margin-bottom: 0.2rem; }
     .play-blurb { font-size: 0.78rem; color: var(--midgray); line-height: 1.4; margin-bottom: 0.5rem; }
     .play-framework { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--logo-blue); font-weight: 600; }
     .play-add { position: absolute; top: 0.7rem; right: 0.8rem; font-size: 1.1rem; color: var(--logo-blue); font-weight: 300; }
     .play-card.added .play-add { content: ''; }
 
     .plan-panel { background: var(--navy); border-radius: 5px; padding: 1.3rem 1.4rem; position: sticky; top: 90px; }
-    .plan-panel h4 { color: #fff; font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.9rem; font-weight: 500; }
+    .plan-panel h4 { color: #fff; font-family: 'Archivo', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.9rem; font-weight: 500; }
     .plan-empty { color: rgba(235,239,236,0.6); font-size: 0.85rem; font-style: italic; padding: 1rem 0; }
     .plan-list { list-style: none; margin: 0; padding: 0; }
     .plan-item {
@@ -1743,7 +1762,7 @@ footer .footer-practices i {
     }
     .plan-item.dragging .plan-drag, body.plan-dragging .plan-drag { cursor: grabbing; }
     .plan-drag:hover { color: #fff; }
-    .plan-week { font-family: 'Fraunces', serif; font-size: 0.72rem; color: var(--seamist); background: rgba(255,255,255,0.1); border-radius: 3px; padding: 0.15rem 0.4rem; white-space: nowrap; }
+    .plan-week { font-family: 'Besley', Georgia, serif; font-size: 0.72rem; color: var(--seamist); background: rgba(255,255,255,0.1); border-radius: 3px; padding: 0.15rem 0.4rem; white-space: nowrap; }
     .plan-name { color: #fff; font-size: 0.82rem; line-height: 1.25; }
     .plan-badge { display: block; font-size: 0.68rem; margin-top: 0.15rem; }
     .plan-badge.good { color: #8FD4A8; }
@@ -1786,7 +1805,7 @@ footer .footer-practices i {
     /* --- Step 3: curve --- */
     .sim-chart { width: 100%; height: auto; display: block; }
     .sim-chart .grid-line { stroke: var(--hairline); stroke-width: 1; }
-    .sim-chart .axis-label { fill: var(--midgray); font-size: 12px; font-family: 'Inter', sans-serif; }
+    .sim-chart .axis-label { fill: var(--midgray); font-size: 12px; font-family: 'Archivo', sans-serif; }
     .sim-chart .curve-base { fill: none; stroke: var(--logo-red); stroke-width: 2.5; stroke-dasharray: 6 5; stroke-linecap: round; }
     .sim-chart .curve-plan { fill: none; stroke: var(--logo-blue); stroke-width: 3; stroke-linecap: round; }
     .sim-chart .gap-area { fill: var(--logo-blue); opacity: 0.09; }
@@ -1805,7 +1824,7 @@ footer .footer-practices i {
     @media (max-width: 520px) { .sim-readout { grid-template-columns: 1fr; } }
     .readout-item { background: var(--seamist); border-radius: 3px; padding: 1.1rem 1.2rem; text-align: center; }
     .readout-item.gap { background: var(--navy); }
-    .readout-num { font-family: 'Fraunces', serif; font-size: 2.1rem; line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; }
+    .readout-num { font-family: 'Besley', Georgia, serif; font-size: 2.1rem; line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; }
     .readout-item.gap .readout-num { color: #fff; }
     .readout-item.plan .readout-num { color: var(--logo-blue); }
     .readout-item.base .readout-num { color: var(--logo-red); }
@@ -1817,11 +1836,11 @@ footer .footer-practices i {
     /* --- Step 3: curve + risks side by side --- */
     .curve-and-risks { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.8rem; align-items: start; }
     @media (max-width: 900px) { .curve-and-risks { grid-template-columns: 1fr; } }
-    .risks-col h4 { font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); margin-bottom: 0.3rem; }
+    .risks-col h4 { font-family: 'Archivo', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); margin-bottom: 0.3rem; }
     .risks-sub { font-size: 0.82rem; color: var(--midgray); font-style: italic; margin-bottom: 1rem; }
     .risk-empty { font-size: 0.85rem; color: var(--midgray); background: #fff; border: 1px dashed var(--hairline); border-radius: 5px; padding: 1.1rem; line-height: 1.5; }
     .risk-card { background: #fff; border: 1px solid var(--hairline); border-left: 3px solid var(--logo-gold); border-radius: 5px; padding: 0.85rem 1rem; margin-bottom: 0.7rem; }
-    .risk-play { font-family: 'Fraunces', serif; font-size: 0.95rem; color: var(--navy); margin-bottom: 0.5rem; }
+    .risk-play { font-family: 'Besley', Georgia, serif; font-size: 0.95rem; color: var(--navy); margin-bottom: 0.5rem; }
     .risk-line { font-size: 0.78rem; line-height: 1.5; color: var(--charcoal); margin-bottom: 0.45rem; }
     .risk-line:last-child { margin-bottom: 0; }
     .risk-tag { display: inline-block; font-size: 0.61rem; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; margin-right: 0.35rem; }
@@ -1843,10 +1862,10 @@ footer .footer-practices i {
     /* --- threshold visuals on the chart --- */
     .sim-chart .sustain-zone { fill: var(--logo-blue); opacity: 0.05; }
     .sim-chart .threshold-line { stroke: var(--navy); stroke-width: 1.5; stroke-dasharray: 2 4; opacity: 0.6; }
-    .sim-chart .threshold-label { fill: var(--navy); font-size: 11px; font-family: 'Inter', sans-serif; font-weight: 600; opacity: 0.8; letter-spacing: 0.03em; }
+    .sim-chart .threshold-label { fill: var(--navy); font-size: 11px; font-family: 'Archivo', sans-serif; font-weight: 600; opacity: 0.8; letter-spacing: 0.03em; }
     .sim-chart .cross-line { stroke: var(--logo-gold); stroke-width: 1.5; }
     .sim-chart .cross-dot { fill: var(--logo-gold); stroke: #fff; stroke-width: 1.5; }
-    .sim-chart .cross-flag { fill: var(--logo-gold); font-size: 11px; font-weight: 700; font-family: 'Inter', sans-serif; }
+    .sim-chart .cross-flag { fill: var(--logo-gold); font-size: 11px; font-weight: 700; font-family: 'Archivo', sans-serif; }
 
     /* --- threshold status callout --- */
     .threshold-status { margin: 0 0 1.15rem; border-radius: 8px; padding: 1rem 1.2rem; font-size: 0.86rem; line-height: 1.55; }
@@ -1854,14 +1873,14 @@ footer .footer-practices i {
     .threshold-status.fragile { background: rgba(200,149,10,0.10); border-left: 3px solid var(--logo-gold); color: var(--charcoal); }
     .threshold-status.liminal { background: var(--seamist); border-left: 3px solid var(--midgray); color: var(--charcoal); }
     .threshold-status strong { color: var(--navy); }
-    .ts-head { display: block; font-family: 'Fraunces', serif; font-size: 0.98rem; color: var(--navy); margin-bottom: 0.35rem; }
+    .ts-head { display: block; font-family: 'Besley', Georgia, serif; font-size: 0.98rem; color: var(--navy); margin-bottom: 0.35rem; }
 
     /* --- left-side groundwork ladder --- */
     .groundwork { background: #fff; border: 1px solid var(--hairline); border-radius: 8px; padding: 1.3rem 1.4rem; }
-    .groundwork h4 { font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); margin-bottom: 0.3rem; }
+    .groundwork h4 { font-family: 'Archivo', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); margin-bottom: 0.3rem; }
     .gw-head-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
     .gw-head-row h4 { margin-bottom: 0; }
-    .gw-outcomes-toggle { flex-shrink: 0; font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; color: var(--logo-blue); background: none; border: 1px solid var(--hairline); border-radius: 999px; padding: 0.3rem 0.85rem; cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+    .gw-outcomes-toggle { flex-shrink: 0; font-family: 'Archivo', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; color: var(--logo-blue); background: none; border: 1px solid var(--hairline); border-radius: 999px; padding: 0.3rem 0.85rem; cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; }
     .gw-outcomes-toggle:hover { border-color: var(--logo-blue); background: rgba(74,124,158,0.06); }
     .gw-outcomes-toggle[aria-expanded="true"] { color: #fff; background: var(--logo-blue); border-color: var(--logo-blue); }
     /* default: the organizational-outcome column is collapsed so the ladder stays scannable */
@@ -1871,11 +1890,11 @@ footer .footer-practices i {
     .gw-empty { font-size: 0.85rem; color: var(--midgray); background: #fff; border: 1px dashed var(--hairline); border-radius: 5px; padding: 1.1rem; line-height: 1.5; }
     .gw-step { position: relative; padding-left: 1.5rem; padding-bottom: 1.1rem; border-left: 2px solid var(--hairline); margin-left: 0.5rem; }
     .gw-step:last-child { padding-bottom: 0; }
-    .gw-pip { position: absolute; left: -0.66rem; top: -0.1rem; width: 1.2rem; height: 1.2rem; border-radius: 50%; background: #fff; border: 2px solid var(--logo-blue); display: flex; align-items: center; justify-content: center; font-size: 0.62rem; color: var(--logo-blue); font-weight: 700; font-family: 'Inter', sans-serif; }
+    .gw-pip { position: absolute; left: -0.66rem; top: -0.1rem; width: 1.2rem; height: 1.2rem; border-radius: 50%; background: #fff; border: 2px solid var(--logo-blue); display: flex; align-items: center; justify-content: center; font-size: 0.62rem; color: var(--logo-blue); font-weight: 700; font-family: 'Archivo', sans-serif; }
     .gw-step.broke { border-left-color: var(--logo-red); }
     .gw-step.broke .gw-pip { border-color: var(--logo-red); color: var(--logo-red); }
     .gw-week { font-size: 0.68rem; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.06em; }
-    .gw-play { font-family: 'Fraunces', serif; font-size: 0.95rem; color: var(--navy); margin: 0.1rem 0 0.3rem; }
+    .gw-play { font-family: 'Besley', Georgia, serif; font-size: 0.95rem; color: var(--navy); margin: 0.1rem 0 0.3rem; }
     .gw-task { font-size: 0.8rem; line-height: 1.5; color: var(--charcoal); }
     .gw-task strong { color: var(--navy); }
     .gw-carry { font-size: 0.74rem; color: var(--midgray); margin-top: 0.35rem; }
@@ -1884,12 +1903,12 @@ footer .footer-practices i {
     .gw-closer.crossed { background: rgba(200,149,10,0.16); border-color: rgba(200,149,10,0.35); border-left: 4px solid var(--logo-gold); box-shadow: 0 1px 6px rgba(200,149,10,0.12); }
     .gw-closer.crossed .gw-closer-tips li::before { color: var(--logo-gold); }
     .gw-closer strong { color: var(--navy); }
-    .gw-closer-head { font-family: 'Fraunces', serif; font-size: 1.05rem; color: var(--navy); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
-    .gw-closer-badge { font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #fff; background: var(--logo-gold); border-radius: 999px; padding: 0.18rem 0.6rem; }
+    .gw-closer-head { font-family: 'Besley', Georgia, serif; font-size: 1.05rem; color: var(--navy); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+    .gw-closer-badge { font-family: 'Archivo', sans-serif; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #fff; background: var(--logo-gold); border-radius: 999px; padding: 0.18rem 0.6rem; }
     .gw-closer-lead { margin: 0; }
     .gw-closer-tips { margin-top: 0.8rem; padding-top: 0.75rem; border-top: 1px solid var(--hairline); }
     .gw-closer.crossed .gw-closer-tips { border-top-color: rgba(200,149,10,0.3); }
-    .gw-tips-head { display: block; font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--navy); font-weight: 700; margin-bottom: 0.55rem; }
+    .gw-tips-head { display: block; font-family: 'Archivo', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--navy); font-weight: 700; margin-bottom: 0.55rem; }
     .gw-closer-tips ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
     .gw-closer-tips li { position: relative; padding-left: 1.15rem; font-size: 0.8rem; line-height: 1.5; color: var(--charcoal); }
     .gw-closer-tips li::before { content: "\2192"; position: absolute; left: 0; top: 0; color: var(--logo-blue); font-weight: 700; }
@@ -1897,14 +1916,14 @@ footer .footer-practices i {
 
     /* flag-aware leverage block — always the final read: what single move would add the most, given flags + budget */
     .gw-leverage { margin-top: 0.8rem; background: rgba(74,124,158,0.10); border: 1px solid rgba(74,124,158,0.28); border-left: 4px solid var(--logo-blue); border-radius: 6px; padding: 1rem 1.15rem; }
-    .gw-lev-head { display: block; font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--logo-blue); margin-bottom: 0.5rem; }
+    .gw-lev-head { display: block; font-family: 'Archivo', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--logo-blue); margin-bottom: 0.5rem; }
     .gw-lev-intro { margin: 0 0 0.6rem; font-size: 0.82rem; line-height: 1.5; color: var(--charcoal); }
     .gw-leverage ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
     .gw-leverage li { position: relative; padding-left: 1.3rem; font-size: 0.82rem; line-height: 1.5; color: var(--charcoal); display: flex; align-items: flex-start; gap: 0.7rem; }
     .gw-leverage li::before { content: "\2191"; position: absolute; left: 0; top: 0.05rem; color: var(--logo-blue); font-weight: 700; }
     .gw-leverage li strong { color: var(--navy); }
     .lev-text { flex: 1; }
-    .lev-apply { flex-shrink: 0; margin-top: 0.05rem; font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; color: #fff; background: var(--logo-blue); border: 1px solid var(--logo-blue); border-radius: 999px; padding: 0.28rem 0.8rem; cursor: pointer; transition: background 0.15s, transform 0.05s; }
+    .lev-apply { flex-shrink: 0; margin-top: 0.05rem; font-family: 'Archivo', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; color: #fff; background: var(--logo-blue); border: 1px solid var(--logo-blue); border-radius: 999px; padding: 0.28rem 0.8rem; cursor: pointer; transition: background 0.15s, transform 0.05s; }
     .lev-apply:hover { background: var(--navy); border-color: var(--navy); }
     .lev-apply:active { transform: translateY(1px); }
     .gw-leverage em { font-style: normal; font-weight: 600; color: var(--logo-blue); }
@@ -1913,7 +1932,7 @@ footer .footer-practices i {
 
     /* break glyphs on the curve */
     .sim-chart .play-marker.break { stroke: var(--logo-red); opacity: 0.55; stroke-dasharray: 3 3; }
-    .sim-chart .break-x { fill: var(--logo-red); font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif; }
+    .sim-chart .break-x { fill: var(--logo-red); font-size: 13px; font-weight: 700; font-family: 'Archivo', sans-serif; }
   
 
 /* value-realized line + readout (AI Transformation Simulation) */
@@ -1925,7 +1944,7 @@ footer .footer-practices i {
 
 /* COM-B library group headers + full-plan lock (AI Transformation Simulation) */
 .lib-group-head { grid-column: 1 / -1; margin: 0.4rem 0 0.1rem; display: flex; align-items: baseline; gap: 0.5rem; }
-.lib-group-name { font-family: 'Fraunces', serif; font-size: 0.98rem; color: var(--navy); }
+.lib-group-name { font-family: 'Besley', Georgia, serif; font-size: 0.98rem; color: var(--navy); }
 .lib-group-desc { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--midgray); }
 .play-card.locked { opacity: 0.4; cursor: not-allowed; }
 .play-card.locked:hover { border-color: var(--hairline); border-left-color: var(--logo-blue); box-shadow: none; }
@@ -1938,14 +1957,14 @@ footer .footer-practices i {
 /* --- Step 2: week-budget meter in the plan panel --- */
 .plan-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.6rem; margin-bottom: 0.6rem; }
 .plan-head h4 { margin-bottom: 0; }
-.plan-budget { font-family: 'Fraunces', serif; font-size: 0.8rem; color: var(--seamist); white-space: nowrap; }
+.plan-budget { font-family: 'Besley', Georgia, serif; font-size: 0.8rem; color: var(--seamist); white-space: nowrap; }
 .plan-budget.full { color: var(--logo-gold); }
 .budget-bar { height: 5px; border-radius: 3px; background: rgba(255,255,255,0.12); overflow: hidden; margin-bottom: 0.9rem; }
 .budget-bar span { display: block; height: 100%; width: 0; border-radius: 3px; background: var(--logo-blue); transition: width 0.25s ease; }
 .budget-bar span.full { background: var(--logo-gold); }
 
 /* --- Step 2: play duration tag + sustainment cards --- */
-.play-weeks { display: inline-block; margin-left: 0.4rem; font-family: 'Inter', sans-serif; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--midgray); background: var(--offwhite); border: 1px solid var(--hairline); border-radius: 10px; padding: 0.05rem 0.4rem; vertical-align: middle; }
+.play-weeks { display: inline-block; margin-left: 0.4rem; font-family: 'Archivo', sans-serif; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--midgray); background: var(--offwhite); border: 1px solid var(--hairline); border-radius: 10px; padding: 0.05rem 0.4rem; vertical-align: middle; }
 .play-weeks.long { color: var(--logo-gold); border-color: rgba(200,149,10,0.4); background: rgba(200,149,10,0.08); }
 .lib-group-head.sustain .lib-group-name { color: var(--value-green); }
 .play-card.sustain-card { border-left-color: var(--value-green); }
@@ -1963,7 +1982,7 @@ footer .footer-practices i {
 .curve-top .readout-num { font-size: 1.8rem; }
 
 /* subtle step number beside each play dot — maps to the plan detail below */
-.sim-chart .play-num { fill: var(--navy); opacity: 0.45; font-size: 9px; font-weight: 600; font-family: 'Inter', sans-serif; }
+.sim-chart .play-num { fill: var(--navy); opacity: 0.45; font-size: 9px; font-weight: 600; font-family: 'Archivo', sans-serif; }
 /* clickable play markers → jump to the step detail; the hit circle is an invisible, generous target */
 .sim-chart .play-mk { cursor: pointer; }
 .sim-chart .play-hit { fill: none; pointer-events: all; }
@@ -2000,7 +2019,7 @@ footer .footer-practices i {
 .gw-value { border-left: 2px solid var(--hairline); padding-left: 1rem; align-self: stretch; }
 @media (max-width: 640px) { .gw-value { border-left: none; padding-left: 0; margin-top: 0.4rem; } }
 .gw-value-eyebrow { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 700; color: var(--midgray); margin-bottom: 0.2rem; }
-.gw-value-head { font-family: 'Fraunces', serif; font-size: 0.92rem; line-height: 1.25; color: var(--value-green); margin-bottom: 0.35rem; }
+.gw-value-head { font-family: 'Besley', Georgia, serif; font-size: 0.92rem; line-height: 1.25; color: var(--value-green); margin-bottom: 0.35rem; }
 .gw-value-body { font-size: 0.78rem; line-height: 1.5; color: var(--charcoal); }
 .gw-value.adverse { border-left-color: var(--logo-red); }
 .gw-value.adverse .gw-value-eyebrow { color: var(--logo-red); }
@@ -2013,28 +2032,136 @@ footer .footer-practices i {
 /* --- Step 3: sustain-phase band on the chart --- */
 .sim-chart .phase-band-sustain { fill: var(--value-green); opacity: 0.05; }
 .sim-chart .phase-divider { stroke: var(--value-green); stroke-width: 1; stroke-dasharray: 2 4; opacity: 0.5; }
-.sim-chart .phase-band-label { fill: var(--value-green); font-size: 10px; font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: 0.04em; opacity: 0.85; }
+.sim-chart .phase-band-label { fill: var(--value-green); font-size: 10px; font-family: 'Archivo', sans-serif; font-weight: 600; letter-spacing: 0.04em; opacity: 0.85; }
 
 /* --- Step 3: transformation-phase nodes on the curve --- */
 .sim-chart .phase-node-line { stroke: var(--logo-gold); stroke-width: 1; opacity: 0.55; }
 .sim-chart .phase-node { fill: var(--logo-gold); stroke: #fff; stroke-width: 1.5; }
-.sim-chart .phase-node-num { fill: #fff; font-size: 10px; font-weight: 700; font-family: 'Inter', sans-serif; }
+.sim-chart .phase-node-num { fill: #fff; font-size: 10px; font-weight: 700; font-family: 'Archivo', sans-serif; }
 
 /* --- Step 3: phase ladder (the revolution, in phases) --- */
 .phase-track { background: #fff; border: 1px solid var(--hairline); border-radius: 8px; padding: 1.3rem 1.4rem; margin-bottom: 1.15rem; }
-.phase-track-head h4 { font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); margin-bottom: 0.3rem; }
+.phase-track-head h4 { font-family: 'Archivo', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--navy); margin-bottom: 0.3rem; }
 .phase-track-sub { font-size: 0.82rem; color: var(--midgray); font-style: italic; margin-bottom: 1rem; }
 .phase-ladder { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
 @media (max-width: 720px) { .phase-ladder { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 400px) { .phase-ladder { grid-template-columns: 1fr; } }
 .phase-pill { position: relative; background: #fff; border: 1px solid var(--hairline); border-top: 3px solid var(--hairline); border-radius: 5px; padding: 0.7rem 0.75rem 0.8rem; }
 .phase-pill.reached { border-top-color: var(--logo-gold); background: rgba(200,149,10,0.05); }
-.phase-pip { display: inline-flex; align-items: center; justify-content: center; width: 1.25rem; height: 1.25rem; border-radius: 50%; font-size: 0.66rem; font-weight: 700; font-family: 'Inter', sans-serif; margin-bottom: 0.4rem; background: var(--offwhite); color: var(--midgray); border: 1px solid var(--hairline); }
+.phase-pip { display: inline-flex; align-items: center; justify-content: center; width: 1.25rem; height: 1.25rem; border-radius: 50%; font-size: 0.66rem; font-weight: 700; font-family: 'Archivo', sans-serif; margin-bottom: 0.4rem; background: var(--offwhite); color: var(--midgray); border: 1px solid var(--hairline); }
 .phase-pill.reached .phase-pip { background: var(--logo-gold); color: #fff; border-color: var(--logo-gold); }
-.phase-label { font-family: 'Fraunces', serif; font-size: 0.9rem; color: var(--navy); line-height: 1.2; margin-bottom: 0.15rem; }
+.phase-label { font-family: 'Besley', Georgia, serif; font-size: 0.9rem; color: var(--navy); line-height: 1.2; margin-bottom: 0.15rem; }
 .phase-pill.pending .phase-label { color: var(--midgray); }
 .phase-when { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: var(--logo-gold); margin-bottom: 0.35rem; }
 .phase-pill.pending .phase-when { color: var(--midgray); opacity: 0.7; }
 .phase-note { font-size: 0.72rem; line-height: 1.4; color: var(--charcoal); }
 .phase-pill.pending .phase-note { color: var(--midgray); }
 
+
+/* ===================================================================
+   BRAND RESHAPE 2026-07 — terrain device, hub components, motion
+   Ported from the validated /brand-lab/ exploration.
+   =================================================================== */
+
+/* Terrain canvases: script.js draws topographic contours into any
+   canvas.terrain / canvas.card-terrain (see data- attrs there) */
+.hero--terrain { position: relative; overflow: hidden; }
+.hero--terrain > canvas.terrain { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero--terrain .wrap { position: relative; }
+
+/* Mono utility register (captions, coordinates, small labels) */
+.band-note {
+  font-family: var(--mono) !important;
+  font-size: 0.68rem !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.fn-pillar { font-family: var(--mono); }
+
+/* Practice offer cards (hub) — white cards, per-practice terrain base */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.1rem, 2.2vw, 1.8rem); }
+.prac-card {
+  position: relative;
+  display: flex; flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 3px;
+  padding: 1.9rem 1.9rem 1.6rem;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(22, 40, 63, 0.05);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+.prac-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(22, 40, 63, 0.07), 0 18px 40px rgba(22, 40, 63, 0.13);
+  border-bottom-color: var(--hairline); /* cards are <a>; keep the link underline off */
+}
+.prac-card.sail:hover { border-color: var(--logo-gold); }
+.prac-card.grow:hover { border-color: var(--logo-blue); }
+.prac-card.advise:hover { border-color: var(--logo-red); }
+.card-terrain {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 130px; width: 100%;
+  pointer-events: none;
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+.prac-card:hover .card-terrain { opacity: 1; }
+.prac-card > *:not(.card-terrain) { position: relative; }
+.prac-rule { display: block; width: 30px; border-top: 2px solid; margin-bottom: 1.1rem; transition: width 0.3s ease; }
+.prac-card:hover .prac-rule { width: 52px; }
+.prac-card.sail .prac-rule { border-color: var(--logo-gold); }
+.prac-card.grow .prac-rule { border-color: var(--logo-blue); }
+.prac-card.advise .prac-rule { border-color: var(--logo-red); }
+.prac-card h3 { font-size: 1.6rem; margin-bottom: 0.3rem; }
+.prac-tag {
+  font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+.prac-card.sail .prac-tag { color: var(--terracotta); }
+.prac-card.grow .prac-tag { color: var(--logo-blue); }
+.prac-card.advise .prac-tag { color: var(--logo-red); }
+.prac-desc { font-size: 0.99rem; line-height: 1.6; color: var(--charcoal); }
+.prac-who { font-size: 0.88rem; color: var(--midgray); }
+.prac-go { font-weight: 600; font-size: 0.95rem; margin-top: auto; padding-top: 0.9rem; }
+.prac-go .arr { display: inline-block; transition: transform 0.25s ease; }
+.prac-card:hover .prac-go .arr { transform: translateX(5px); }
+.prac-card.sail .prac-go { color: var(--terracotta); }
+.prac-card.grow .prac-go { color: var(--logo-blue); }
+.prac-card.advise .prac-go { color: var(--logo-red); }
+@media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
+
+/* Through-line: asymmetric split with a gold seam rule (hub) */
+.through-grid { display: grid; grid-template-columns: 5fr 1px 7fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+.seam-rule { width: 1px; height: 100%; background: linear-gradient(to bottom, var(--logo-gold), rgba(232, 176, 3, 0.15)); }
+.through-grid h2 { max-width: 14ch; }
+@media (max-width: 780px) {
+  .through-grid { grid-template-columns: 1fr; }
+  .seam-rule { width: 60px; height: 1px; background: linear-gradient(to right, var(--logo-gold), rgba(232, 176, 3, 0.15)); }
+}
+
+/* Navy field CTA panel (hub) — overrides the default seamist .cta-panel */
+.cta-panel--field { position: relative; background: var(--navy-deep); overflow: hidden; text-align: left; }
+.cta-panel--field > canvas.terrain { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cta-panel--field .cta-inner {
+  position: relative;
+  display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+}
+/* p.cta-sentence matches the production selector's specificity so this later rule wins */
+.cta-panel--field p.cta-sentence {
+  font-family: 'Besley', Georgia, serif; font-weight: 400; font-style: normal;
+  font-size: clamp(1.35rem, 2.7vw, 1.75rem); line-height: 1.35;
+  color: var(--offwhite); max-width: 24ch; margin: 0;
+}
+.btn-gold { background: var(--logo-gold); color: var(--navy-deep); border: 1px solid var(--logo-gold); font-weight: 600; }
+.btn-gold:hover { background: var(--offwhite); border-color: var(--offwhite); color: var(--navy-deep); }
+
+/* Scroll reveals — html.js gate keeps content visible without JS */
+html.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+html.js .reveal.in { opacity: 1; transform: none; }
+html.js .cards .reveal:nth-child(2) { transition-delay: 0.1s; }
+html.js .cards .reveal:nth-child(3) { transition-delay: 0.2s; }
+@media (prefers-reduced-motion: reduce) {
+  html.js .reveal { opacity: 1; transform: none; transition: none; }
+  .prac-card, .prac-rule, .prac-go .arr, .card-terrain { transition: none; }
+}
