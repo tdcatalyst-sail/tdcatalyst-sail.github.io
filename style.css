@@ -2165,3 +2165,72 @@ html.js .cards .reveal:nth-child(3) { transition-delay: 0.2s; }
   html.js .reveal { opacity: 1; transform: none; transition: none; }
   .prac-card, .prac-rule, .prac-go .arr, .card-terrain { transition: none; }
 }
+
+/* ===== DELIVERY TEMPLATES (print-ready documents under /templates/) =====
+   Open in browser, edit text in place, Cmd/Ctrl+P → Save as PDF. */
+.doc-body { background: #9aa8a0; }
+.doc-toolbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--navy-deep); color: var(--offwhite);
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em;
+  padding: 0.6rem 1.2rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+}
+.doc-toolbar button {
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em;
+  background: var(--logo-gold); color: var(--navy-deep);
+  border: none; border-radius: 999px; padding: 0.45rem 1.1rem; cursor: pointer;
+}
+.sheet {
+  width: 8.5in; max-width: 100%; min-height: 11in;
+  margin: 1.5rem auto; padding: 0.9in 0.85in;
+  background: var(--paper);
+  box-shadow: 0 12px 34px rgba(22, 40, 63, 0.3);
+  position: relative; overflow: hidden;
+}
+.sheet--cover { display: flex; flex-direction: column; }
+.sheet--cover > canvas.terrain { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sheet--cover > * { position: relative; }
+.doc-brand { font-family: 'Besley', Georgia, serif; font-size: 1.15rem; color: var(--navy); }
+.doc-brand b { font-weight: 700; }
+.doc-brand .prac { color: var(--terracotta); }
+.doc-rule { width: 38px; border: 0; border-top: 3px solid var(--logo-gold); margin: 2.2rem 0 1.6rem; }
+.doc-title { font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.15; max-width: 16ch; }
+.doc-subtitle { font-size: 1.05rem; color: var(--midgray); margin-top: 0.6rem; }
+.doc-meta { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; color: var(--charcoal); margin-top: 2.5rem; line-height: 2; }
+.sheet-foot {
+  position: absolute; left: 0.85in; right: 0.85in; bottom: 0.45in;
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--midgray);
+}
+.doc-section { margin-bottom: 1.8rem; }
+.doc-section h2 { font-size: 1.35rem; margin-bottom: 0.6rem; }
+.doc-section h3 { font-size: 1.05rem; margin-bottom: 0.3rem; }
+.doc-num {
+  font-family: var(--mono); font-weight: 500; font-size: 0.68rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--terracotta);
+  margin-bottom: 0.35rem;
+}
+.doc-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 0.8rem 0 1.2rem; }
+.doc-table th {
+  font-family: var(--mono); font-weight: 500; font-size: 0.66rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracotta);
+  text-align: left; padding: 0.5rem 0.7rem 0.4rem 0; border-bottom: 2px solid var(--logo-gold);
+}
+.doc-table td { padding: 0.55rem 0.7rem 0.55rem 0; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+.ph { background: rgba(232, 176, 3, 0.16); border-radius: 2px; padding: 0 0.15em; }
+.doc-sign { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-top: 2.5rem; }
+.doc-sign > div { border-top: 1px solid var(--charcoal); padding-top: 0.4rem; font-size: 0.85rem; color: var(--midgray); }
+@media print {
+  .doc-toolbar { display: none; }
+  .doc-body { background: #fff; }
+  .sheet {
+    width: auto; min-height: 10in; max-width: none;
+    margin: 0; padding: 0.2in 0; box-shadow: none;
+    page-break-after: always;
+  }
+  .sheet:last-child { page-break-after: auto; }
+  .sheet-foot { left: 0; right: 0; bottom: 0; }
+  @page { size: Letter; margin: 0.7in 0.85in; }
+}

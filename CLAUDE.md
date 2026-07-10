@@ -78,17 +78,19 @@ tdcatalyst-sail.github.io/
 
 **Single unified stylesheet** using CSS custom properties (variables) for the design system.
 
-**Color Palette (defined in `:root`):**
-- `--navy` (`#1F3A5F`), `--navy-soft`: Primary text and headings
+**Color Palette (defined in `:root`) — logo-exact since the 2026-07 brand reshape (v3), sampled from the artwork's stroke cores:**
+- `--navy` (`#1F3A5F`), `--navy-soft`, `--navy-deep` (`#16283F`): Text, headings, field CTA panels
 - `--charcoal` (`#222222`): Body text
-- `--offwhite` (`#EBEFEC`), `--seamist`: Page backgrounds
-- `--terracotta` (`#C8950A`), `--terracotta-soft`: Accent/highlight (logo gold)
+- `--offwhite` (`#EBEFEC`), `--seamist` (`#D9E2E6`): Alternating page grounds
+- `--logo-gold` (`#E8B003`): Exact logo gold — graphics only (bars, rules, terrain, buttons); Sail accent
+- `--terracotta` (`#8A6302`): The SAME gold hue deepened for small text on light grounds (WCAG) — gold text/hover accents use this, never `--logo-gold`
+- `--terracotta-soft` (`#E8B003`): Bright gold for text on dark grounds
+- `--logo-red` (`#DB160E`), `--logo-blue` (`#0348CA`): Logo-exact; Advise / Grow accents
 - `--midgray` (`#6B6B6B`): Secondary text
-- `--logo-red` (`#C44536`), `--logo-blue` (`#4A7C9E`): Logo decoration
 - `--hairline` (`#D9D3CA`): Borders
 
 **Layout & Typography:**
-- **Fonts:** Fraunces (serif, weights 300/400/500) for headings; Inter (sans-serif, weights 300–600) for body
+- **Fonts (self-hosted in `/fonts/`, no Google Fonts CDN):** Besley (Clarendon serif, variable 400–900; headings weight 500, logo TD 700) for headings; Archivo (variable; body 17.5px) for body; IBM Plex Mono (400/500) for eyebrows, captions, coordinates, the nav Begin button (`--mono` var). Do NOT re-add Google Fonts links — `@font-face` lives at the top of style.css
 - **Headings:** `h1` uses `clamp(2.2rem, 5vw, 3.6rem)` for fluid sizing; h2/h3 similarly fluid
 - **Container:** `.wrap` class = max-width 1180px, centered; `.narrow` variant for tighter layout
 - **Sections:** Alternate white/off-white backgrounds using `.alt` class
@@ -120,6 +122,21 @@ tdcatalyst-sail.github.io/
    ```
 
 2. **Auto-hiding Navigation:** On scroll down, nav hides (with `nav--hidden` class); on scroll up, nav reveals. Respects a `topBuffer` (80px) to always show nav near the top. Closes mobile menu when scrolling down. Uses passive scroll listeners for performance.
+
+### Terrain device & motion (brand v3)
+
+- **Terrain contours** (the brand's graphic device — generated topographic lines, every fifth line heavier in the accent) are drawn by `script.js` into any `canvas.terrain` / `canvas.card-terrain` with `data-seed / data-line / data-index / data-alpha / data-index-alpha / data-fade / data-scale` attributes. Every page/artifact gets a UNIQUE seed (same rule as photography: no ground repeats). Site alphas: hub hero 0.14/0.35, interior heroes 0.09/0.20, navy panels 0.35/0.5, card bases 0.09–0.13. Wrap hero sections with class `hero--terrain`; navy CTA panels use `cta-panel cta-panel--field` + a canvas.
+- **Motion:** `.reveal` elements fade up on scroll (IntersectionObserver, `html.js`-gated so no-JS still shows content); the first `canvas.terrain[data-animate]` drifts slowly on desktop. Everything respects `prefers-reduced-motion`.
+- **Deck assets:** pre-rendered 1920×1080 terrain backgrounds for Google Slides live in `/images/deck/`.
+
+### Delivery templates & brand guideline (`/templates/`, noindex + robots-disallowed)
+
+- `templates/diagnostic-report.html`, `templates/proposal.html` — print-ready client documents sharing `/style.css` (`.doc-body`/`.sheet` classes; edit in browser via contenteditable, print to PDF, US Letter). Placeholders are `.ph` spans.
+- `templates/brand-guideline.html` — the one-page brand reference (colors, type, terrain rules, Google Slides setup, voice rules). Keep it in sync with brand changes.
+
+### Copy rules (IMPORTANT)
+
+**Tom's copy is canonical.** Styling changes must never rewrite page copy; copy edits ship only with Tom's explicit sign-off, and open questions are batched to him. Standing vocabulary: "the AI Revolution" (hub h1/title), "embodied strategic framing" (Sail), "transformation consulting" (Grow — deliberately broader than deployment/adoption). Style rules for NEW copy: claim-first headlines, no em dashes in visible copy, vary sentence shape (the hub's executives/enterprises/founders triplet is a deliberate exception), first person on the hub only.
 
 ### Images (images/ directory)
 
@@ -315,9 +332,10 @@ Changes are live on `tdcatalyst.com` within seconds of merging to `main`.
 | .eyebrow | Small, uppercase | Inter | 500 | — |
 
 ### Button States
-- `.btn-primary` — Navy bg, white text, terracotta border on hover
-- `.btn-ghost` — Transparent, navy text, terracotta underline on hover
-- Both use `transition: border-color 0.2s` for smooth interaction
+- `.btn-primary` — Navy bg, white text; hover floods logo gold with navy-deep text
+- `.btn-ghost` — Transparent, navy text, gold border on hover
+- `.btn-gold` — Gold bg, navy-deep text (navy field panels)
+- All buttons are pill-shaped (`border-radius: 999px`). `.nav-cta` uses `text-box: trim-both cap alphabetic` for geometric vertical centering — do not remove it or the `!important` paddings (they defeat `.nav-links a`'s higher-specificity `padding-bottom`)
 
 ### Navigation
 - Sticky header with backdrop blur
