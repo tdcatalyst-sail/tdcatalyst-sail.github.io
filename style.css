@@ -275,6 +275,8 @@ section:has(+ .hero) {
   margin-bottom: 0.5rem;
 }
 .hero-with-logo .hero-logo { margin-bottom: 1.4rem; }
+/* one hero geometry across hub + practice homes: left-aligned in the full wrap, headline measure capped */
+.hero-with-logo h1 { max-width: 20ch; }
 
 /* Adaptive challenges boxes in hero */
 .challenges-boxes {
