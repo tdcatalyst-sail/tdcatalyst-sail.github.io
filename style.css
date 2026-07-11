@@ -590,14 +590,11 @@ hr.rule { border: none; border-top: 1px solid var(--hairline); margin: 2.5rem 0;
 .meta-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
 .meta-tag { font-size: 0.78rem; background: var(--seamist); color: var(--navy); padding: 0.3rem 0.7rem; border-radius: 2px; letter-spacing: 0.02em; }
 
-/* ===== CLIENT LOGO WALL (about pages: "Delivered for") ===== */
-.logo-wall { margin-top: 0.2rem; }
-.logo-group + .logo-group { margin-top: 1.6rem; }
-.logo-group-label { font-family: 'Archivo', sans-serif; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--midgray); margin-bottom: 0.7rem; }
-.logo-grid { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(1.1rem, 2.4vw, 2rem); }
-.logo-tile { display: flex; align-items: center; height: 2.3rem; }
-.logo-tile img { max-height: 100%; max-width: 128px; width: auto; object-fit: contain; filter: grayscale(1); opacity: 0.6; transition: filter 0.2s ease, opacity 0.2s ease; }
-.logo-tile:hover img { filter: grayscale(0); opacity: 1; }
+/* ===== DELIVERED-FOR TAG GROUPS (about pages) ===== */
+.tag-groups { margin-top: 0.2rem; }
+.tag-group + .tag-group { margin-top: 1.3rem; }
+.tag-group-label { font-family: 'Archivo', sans-serif; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--midgray); margin-bottom: 0.55rem; }
+.tag-group .meta-tags { margin-top: 0; }
 .positioning {
   font-family: 'Besley', Georgia, serif;
   font-size: clamp(1.3rem, 2.6vw, 1.8rem);
