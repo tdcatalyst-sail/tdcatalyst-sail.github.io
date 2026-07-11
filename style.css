@@ -589,6 +589,12 @@ footer .land {
 hr.rule { border: none; border-top: 1px solid var(--hairline); margin: 2.5rem 0; }
 .meta-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
 .meta-tag { font-size: 0.78rem; background: var(--seamist); color: var(--navy); padding: 0.3rem 0.7rem; border-radius: 2px; letter-spacing: 0.02em; }
+
+/* ===== DELIVERED-FOR TAG GROUPS (about pages) ===== */
+.tag-groups { margin-top: 0.2rem; }
+.tag-group + .tag-group { margin-top: 1.3rem; }
+.tag-group-label { font-family: 'Archivo', sans-serif; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--midgray); margin-bottom: 0.55rem; }
+.tag-group .meta-tags { margin-top: 0; }
 .positioning {
   font-family: 'Besley', Georgia, serif;
   font-size: clamp(1.3rem, 2.6vw, 1.8rem);
