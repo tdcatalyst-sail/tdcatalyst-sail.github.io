@@ -565,6 +565,28 @@
   }
   // back-compat: names of prerequisites placed later in the plan (used where only lateness matters)
   function orderIssues(planIds, idx) { return missingPrereqs(planIds, idx).late; }
+  // Some prerequisites encode a population STATE, not a specific play — the same principle the phase
+  // ladder and earned-sponsorship use ("conditions key on achieved state, so it counts for work done by
+  // any route"). When that state is already reached, the foundation is met even if the named play isn't in
+  // the plan. Quiet Path leans on Inaction-Cost Reframe only as a proxy for majority momentum: once the
+  // majority has visibly moved (overall adoption ≥ Quiet's own maturity bar), approaching laggards is no
+  // longer a premature spotlight, so the inaction play is not required and no adverse misfire applies.
+  function prereqMetByState(playId, reqId, overallNow) {
+    if (playId === 'quiet' && reqId === 'inaction') return overallNow >= PLAY_BY_ID.quiet.needsProof;
+    return false;
+  }
+  // state-aware view of missingPrereqs for the UI: drops any prerequisite already satisfied by achieved
+  // adoption (overallNow, read from the play's simulated deploy-week state), so the groundwork ladder and
+  // its outcome insight say exactly what the simulation actually scored — never "missing foundation" for a
+  // foundation the run reached another way.
+  function missingPrereqsLive(planIds, idx, overallNow) {
+    var mp = missingPrereqs(planIds, idx), id = planIds[idx];
+    if (overallNow == null) return mp;
+    var out = { late: [], absent: [], lateIds: [], absentIds: [] };
+    mp.absentIds.forEach(function (r, k) { if (!prereqMetByState(id, r, overallNow)) { out.absent.push(mp.absent[k]); out.absentIds.push(r); } });
+    mp.lateIds.forEach(function (r, k) { if (!prereqMetByState(id, r, overallNow)) { out.late.push(mp.late[k]); out.lateIds.push(r); } });
+    return out;
+  }
   // pick the adverse narrative that matches the foundation actually missing. A play with several
   // prerequisites carries a variant per prerequisite (byReq); when exactly one is absent/late we name
   // that one, and when more than one is missing (or none is pinpointed, e.g. a muted play) we fall back
@@ -826,7 +848,8 @@
           var reqs = ORDER_AFTER[entry.id] || [], missReqs = 0;
           for (var qi = 0; qi < reqs.length; qi++) {
             var rq = reqs[qi];
-            if (startAt[rq] === undefined || startAt[rq] + leadWeeks(PLAY_BY_ID[rq]) > entry.start) missReqs++;
+            if ((startAt[rq] === undefined || startAt[rq] + leadWeeks(PLAY_BY_ID[rq]) > entry.start)
+                && !prereqMetByState(entry.id, rq, overallNow)) missReqs++;
           }
           var orderPenalty = Math.pow(MISORDER_FACTOR, missReqs);
           // proof gate: the two pure social-proof plays (peer relay, inaction-cost norm) fall flat without
@@ -852,7 +875,7 @@
           notes[p.id] = { readiness: readiness, hits: hits, muted: muted,
             reason: muted ? (p.sustain ? 'timing' : 'proof') : null,
             missReqs: missReqs, orderPenalty: orderPenalty, proofGate: proofGate,
-            misplace: misplace, start: entry.start, end: entry.end };
+            misplace: misplace, start: entry.start, end: entry.end, overallAtStart: overallNow };
         });
       }
       // 2) COMPLETIONS — a play's benefit is realized when it FINISHES, scaled by the eff it earned at deploy time.
@@ -1362,7 +1385,7 @@
       var li = document.createElement('li');
       li.className = 'plan-item';
       li.setAttribute('data-i', i);
-      var mp = n.muted ? { late: [], absent: [] } : missingPrereqs(plan, i);
+      var mp = n.muted ? { late: [], absent: [] } : missingPrereqsLive(plan, i, n.overallAtStart);
       var badge = '';
       if (n.muted) {
         badge = n.reason === 'timing'
@@ -1597,7 +1620,7 @@
     } else {
       var steps = plan.map(function (id, i) {
         var p = PLAY_BY_ID[id], n = res.notes[id] || {}, broke = !!n.muted;
-        var mp = broke ? { late: [], absent: [] } : missingPrereqs(plan, i);
+        var mp = broke ? { late: [], absent: [] } : missingPrereqsLive(plan, i, n.overallAtStart);
         var misordered = mp.late.length > 0 || mp.absent.length > 0;
         var absentOnly = mp.absent.length > 0 && mp.late.length === 0;
         var next = i < plan.length - 1 ? PLAY_BY_ID[plan[i + 1]] : null;
