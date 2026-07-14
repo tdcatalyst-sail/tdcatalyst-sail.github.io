@@ -10,17 +10,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/favicon.png">
-  <title>AI Transformation Simulation — TDcatalyst Grow · Deploy</title>
+  <title>Transformation Dynamics Simulation&trade; — TDcatalyst Grow · Deploy</title>
   <meta name="description" content="An interactive simulation: flag where your AI transformation is stalling, sequence a library of proprietary interventions, and watch the adoption curve evolve, including the threshold where change becomes self-sustaining. Built on TDcatalyst's Adoption Matrix." />
   <link rel="canonical" href="https://tdcatalyst.com/grow/ai-transformation-simulation" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://tdcatalyst.com/grow/ai-transformation-simulation" />
-  <meta property="og:title" content="AI Transformation Simulation — TDcatalyst Grow" />
+  <meta property="og:title" content="Transformation Dynamics Simulation&trade; — TDcatalyst Grow" />
   <meta property="og:description" content="Flag where your AI transformation is stalling, sequence the interventions, and watch the adoption curve evolve. An interactive tool from the Adoption Reset engagement." />
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=b9fca194">
+  <link rel="stylesheet" href="/style.css?v=1a95e5f4">
 </head>
 <body class="brand-grow">
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -42,7 +42,7 @@
     </div>
     <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false" onclick="var o=document.getElementById('nav').classList.toggle('open');this.setAttribute('aria-expanded',o)"><span></span><span></span><span></span></button>
     <ul class="nav-links">
-      <li><a href="/grow/ai-transformation-simulation" class="active">Simulation<span class="tool-tag" aria-hidden="true">&#8599;</span></a></li>
+      <li><a href="/grow/ai-transformation-simulation" class="active">Simulation&trade;<span class="tool-tag" aria-hidden="true">&#8599;</span></a></li>
       <li><a href="/grow/#services">Engagements</a></li>
       <li><a href="/grow/#proof">Proof</a></li>
       <li><a href="/grow/#approach">How to start</a></li>
@@ -56,7 +56,7 @@
 <section class="hero" id="main-content">
   <div class="wrap narrow">
     <a href="/grow/" class="back-link">← TDcatalyst Grow</a>
-    <div class="eyebrow">AI Transformation Simulation · Adoption Reset</div>
+    <div class="eyebrow">Transformation Dynamics Simulation&trade; · Adoption Reset</div>
     <h1>Transformation isn't a communications problem. It's a sequence.</h1>
     <p class="hero-sub">The same interventions, run in the wrong order, stall. Flag where your transformation is stalling, sequence the plays that move each segment, and watch the adoption curve evolve, including what happens when you deploy a play before the proof it needs exists.</p>
   </div>
@@ -158,6 +158,7 @@
         <path class="curve-plan" id="curveP" d=""></path>
         <g id="phaseNodes"></g>
         <g id="crossMarker"></g>
+        <g id="valueCrossMarker"></g>
         <circle class="end-dot-b" id="dotB" cx="0" cy="0" r="4.5"></circle>
         <circle class="end-dot-v" id="dotV" cx="0" cy="0" r="4"></circle>
         <circle class="end-dot-p" id="dotP" cx="0" cy="0" r="5.5"></circle>
@@ -183,6 +184,7 @@
         </div>
       </div>
       </div><!-- /curve-top -->
+      <p id="valueNote" class="value-note"></p>
       <div class="phase-track">
         <div class="phase-track-head">
           <h4>The revolution, in phases</h4>
@@ -238,7 +240,7 @@
       </div>
       <div>
         <form class="form-grid" action="https://formsubmit.co/sail@tdcatalyst.com" method="POST" enctype="multipart/form-data">
-          <input type="hidden" name="_subject" value="AI Transformation Simulation — scenario submitted">
+          <input type="hidden" name="_subject" value="Transformation Dynamics Simulation — scenario submitted">
           <input type="hidden" name="_captcha" value="true">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_next" value="https://tdcatalyst.com/grow/ai-transformation-simulation?sent=1">
@@ -341,7 +343,7 @@
     </div>
     <div>
       <h4>Engage</h4>
-      <a href="/grow/ai-transformation-simulation" target="_blank">Simulation<span class="tool-tag" aria-hidden="true">&#8599;</span></a>
+      <a href="/grow/ai-transformation-simulation" target="_blank">Simulation&trade;<span class="tool-tag" aria-hidden="true">&#8599;</span></a>
       <a href="/grow/#begin">Begin</a>
     </div>
   </div>
@@ -793,6 +795,13 @@
                            readiness: 0, missReqs: 0, orderPenalty: 1, proofGate: 1, misplace: 0 };
     });
     var capStock = 0, structStock = 0, value = 0, valueLift = 0, CAP_REF = 1.00, STRUCT_REF = 0.80, VGROWTH = 0.18, decayCut = 0;
+    // OUTCOMES PREMIUM — the point where value stops being a function of adoption and becomes a function of
+    // OUTCOMES. Below it, value is capped by headcount (usage without capability is not value). Once the change
+    // is self-sustaining AND adoption clears OUTCOME_BAR (~75%), the same population starts compounding results —
+    // skill deepens, the redesigned workflow pays off, the output standard is institutionalized — so realized
+    // value can climb ABOVE the adoption curve. OUTCOME_PREMIUM sets how far above. valueCrossWeek records the
+    // week value overtakes adoption, so the chart and copy can name the inflection.
+    var OUTCOME_BAR = 0.75, OUTCOME_PREMIUM = 0.55, valueCrossWeek = null;
     // INSTITUTIONALIZATION is gated by the transformation's maturity, not the calendar: the "sustain phase"
     // opens once adoption is real enough that codifying the new way reinforces a behavior that already exists.
     // A fast/small transformation reaches that point early; a large one later. sustainStartWeek records it.
@@ -934,14 +943,33 @@
       // ceiling — institutionalizing the output standard (Performance Criteria's valueLift) unlocks the last
       // headroom, so performance keeps compounding instead of flattening. Rewards drive what gets measured.
       var conversion = Math.min(1, 0.10 + 0.78 * capNorm * (0.55 + 0.45 * structNorm) + Math.min(valueLift, 0.12));
-      var valueCeil = adoptionFrac * conversion;
+      // past the inflection, value is no longer bounded by reach: once the change is self-sustaining (inertia)
+      // AND adoption has cleared the high bar, outcomes compound beyond the headcount using the tool. The premium
+      // ramps from zero at OUTCOME_BAR to full across the top band, and is gated on the enabling stack actually
+      // being in place — so reach alone can never manufacture it; it takes the capability and redesign underneath.
+      var outcomePremium = 0;
+      if (inertiaActive && adoptionFrac >= OUTCOME_BAR) {
+        var over = Math.min(1, (adoptionFrac - OUTCOME_BAR) / (1 - OUTCOME_BAR));   // 0→1 across the top band
+        var stackReady = Math.min(1, capNorm * (0.55 + 0.45 * structNorm) + Math.min(valueLift, 0.12));
+        outcomePremium = OUTCOME_PREMIUM * over * stackReady;
+      }
+      // the ceiling can now exceed adoption (conversion + premium > 1), so value can be drawn above the plan
+      // curve; still capped at 100% for the chart.
+      var valueCeil = Math.min(1, adoptionFrac * (conversion + outcomePremium));
       // organizational impact COMPOUNDS: value builds slowly, then accelerates as the enabling stack completes,
       // rather than approaching an adoption-linear ceiling at a flat rate. The realization rate rises with the
       // capability actually in place — so an S-curve, gated early, gathering pace once the pieces land.
       var realizeRate = VGROWTH * (0.28 + 0.72 * capNorm);
+      // past the inflection the compounding accelerates — this is the visible kink where value pulls up and
+      // overtakes adoption. The stronger the outcomes premium (more headroom past the bar, fuller stack), the
+      // faster it realizes, so a genuinely capable transformation crosses within the window.
+      if (outcomePremium > 0) realizeRate *= 1 + 3.0 * outcomePremium;
       value += realizeRate * (valueCeil - value);
       if (value < 0) value = 0;
       valueSeries.push(value * 100);
+      // the week realized value overtakes adoption — the outcomes inflection — noted once, only when adoption is
+      // genuinely high (so a near-zero-week tie can't register as a crossover).
+      if (valueCrossWeek === null && value * 100 >= ov && ov >= OUTCOME_BAR * 100 - 0.5) valueCrossWeek = w;
       if (!inertiaActive && ov >= THRESHOLD) inertiaActive = true;
       // the sustain phase opens the first week adoption is mature enough to institutionalize (scope-dependent)
       if (sustainStartWeek === null && ov >= SUSTAIN_READY * 100) sustainStartWeek = w;
@@ -976,6 +1004,7 @@
     var touched = series.some(function (v) { return v >= THRESHOLD; });
     return { series: series, valueSeries: valueSeries, notes: notes, markers: markers,
              crossedWeek: crossedWeek, touched: touched, milestones: milestones, trustEnd: trust,
+             valueCrossWeek: valueCrossWeek,
              sponsorEarned: sponsorEarned, sponsorActive: sponsorshipActive, sustainStartWeek: sustainStartWeek,
              totalWeeks: sched.reduce(function (m, e) { return Math.max(m, e.end); }, 0) };
   }
@@ -1003,7 +1032,8 @@
     gapArea: document.getElementById('gapArea'), markers: document.getElementById('markers'),
     phaseNodes: document.getElementById('phaseNodes'), phaseLadder: document.getElementById('phaseLadder'),
     phaseBandSustain: document.getElementById('phaseBandSustain'), phaseDivider: document.getElementById('phaseDivider'), phaseBandLabel: document.getElementById('phaseBandLabel'),
-    crossMarker: document.getElementById('crossMarker'), thresholdStatus: document.getElementById('thresholdStatus'),
+    crossMarker: document.getElementById('crossMarker'), valueCrossMarker: document.getElementById('valueCrossMarker'),
+    valueNote: document.getElementById('valueNote'), thresholdStatus: document.getElementById('thresholdStatus'),
     groundworkLadder: document.getElementById('groundworkLadder'),
     dotB: document.getElementById('dotB'), dotP: document.getElementById('dotP'), dotV: document.getElementById('dotV'),
     rPlan: document.getElementById('r-plan'), rValue: document.getElementById('r-value'), rGap: document.getElementById('r-gap'),
@@ -1523,10 +1553,36 @@
     el.dotV.setAttribute('cx', x(WEEKS)); el.dotV.setAttribute('cy', y(res.valueSeries[WEEKS]));
     el.dotB.setAttribute('cx', x(WEEKS)); el.dotB.setAttribute('cy', y(endB));
 
-    var rP = Math.round(endP), rB = Math.round(endB), rG = Math.round(endP - endB);
+    var rP = Math.round(endP), rB = Math.round(endB), rG = Math.round(endP - endB), rV = Math.round(res.valueSeries[WEEKS]);
     el.rPlan.textContent = rP + '%';
-    el.rValue.textContent = Math.round(res.valueSeries[WEEKS]) + '%';
+    el.rValue.textContent = rV + '%';
     el.rGap.textContent = '+' + rG;
+
+    // outcomes inflection — mark where realized value overtakes adoption. Past ~75% adoption and the
+    // self-sustaining line, value is driven by outcomes rather than headcount, so the value line rises
+    // above the plan line. A green node + label sits at the crossover; a dynamic note explains it below.
+    var vcw = res.valueCrossWeek;
+    if (vcw !== null && vcw !== undefined) {
+      var vcx = x(vcw), vcy = y(res.valueSeries[vcw]);
+      var vtx = vcx > 540 ? vcx - 8 : vcx + 8, vanch = vcx > 540 ? 'end' : 'start';
+      el.valueCrossMarker.innerHTML =
+        '<circle class="vcross-dot" cx="' + vcx.toFixed(1) + '" cy="' + vcy.toFixed(1) + '" r="4.5"></circle>' +
+        '<text class="vcross-flag" x="' + vtx.toFixed(1) + '" y="' + (vcy - 9).toFixed(1) + '" text-anchor="' + vanch + '">Value overtakes adoption · wk ' + vcw + '</text>';
+    } else {
+      el.valueCrossMarker.innerHTML = '';
+    }
+    if (!plan.length) {
+      el.valueNote.style.display = 'none';
+      el.valueNote.innerHTML = '';
+    } else if (vcw !== null && vcw !== undefined) {
+      el.valueNote.style.display = '';
+      el.valueNote.className = 'value-note crossed';
+      el.valueNote.innerHTML = '<strong>Value has outrun adoption.</strong> Around week ' + vcw + ', with adoption past ~75% and the change self-sustaining, realized value crossed above the adoption line (' + rV + '% value against ' + rP + '% adoption at week 24). Past this inflection the return is no longer about how many people use the tool but how well they use it: skill deepens, the redesigned workflow pays off, and the output standard is institutionalized. The organization gets more out than the headcount alone would predict.';
+    } else {
+      el.valueNote.style.display = '';
+      el.valueNote.className = 'value-note';
+      el.valueNote.innerHTML = '<strong>Value still trails adoption.</strong> Realized value ends at ' + rV + '% against ' + rP + '% adoption: reach is running ahead of outcomes. Value only climbs above adoption past the inflection — adoption over ~75%, the change self-sustaining, and the capability, workflow redesign, and reinforcement underneath it in place. Below that, usage outpaces the results it produces.';
+    }
 
     // phase ladder — the five thresholds a transformation crosses, lit as your sequence reaches them
     var reachedCount = 0;
@@ -1793,7 +1849,9 @@
     '.phase-node-num{fill:#fff;font-family:Inter,Arial,sans-serif;font-size:10px;font-weight:700}' +
     '.end-dot-b{fill:#C44536}.end-dot-p{fill:#4A7C9E}.end-dot-v{fill:#4E8B72}' +
     '.cross-line{stroke:#C8950A;stroke-width:1.5}.cross-dot{fill:#C8950A;stroke:#fff;stroke-width:1.5}' +
-    '.cross-flag{fill:#C8950A;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:700}';
+    '.cross-flag{fill:#C8950A;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:700}' +
+    '.vcross-dot{fill:#4E8B72;stroke:#fff;stroke-width:1.5}' +
+    '.vcross-flag{fill:#4E8B72;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:700}';
 
   function chartToImage(cb) {
     var src = document.querySelector('.sim-chart');
@@ -2166,7 +2224,7 @@
     obj(2, '<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + N + ' >>');
     var dt = new Date();
     function p2(v) { return (v < 10 ? '0' : '') + v; }
-    obj(3, '<< /Title (AI Transformation Simulation - Adoption Scenario Briefing) /Author (TDcatalyst) /Producer (tdcatalyst.com/grow) /CreationDate (D:' + dt.getFullYear() + p2(dt.getMonth() + 1) + p2(dt.getDate()) + p2(dt.getHours()) + p2(dt.getMinutes()) + p2(dt.getSeconds()) + ') >>');
+    obj(3, '<< /Title (Transformation Dynamics Simulation - Adoption Scenario Briefing) /Author (TDcatalyst) /Producer (tdcatalyst.com/grow) /CreationDate (D:' + dt.getFullYear() + p2(dt.getMonth() + 1) + p2(dt.getDate()) + p2(dt.getHours()) + p2(dt.getMinutes()) + p2(dt.getSeconds()) + ') >>');
     jpegs.forEach(function (j, k) {
       var po = 4 + k * 3, co = po + 1, io = po + 2;
       obj(po, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /XObject << /Im' + k + ' ' + io + ' 0 R >> /ProcSet [/PDF /ImageC] >> /Contents ' + co + ' 0 R >>');
