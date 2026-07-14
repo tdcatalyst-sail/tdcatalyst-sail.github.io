@@ -1,0 +1,2321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--
+  (c) 2026 TDcatalyst. The question set, scoring logic, archetypes, model
+  parameters, and copy in this tool are proprietary. Viewing source is fine;
+  copying, adapting, or commercial reuse requires written permission.
+  See https://tdcatalyst.com/terms
+-->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Transformation Dynamics Simulation&trade; — TDcatalyst Grow · Deploy</title>
+  <meta name="description" content="An interactive simulation: flag where your AI transformation is stalling, sequence a library of proprietary interventions, and watch the adoption curve evolve, including the threshold where change becomes self-sustaining. Built on TDcatalyst's Adoption Matrix." />
+  <link rel="canonical" href="https://tdcatalyst.com/grow/ai-transformation-simulation" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tdcatalyst.com/grow/ai-transformation-simulation" />
+  <meta property="og:title" content="Transformation Dynamics Simulation&trade; — TDcatalyst Grow" />
+  <meta property="og:description" content="Flag where your AI transformation is stalling, sequence the interventions, and watch the adoption curve evolve. An interactive tool from the Adoption Reset engagement." />
+  <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
+  <link rel="stylesheet" href="/style.css?v=1a95e5f4">
+</head>
+<body class="brand-grow">
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav>
+  <div class="nav-inner" id="nav">
+    <div class="nav-brand">
+      <a href="/grow/" class="nav-logo">
+        <span class="mark-td">TD</span><span class="mark-cat">catalyst</span><span class="mark-practice">/grow</span>
+      </a>
+      <button type="button" class="brand-switch" aria-label="Switch practice" aria-haspopup="true" aria-expanded="false" onclick="var b=this.closest('.nav-brand'),o=b.classList.toggle('open');this.setAttribute('aria-expanded',o)">
+        <svg viewBox="0 0 10 6" width="11" height="7" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="brand-menu" role="menu">
+        <a href="/" role="menuitem">TDcatalyst</a>
+        <a href="/sail/" role="menuitem">Sail</a>
+        <a href="/grow/" role="menuitem">Grow</a>
+        <a href="/advise/" role="menuitem">Advise</a>
+      </div>
+    </div>
+    <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false" onclick="var o=document.getElementById('nav').classList.toggle('open');this.setAttribute('aria-expanded',o)"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="/grow/ai-transformation-simulation" class="active">Simulation&trade;<span class="tool-tag" aria-hidden="true">&#8599;</span></a></li>
+      <li><a href="/grow/#services">Engagements</a></li>
+      <li><a href="/grow/#proof">Proof</a></li>
+      <li><a href="/grow/#approach">How to start</a></li>
+      <li><a href="/grow/about">About</a></li>
+      <li><a href="/grow/#begin" class="nav-cta">Begin</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="main-content">
+  <div class="wrap narrow">
+    <a href="/grow/" class="back-link">← TDcatalyst Grow</a>
+    <div class="eyebrow">Transformation Dynamics Simulation&trade; · Adoption Reset</div>
+    <h1>Transformation isn't a communications problem. It's a sequence.</h1>
+    <p class="hero-sub">The same interventions, run in the wrong order, stall. Flag where your transformation is stalling, sequence the plays that move each segment, and watch the adoption curve evolve, including what happens when you deploy a play before the proof it needs exists.</p>
+  </div>
+</section>
+
+<!-- PLANNER -->
+<section class="alt">
+  <div class="wrap">
+
+    <!-- DEMO DISCLAIMER -->
+    <div class="sim-demo-note">
+      <span class="demo-tag">A note on this tool</span>
+      <p>A deliberately simplified model, not a forecast of your organization. It makes one thing visible: how the <em>order and timing</em> of your interventions compound or stall across a whole population. In reality that population isn't uniform — readiness varies by person and by department — and a model this simple deliberately flattens that. Use it to build intuition for the shape of the work.</p>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="planner-step">
+      <div class="step-head">
+        <span class="step-badge">1</span>
+        <h3>Flag where the transformation is stalling</h3>
+        <span class="step-hint">Set each segment's share of your people on the left, then click the 2–3 cells where they're stuck</span>
+      </div>
+      <div class="matrix-scroll">
+      <div class="matrix-grid" id="matrixGrid">
+        <!-- header row -->
+        <div class="mx-corner">
+          <input type="text" class="mx-persona-input" id="personaTitle" placeholder="Persona / role…" maxlength="80" autocomplete="off" aria-label="Persona or role this simulation is about">
+        </div>
+        <div class="mx-col-head">Precontemplation<span style="font-weight:400;text-transform:none;letter-spacing:0">"no problem here"</span></div>
+        <div class="mx-col-head">Contemplation<span style="font-weight:400;text-transform:none;letter-spacing:0">"maybe there is"</span></div>
+        <div class="mx-col-head">Preparation<span style="font-weight:400;text-transform:none;letter-spacing:0">"I'll try"</span></div>
+        <div class="mx-col-head">Action / Maintenance<span style="font-weight:400;text-transform:none;letter-spacing:0">"I'm doing it"</span></div>
+        <!-- rows injected by JS -->
+      </div>
+      </div>
+      <p class="seg-total-note">Population set: <span id="segTotal">100</span> / 100% of your people <span class="seg-total-hint">(raise one segment by freeing room in another)</span></p>
+      <p class="flag-note"><span class="flag-count" id="flagCount">0</span> cells flagged. These are the bottlenecks your sequence should target. Plays that hit a flagged cell land harder, and the bigger that segment's share of your people, the harder they pull.</p>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="planner-step">
+      <div class="step-head">
+        <span class="step-badge">2</span>
+        <h3>Sequence your interventions</h3>
+        <span class="step-hint">Click a play to add it · drag to reorder · independent plays overlap automatically, so the calendar compresses below the sum of their durations</span>
+      </div>
+      <div class="build-grid">
+        <div class="lib-grid" id="libGrid"><!-- play cards injected by JS --></div>
+        <div class="plan-panel">
+          <div class="plan-head">
+            <h4>Your 24-week plan</h4>
+            <div class="plan-budget" id="planBudget">0 / 24 weeks</div>
+          </div>
+          <div class="budget-bar" id="budgetBar"><span id="budgetFill"></span></div>
+          <div class="plan-compress" id="planCompress"></div>
+          <div id="planEmpty" class="plan-empty">Click plays on the left to build a sequence. Order, and how long each play runs, both matter — independent plays overlap automatically, so calendar time is less than the sum of their durations.</div>
+          <ol class="plan-list" id="planList"></ol>
+          <div class="plan-timeline" id="planTimeline"></div>
+          <button class="plan-clear" id="planClear" style="display:none;">Clear plan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="planner-step" style="margin-bottom:0;">
+      <div class="step-head">
+        <span class="step-badge">3</span>
+        <h3>Watch the curve evolve, and what each move demands</h3>
+      </div>
+      <div class="curve-col">
+      <div class="curve-top">
+      <div class="chart-box">
+      <svg class="sim-chart" viewBox="0 0 720 380" role="img" aria-label="Adoption over 24 weeks under your plan versus doing nothing">
+        <rect class="sustain-zone" x="48" y="20" width="648" height="144"></rect>
+        <rect class="phase-band-sustain" id="phaseBandSustain" x="480" y="20" width="216" height="320"></rect>
+        <line class="phase-divider" id="phaseDivider" x1="480" y1="20" x2="480" y2="340"></line>
+        <line class="grid-line" x1="48" y1="20"  x2="696" y2="20"></line>
+        <line class="grid-line" x1="48" y1="100" x2="696" y2="100"></line>
+        <line class="grid-line" x1="48" y1="180" x2="696" y2="180"></line>
+        <line class="grid-line" x1="48" y1="260" x2="696" y2="260"></line>
+        <line class="grid-line" x1="48" y1="340" x2="696" y2="340"></line>
+        <text class="axis-label" x="40" y="24"  text-anchor="end">100%</text>
+        <text class="axis-label" x="40" y="104" text-anchor="end">75%</text>
+        <text class="axis-label" x="40" y="184" text-anchor="end">50%</text>
+        <text class="axis-label" x="40" y="264" text-anchor="end">25%</text>
+        <text class="axis-label" x="40" y="344" text-anchor="end">0%</text>
+        <text class="axis-label" x="48"  y="362" text-anchor="middle">Launch</text>
+        <text class="axis-label" x="210" y="362" text-anchor="middle">Week 6</text>
+        <text class="axis-label" x="372" y="362" text-anchor="middle">Week 12</text>
+        <text class="axis-label" x="534" y="362" text-anchor="middle">Week 18</text>
+        <text class="axis-label" x="696" y="362" text-anchor="middle">Week 24</text>
+        <text class="phase-band-label" id="phaseBandLabel" x="588" y="34" text-anchor="middle">Sustain phase · institutionalize</text>
+        <path class="gap-area" id="gapArea" d=""></path>
+        <line class="threshold-line" x1="48" y1="164" x2="696" y2="164"></line>
+        <text class="threshold-label" x="54" y="156" text-anchor="start">Self-sustaining transformation ↑</text>
+        <g id="markers"></g>
+        <path class="curve-base" id="curveB" d=""></path>
+        <path class="curve-value" id="curveV" d=""></path>
+        <path class="curve-plan" id="curveP" d=""></path>
+        <g id="phaseNodes"></g>
+        <g id="crossMarker"></g>
+        <g id="valueCrossMarker"></g>
+        <circle class="end-dot-b" id="dotB" cx="0" cy="0" r="4.5"></circle>
+        <circle class="end-dot-v" id="dotV" cx="0" cy="0" r="4"></circle>
+        <circle class="end-dot-p" id="dotP" cx="0" cy="0" r="5.5"></circle>
+      </svg>
+      <div class="sim-legend">
+        <span><span class="swatch p"></span> Your sequenced plan</span>
+        <span><span class="swatch v"></span> Value realized (real output: speed, quality, results)</span>
+        <span><span class="swatch b"></span> Do nothing (adoption erodes without reinforcement)</span>
+      </div>
+      </div><!-- /chart-box -->
+      <div class="sim-readout">
+        <div class="readout-item plan">
+          <div class="readout-num" id="r-plan">—</div>
+          <div class="readout-label">Week-24 adoption, your plan</div>
+        </div>
+        <div class="readout-item value">
+          <div class="readout-num" id="r-value">—</div>
+          <div class="readout-label">Week-24 value realized</div>
+        </div>
+        <div class="readout-item gap">
+          <div class="readout-num" id="r-gap">—</div>
+          <div class="readout-label">Points of adoption your sequence adds</div>
+        </div>
+      </div>
+      </div><!-- /curve-top -->
+      <p id="valueNote" class="value-note"></p>
+      <div class="phase-track">
+        <div class="phase-track-head">
+          <h4>The revolution, in phases</h4>
+          <p class="phase-track-sub">A transformation isn't a project you finish. It's a set of thresholds an organization crosses. Each lights up when your sequence carries it there.</p>
+        </div>
+        <div class="phase-ladder" id="phaseLadder"></div>
+      </div>
+      <div id="thresholdStatus" class="threshold-status liminal"></div>
+      <div class="groundwork">
+        <div class="gw-head-row">
+          <h4>What to get right, in order</h4>
+          <button type="button" class="gw-outcomes-toggle" id="gwOutcomesToggle" aria-expanded="false">Show organizational outcomes</button>
+        </div>
+        <p class="groundwork-sub">The groundwork each step needs, in order. A play run out of order, or without the foundation it leans on, gets flagged. Use the toggle to see the real outcome each move drives (speed, quality, results) alongside how far it widens reach.</p>
+        <div id="groundworkLadder"></div>
+      </div>
+      </div><!-- /curve-col -->
+      <p class="sim-disclaimer">Illustrative model, not a forecast. <strong>What it isolates:</strong> the sequencing of a transformation, namely who moves first, how proof gates the next play, why sponsorship sets the ceiling on how far change spreads (won directly, or earned by a bottom-up win that demonstrates results), why adoption without capability is usage rather than value, and how a mistimed move breaks trust and breeds quiet resistance. It renders the logic of the <a href="/sail/field-note-the-adoption-matrix" target="_blank" rel="noopener">Adoption Matrix</a> and the <a href="/sail/field-note-adaptability-as-a-discipline" target="_blank" rel="noopener">Adaptability field note</a>. <strong>What it can't see:</strong> a simulation moves averages; real change turns on specific people. One leader with the capital to fund it and go first, or to quietly starve it, can decide the outcome, and no curve names that person, or tells you whether a sponsor truly leads or a manager truly coaches. That human work, with your real people and data, is what the <a href="/grow/#services">Adoption Reset</a> builds. The tool is the map; the people who walk the terrain are the engagement.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW TO READ IT -->
+<section>
+  <div class="wrap narrow">
+    <div class="section-head">
+      <div class="eyebrow">The lesson in the model</div>
+      <h2>The work is in the execution.</h2>
+    </div>
+    <p>The model earns one honest claim: sequence and timing shape the outcome. Put the laggard path or the skeptic reframe in week one and it barely moves the line, because there is no peer proof yet for it to stand on. Seed proof with your innovators first, equip managers early to amplify what follows, and the same plays compound. Push a move onto people who aren't ready and it does worse than fizzle. It spends trust, and the curve can bend back down as people stop responding.</p>
+    <p>Every one of those effects assumes the work was carried out well, and that is what reality tests hardest. A simulation moves segments and averages. A transformation moves specific people: the sponsor who actually goes first, the manager who coaches the judgment behind the tool, the champion who is genuinely respected. None of it runs itself. Your team clears the time, has the conversations, and holds the line when the launch energy fades. The model shows you the shape of the work and where a sequence gains or loses ground. The work itself is on the ground, in the execution. That is the part we do together.</p>
+  </div>
+</section>
+
+<!-- GATED REPORT -->
+<section class="alt" id="report">
+  <div class="wrap">
+    <div id="sent-banner" style="display:none; padding:1rem 1.2rem; margin-bottom:2rem; background:#fff; border-left:3px solid var(--logo-blue); border-radius:4px;">
+      <strong>Request received.</strong> Tom will send your simulation briefing (the curve, your sequence, and a short read on where it holds or breaks) usually within two business days.
+    </div>
+
+    <div class="grid-2" id="report-form">
+      <div>
+        <div class="eyebrow">Get your simulation briefing</div>
+        <h2>Get the finished briefing sent to you.</h2>
+        <p>You've built a working model. Request the finished briefing and Tom sends it to you personally: a formatted PDF with your curve, your sequence, the read on where the transformation holds or breaks, and a short take on what it means for your actual rollout — written so you can circulate it internally as it stands. The scenario you built is attached automatically.</p>
+        <div class="teaser-callout">
+          <span class="teaser-callout-tag">Included in the report</span>
+          <p id="teaserLine">Build a sequence above and your report will include a plain-English read on the common pitfalls hiding inside it: the traps most teams underestimate, written to read on its own and share with your team.</p>
+        </div>
+        <p style="font-size:0.9rem; color:var(--midgray);">No list, no drip sequence. One human reply.</p>
+      </div>
+      <div>
+        <form class="form-grid" action="https://formsubmit.co/sail@tdcatalyst.com" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="_subject" value="Transformation Dynamics Simulation — scenario submitted">
+          <input type="hidden" name="_captcha" value="true">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value="https://tdcatalyst.com/grow/ai-transformation-simulation?sent=1">
+          <input type="hidden" name="flagged_cells"  id="f-flagged">
+          <input type="hidden" name="plan_sequence"  id="f-plan">
+          <input type="hidden" name="result_week24_plan"      id="f-plan-res">
+          <input type="hidden" name="result_week24_donothing" id="f-base-res">
+          <input type="hidden" name="result_points_added"     id="f-gap-res">
+          <input type="hidden" name="result_transformation_threshold" id="f-thr-res">
+          <input type="hidden" name="result_phases_reached" id="f-phases">
+          <input type="hidden" name="report_common_pitfalls" id="f-pitfalls">
+          <input type="file" name="attachment" id="f-attach" style="display:none" tabindex="-1" aria-hidden="true">
+          <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div>
+            <label for="company">Organization</label>
+            <input type="text" id="company" name="company">
+          </div>
+          <div>
+            <label for="context">The deployment (optional)</label>
+            <textarea id="context" name="context" placeholder="What was rolled out, to whom, and where adoption is now."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Request my briefing</button>
+          <p style="font-size:0.82rem; color:var(--midgray); margin-top:0.4rem;">Messages route to sail@tdcatalyst.com. Prefer to talk? <a href="https://cal.com/tdcatalyst" target="_blank" rel="noopener">Book a Fit Call →</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CROSS-LINK TO ENGAGEMENT -->
+<section>
+  <div class="wrap narrow">
+    <div class="section-head">
+      <div class="eyebrow">The engagement behind the tool</div>
+      <h2>Adoption Reset · 60–90 days</h2>
+    </div>
+    <p>Diagnosis by role and workflow, a population mapped onto the matrix, and a sequenced set of interventions for the cells where adoption is actually stalled. Enablement delivered through two workshops for leaders and champions. You walk away with a plan built around behavioral change, not communications volume, and usage that survives the quarter after launch.</p>
+    <div class="btn-row" style="margin-top:1.4rem;">
+      <a href="/grow/#services" class="btn btn-ghost">See the engagement</a>
+      <a href="/grow/#begin" class="btn btn-primary">Book a Fit Call</a>
+    </div>
+  </div>
+</section>
+
+<!-- SOURCES -->
+<section class="alt">
+  <div class="wrap narrow">
+    <details class="sources-collapsible">
+      <summary><span class="eyebrow" style="margin: 0;">Sources</span></summary>
+
+      <p style="margin-top: 1.2rem; font-size: 0.92rem; line-height: 1.6;">The simulation is TDcatalyst's own synthesis of four decades of behavioural science, shaped by hands-on experience leading AI and digital transformations across Fortune 100 and public-sector organizations. What follows separates the frameworks TDcatalyst developed from the published research they stand on.</p>
+
+      <p class="eyebrow" style="color: var(--logo-blue); margin: 1.7rem 0 0.7rem;">Developed by TDcatalyst</p>
+      <ul style="list-style: none; padding-left: 0; margin: 0; display: flex; flex-direction: column; gap: 0.85rem; font-size: 0.9rem; line-height: 1.55;">
+        <li><strong style="color: var(--navy);">The Adoption Matrix.</strong> The operational grid that crosses Rogers' diffusion segments with Prochaska's stages of change, so a leader can locate exactly where a population is stuck and match the play to the cell. Set out in the <a href="/sail/field-note-the-adoption-matrix" target="_blank" rel="noopener">Adoption Matrix field note</a>.</li>
+        <li><strong style="color: var(--navy);">The sequencing logic.</strong> The dependency graph the model enforces: sponsorship as the ceiling on how far change spreads — won directly or earned by a demonstrated bottom-up win — proof before the plays that borrow its credibility, capability as what converts adoption into value, and institutionalization held for the sustain phase. Distilled from what holds and what decays in real rollouts.</li>
+        <li><strong style="color: var(--navy);">The trust-and-relapse model.</strong> Treating a mistimed intervention as active harm: it breaks trust, dampens how people respond to everything after, and can bend the adoption curve back down into performative relapse. TDcatalyst's modeling of a pattern seen repeatedly in the field, read through self-determination theory and Turner's liminal collapse.</li>
+        <li><strong style="color: var(--navy);">Transformation as a marked passage.</strong> The five phases and the escape-velocity threshold, framing a transformation as a set of thresholds an organization crosses and holds. TDcatalyst's application of rites-of-passage theory to the AI transition, set out in the <a href="/sail/field-note-adaptability-as-a-discipline" target="_blank" rel="noopener">Adaptability field note</a>.</li>
+      </ul>
+
+      <p class="eyebrow" style="color: var(--midgray); margin: 1.9rem 0 0.7rem;">The frameworks it stands on</p>
+      <ol class="fn-notes" style="padding-left: 1.8rem;">
+        <li id="src-rogers"><strong>Everett M. Rogers,</strong> <em>Diffusion of Innovations</em> (5th ed., 2003). The population's split into innovators/early adopters, early majority, late majority, and laggards (the 16 / 34 / 34 / 16 segment sizes), the chasm between early adopters and the majority, and the &ldquo;whole product&rdquo; requirement all come from Rogers. In the model this is the matrix's row axis and the reason proof must precede the majority-belief plays.</li>
+        <li id="src-prochaska"><strong>James O. Prochaska and Carlo C. DiClemente,</strong> &ldquo;Transtheoretical Therapy: Toward a More Integrative Model of Change,&rdquo; <em>Psychotherapy</em> (1982). The five stages of change &mdash; precontemplation, contemplation, preparation, action, maintenance &mdash; are the matrix's column axis, and the finding that a <em>mismatched</em> intervention (right message, wrong stage) is a leading cause of underperformance is the basis for the trust penalty.</li>
+        <li id="src-comb"><strong>Susan Michie, Maartje van Stralen, and Robert West,</strong> &ldquo;The behaviour change wheel: a new method for characterising and designing behaviour change interventions,&rdquo; <em>Implementation Science</em> (2011). The COM-B model (capability, opportunity, motivation) groups the intervention library into the Opportunity, Motivation, and Capability families.</li>
+        <li id="src-kotter"><strong>John P. Kotter,</strong> <em>Leading Change</em> (1996). The eight-step model informs several plays: the guiding coalition and visible urgency behind Executive Sponsorship, the short-term wins of Proof Seeding, and anchoring the change in the culture through the sustainment plays.</li>
+        <li id="src-lewin"><strong>Kurt Lewin,</strong> the unfreeze&ndash;change&ndash;refreeze model (1947). The arc from loosening the old way to refreezing the new sits under the phase progression, and the refreeze is exactly the reinforcement the Policy, Performance Criteria, and Ritual plays provide.</li>
+        <li id="src-sdt"><strong>Edward L. Deci and Richard M. Ryan,</strong> <em>Intrinsic Motivation and Self-Determination in Human Behavior</em> (1985). Autonomy, competence, and relatedness are why mandates produce compliance or &ldquo;quiet resistance&rdquo; rather than commitment; this underwrites the trust-erosion mechanic and the laggard play's one-to-one, non-spotlight design.</li>
+        <li id="src-fogg"><strong>BJ Fogg,</strong> <em>Tiny Habits</em> (2019) and the Fogg Behavior Model (B = MAP). Behaviour needs motivation, ability, and a prompt to converge; the model's emphasis on ability (capability building, workflow redesign) over motivation alone is the Fogg inversion.</li>
+        <li id="src-gollwitzer"><strong>Peter M. Gollwitzer,</strong> &ldquo;Implementation Intentions: Strong Effects of Simple Plans,&rdquo; <em>American Psychologist</em> (1999). The two-to-threefold uplift from &ldquo;when situation X arises, I will do Y&rdquo; plans is the When-Then Prompts play.</li>
+        <li id="src-moore"><strong>Geoffrey A. Moore,</strong> <em>Crossing the Chasm</em> (1991). The pragmatist majority adopts only once the whole product and credible peer proof exist &mdash; the dependency the model encodes between Proof Seeding, Peer Proof Relay, and the Whole-Product Kit.</li>
+        <li id="src-heath"><strong>Chip Heath and Dan Heath,</strong> <em>Switch: How to Change Things When Change Is Hard</em> (2010). The rider / elephant / path frame for equipping managers as the change channel is the Manager-as-Channel play and its amplifier effect.</li>
+        <li id="src-prosci"><strong>Jeff Hiatt / Prosci,</strong> <em>ADKAR: A Model for Change</em> (2006) and Prosci's benchmarking on active and visible sponsorship. Sponsorship as the single strongest predictor of success is modelled as a hard gate; ADKAR's Reinforcement stage is the sustainment plays (policy, criteria, ritual).</li>
+        <li id="src-curve"><strong>The change curve,</strong> the &ldquo;valley of despair&rdquo; adapted from Elisabeth K&uuml;bler-Ross's stages, with William Bridges, <em>Transitions</em> (1980). The productivity dip before the payoff, drawn on the chart whenever a workflow is genuinely redesigned, is this curve.</li>
+        <li id="src-passage"><strong>Arnold van Gennep,</strong> <em>Les rites de passage</em> (1909) and <strong>Victor Turner,</strong> <em>The Ritual Process</em> (1969). The separation / threshold / reincorporation architecture and Turner's &ldquo;liminal collapse&rdquo; (premature certainty that produces the symptoms ritual prevents) underpin the five transformation phases, the &ldquo;liminal&rdquo; below-threshold state, and the performative-relapse behaviour when trust is lost. See also <strong>Jonathan Shay,</strong> <em>Achilles in Vietnam</em> (1994).</li>
+      </ol>
+      <p style="font-size: 0.82rem; color: var(--midgray); margin-top: 1.4rem;">The simulation renders this logic. It is an illustrative teaching model, not a calibrated forecast.</p>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="tagline">TDcatalyst Grow &middot; Deploy</div>
+      <div class="fine">Independent advisory. No affiliation with prior employers.</div>
+      <div class="fine">&copy; 2026 TDcatalyst &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></div>
+      <a href="/" class="footer-home-link" target="_blank" rel="noopener">All TDcatalyst practices →</a>
+      <div class="footer-practices">
+        <a href="/sail/" target="_blank" rel="noopener">Sail <i>Embodied strategic framing for the AI transformation</i></a>
+        <a href="/advise/" target="_blank" rel="noopener">Advise <i>Founder advisory for enterprise sales</i></a>
+      </div>
+    </div>
+    <div>
+      <h4>Engage</h4>
+      <a href="/grow/ai-transformation-simulation" target="_blank">Simulation&trade;<span class="tool-tag" aria-hidden="true">&#8599;</span></a>
+      <a href="/grow/#begin">Begin</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/script.js?v=15aca4ca"></script>
+<script>
+(function () {
+  // ===== matrix definition =====
+  var SEGMENTS = [
+    { key: 'ia', label: 'Innovators & Early Adopters', size: 16 },
+    { key: 'em', label: 'Early Majority',              size: 34 },
+    { key: 'lm', label: 'Late Majority',               size: 34 },
+    { key: 'lg', label: 'Laggards',                     size: 16 }
+  ];
+  var STAGES = ['pre', 'con', 'prp', 'act'];
+
+  // Segment sizes (SEGMENTS[].size) are the editable population weights. A flagged cell's pull scales with
+  // its segment's share of the org, so flagging a stall in a big segment matters more, and editing a
+  // segment's size changes both the overall-adoption weighting and the targeting bonus live.
+  function totalSegSize() { return SEGMENTS.reduce(function (s, g) { return s + g.size; }, 0) || 1; }
+  function segSizeOf(segKey) { for (var i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].key === segKey) return SEGMENTS[i].size; } return 0; }
+  // share of the whole org sitting in one cell, as a %, assuming an even split across the four stages
+  function cellShare(cellKey) { return 100 * (segSizeOf(cellKey.split('-')[0]) / totalSegSize()) / STAGES.length; }
+
+  // symptom of each cell (segment × stage) — written in the Stall Diagnostic's voice
+  // so a leader recognizes "that's us" and can flag it in one click.
+  var SYMPTOMS = {
+    'ia-pre': "Your natural champions haven't been asked. They're already using AI off the record.",
+    'ia-con': "Keen users, but not activated: no early access, no license to evangelize.",
+    'ia-prp': "Ready to lead, but first-run friction is stalling their first real win.",
+    'ia-act': "Active power users exist, but they're invisible, so their proof never spreads.",
+    'em-pre': "The majority is watching. They don't yet see why this matters to their job.",
+    'em-con': "Open but not activated, waiting on peer proof and the whole toolkit.",
+    'em-prp': "Willing to try, but “when exactly do I use this?” goes unanswered.",
+    'em-act': "Usage started, then drifted. The week-two return rate is quietly slipping.",
+    'lm-pre': "Skeptics treat AI as someone else's project. Not moving still feels perfectly safe.",
+    'lm-con': "Quiet doubt. They'll comply if required, but they'd rather not.",
+    'lm-prp': "Willing with heavy support, but the first step feels risky and public.",
+    'lm-act': "They moved, but it's fragile. Without recognition it won't hold.",
+    'lg-pre': "Resistance you can feel but can't name, usually a fear about the job itself.",
+    'lg-con': "Reached only one-to-one. Group settings only harden the resistance.",
+    'lg-prp': "They need a pre-built path and hand-holding. Inspiration backfires here.",
+    'lg-act': "A few quietly adopted. Public celebration would tip them back."
+  };
+
+  // short, imperative "get this right at this step" line for the left-side groundwork ladder.
+  var GROUNDWORK = {
+    sponsor:  "Secure a sponsor who will use it visibly, fund it, and protect the time, not just endorse it.",
+    build:    "Design role-based capability: the prompting, judgment, and workflow redesign that turn usage into value.",
+    proof:    "Pick genuinely respected first users, and clear real time for one true win.",
+    manager:  "Give managers permission to localize and authority over the workflow, not just talking points.",
+    whole:    "Name one owner to assemble the full kit (integrations, FAQ, templates) before rollout.",
+    friction: "Redesign the task around the tool and retire the legacy path. Don't bolt the AI step onto the old process.",
+    whenthen: "Map the real trigger moment in each role with the team, not from a slide.",
+    peer:     "Line up real, same-function peers who have already moved and will vouch.",
+    inaction: "Make sure the majority norm is genuinely true before you invoke it.",
+    quiet:    "Equip managers for honest 1:1s that surface the real fear behind the resistance.",
+    policy:   "Codify the new workflow into real policy and SOPs (owned, dated, enforced), not a wiki page nobody reads.",
+    criteria: "Rewrite the review rubric so AI-augmented work is what gets measured, then run the first review against it.",
+    ritual:   "Anchor the practice to a meeting that already happens, so it survives when the launch energy fades."
+  };
+
+  // for each play: the pitfall of doing it wrong / too early, and the prerequisite most orgs miss.
+  // Tone: we've seen these fail; your team owns the groundwork, we own the sequencing judgment.
+  var CAVEATS = {
+    sponsor: {
+      risk: "A sponsor in name only (a logo on a slide, no visible use, no funding) is worse than none; people read the gap in a week.",
+      prereq: "The sponsor has to go first, publicly and imperfectly, fund it, and hold the line on competing priorities. Delegated to IT, it is not sponsorship." },
+    build: {
+      risk: "Generic AI training that teaches features, not judgment: people finish the module and work exactly as before.",
+      prereq: "Requires role-level design: the real tasks, the prompting and judgment that create value, the workflow rebuilt around them. Fieldwork, not an LMS course." },
+    proof: {
+      risk: "Anoint the wrong “champions” (loud but not respected) and their advocacy reads as management astroturf, not proof.",
+      prereq: "You need a real first win, not a demo: one team clearing time on a workflow worth switching to. Manufactured wins get spotted instantly." },
+    manager: {
+      risk: "Hand managers a 50-page playbook and they ignore it; over-script them and their teams hear a corporate register, not their manager.",
+      prereq: "Managers can't carry a message they haven't been given permission to localize, or authority to change the workflow beneath it. Most get talking points but no decision rights." },
+    whole: {
+      risk: "Shipping the core tool and calling it done. Every missing integration, template, or FAQ becomes a pragmatist's reason to wait.",
+      prereq: "Someone has to own assembling the whole product across IT, L&D, and the function. With no named owner it ships in fragments. Same as not shipping." },
+    friction: {
+      risk: "Bolting the AI step onto the old process instead of redesigning the work: now people do both, and you've added effort instead of removing it. Expect a real dip while the team relearns the task.",
+      prereq: "You have to be willing to kill the legacy path and rebuild the workflow around the tool. It's political, because someone owns the old process. Skip that and the “redesign” just adds a lane." },
+    whenthen: {
+      risk: "Generic prompts (“use AI more”) do nothing. The power is in specificity, and specificity takes real knowledge of the actual workflow.",
+      prereq: "Requires mapping the real trigger in each role: the Monday-calendar moment. That's fieldwork with the team, not a message you can broadcast." },
+    peer: {
+      risk: "Run it too early and there are no credible peers who've moved, so the “relay” is a vendor demo in disguise, and skeptics smell it.",
+      prereq: "Depends on Proof Seeding landing first. The part most miss: the peer has to be in the same function, not just any early adopter." },
+    inaction: {
+      risk: "Invoke the norm before it's true and you're bluffing. The moment “70% are already in” is checkable and false, you lose the skeptics for good.",
+      prereq: "The norm has to be real before you can name it. This is a late move: it needs genuine majority momentum underneath it, or it curdles into cynicism." },
+    quiet: {
+      risk: "Treating laggards as a training problem. The block is usually fear (often job security), and a webinar aimed at fear reads as a threat.",
+      prereq: "Requires managers willing to have the honest, unscripted conversation and surface the real fear. Save it for last: pushed early, it hardens resistance." },
+    policy: {
+      risk: "Writing policy before the behavior exists: you codify a practice nobody has yet, and it reads as compliance theater, not reinforcement.",
+      prereq: "Sequence it late. Policy locks in a norm that's already forming; run ahead of real adoption it hardens resistance and ages into a document no one follows." },
+    criteria: {
+      risk: "Changing what gets measured before people can hit the new bar punishes them for a capability you never built: the fastest way to breed cynicism.",
+      prereq: "The capability work has to have landed first, and managers have to actually evaluate against the new criteria. HR can't enforce judgment the org doesn't have yet." },
+    ritual: {
+      risk: "Bolting a new ritual onto an already-crowded calendar: it gets quietly skipped by week three unless it replaces something.",
+      prereq: "Anchor it to a cadence that already exists and give it an owner. A ritual with no home on the calendar and no owner is a resolution, not a system." }
+  };
+
+  // how each play moves REAL organizational outcomes — value in the model = adoption × capability
+  // (reach × the skill to turn it into results). Each has a specific outcome heading + an in-depth read.
+  var VALUE_OUTCOME = {
+    sponsor:  "Enabling condition, not a result yet",
+    manager:  "Engagement, retention & durable quality",
+    whole:    "Fewer errors, faster turnaround",
+    friction: "Cycle time & cost: the structural gain",
+    build:    "Quality, throughput & rework: core driver",
+    whenthen: "Consistency & everyday speed",
+    proof:    "First measurable win, still localized",
+    peer:     "Reach & buy-in, not yet output",
+    inaction: "Majority coverage, not yet output",
+    quiet:    "Full coverage, lower operational risk",
+    policy:   "Durability: gains protected from decay",
+    criteria: "Compounding performance over time",
+    ritual:   "Sustained results between launches"
+  };
+  var VALUE_IMPACT = {
+    sponsor:  "On its own it moves no metric. It is the precondition for every result downstream. It frees budget, reallocates priority, and gives teams the air cover to change how work is done; skip it and the capability and redesign work that actually shift speed, quality and cost never gets the room to land.",
+    manager:  "Managers convert activity into results by moving the question from “did you use it?” to “is the output better?” That coaching lifts work quality and decision-making and keeps people (and the gains) from sliding back. It is the largest lever on whether improvements stick and on retention and engagement through the change.",
+    whole:    "By closing the gaps (integrations, templates, a real support path) it removes the manual workarounds that create errors and delay. The organizational result is fewer defects, faster turnaround and less rework, because the tool now fits the actual job instead of adding steps beside it.",
+    friction: "This is where the hard operational metrics move: rebuilding the task around the tool collapses two parallel paths into one, cutting cycle time and cost-to-serve. Output dips while people relearn the workflow, then throughput steps up to a durably higher level. That is the difference between a faster old process and a genuinely new one.",
+    build:    "The single biggest driver of real results: people learn to produce correct, high-quality output quickly and to judge when it is wrong. That moves quality, throughput and rework at once and raises the ceiling on what the team can take on. Without it, adoption is logins: activity with no change in outcomes.",
+    whenthen: "By tying the tool to the exact trigger moment in the workflow, the speed and consistency gains show up every day instead of occasionally, turning a capable few into reliable, repeatable output across the team.",
+    proof:    "Produces the first hard evidence that output actually improved: a real, quantified win from your innovators. It is the proof the rest of the organization needs to believe the change is worth it, but the measured gains stay local until capability spreads to the majority.",
+    peer:     "Moves the majority to genuinely adopt by replacing decks with credible, same-function proof. That is reach and belief, not yet output. Their speed and quality only move once the capability work turns adoption into real skill.",
+    inaction: "Pulls the late majority in by making standing still the risky choice, expanding coverage across the organization. But headcount using the tool is not a result: revenue, quality and speed follow only if those people reach genuine competence rather than mere compliance.",
+    quiet:    "Brings the last holdouts along without triggering the fear that hardens resistance, closing the coverage gap and reducing the operational risk of a two-speed organization. Output from this group follows only once they are supported into confident, genuine use.",
+    policy:   "Turns improvement into the standard: writing the new way into policy and governance stops the speed and quality gains quietly decaying back to the old process once attention moves on. The result is durability and compliance: the difference between a good quarter and a new baseline.",
+    criteria: "Ties the new output standard to how people are evaluated and rewarded, so the organization keeps improving on the metrics that matter (quality, throughput, decision quality) instead of plateauing. What gets measured and rewarded is what compounds.",
+    ritual:   "Anchors the practice to cadences that already exist (standups, reviews, retros) so the outcome gains compound between launch pushes instead of leaking away. It is what keeps the improvement curve rising after the initial energy fades."
+  };
+
+  // when a play runs OUT OF ORDER (before the prerequisite it leans on, or before its proof/maturity
+  // exists), the organizational outcome inverts: instead of the value above, you get a specific adverse
+  // result. Each entry names what the org actually gets, and the mechanism, grounded in change practice.
+  // A play with more than one prerequisite carries a variant PER prerequisite (byReq) plus a combined
+  // default for when several are missing at once — so the callout always names the foundation that is
+  // actually absent, never one the plan already satisfies (see adverseFor). Single-prerequisite plays
+  // stay flat: their one body can only surface when that prerequisite is the gap.
+  var VALUE_ADVERSE = {
+    manager:  { head: "A channel with no mandate to carry",
+                body: "Managers can only amplify a change their own leadership has visibly backed. Equipped before the sponsor has gone first and set the priority, they are handed talking points with no air cover, so they soft-pedal the message and much of the amplification you were counting on never fires." },
+    build:    { head: "Capability that never gets used",
+                body: "Run before a sponsor has cleared the time and reset priorities, skill-building competes with the unchanged day job and loses. People attend, then return to old workloads and old incentives, so the judgment is rarely exercised and most of the capability you paid for is never banked." },
+    whenthen: {
+      byReq: {
+        build: { head: "Habit without the skill to cash it in",
+                 body: "A cue to “use the tool now” only pays off for someone who already knows how to get value from it. Fired before the capability is built, it drives activity, not better output: logins on schedule, with no lift in quality or speed behind them." },
+        whole: { head: "A cue that fires into an unfinished tool",
+                 body: "The cue lands people in the tool at the right moment, and the skill is there — but with the kit unfinished, the integrations, templates, and function-specific guides aren’t there to meet them. Each firing hits a rough edge, so the loop never closes into a reward, and the habit decays before it sets." }
+      },
+      default: { head: "Habit without the skill to cash it in",
+                 body: "A cue to “use the tool now” only pays off for someone who can already get value from it and has a finished tool to get it from. Fired before the capability is built and before the kit exists, it drives activity, not better output: logins on schedule, with no lift in quality or speed behind them." }
+    },
+    whole:    { head: "A finished kit belief hasn’t earned",
+                body: "Shipping every integration and template before a single visible win exists solves a problem the majority doesn’t yet feel. Budget goes into polish while belief is still zero, so uptake barely moves however complete the product is." },
+    friction: {
+      byReq: {
+        build: { head: "A rebuilt path the team can’t yet walk",
+                 body: "Rebuilding the task around the tool before people can operate it hands a redesigned workflow to a team still learning the basics. The disruption is immediate; the payoff waits on skill that hasn’t landed, so the change reads as churn and spends trust before the method can prove out." },
+        whole: { head: "A rebuilt path, nothing laid on it",
+                 body: "Retiring the old workflow before the kit exists — integrations, templates, the function-specific guides — sends a capable team down a new path with nothing laid on it. The relearning dip arrives and no equipped route is waiting on the far side, so the workaround becomes the real process and the redesign quietly reverts." }
+      },
+      default: { head: "Effort added, not removed",
+                 body: "Rebuilding the task around the tool before people are capable and before the kit exists lays a new path on a team that can’t yet walk it and has nothing to walk it with. The relearning dip arrives without the payoff on the far side, and the disruption reads as change for its own sake." }
+    },
+    peer:     { head: "A “peer story” skeptics see through",
+                body: "The relay works only when a credible, same-function colleague has genuinely succeeded. Run before proof is seeded, there is no real story to carry, so the reference reads as a staged demo, and the manufacture hardens the very doubt it was meant to soften." },
+    inaction: {
+      byReq: {
+        proof: { head: "A norm claim with no first movers behind it",
+                 body: "“Most of your peers are already in” needs real early adopters to point at. Invoked before proof is even seeded, there are no first wins to cite, so the claim is manufactured whole, and the moment a skeptic checks and finds nothing, the bluff hardens into cynicism." },
+        peer:  { head: "A norm claim that has outrun its proof",
+                 body: "“Most of your peers are already in” only carries when same-function peers have moved and can vouch. Invoked before the relay has spread the early wins, the norm is real in pockets but not yet where this audience can see it, so the claim reads as inflated and the skeptics discount it." }
+      },
+      default: { head: "A norm claim that’s checkably false",
+                 body: "“Most of your peers are already in” moves the late majority only if it is true. Invoked before real majority momentum exists, the claim is falsifiable and false, and once you are caught bluffing, trust converts into cynicism and the skeptics are lost for good." }
+    },
+    quiet:    { head: "Fear pushed into hard resistance",
+                body: "Approaching laggards before the majority has visibly moved makes the change feel like a spotlight on the unwilling. Pushed early, the honest 1:1 reads as a threat rather than support, and the underlying fear (often about the job itself) entrenches instead of easing." },
+    policy:   { head: "Compliance theater ahead of the behavior",
+                body: "Codifying a practice almost no one performs yet governs a behavior that doesn’t exist. Written ahead of real adoption, policy reads as coercion, breeds workarounds, and ages into a document nobody follows: reinforcement with nothing to reinforce." },
+    criteria: { head: "People judged on a bar you never built",
+                body: "Changing what’s measured before the capability has landed punishes people for a skill the organization hasn’t given them. Evaluation running ahead of enablement reads as a trap: the fastest way to breed cynicism and quiet resistance." },
+    ritual:   { head: "A ritual with nothing to carry",
+                body: "Anchoring a cadence around a practice that isn’t real yet turns the ritual into an empty slot on an already-crowded calendar. With no established behavior to reinforce, it is quietly skipped within weeks and signals the change is optional." }
+  };
+
+  // soft ordering: plays that ideally land BEFORE this one. Used to flag ordering mismatches (not hard mutes).
+  var ORDER_AFTER = {
+    build:    ['sponsor'],
+    manager:  ['sponsor'],
+    friction: ['build', 'whole'],
+    whenthen: ['build', 'whole'],
+    whole:    ['proof'],
+    peer:     ['proof'],
+    inaction: ['peer', 'proof'],
+    quiet:    ['inaction'],
+    policy:   ['build'],
+    criteria: ['build'],
+    ritual:   ['build']
+  };
+  // a play's foundation is broken if a prerequisite is missing from the plan entirely (absent) or
+  // placed later than the play that leans on it (late). Both mean the groundwork hasn't landed yet.
+  function missingPrereqs(planIds, idx) {
+    var id = planIds[idx], reqs = ORDER_AFTER[id] || [], late = [], absent = [], lateIds = [], absentIds = [];
+    reqs.forEach(function (r) {
+      var j = planIds.indexOf(r);
+      if (j === -1) { absent.push(PLAY_BY_ID[r].name); absentIds.push(r); }
+      else if (j > idx) { late.push(PLAY_BY_ID[r].name); lateIds.push(r); }
+    });
+    return { late: late, absent: absent, lateIds: lateIds, absentIds: absentIds };
+  }
+  // back-compat: names of prerequisites placed later in the plan (used where only lateness matters)
+  function orderIssues(planIds, idx) { return missingPrereqs(planIds, idx).late; }
+  // Some prerequisites encode a population STATE, not a specific play — the same principle the phase
+  // ladder and earned-sponsorship use ("conditions key on achieved state, so it counts for work done by
+  // any route"). When that state is already reached, the foundation is met even if the named play isn't in
+  // the plan. Quiet Path leans on Inaction-Cost Reframe only as a proxy for majority momentum: once the
+  // majority has visibly moved (overall adoption ≥ Quiet's own maturity bar), approaching laggards is no
+  // longer a premature spotlight, so the inaction play is not required and no adverse misfire applies.
+  function prereqMetByState(playId, reqId, overallNow) {
+    if (playId === 'quiet' && reqId === 'inaction') return overallNow >= PLAY_BY_ID.quiet.needsProof;
+    return false;
+  }
+  // state-aware view of missingPrereqs for the UI: drops any prerequisite already satisfied by achieved
+  // adoption (overallNow, read from the play's simulated deploy-week state), so the groundwork ladder and
+  // its outcome insight say exactly what the simulation actually scored — never "missing foundation" for a
+  // foundation the run reached another way.
+  function missingPrereqsLive(planIds, idx, overallNow) {
+    var mp = missingPrereqs(planIds, idx), id = planIds[idx];
+    if (overallNow == null) return mp;
+    var out = { late: [], absent: [], lateIds: [], absentIds: [] };
+    mp.absentIds.forEach(function (r, k) { if (!prereqMetByState(id, r, overallNow)) { out.absent.push(mp.absent[k]); out.absentIds.push(r); } });
+    mp.lateIds.forEach(function (r, k) { if (!prereqMetByState(id, r, overallNow)) { out.late.push(mp.late[k]); out.lateIds.push(r); } });
+    return out;
+  }
+  // pick the adverse narrative that matches the foundation actually missing. A play with several
+  // prerequisites carries a variant per prerequisite (byReq); when exactly one is absent/late we name
+  // that one, and when more than one is missing (or none is pinpointed, e.g. a muted play) we fall back
+  // to the combined default. Flat entries — single-prerequisite plays — are returned unchanged.
+  function adverseFor(id, mp) {
+    var e = VALUE_ADVERSE[id];
+    if (!e) return null;
+    if (e.head) return e;
+    var miss = (mp && mp.absentIds ? mp.absentIds : []).concat(mp && mp.lateIds ? mp.lateIds : []);
+    if (miss.length === 1 && e.byReq[miss[0]]) return e.byReq[miss[0]];
+    return e.default;
+  }
+
+  // ===== the curated plays (from the 16-cell matrix) =====
+  // weeks = how long the play occupies the 24-week timeline (some work is not a two-week activity).
+  // handoff = fraction of the play that must elapse before a dependent play can start (and before its own
+  //   foundation counts as available). 1.0 = finish-to-start: the play must fully complete before anything
+  //   leans on it (e.g. Executive Sponsorship must be secured AND executed). <1 = early-leverage: its early
+  //   output (scoping, curriculum, integrations) is usable while the rest is still being built, so dependents
+  //   can overlap it (e.g. Capability Build at 0.4 — the manager playbook can begin ~2–3 weeks in).
+  // raises = permanent lift to a segment's sustainable ceiling; push = one-time bump to current level.
+  // floor = permanent lift to a segment's floor (sustainment: locks gains so decay can't erase them).
+  // decayCut = fraction of ongoing decay removed (sustainment: the change stops leaking).
+  // needsProof = overall adoption threshold below which the play is muted (peer-proof / maturity dependency).
+  // capability = adds to the skill stock that converts adoption into real output (value).
+  // structural = adds to the "workflow actually rebuilt around the tool" stock — the structural multiplier on
+  //   value (cycle time, cost). Only Workflow Redesign and, partly, the Whole-Product Kit contribute.
+  // valueLift = unlocks value headroom that capability + redesign alone can't reach: institutionalizing the
+  //   output standard (Performance Criteria) pushes performance past the plateau instead of protecting it only.
+  // cells = matrix cells this play addresses (for the flagged-cell targeting bonus).
+  var PLAYS = [
+    // ---- Opportunity: structural & social permission ----
+    { id: 'sponsor', name: 'Executive Sponsorship', framework: 'Prosci · active sponsorship', group: 'O', weeks: 2, handoff: 1.0,
+      blurb: 'Visible, funded, active executive ownership: going first and holding the line. The single strongest predictor of success.',
+      raises: { ia: 0.05, em: 0.06, lm: 0.06, lg: 0.05 }, push: {}, needsProof: 0, sponsor: true, capability: 0.10,
+      cells: ['em-pre','lm-pre','lg-pre'] },
+    { id: 'manager',  name: 'Manager-as-Channel',   framework: 'Switch · rider/elephant/path', group: 'O', weeks: 3, handoff: 0.5,
+      blurb: 'Equip managers with talking points, permission to localize, a one-page path. Amplifies everything after.',
+      raises: { ia: 0.04, em: 0.05, lm: 0.05, lg: 0.05 }, push: {}, needsProof: 0, manager: true, capability: 0.15,
+      cells: ['ia-act','em-act','lm-act','lg-act'] },
+    { id: 'whole',    name: 'Whole-Product Kit',    framework: 'Diffusion · whole product', group: 'O', weeks: 4, handoff: 0.4,
+      blurb: 'Ship the toolkit: SSO, integrations, templates and design systems, function-specific skills.md libraries, FAQ, and success stories, so no team is left to build the missing piece itself.',
+      raises: { em: 0.30 }, push: { em: 0.05 }, needsProof: 0.10, capability: 0.30, structural: 0.25, disrupt: 0.06,
+      cells: ['em-con','em-prp'] },
+    { id: 'friction', name: 'Workflow Redesign',     framework: 'Fogg · ability + process redesign', group: 'O', weeks: 3, handoff: 1.0,
+      blurb: 'Rebuild the task around the tool and retire the old path, not AI bolted onto the old process or two ways to run the same task. People relearn the workflow, so adoption dips before it steps up durably.',
+      raises: { em: 0.18, lm: 0.16 }, push: { em: 0.08, lm: 0.06 }, needsProof: 0, capability: 0.22, structural: 0.70, disrupt: 0.20,
+      cells: ['em-prp','lm-prp'] },
+    // ---- Motivation: belief & desire ----
+    { id: 'proof',    name: 'Proof Seeding',        framework: 'Diffusion of Innovations', group: 'M', weeks: 3, handoff: 1.0,
+      blurb: 'Recruit innovators, white-glove their first win, make it a visible story.',
+      raises: { ia: 0.30 }, push: { ia: 0.10 }, needsProof: 0,
+      cells: ['ia-pre','ia-con','ia-prp','ia-act'] },
+    { id: 'peer',     name: 'Peer Proof Relay',     framework: 'Diffusion · peer references', group: 'M', weeks: 2, handoff: 0.5,
+      blurb: 'Replace decks with 15-minute calls from someone in their function who already moved.',
+      raises: { em: 0.22, lm: 0.14 }, push: { em: 0.05, lm: 0.03 }, needsProof: 0.28,
+      cells: ['em-pre','em-con','lm-con'] },
+    { id: 'inaction', name: 'Inaction-Cost Reframe', framework: 'Social Norms · Late Majority', group: 'M', weeks: 2, handoff: 0.5,
+      blurb: 'Make not-moving the risky choice; establish adoption as the norm ("70% of peers are already in").',
+      raises: { lm: 0.40 }, push: { lm: 0.06 }, needsProof: 0.45,
+      cells: ['lm-pre','lm-act'] },
+    { id: 'quiet',    name: 'Quiet Path for Laggards', framework: 'Self-Determination Theory', group: 'M', weeks: 4, handoff: 1.0,
+      blurb: 'One-on-one, surface the real fear, pre-built path, sustained support, quiet recognition, never a spotlight.',
+      raises: { lg: 0.48 }, push: { lg: 0.05 }, needsProof: 0.50,
+      cells: ['lg-pre','lg-con','lg-prp','lg-act'] },
+    // ---- Capability: can they actually do it well ----
+    { id: 'build',    name: 'Capability Build',     framework: 'ADKAR · Ability / COM-B Capability', group: 'C', weeks: 6, handoff: 0.4,
+      blurb: 'Role-based skill-building (prompting, judgment, workflow redesign) so people get real value, not just log in. Not a two-week push.',
+      raises: { em: 0.12, lm: 0.10 }, push: { em: 0.05, lm: 0.04 }, needsProof: 0, capability: 0.40, disrupt: 0.08,
+      cells: ['em-prp','em-act','lm-prp'] },
+    { id: 'whenthen', name: 'When-Then Prompts',    framework: 'Implementation Intentions', group: 'C', weeks: 1, handoff: 1.0,
+      blurb: '"When my Monday calendar opens, I run the review in the new tool." Converts intent into action.',
+      raises: { em: 0.10, lm: 0.08 }, push: { em: 0.12, lm: 0.08 }, needsProof: 0, capability: 0.15,
+      cells: ['em-prp','em-act'] },
+    // ---- Sustainment: make the change stick (institutionalization; belongs in the sustain phase) ----
+    { id: 'policy',   name: 'Policy & Standards Codified', framework: 'ADKAR · Reinforcement', group: 'S', weeks: 3, handoff: 1.0,
+      blurb: 'Write AI use into policy, data governance, and the standard operating procedure: the new way becomes the documented way.',
+      raises: {}, push: {}, needsProof: 0.38, sustain: true, capability: 0.05,
+      floor: { em: 0.10, lm: 0.08, lg: 0.04 }, decayCut: 0.35,
+      cells: ['em-act','lm-act'] },
+    { id: 'criteria', name: 'Performance Criteria Redefined', framework: 'Prosci · Reinforcement / COM-B', group: 'S', weeks: 3, handoff: 1.0,
+      blurb: 'Rewrite role expectations and review criteria so AI-augmented output is what gets evaluated and rewarded, not optional extra credit.',
+      raises: {}, push: {}, needsProof: 0.42, sustain: true, valueLift: 0.12,
+      floor: { em: 0.12, lm: 0.12, lg: 0.08 }, decayCut: 0.45,
+      cells: ['lm-act','lg-act'] },
+    { id: 'ritual',   name: 'Ritual & Cadence', framework: 'Habit · cue → routine → reward', group: 'S', weeks: 2, handoff: 1.0,
+      blurb: 'Bake the new workflow into recurring rituals (standups, reviews, retros) so it is carried by the calendar, not by campaigns.',
+      raises: {}, push: {}, needsProof: 0.35, sustain: true,
+      floor: { em: 0.06, lm: 0.06, lg: 0.03 }, decayCut: 0.30,
+      cells: ['em-act','lm-act','lg-act'] }
+  ];
+  var PLAY_BY_ID = {};
+  PLAYS.forEach(function (p) { PLAY_BY_ID[p.id] = p; });
+
+  // ===== state =====
+  var flagged = {};        // "seg-stage" -> true
+  var plan = [];           // ordered list of play ids
+
+  // short, readable labels for the timeline strip (full names truncate on narrow bars)
+  var SHORT = {
+    sponsor: 'Exec Sponsorship', manager: 'Manager Channel', whole: 'Whole-Product Kit',
+    friction: 'Workflow Redesign', build: 'Capability Build', whenthen: 'When-Then Prompts',
+    proof: 'Proof Seeding', peer: 'Peer Proof Relay', inaction: 'Inaction-Cost',
+    quiet: 'Quiet Path', policy: 'Policy & SOPs', criteria: 'Perf. Criteria', ritual: 'Ritual & Cadence'
+  };
+
+  // ===== scheduling: dependency-aware overlap — plays run concurrently where one needn't finish for the
+  // next to start; the 24-week budget now measures CALENDAR time (the last completion), not the sum of
+  // durations, so overlapping independent work frees weeks. =====
+  var WEEKS = 24;
+  // (institutionalization is no longer gated to a fixed week — the sustain phase opens on adoption maturity;
+  //  see SUSTAIN_READY / sustainStartWeek inside simulate.)
+  var THRESHOLD = 55;   // % adoption at which transformation becomes self-sustaining (crosses out of the liminal phase)
+  var MAX_CONCURRENT = 2;   // bandwidth cap: at most this many plays active in any week (an org's real change capacity)
+  var STAGGER = 1;          // min weeks between consecutive starts, so the chosen order stays a legible cascade
+  // how many weeks into a play before a dependent may start / its foundation counts as available.
+  // handoff 1.0 → leadWeeks == duration → finish-to-start (dependent waits for completion).
+  function leadWeeks(p) { return Math.max(1, Math.round(p.weeks * (p.handoff != null ? p.handoff : 1))); }
+
+  // Assign each play the earliest start that respects: (1) its in-plan prerequisites' handoff points,
+  // (2) the chosen order (never before the previous play, min one-week stagger), and (3) the bandwidth cap.
+  // Only prerequisites scheduled EARLIER in the plan constrain the start; a prerequisite placed later or
+  // missing doesn't hold the schedule (it surfaces as an out-of-order penalty in the simulation instead).
+  function scheduleOf(planIds) {
+    var out = [], startById = {};
+    planIds.forEach(function (id, i) {
+      var p = PLAY_BY_ID[id];
+      var earliest = 1;
+      (ORDER_AFTER[id] || []).forEach(function (r) {
+        if (startById[r] !== undefined) earliest = Math.max(earliest, startById[r] + leadWeeks(PLAY_BY_ID[r]));
+      });
+      if (i > 0) earliest = Math.max(earliest, out[i - 1].start + STAGGER);
+      // slide forward until the play's whole span fits under the concurrency cap
+      var s = earliest, guard = 0;
+      while (guard++ < 500) {
+        var ok = true;
+        for (var wk = s; wk <= s + p.weeks - 1 && ok; wk++) {
+          var n = 0;
+          for (var k = 0; k < out.length; k++) { if (wk >= out[k].start && wk <= out[k].end) n++; }
+          if (n >= MAX_CONCURRENT) ok = false;
+        }
+        if (ok) break;
+        s++;
+      }
+      out.push({ id: id, slot: i, start: s, end: s + p.weeks - 1 });
+      startById[id] = s;
+    });
+    return out;
+  }
+  // calendar weeks = the last play's completion week (wall-clock span of the plan)
+  function planCalendarWeeks(planIds) {
+    return scheduleOf(planIds).reduce(function (m, e) { return Math.max(m, e.end); }, 0);
+  }
+  // effort weeks = total person-time across all plays (the sum that used to be the whole budget)
+  function planEffortWeeks(planIds) {
+    return planIds.reduce(function (n, id) { return n + PLAY_BY_ID[id].weeks; }, 0);
+  }
+
+  // ===== transformation phases (Seams: a revolution crosses thresholds; it isn't a project you finish) =====
+  var MILESTONES = [
+    { key: 'vision',   label: 'Vision set',               note: 'Leadership goes first; the change reads as real, not a memo.' },
+    { key: 'proof',    label: 'Proof visible',            note: 'A real, visible win peers can point to: a seeded early-adopter story, or enough of the population has moved that the proof is self-evident.' },
+    { key: 'redesign', label: 'Workflow redesigned',      note: 'The work itself changes: AI is built in, not bolted on.' },
+    { key: 'identity', label: 'Work identity reimagined', note: 'The role is redrawn: what AI replaces, what it augments, and what must stay durably human. Managers coach that judgment instead of enforcing compliance.' },
+    { key: 'outcome',  label: 'Outcome realized',         note: 'The work is measurably better (speed, quality, output) and it holds. The change pays for itself.' }
+  ];
+
+  // ===== simulation =====
+  function initState() {
+    return {
+      ia: { level: 0.60, ceil: 0.62, floor: 0.15 },
+      em: { level: 0.18, ceil: 0.24, floor: 0.06 },
+      lm: { level: 0.09, ceil: 0.13, floor: 0.03 },
+      lg: { level: 0.04, ceil: 0.06, floor: 0.01 }
+    };
+  }
+  function overallOf(st) {
+    var t = totalSegSize();
+    return SEGMENTS.reduce(function (sum, s) { return sum + s.size * st[s.key].level; }, 0) / t;
+  }
+
+  // Returns { series, valueSeries, notes, markers, crossedWeek, touched, milestones, totalWeeks }
+  function simulate(planIds) {
+    var st = initState();
+    var growth = 0.22, decay = 0.06, managerActive = false, managerStrength = 1, inertiaActive = false;
+    // SPONSORSHIP is the strongest single lever, but not the only route. Until it's active — won directly (the
+    // Executive Sponsorship play) or EARNED bottom-up — ceilings are capped, so the change can't reach self-
+    // sustaining. A manager/team-led effort that seeds real proof and climbs on its own earns that sponsorship
+    // once it has visibly worked (see the earned-sponsorship check in the loop). Prosci: active sponsorship is
+    // the top predictor of success; Kotter: the guiding coalition and short-term wins can form bottom-up.
+    var sponsorshipActive = false, sponsorEarned = false, NOSPONSOR_CAP = 0.52, EARN_SPONSOR_OV = 42;
+    var EROSION = 4.5, RWIN = 4, DIPSCALE = 60, lastActive = -99, dipEvents = [];
+    var sched = scheduleOf(planIds);
+    var notes = {}, markers = [], series = [], valueSeries = [], effOf = {};
+    // TIMING: a play's DISRUPTION (relearning cost) is felt while the work is underway — a dip anchored at its
+    // start; its BENEFIT (reach, capability, reinforcement) is realized at COMPLETION. Readiness and the out-of-
+    // order penalty are judged when the play is deployed (start), and that same eff scales the payoff that lands
+    // at the end. Plays that would finish past the 24-week window never land — flag them so the UI can say so.
+    var byStart = {}, byEnd = {}, startAt = {};
+    sched.forEach(function (e) {
+      startAt[e.id] = e.start;
+      if (e.end <= WEEKS) { (byStart[e.start] = byStart[e.start] || []).push(e); (byEnd[e.end] = byEnd[e.end] || []).push(e); }
+      else notes[e.id] = { muted: true, reason: 'overflow', hits: 0, start: e.start, end: e.end,
+                           readiness: 0, missReqs: 0, orderPenalty: 1, proofGate: 1, misplace: 0 };
+    });
+    var capStock = 0, structStock = 0, value = 0, valueLift = 0, CAP_REF = 1.00, STRUCT_REF = 0.80, VGROWTH = 0.18, decayCut = 0;
+    // OUTCOMES PREMIUM — the point where value stops being a function of adoption and becomes a function of
+    // OUTCOMES. Below it, value is capped by headcount (usage without capability is not value). Once the change
+    // is self-sustaining AND adoption clears OUTCOME_BAR (~75%), the same population starts compounding results —
+    // skill deepens, the redesigned workflow pays off, the output standard is institutionalized — so realized
+    // value can climb ABOVE the adoption curve. OUTCOME_PREMIUM sets how far above. valueCrossWeek records the
+    // week value overtakes adoption, so the chart and copy can name the inflection.
+    var OUTCOME_BAR = 0.75, OUTCOME_PREMIUM = 0.55, valueCrossWeek = null;
+    // INSTITUTIONALIZATION is gated by the transformation's maturity, not the calendar: the "sustain phase"
+    // opens once adoption is real enough that codifying the new way reinforces a behavior that already exists.
+    // A fast/small transformation reaches that point early; a large one later. sustainStartWeek records it.
+    var SUSTAIN_READY = 0.35, sustainStartWeek = null;
+    var sponsorClean = false, proofClean = false, phaseIdx = 0;
+    var milestones = { vision: null, proof: null, redesign: null, identity: null, outcome: null };
+    // out-of-order penalty: a play whose prerequisite hasn't reached its handoff point by the time this play
+    // starts still lands, but weaker. MISORDER_FACTOR is the retained fraction of effect per missing
+    // prerequisite (matches the "lands, but weaker" copy — the curve reflects it, not just the annotation).
+    var MISORDER_FACTOR = 0.6, NOPROOF = 0.5;
+    // ORGANIZATIONAL TRUST (responsiveness), 1 = full. A misplaced intervention doesn't just do less good —
+    // it does harm: "mismatched intervention is the most common reason change campaigns underperform"
+    // (Adoption Matrix), producing "quiet resistance" (self-determination theory) and performative adoption
+    // — the Adaptability field note's liminal collapse and freeze, where a cohort pushed through an unmarked
+    // passage gets damaged and disengages. Low trust (a) leans the curve down now (a backlash dip) and
+    // (b) scales down the effect of every LATER play and speeds erosion — people stop responding to the change.
+    var trust = 1, TRUST_FLOOR = 0.3, TRUST_SENS = 0.5, TRUST_REGEN = 0.012, DISTRUST_DECAY = 1.0;
+    var BACKLASH_DIP = 10, MUTED_SEV = 0.8, MIS_SEV = 0.25, MIS_SEV_CAP = 0.6;
+
+    function dipAt(w) {
+      var t = 0;
+      for (var k = 0; k < dipEvents.length; k++) {
+        var delta = w - dipEvents[k].week;
+        var kern = delta <= 0 ? 0 : (delta <= 1 ? delta : (delta < 4 ? (4 - delta) / 3 : 0));
+        t += dipEvents[k].mag * kern;
+      }
+      return t;
+    }
+    function activeThisWeek(w) {
+      for (var k = 0; k < sched.length; k++) { if (w >= sched[k].start && w <= sched[k].end) return true; }
+      return false;
+    }
+
+    for (var w = 0; w <= WEEKS; w++) {
+      // 1) DEPLOYMENTS — gate each play as it STARTS: readiness now, foundations in place, current trust.
+      // This is where the relearning dip and any misplacement backlash land (during the work), and where the
+      // play's eff is fixed. The payoff that eff scales is banked later, at completion.
+      if (byStart[w]) {
+        byStart[w].forEach(function (entry) {
+          var p = PLAY_BY_ID[entry.id];
+          var overallNow = overallOf(st);
+          // sustainment reads its readiness off adoption (needsProof ~0.35–0.42): institutionalizing before the
+          // behavior is real enough is theater. This is state-based, so it can land earlier in a fast transformation
+          // and later in a slow one — no fixed calendar gate.
+          var readiness = p.needsProof > 0 ? Math.max(0, Math.min(1, overallNow / p.needsProof)) : 1;
+          var hits = p.cells.reduce(function (n, c) { return n + (flagged[c] ? 1 : 0); }, 0);
+          // targeting bonus is weighted by how much of the org sits in the flagged cells this play addresses:
+          // hitting a stall in a big (editable) segment pulls far harder than a small one. Capped so it can't dominate.
+          var flaggedPop = p.cells.reduce(function (s, c) { return s + (flagged[c] ? cellShare(c) : 0); }, 0);
+          var tBonus = 1 + Math.min(0.75, 0.025 * flaggedPop);
+          // a prerequisite's foundation is available only once it passed its handoff point before this play
+          // began; a prerequisite missing from the plan or placed later misses, docking effect per miss.
+          var reqs = ORDER_AFTER[entry.id] || [], missReqs = 0;
+          for (var qi = 0; qi < reqs.length; qi++) {
+            var rq = reqs[qi];
+            if ((startAt[rq] === undefined || startAt[rq] + leadWeeks(PLAY_BY_ID[rq]) > entry.start)
+                && !prereqMetByState(entry.id, rq, overallNow)) missReqs++;
+          }
+          var orderPenalty = Math.pow(MISORDER_FACTOR, missReqs);
+          // proof gate: the two pure social-proof plays (peer relay, inaction-cost norm) fall flat without
+          // a real seeded win to point to — a relay with no one who has moved is a vendor demo in disguise.
+          var proofGate = ((entry.id === 'peer' || entry.id === 'inaction') && !proofClean) ? NOPROOF : 1;
+          // a burned organization responds less to everything — this play's own force is scaled by current trust
+          var eff = readiness * readiness * tBonus * orderPenalty * proofGate * trust;
+          effOf[entry.id] = { eff: eff, orderPenalty: orderPenalty, readiness: readiness };
+          // the relearning dip lands NOW, during the work — a transient cost that recovers before the payoff
+          // (the classic J-curve / change curve). It scales with how much real change is actually underway.
+          if (p.disrupt) dipEvents.push({ week: w, mag: p.disrupt * DIPSCALE * eff });
+          // trust cost of misplacement: a play pushed on people who plainly aren't ready (muted — the
+          // wrong-stage move) breeds the most resistance; a weak-foundation move (missing/late prerequisite)
+          // breeds less. Backlash leans the curve down now; the trust drop suppresses every later move.
+          var muted = readiness < 0.5;
+          var misplace = muted ? MUTED_SEV : (missReqs > 0 ? Math.min(MIS_SEV_CAP, MIS_SEV * missReqs) : 0);
+          if (misplace > 0) {
+            dipEvents.push({ week: w, mag: misplace * BACKLASH_DIP });
+            trust = Math.max(TRUST_FLOOR, trust - misplace * TRUST_SENS);
+          }
+          // a muted sustainment play was institutionalized before adoption was real enough ('timing'); any other
+          // muted play was pushed before the proof/maturity it needs ('proof').
+          notes[p.id] = { readiness: readiness, hits: hits, muted: muted,
+            reason: muted ? (p.sustain ? 'timing' : 'proof') : null,
+            missReqs: missReqs, orderPenalty: orderPenalty, proofGate: proofGate,
+            misplace: misplace, start: entry.start, end: entry.end, overallAtStart: overallNow };
+        });
+      }
+      // 2) COMPLETIONS — a play's benefit is realized when it FINISHES, scaled by the eff it earned at deploy time.
+      if (byEnd[w]) {
+        byEnd[w].forEach(function (entry) {
+          var p = PLAY_BY_ID[entry.id], gg = effOf[entry.id] || { eff: 0, orderPenalty: 1, readiness: 0 };
+          var eff = gg.eff;
+          for (var rk in p.raises) { st[rk].ceil = Math.min(0.95, st[rk].ceil + p.raises[rk] * eff); }
+          for (var pk in p.push)   { st[pk].level = Math.min(st[pk].ceil, st[pk].level + p.push[pk] * eff); }
+          // sustainment: raise floors (lock in gains) and cut ongoing decay (the change stops leaking)
+          if (p.floor) { for (var fk in p.floor) { st[fk].floor = Math.min(st[fk].ceil, st[fk].floor + p.floor[fk] * eff); } }
+          if (p.decayCut) decayCut = Math.min(0.8, decayCut + p.decayCut * eff);
+          if (p.manager) { managerActive = true; managerStrength = gg.orderPenalty; }
+          if (p.sponsor) { sponsorshipActive = true; if (gg.readiness >= 0.5) sponsorClean = true; }
+          if (p.id === 'proof' && gg.readiness >= 0.5) proofClean = true;
+          capStock += (p.capability || 0) * eff;
+          structStock += (p.structural || 0) * eff;
+          valueLift += (p.valueLift || 0) * eff;   // institutionalizing the output standard unlocks value headroom
+          markers.push({ week: w, overall: overallOf(st), id: p.id });
+        });
+      }
+      var activeNow = activeThisWeek(w);
+      if (activeNow) lastActive = w;
+      // trust heals slowly with clean execution — but a betrayal early costs real ground while it recovers
+      trust = Math.min(1, trust + TRUST_REGEN);
+      // reinforcement: without an active/recent play, an active manager, or self-sustaining inertia,
+      // adoption erodes (novelty fades / shadow AI / silence-is-waiting). Sustainment plays cut the decay.
+      var reinforced = managerActive || inertiaActive || (w - lastActive <= RWIN);
+      var g = growth * (managerActive ? 1 + 0.6 * managerStrength : 1) * (inertiaActive ? 1.12 : 1);
+      // lost trust also erodes faster: a disengaging organization lets the change slip back (performative relapse)
+      var d = decay * (managerActive ? 1 - 0.6 * managerStrength : 1) * (inertiaActive ? 0.45 : 1) * (reinforced ? 1 : EROSION) * (1 - decayCut) * (1 + (1 - trust) * DISTRUST_DECAY);
+      SEGMENTS.forEach(function (s2) {
+        var c = st[s2.key];
+        // until sponsorship is active (won directly or earned bottom-up), ceilings are capped — the change
+        // can climb, but can't yet reach self-sustaining
+        var effCeil = sponsorshipActive ? c.ceil : Math.min(c.ceil, NOSPONSOR_CAP);
+        c.level += g * (effCeil - c.level);
+        c.level -= d * (c.level - c.floor);
+        if (c.level < 0) c.level = 0;
+        if (c.level > effCeil) c.level = effCeil;
+      });
+      // J-curve: workflow-disrupting plays cause a transient dip before the payoff
+      var rawOv = overallOf(st) * 100;
+      var ov = Math.max(3, rawOv - dipAt(w));
+      series.push(ov);
+      // VALUE REALIZED — the organization actually getting better outcomes (speed, quality, cost). It is not a
+      // linear echo of adoption: it needs reach AND the capability to convert usage into output AND the workflow
+      // rebuilt around the tool. These MULTIPLY — a weak link caps the result — so value tracks the impact logic,
+      // not the headcount using the tool.
+      var adoptionFrac = ov / 100;
+      var capNorm = Math.min(capStock / CAP_REF, 1);        // skill to turn usage into good output
+      var structNorm = Math.min(structStock / STRUCT_REF, 1); // workflow actually redesigned around the tool
+      // conversion of reach → real outcomes: pure usage converts poorly (adoption without capability is usage,
+      // not value); capability is the core driver; a redesigned workflow is the structural multiplier that
+      // unlocks the hard operational gains (cycle time, cost). Capability + redesign alone plateau below the
+      // ceiling — institutionalizing the output standard (Performance Criteria's valueLift) unlocks the last
+      // headroom, so performance keeps compounding instead of flattening. Rewards drive what gets measured.
+      var conversion = Math.min(1, 0.10 + 0.78 * capNorm * (0.55 + 0.45 * structNorm) + Math.min(valueLift, 0.12));
+      // past the inflection, value is no longer bounded by reach: once the change is self-sustaining (inertia)
+      // AND adoption has cleared the high bar, outcomes compound beyond the headcount using the tool. The premium
+      // ramps from zero at OUTCOME_BAR to full across the top band, and is gated on the enabling stack actually
+      // being in place — so reach alone can never manufacture it; it takes the capability and redesign underneath.
+      var outcomePremium = 0;
+      if (inertiaActive && adoptionFrac >= OUTCOME_BAR) {
+        var over = Math.min(1, (adoptionFrac - OUTCOME_BAR) / (1 - OUTCOME_BAR));   // 0→1 across the top band
+        var stackReady = Math.min(1, capNorm * (0.55 + 0.45 * structNorm) + Math.min(valueLift, 0.12));
+        outcomePremium = OUTCOME_PREMIUM * over * stackReady;
+      }
+      // the ceiling can now exceed adoption (conversion + premium > 1), so value can be drawn above the plan
+      // curve; still capped at 100% for the chart.
+      var valueCeil = Math.min(1, adoptionFrac * (conversion + outcomePremium));
+      // organizational impact COMPOUNDS: value builds slowly, then accelerates as the enabling stack completes,
+      // rather than approaching an adoption-linear ceiling at a flat rate. The realization rate rises with the
+      // capability actually in place — so an S-curve, gated early, gathering pace once the pieces land.
+      var realizeRate = VGROWTH * (0.28 + 0.72 * capNorm);
+      // past the inflection the compounding accelerates — this is the visible kink where value pulls up and
+      // overtakes adoption. The stronger the outcomes premium (more headroom past the bar, fuller stack), the
+      // faster it realizes, so a genuinely capable transformation crosses within the window.
+      if (outcomePremium > 0) realizeRate *= 1 + 3.0 * outcomePremium;
+      value += realizeRate * (valueCeil - value);
+      if (value < 0) value = 0;
+      valueSeries.push(value * 100);
+      // the week realized value overtakes adoption — the outcomes inflection — noted once, only when adoption is
+      // genuinely high (so a near-zero-week tie can't register as a crossover).
+      if (valueCrossWeek === null && value * 100 >= ov && ov >= OUTCOME_BAR * 100 - 0.5) valueCrossWeek = w;
+      if (!inertiaActive && ov >= THRESHOLD) inertiaActive = true;
+      // the sustain phase opens the first week adoption is mature enough to institutionalize (scope-dependent)
+      if (sustainStartWeek === null && ov >= SUSTAIN_READY * 100) sustainStartWeek = w;
+      // EARNED sponsorship: a manager/team-led effort that has seeded real proof and climbed on its own past
+      // EARN_SPONSOR_OV has demonstrated enough success to win the executive sponsorship it didn't start with.
+      // The cap lifts from here — a slower, later route than leading with sponsorship, but a real bottom-up one.
+      if (!sponsorshipActive && proofClean && managerActive && ov >= EARN_SPONSOR_OV) {
+        sponsorshipActive = true; sponsorClean = true; sponsorEarned = true;
+      }
+      // transformation phases advance strictly in order — a later phase can't be reached before an earlier one.
+      // conditions key on achieved STATE (not specific plays), so a phase lights for work actually done by any route.
+      var phaseConds = [
+        sponsorClean || (proofClean && managerActive),  // Vision set — a guiding coalition is visibly behind it (exec OR grassroots)
+        proofClean || ov >= 30,                // Proof visible — seeded win, or the majority has visibly moved
+        structStock >= 0.35,                   // Workflow redesigned — the task was genuinely rebuilt (needs Workflow Redesign)
+        managerActive && ov >= THRESHOLD,      // Work identity reimagined — managers coaching + across the line
+        value * 100 >= 40                      // Outcome realized — durable, measurable output
+      ];
+      while (phaseIdx < MILESTONES.length && phaseConds[phaseIdx]) {
+        milestones[MILESTONES[phaseIdx].key] = w;
+        phaseIdx++;
+      }
+    }
+    var crossedWeek = null;
+    for (var cw = 0; cw <= WEEKS && crossedWeek === null; cw++) {
+      if (series[cw] >= THRESHOLD) {
+        var stays = true;
+        for (var jj = cw; jj <= WEEKS; jj++) { if (series[jj] < THRESHOLD) { stays = false; break; } }
+        if (stays) crossedWeek = cw;
+      }
+    }
+    var touched = series.some(function (v) { return v >= THRESHOLD; });
+    return { series: series, valueSeries: valueSeries, notes: notes, markers: markers,
+             crossedWeek: crossedWeek, touched: touched, milestones: milestones, trustEnd: trust,
+             valueCrossWeek: valueCrossWeek,
+             sponsorEarned: sponsorEarned, sponsorActive: sponsorshipActive, sustainStartWeek: sustainStartWeek,
+             totalWeeks: sched.reduce(function (m, e) { return Math.max(m, e.end); }, 0) };
+  }
+
+  // ===== chart geometry =====
+  var PADL = 48, PW = 648, PADT = 20, PH = 320;
+  function x(week) { return PADL + (week / WEEKS) * PW; }
+  function y(pct)  { return PADT + (1 - pct / 100) * PH; }
+  function pathFrom(series) {
+    return series.map(function (v, w) { return (w ? 'L' : 'M') + x(w).toFixed(1) + ' ' + y(v).toFixed(1); }).join(' ');
+  }
+
+  // ===== DOM refs =====
+  var el = {
+    matrix: document.getElementById('matrixGrid'),
+    flagCount: document.getElementById('flagCount'),
+    lib: document.getElementById('libGrid'),
+    planList: document.getElementById('planList'),
+    planEmpty: document.getElementById('planEmpty'),
+    planClear: document.getElementById('planClear'),
+    planBudget: document.getElementById('planBudget'), budgetFill: document.getElementById('budgetFill'),
+    planCompress: document.getElementById('planCompress'), planTimeline: document.getElementById('planTimeline'),
+    teaserLine: document.getElementById('teaserLine'),
+    curveB: document.getElementById('curveB'), curveP: document.getElementById('curveP'), curveV: document.getElementById('curveV'),
+    gapArea: document.getElementById('gapArea'), markers: document.getElementById('markers'),
+    phaseNodes: document.getElementById('phaseNodes'), phaseLadder: document.getElementById('phaseLadder'),
+    phaseBandSustain: document.getElementById('phaseBandSustain'), phaseDivider: document.getElementById('phaseDivider'), phaseBandLabel: document.getElementById('phaseBandLabel'),
+    crossMarker: document.getElementById('crossMarker'), valueCrossMarker: document.getElementById('valueCrossMarker'),
+    valueNote: document.getElementById('valueNote'), thresholdStatus: document.getElementById('thresholdStatus'),
+    groundworkLadder: document.getElementById('groundworkLadder'),
+    dotB: document.getElementById('dotB'), dotP: document.getElementById('dotP'), dotV: document.getElementById('dotV'),
+    rPlan: document.getElementById('r-plan'), rValue: document.getElementById('r-value'), rGap: document.getElementById('r-gap'),
+    fFlagged: document.getElementById('f-flagged'), fPlan: document.getElementById('f-plan'),
+    fPlanRes: document.getElementById('f-plan-res'), fBaseRes: document.getElementById('f-base-res'), fGapRes: document.getElementById('f-gap-res'),
+    fThr: document.getElementById('f-thr-res'), fPhases: document.getElementById('f-phases'),
+    fPitfalls: document.getElementById('f-pitfalls')
+  };
+  var STAGE_ABBR = { pre: 'Precontempl.', con: 'Contempl.', prp: 'Preparation', act: 'Action / Maintenance' };
+  // fully spelled-out stage names — used in the emailed report, which must read standalone with no abbreviations
+  var STAGE_FULL = { pre: 'Precontemplation', con: 'Contemplation', prp: 'Preparation', act: 'Action / Maintenance' };
+
+  // Plain-English pitfalls write-up for the emailed report — no jargon, no abbreviations, shareable as-is.
+  function buildPitfallsReport(planIds) {
+    if (!planIds.length) return '(No sequence was built, so there are no pitfalls to list yet.)';
+    var sched = scheduleOf(planIds), lines = [];
+    lines.push('WHAT MOST TEAMS UNDERESTIMATE: COMMON PITFALLS IN YOUR SEQUENCE');
+    lines.push('');
+    lines.push('Each intervention you chose carries a trap most teams walk into, and a condition it quietly depends on. In order, this is the groundwork your team owns.');
+    lines.push('');
+    planIds.forEach(function (id, i) {
+      var p = PLAY_BY_ID[id], c = CAVEATS[id], e = sched[i];
+      var span = 'Weeks ' + e.start + (e.end > e.start ? '-' + e.end : '');
+      lines.push((i + 1) + '. ' + p.name + '  (' + span + ')');
+      lines.push('   The pitfall: ' + c.risk);
+      lines.push('   What it depends on: ' + c.prereq);
+      lines.push('');
+    });
+    lines.push('This preview names the traps. The full engagement sequences them against your real data, the resistance a model cannot show, and the systems that keep the change from decaying.');
+    return lines.join('\n');
+  }
+
+  // ===== the closing read: specific to THIS plan =====
+  // Names what actually carried the sequence (using the real milestone weeks and opening move), then
+  // surfaces up to three distinctive, actionable ways the SAME plays — reordered — would land harder.
+  // Every line keys off the actual plan: no generic copy.
+  function planCloser(planIds, res, ctx) {
+    var sched = scheduleOf(planIds);
+    var pos = {}, startOf = {};
+    planIds.forEach(function (id, i) { pos[id] = i; });
+    sched.forEach(function (e) { startOf[e.id] = e.start; });
+    var M = res.milestones;
+    function has(id) { return pos[id] !== undefined; }
+    function nt(id) { return res.notes[id] || {}; }
+    function landedId(id) { return has(id) && !nt(id).muted; }
+    function nm(id) { return PLAY_BY_ID[id].name; }
+    function wkOf(id) { return startOf[id]; }
+    function andList(ids) { return ids.map(nm).join(ids.length > 2 ? ', ' : ' and '); }
+
+    var endAdopt = Math.round(res.series[WEEKS]), endVal = Math.round(res.valueSeries[WEEKS]);
+
+    // ---- distinctive improvement insights, most valuable first ----
+    var tips = [];
+
+    // Executive sponsorship — the ceiling on how far change spreads. Won directly, earned bottom-up, or missing.
+    if (!has('sponsor')) {
+      if (res.sponsorEarned) {
+        tips.push('<strong>No executive sponsorship up front — but the plan earned it.</strong> Proof plus active managers carried adoption far enough that sponsorship was won on demonstrated results. That bottom-up route is real, but it runs under a ceiling until the win lands, so it’s slower; leading with a visible, funded sponsor gets there sooner.');
+      } else {
+        tips.push('<strong>No executive sponsorship, and the plan hasn’t earned it.</strong> Until sponsorship is active the model caps every segment’s ceiling, so the curve can climb but not cross. Two routes open it: add a visible, funded sponsor at the top (fastest), or earn it bottom-up — seed real proof and put managers in the channel so a climbing, demonstrated win pulls sponsorship in.');
+      }
+    } else if (pos.sponsor > 0) {
+      tips.push('<strong>Executive sponsorship ran at week ' + wkOf('sponsor') + ', after ' + andList(planIds.slice(0, pos.sponsor)) + '.</strong> It’s the gate the rest depend on, so everything ahead of it worked without the air cover it grants. Lead with it and those plays compound instead of pushing uphill.');
+    }
+
+    // Proof before the plays that borrow its credibility.
+    var proofDeps = ['peer', 'whole', 'inaction'].filter(function (id) {
+      return has(id) && has('proof') && pos[id] < pos.proof;
+    });
+    if (proofDeps.length) {
+      tips.push('<strong>' + andList(proofDeps) + ' ran before Proof Seeding.</strong> Each stands on a visible early win that didn’t exist yet, so it lands weaker than it should. Seed proof first, then let them build on it.');
+    } else if (!has('proof') && (has('peer') || has('inaction'))) {
+      tips.push('<strong>No Proof Seeding, yet plays that need peer proof are in the mix.</strong> Peer and social-norm moves borrow their credibility from a real first win, and without one they read as a vendor pitch. Add a proof step with your innovators early.');
+    }
+
+    // Capability — reach without the skill to convert it into output.
+    if (!has('build')) {
+      tips.push('<strong>No Capability Build.</strong> Adoption reaches ' + endAdopt + '% but value realized ends at ' + endVal + '%. That gap is people logging in without the skill to turn usage into output. Role-based capability is the single biggest driver of real results.');
+    }
+
+    // Manager-as-Channel placed late — it amplifies everything AFTER it, so late placement wastes it.
+    if (landedId('manager') && pos.manager > Math.floor(planIds.length / 2) && (planIds.length - 1 - pos.manager) <= 1) {
+      tips.push('<strong>Manager-as-Channel landed at week ' + wkOf('manager') + ', near the end.</strong> It multiplies every play that follows it, but here almost nothing does. Moved early, it would amplify the whole sequence behind it.');
+    }
+
+    // Sustainment fired before the sustain phase and couldn’t land.
+    var earlySust = planIds.filter(function (id) { return nt(id).muted && nt(id).reason === 'timing'; });
+    if (earlySust.length) {
+      tips.push('<strong>' + andList(earlySust) + ' institutionalized before adoption was real enough, so it didn’t land.</strong> Codifying a behavior that barely exists reads as theater; run these once adoption has genuinely climbed, not on a fixed date.');
+    }
+
+    // Proof-dependent play muted outright.
+    var mutedProof = planIds.filter(function (id) { return nt(id).muted && nt(id).reason === 'proof'; });
+    if (mutedProof.length) {
+      tips.push('<strong>' + andList(mutedProof) + ' deployed before the proof it needs and was muted, so it added nothing.</strong> Delay it until overall adoption clears its threshold.');
+    }
+
+    // Nothing institutionalizes the gains, though there’s room (or the plan already crossed).
+    var hasSust = planIds.some(function (id) { return PLAY_BY_ID[id].sustain && landedId(id); });
+    var weeksLeft = Math.max(0, WEEKS - planCalendarWeeks(planIds));
+    if (!hasSust && (ctx.trueEscape || weeksLeft >= 2)) {
+      tips.push('<strong>Nothing institutionalizes the gains.</strong> No Policy, Performance Criteria, or Ritual lands in the sustain phase' + (weeksLeft >= 2 ? ', and you have ' + weeksLeft + ' week' + (weeksLeft > 1 ? 's' : '') + ' free' : '') + '. Add one so the change survives the quarter after attention moves on.');
+    }
+
+    var topTips = tips.slice(0, 3);
+    var tipsHtml = topTips.length
+      ? '<div class="gw-closer-tips"><span class="gw-tips-head">Where the same sequence could land harder</span><ul>' +
+          topTips.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul></div>'
+      : '';
+
+    // ---- escaped: name what actually carried it, with the real phase weeks ----
+    if (ctx.trueEscape) {
+      var firstLanded = null;
+      for (var i = 0; i < planIds.length; i++) { if (landedId(planIds[i])) { firstLanded = planIds[i]; break; } }
+      var bits = [];
+      if (firstLanded) bits.push(nm(firstLanded) + ' opened the sequence at week ' + wkOf(firstLanded));
+      if (M.proof != null) bits.push('proof was visible by week ' + M.proof);
+      if (M.redesign != null) bits.push('the workflow was redesigned by week ' + M.redesign);
+      if (M.identity != null) bits.push('managers were coaching the shift by week ' + M.identity + ', the week the curve crossed and held');
+      var lead = 'The steps compounded: ' + bits.join('; ') + '. All five phases lit, so above the line the loop reinforces itself and the gains hold instead of decaying. The order it ran in is what carried it across.';
+      var affirm = topTips.length ? ''
+        : '<div class="gw-closer-tips"><span class="gw-tips-head">Little left to sharpen</span>' +
+          '<p class="gw-tips-clean">Sponsorship led, proof preceded the plays that lean on it, capability turned reach into value, and the gains are institutionalized. This is close to the ideal ordering.</p></div>';
+      return '<div class="gw-closer crossed">' +
+        '<div class="gw-closer-head"><span class="gw-closer-badge">✓ Escape velocity</span>Why this reached escape velocity</div>' +
+        '<p class="gw-closer-lead">' + lead + '</p>' + tipsHtml + affirm + '</div>';
+    }
+
+    // ---- not escaped: name the specific gap, then the concrete reorderings that close it ----
+    var gapLead;
+    if (ctx.phasesReached >= 5) {
+      gapLead = 'All five phases were touched, but the curve didn’t hold above the line. The order these run in is what’s still missing. ';
+    } else if (ctx.phasesReached === 0) {
+      gapLead = 'The sequence hasn’t lit its first phase: nothing yet establishes that the change is real. ';
+    } else {
+      gapLead = 'This lit ' + ctx.phasesReached + ' of 5 phases; the next, <strong>' + ctx.nextLabel + '</strong>, is what stands between it and a change that holds. ';
+    }
+    var fallback = 'Seed proof with your innovators, redesign the workflow, and equip managers to coach. Those are the phases that turn a rising line into a transformation that sticks. Push the proof-dependent or sustainment plays too soon and the chain breaks; the same interventions, in the right order, carry all five phases.';
+    return '<div class="gw-closer">' +
+      '<div class="gw-closer-head">How to reach escape velocity</div>' +
+      '<p class="gw-closer-lead">' + gapLead + (topTips.length ? '' : fallback) + '</p>' + tipsHtml + '</div>';
+  }
+
+  // ---- flag-aware leverage: given the flagged stalls and the fixed 24-week budget, which single
+  // interventions NOT already working would add the most value. Shown as the final read, always. Runs the
+  // model a few dozen times (cheap) to project the real value lift of each candidate add / swap / drop.
+  function cellLabel(key) {
+    var q = key.split('-'), seg = key;
+    SEGMENTS.forEach(function (s) { if (s.key === q[0]) seg = s.label; });
+    return seg + ' · ' + (STAGE_ABBR[q[1]] || q[1]);
+  }
+  function flagLeverage(planIds, flagged, res) {
+    if (!planIds.length) return '';
+    var base = res.valueSeries[WEEKS];
+    var flaggedKeys = Object.keys(flagged);
+    var inPlan = {}; planIds.forEach(function (id) { inPlan[id] = 1; });
+    var weeksLeft = Math.max(0, WEEKS - planCalendarWeeks(planIds));
+    function valOf(pl) { return simulate(pl).valueSeries[WEEKS]; }
+    function bestInsert(basePlan, id) {
+      var best = -Infinity, bestPlan = null;
+      for (var i = 0; i <= basePlan.length; i++) {
+        var cand = basePlan.slice(); cand.splice(i, 0, id);
+        if (planCalendarWeeks(cand) > WEEKS) continue;
+        var v = valOf(cand); if (v > best) { best = v; bestPlan = cand; }
+      }
+      return bestPlan === null ? null : { value: best, plan: bestPlan };
+    }
+    // weakest current play: the one whose removal costs the least value (or even raises it)
+    var weakest = null, weakestDrop = Infinity;
+    planIds.forEach(function (id) {
+      var d = base - valOf(planIds.filter(function (x) { return x !== id; }));
+      if (d < weakestDrop) { weakestDrop = d; weakest = id; }
+    });
+    var recs = [];
+    // a current play that is net-negative (removing it RAISES value) is the single biggest fix
+    if (weakest && weakestDrop < -0.5) recs.push({ kind: 'drop', id: weakest, gain: -weakestDrop, flagRec: false, applyPlan: planIds.filter(function (x) { return x !== weakest; }) });
+    PLAYS.forEach(function (p) {
+      if (inPlan[p.id]) return;
+      var cellsHit = p.cells.filter(function (c) { return flagged[c]; });
+      var gain = -Infinity, kind = null, out = null, applyPlan = null;
+      var a = bestInsert(planIds, p.id);              // does it fit within 24 calendar weeks anywhere (with overlap)?
+      if (a) { gain = a.value - base; kind = 'add'; applyPlan = a.plan; }
+      else if (weakest) {                              // out of calendar room → trade it for the weakest play
+        var s = bestInsert(planIds.filter(function (x) { return x !== weakest; }), p.id);
+        if (s) { gain = s.value - base; kind = 'swap'; out = weakest; applyPlan = s.plan; }
+      }
+      if (gain > 0.5) recs.push({ kind: kind, id: p.id, gain: gain, out: out, hits: cellsHit, flagRec: cellsHit.length > 0, applyPlan: applyPlan });
+    });
+    // reordering the SAME plays (no add / swap / drop) can itself lift value — verify with a small hill-climb,
+    // so we never claim "the lift is in the ordering" without checking whether a better order actually exists
+    if (planIds.length >= 2) {
+      var cur = planIds.slice(), cv = base, improved = true;
+      while (improved) {
+        improved = false;
+        for (var si = 0; si < cur.length - 1; si++) {
+          var sw = cur.slice(); var tmp = sw[si]; sw[si] = sw[si + 1]; sw[si + 1] = tmp;
+          var sv = valOf(sw); if (sv > cv + 1e-9) { cur = sw; cv = sv; improved = true; }
+        }
+        for (var ma = 0; ma < cur.length; ma++) {
+          for (var mb = 0; mb <= cur.length; mb++) {
+            var mvp = cur.slice(); var it = mvp.splice(ma, 1)[0]; mvp.splice(mb > ma ? mb - 1 : mb, 0, it);
+            var vv = valOf(mvp); if (vv > cv + 1e-9) { cur = mvp; cv = vv; improved = true; }
+          }
+        }
+      }
+      if (cv - base > 0.8 && cur.join(',') !== planIds.join(',')) {
+        recs.push({ kind: 'reorder', gain: cv - base, flagRec: false, applyPlan: cur });
+      }
+    }
+    recs.sort(function (a, b) {
+      var ad = a.kind === 'drop' ? 1 : 0, bd = b.kind === 'drop' ? 1 : 0;
+      if (ad !== bd) return bd - ad;                              // a net-negative move to drop leads
+      if (a.flagRec !== b.flagRec) return a.flagRec ? -1 : 1;     // then flag-addressing moves
+      return b.gain - a.gain;                                     // then biggest projected lift
+    });
+    var top = recs.slice(0, 2);
+    if (!top.length) {
+      return '<div class="gw-leverage"><span class="gw-lev-head">Where the untapped impact is</span>' +
+        '<p class="gw-lev-clean">Within the stalls you flagged and a fixed 24 weeks, this plan is near its value ceiling. Reordering these plays, or adding another intervention, both test out to little more here. What is left is execution.</p></div>';
+    }
+    var intro = flaggedKeys.length
+      ? 'Given the ' + flaggedKeys.length + ' stall' + (flaggedKeys.length > 1 ? 's' : '') + ' you flagged and a fixed 24-week budget, these single interventions would have added the most:'
+      : 'You haven’t flagged your stalls yet. Flag your 2–3 biggest above to make this specific. In general, the single interventions with the most untapped impact here:';
+    // relative magnitude, in words, rather than a false-precision point count
+    function mag(g) { return g >= 8 ? 'a large lift' : (g >= 3.5 ? 'a solid lift' : 'a modest lift'); }
+    function li(r, idx) {
+      var lead = idx === 0 ? 'the biggest lever here' : mag(r.gain);
+      var apply = '<button class="lev-apply" data-plan="' + r.applyPlan.join(',') + '" title="Apply this move to your plan">Apply</button>';
+      var text;
+      if (r.kind === 'reorder') {
+        text = '<strong>Reorder what you already have.</strong> The same plays in a better sequence would help, and it looks like ' + lead + '. The notes above point to which step is out of place.';
+      } else if (r.kind === 'drop') {
+        text = '<strong>Drop ' + PLAY_BY_ID[r.id].name + '.</strong> As placed it costs more trust than it adds. Removing it on its own recovers real ground (' + (idx === 0 ? 'your biggest single fix' : mag(r.gain)) + ').';
+      } else {
+        var tgt = r.flagRec ? ' It hits the <em>' + cellLabel(r.hits[0]) + '</em> stall you flagged. ' : ' ';
+        if (r.kind === 'swap') {
+          text = '<strong>Swap ' + PLAY_BY_ID[r.id].name + ' in for ' + PLAY_BY_ID[r.out].name + '.</strong>' + tgt + 'You are out of weeks, so this is a trade rather than an addition, and it looks like ' + lead + '.';
+        } else {
+          text = '<strong>Add ' + PLAY_BY_ID[r.id].name + '.</strong>' + tgt + 'It fits your ' + weeksLeft + ' free week' + (weeksLeft > 1 ? 's' : '') + ', and it looks like ' + lead + '.';
+        }
+      }
+      return '<li><span class="lev-text">' + text + '</span>' + apply + '</li>';
+    }
+    return '<div class="gw-leverage"><span class="gw-lev-head">Given your flags and 24 weeks: the biggest untapped moves</span>' +
+      '<p class="gw-lev-intro">' + intro + '</p><ul>' + top.map(function (r, idx) { return li(r, idx); }).join('') + '</ul>' +
+      '<p class="gw-lev-foot">These point a direction rather than promise a number. Whether any of them lands comes down to the people doing the work.</p></div>';
+  }
+
+  // ===== build the matrix grid =====
+  SEGMENTS.forEach(function (seg) {
+    var head = document.createElement('div');
+    head.className = 'mx-row-head';
+    head.innerHTML = '<span class="mx-seg">' + seg.label + '</span>' +
+      '<span class="mx-size"><input type="number" class="mx-size-input" data-seg="' + seg.key + '" value="' + seg.size + '" min="1" max="100" step="1" aria-label="' + seg.label + ' share of your people, percent"><span class="mx-size-suffix">% of your people</span></span>';
+    el.matrix.appendChild(head);
+    STAGES.forEach(function (stage) {
+      var cell = document.createElement('div');
+      var ckey = seg.key + '-' + stage;
+      cell.className = 'cell';
+      cell.dataset.key = ckey;
+      cell.textContent = SYMPTOMS[ckey] || STAGE_ABBR[stage];
+      cell.title = seg.label + ' · ' + STAGE_ABBR[stage];
+      cell.addEventListener('click', function () {
+        if (flagged[cell.dataset.key]) { delete flagged[cell.dataset.key]; cell.classList.remove('flagged'); }
+        else { flagged[cell.dataset.key] = true; cell.classList.add('flagged'); }
+        render();
+      });
+      el.matrix.appendChild(cell);
+    });
+  });
+
+  // editable segment sizes: retype a segment's share of your people and the model re-runs on the new weights.
+  // the four shares are capped so they never total more than 100% (you must free room elsewhere to grow one).
+  function segTotal() { return SEGMENTS.reduce(function (s, g) { return s + g.size; }, 0); }
+  function updateSegTotal() {
+    var t = segTotal(), node = document.getElementById('segTotal');
+    if (!node) return;
+    node.textContent = t;
+    node.parentNode.classList.toggle('under', t < 100);
+  }
+  el.matrix.addEventListener('input', function (e) {
+    var inp = e.target.closest('.mx-size-input'); if (!inp) return;
+    var key = inp.getAttribute('data-seg'), v = parseInt(inp.value, 10);
+    if (isNaN(v)) return;
+    var others = 0;
+    for (var i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].key !== key) others += SEGMENTS[i].size; }
+    v = Math.max(1, Math.min(100 - others, v));   // cap so the four never exceed 100%
+    for (var j = 0; j < SEGMENTS.length; j++) { if (SEGMENTS[j].key === key) SEGMENTS[j].size = v; }
+    render();
+    updateSegTotal();
+  });
+  el.matrix.addEventListener('change', function (e) {
+    var inp = e.target.closest('.mx-size-input'); if (!inp) return;   // reconcile the field to the clamped value on blur
+    var key = inp.getAttribute('data-seg');
+    for (var i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].key === key) inp.value = SEGMENTS[i].size; }
+  });
+  updateSegTotal();
+
+  // ===== build the library =====
+  var GROUPS = [
+    { key: 'O', label: 'Opportunity', desc: 'structural & social permission' },
+    { key: 'M', label: 'Motivation', desc: 'belief & desire' },
+    { key: 'C', label: 'Capability', desc: 'can they do it well' },
+    { key: 'S', label: 'Sustainment', desc: 'make the change stick' }
+  ];
+  GROUPS.forEach(function (grp) {
+    var gh = document.createElement('div');
+    gh.className = 'lib-group-head' + (grp.key === 'S' ? ' sustain' : '');
+    gh.innerHTML = '<span class="lib-group-name">' + grp.label + '</span> <span class="lib-group-desc">' + grp.desc + '</span>';
+    el.lib.appendChild(gh);
+    PLAYS.filter(function (p) { return p.group === grp.key; }).forEach(function (p) {
+      var card = document.createElement('div');
+      card.className = 'play-card' + (p.sustain ? ' sustain-card' : '') + (p.weeks >= 4 ? ' long-play' : '');
+      card.dataset.id = p.id;
+      var dur = p.weeks + (p.weeks === 1 ? ' wk' : ' wks');
+      var sustainTag = p.sustain ? '<span class="play-sustain-hint">↳ Belongs in the sustain phase: needs real adoption first</span>' : '';
+      card.innerHTML =
+        '<span class="play-add"></span>' +
+        '<div class="play-name">' + p.name + '<span class="play-weeks' + (p.weeks >= 4 ? ' long' : '') + '">' + dur + '</span></div>' +
+        '<div class="play-blurb">' + p.blurb + '</div>' +
+        '<div class="play-framework">' + p.framework + '</div>' +
+        '<span class="play-match">↳ Targets a stalled cell you flagged</span>' +
+        sustainTag;
+      card.addEventListener('click', function () {
+        var i = plan.indexOf(p.id);
+        if (i !== -1) { plan.splice(i, 1); render(); return; }   // already in plan → click removes it
+        if (planCalendarWeeks(plan.concat([p.id])) > WEEKS) return;   // adding it would overrun the 24 calendar weeks
+        plan.push(p.id);
+        render();
+      });
+      el.lib.appendChild(card);
+    });
+  });
+
+  // ===== render =====
+  function render() {
+    // flag count
+    var flagKeys = Object.keys(flagged);
+    el.flagCount.textContent = flagKeys.length;
+
+    // simulate
+    var res = simulate(plan);
+    var base = simulate([]);
+
+    // week budget — now CALENDAR time (last completion), since overlap lets plays share weeks.
+    // effort = total person-weeks; the difference is what overlap saved you.
+    var weeksUsed = res.totalWeeks;
+    var effortUsed = planEffortWeeks(plan);
+    var saved = Math.max(0, effortUsed - weeksUsed);
+    var planFull = weeksUsed >= WEEKS;
+    el.planBudget.textContent = weeksUsed + ' / ' + WEEKS + ' weeks';
+    el.planBudget.classList.toggle('full', planFull);
+    el.budgetFill.style.width = Math.min(100, (weeksUsed / WEEKS) * 100).toFixed(1) + '%';
+    el.budgetFill.classList.toggle('full', planFull);
+    if (el.planCompress) {
+      el.planCompress.textContent = plan.length
+        ? weeksUsed + ' calendar · ' + effortUsed + ' effort-weeks' + (saved > 0 ? ' · ' + saved + ' saved by overlap' : '')
+        : '';
+    }
+
+    // library: added-state + "matches a flagged cell" marker + out-of-budget lock.
+    // a card is locked only if adding THAT play would overrun the 24 calendar weeks (overlap may still fit it).
+    Array.prototype.forEach.call(el.lib.children, function (card) {
+      if (!card.dataset.id) return;
+      var pl = PLAY_BY_ID[card.dataset.id];
+      var added = plan.indexOf(card.dataset.id) !== -1;
+      var matches = pl.cells.some(function (c) { return flagged[c]; });
+      card.classList.toggle('matches', matches);
+      card.classList.toggle('added', added);
+      card.classList.toggle('locked', !added && planCalendarWeeks(plan.concat([card.dataset.id])) > WEEKS);
+    });
+
+    // plan list — each play shows the span it occupies (Wk start–end)
+    el.planList.innerHTML = '';
+    el.planEmpty.style.display = plan.length ? 'none' : 'block';
+    el.planClear.style.display = plan.length ? 'inline' : 'none';
+    plan.forEach(function (id, i) {
+      var p = PLAY_BY_ID[id], n = res.notes[id] || {};
+      var li = document.createElement('li');
+      li.className = 'plan-item';
+      li.setAttribute('data-i', i);
+      var mp = n.muted ? { late: [], absent: [] } : missingPrereqsLive(plan, i, n.overallAtStart);
+      var badge = '';
+      if (n.muted) {
+        badge = n.reason === 'timing'
+          ? '<span class="plan-badge muted">⚠ too early: institutionalize only once adoption is real</span>'
+          : (n.reason === 'overflow'
+            ? '<span class="plan-badge muted">⚠ finishes past week 24, never lands, trim the plan</span>'
+            : '<span class="plan-badge muted">⚠ deployed before its proof exists, muted</span>');
+      } else if (mp.late.length) {
+        badge = '<span class="plan-badge warn">⧗ out of order, runs before ' + mp.late.join(' &amp; ') + '</span>';
+      } else if (mp.absent.length) {
+        badge = '<span class="plan-badge warn">⧗ missing foundation: ' + mp.absent.join(' &amp; ') + '</span>';
+      } else if (n.hits > 0) {
+        badge = '<span class="plan-badge good">✓ hits ' + n.hits + ' flagged cell' + (n.hits > 1 ? 's' : '') + '</span>';
+      }
+      var span = n.start ? ('Wk ' + n.start + (n.end > n.start ? '–' + n.end : '')) : 'Wk —';
+      li.innerHTML =
+        '<span class="plan-drag" aria-hidden="true">⠿</span>' +
+        '<span class="plan-week">' + span + '</span>' +
+        '<span class="plan-name">' + p.name + badge + '</span>' +
+        '<button class="plan-rm" data-act="rm" data-i="' + i + '" aria-label="Remove">✕</button>';
+      el.planList.appendChild(li);
+    });
+
+    // timeline strip — a Gantt grouped by workstream (the COM-B intervention categories). Each play is a bar
+    // on a shared 24-week track with a readable name in the left column, so overlaps and staggers are legible.
+    if (el.planTimeline) {
+      if (!plan.length) {
+        el.planTimeline.innerHTML = '';
+      } else {
+        var TLW = WEEKS;   // track spans weeks 1..24
+        function barRow(id, i) {
+          var p = PLAY_BY_ID[id], n = res.notes[id] || {};
+          var s = n.start || 1, e = n.end || s;
+          var vizEnd = Math.min(e, WEEKS);
+          var left = ((s - 1) / TLW) * 100;
+          var width = Math.max(2.5, ((vizEnd - (s - 1)) / TLW) * 100);
+          var mods = (n.muted ? ' broke' : (p.sustain ? ' sustain' : '')) + (e > WEEKS ? ' overruns' : '');
+          var name = SHORT[id] || p.name;
+          // only label the bar itself when it's wide enough to read; the name column + tooltip carry the rest
+          var spanTxt = width >= 15 ? ('wk ' + s + (e > s ? '–' + e : '')) : '';
+          return '<div class="ptl-row" title="' + (i + 1) + '. ' + p.name + ' · weeks ' + s + '–' + e + '">' +
+                   '<span class="ptl-name"><b>' + (i + 1) + '</b> ' + name + '</span>' +
+                   '<span class="ptl-track">' +
+                     '<span class="ptl-bar' + mods + '" style="left:' + left.toFixed(1) + '%;width:' + width.toFixed(1) + '%;">' +
+                       (spanTxt ? '<span class="ptl-span">' + spanTxt + '</span>' : '') +
+                     '</span>' +
+                   '</span>' +
+                 '</div>';
+        }
+        // group by workstream, preserving plan order within each; skip empty streams
+        var blocks = GROUPS.map(function (grp) {
+          var ids = plan.filter(function (id) { return PLAY_BY_ID[id].group === grp.key; });
+          if (!ids.length) return '';
+          var rows = ids.map(function (id) { return barRow(id, plan.indexOf(id)); }).join('');
+          return '<div class="ptl-stream ' + (grp.key === 'S' ? 'sustain' : '') + '">' + grp.label +
+                   '<i>' + grp.desc + '</i></div>' + rows;
+        }).join('');
+        el.planTimeline.innerHTML =
+          '<div class="ptl-head"><span>Timeline · by workstream</span><span class="ptl-axis-note">bars overlap where plays run in parallel</span></div>' +
+          '<div class="ptl-body">' + blocks + '</div>' +
+          '<div class="ptl-axis"><span>1</span><span>6</span><span>12</span><span>18</span><span>24</span></div>';
+      }
+    }
+
+    // sustain-phase band — positioned where THIS plan's adoption matured enough to institutionalize, not a
+    // fixed week. Earlier for a fast/small transformation, later for a large one; hidden if it never matures.
+    (function () {
+      var sw = res.sustainStartWeek;
+      if (el.phaseBandSustain && el.phaseDivider && el.phaseBandLabel) {
+        if (sw === null || sw === undefined) {
+          el.phaseBandSustain.setAttribute('width', '0');
+          el.phaseDivider.style.display = 'none';
+          el.phaseBandLabel.style.display = 'none';
+        } else {
+          var sx = x(sw);
+          el.phaseBandSustain.setAttribute('x', sx.toFixed(1));
+          el.phaseBandSustain.setAttribute('width', Math.max(0, (PADL + PW) - sx).toFixed(1));
+          el.phaseDivider.style.display = '';
+          el.phaseDivider.setAttribute('x1', sx.toFixed(1));
+          el.phaseDivider.setAttribute('x2', sx.toFixed(1));
+          el.phaseBandLabel.style.display = '';
+          var midx = Math.min(PADL + PW - 4, (sx + PADL + PW) / 2);
+          el.phaseBandLabel.setAttribute('x', midx.toFixed(1));
+        }
+      }
+    })();
+
+    // curves
+    el.curveB.setAttribute('d', pathFrom(base.series));
+    el.curveP.setAttribute('d', pathFrom(res.series));
+    el.curveV.setAttribute('d', pathFrom(res.valueSeries));
+    var area = pathFrom(res.series) + ' ' +
+      base.series.slice().reverse().map(function (v, k) {
+        var w = WEEKS - k; return 'L' + x(w).toFixed(1) + ' ' + y(v).toFixed(1);
+      }).join(' ') + ' Z';
+    el.gapArea.setAttribute('d', area);
+
+    // play markers — a red break glyph where a play fires out of order (doesn't land / won't compound).
+    // each carries a subtle step number that maps to the plan detail below.
+    el.markers.innerHTML = res.markers.map(function (m) {
+      var mx = x(m.week).toFixed(1), my = y(res.series[m.week]).toFixed(1);
+      var broke = res.notes[m.id] && res.notes[m.id].muted;
+      var idx = plan.indexOf(m.id), step = idx + 1;
+      var num = '<text class="play-num" x="' + (x(m.week) + 5).toFixed(1) + '" y="' + (y(res.series[m.week]) + 12).toFixed(1) + '" text-anchor="start">' + step + '</text>';
+      var body;
+      if (broke) {
+        body = '<line class="play-marker break" x1="' + mx + '" y1="20" x2="' + mx + '" y2="340"></line>' +
+               '<text class="break-x" x="' + mx + '" y="' + (y(res.series[m.week]) + 4).toFixed(1) + '" text-anchor="middle">✕</text>' + num;
+      } else {
+        body = '<line class="play-marker" x1="' + mx + '" y1="20" x2="' + mx + '" y2="340"></line>' +
+               '<circle class="play-dot" cx="' + mx + '" cy="' + my + '" r="3"></circle>' + num;
+      }
+      // wrap in a clickable group with a generous transparent hit target → scrolls to the step detail below
+      return '<g class="play-mk" data-step="' + idx + '"><title>Step ' + step + ': click for detail</title>' + body +
+             '<circle class="play-hit" cx="' + mx + '" cy="' + my + '" r="13"></circle></g>';
+    }).join('');
+
+    // transformation-phase nodes: numbered pins on the plan curve where each threshold is first reached
+    var nodeStack = {};
+    el.phaseNodes.innerHTML = MILESTONES.map(function (m, idx) {
+      var wk = res.milestones[m.key];
+      if (wk === null || wk === undefined) return '';
+      var nx = x(wk), baseY = y(res.series[wk]);
+      var slot = Math.round(nx / 24);
+      var stack = nodeStack[slot] || 0; nodeStack[slot] = stack + 1;
+      var ny = baseY - 16 - stack * 17;
+      if (ny < 24) ny = 24 + stack * 15;
+      return '<line class="phase-node-line" x1="' + nx.toFixed(1) + '" y1="' + ny.toFixed(1) + '" x2="' + nx.toFixed(1) + '" y2="' + baseY.toFixed(1) + '"></line>' +
+             '<circle class="phase-node" cx="' + nx.toFixed(1) + '" cy="' + ny.toFixed(1) + '" r="8.5"></circle>' +
+             '<text class="phase-node-num" x="' + nx.toFixed(1) + '" y="' + (ny + 3.2).toFixed(1) + '" text-anchor="middle">' + (idx + 1) + '</text>';
+    }).join('');
+
+    var endP = res.series[WEEKS], endB = base.series[WEEKS];
+    el.dotP.setAttribute('cx', x(WEEKS)); el.dotP.setAttribute('cy', y(endP));
+    el.dotV.setAttribute('cx', x(WEEKS)); el.dotV.setAttribute('cy', y(res.valueSeries[WEEKS]));
+    el.dotB.setAttribute('cx', x(WEEKS)); el.dotB.setAttribute('cy', y(endB));
+
+    var rP = Math.round(endP), rB = Math.round(endB), rG = Math.round(endP - endB), rV = Math.round(res.valueSeries[WEEKS]);
+    el.rPlan.textContent = rP + '%';
+    el.rValue.textContent = rV + '%';
+    el.rGap.textContent = '+' + rG;
+
+    // outcomes inflection — mark where realized value overtakes adoption. Past ~75% adoption and the
+    // self-sustaining line, value is driven by outcomes rather than headcount, so the value line rises
+    // above the plan line. A green node + label sits at the crossover; a dynamic note explains it below.
+    var vcw = res.valueCrossWeek;
+    if (vcw !== null && vcw !== undefined) {
+      var vcx = x(vcw), vcy = y(res.valueSeries[vcw]);
+      var vtx = vcx > 540 ? vcx - 8 : vcx + 8, vanch = vcx > 540 ? 'end' : 'start';
+      el.valueCrossMarker.innerHTML =
+        '<circle class="vcross-dot" cx="' + vcx.toFixed(1) + '" cy="' + vcy.toFixed(1) + '" r="4.5"></circle>' +
+        '<text class="vcross-flag" x="' + vtx.toFixed(1) + '" y="' + (vcy - 9).toFixed(1) + '" text-anchor="' + vanch + '">Value overtakes adoption · wk ' + vcw + '</text>';
+    } else {
+      el.valueCrossMarker.innerHTML = '';
+    }
+    if (!plan.length) {
+      el.valueNote.style.display = 'none';
+      el.valueNote.innerHTML = '';
+    } else if (vcw !== null && vcw !== undefined) {
+      el.valueNote.style.display = '';
+      el.valueNote.className = 'value-note crossed';
+      el.valueNote.innerHTML = '<strong>Value has outrun adoption.</strong> Around week ' + vcw + ', with adoption past ~75% and the change self-sustaining, realized value crossed above the adoption line (' + rV + '% value against ' + rP + '% adoption at week 24). Past this inflection the return is no longer about how many people use the tool but how well they use it: skill deepens, the redesigned workflow pays off, and the output standard is institutionalized. The organization gets more out than the headcount alone would predict.';
+    } else {
+      el.valueNote.style.display = '';
+      el.valueNote.className = 'value-note';
+      el.valueNote.innerHTML = '<strong>Value still trails adoption.</strong> Realized value ends at ' + rV + '% against ' + rP + '% adoption: reach is running ahead of outcomes. Value only climbs above adoption past the inflection — adoption over ~75%, the change self-sustaining, and the capability, workflow redesign, and reinforcement underneath it in place. Below that, usage outpaces the results it produces.';
+    }
+
+    // phase ladder — the five thresholds a transformation crosses, lit as your sequence reaches them
+    var reachedCount = 0;
+    el.phaseLadder.innerHTML = MILESTONES.map(function (m, idx) {
+      var wk = res.milestones[m.key];
+      var reached = wk !== null && wk !== undefined;
+      if (reached) reachedCount++;
+      return '<div class="phase-pill ' + (reached ? 'reached' : 'pending') + '">' +
+        '<span class="phase-pip">' + (reached ? '✓' : (idx + 1)) + '</span>' +
+        '<div class="phase-body">' +
+          '<div class="phase-label">' + m.label + '</div>' +
+          '<div class="phase-when">' + (reached ? 'Reached · wk ' + wk : 'Not yet') + '</div>' +
+          '<div class="phase-note">' + m.note + '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    // pitfalls: the full plain-English write-up rides along in the emailed report; the page shows only a teaser
+    el.fPitfalls.value = buildPitfallsReport(plan);
+    if (!plan.length) {
+      el.teaserLine.innerHTML = 'Build a sequence above and your report will include a plain-English read on the common pitfalls hiding inside it: the traps most teams underestimate, written to read on its own and share with your team.';
+    } else {
+      var pitNames = plan.map(function (id) { return PLAY_BY_ID[id].name; }).join(', ');
+      el.teaserLine.innerHTML = 'A plain-English walk-through of the <strong>' + plan.length + ' common pitfall' + (plan.length > 1 ? 's' : '') + '</strong> in your sequence (' + pitNames + ') and the prerequisite each one depends on. Written to read on its own and be shared internally.';
+    }
+
+    // escape velocity == reaching Phase 4 (Work identity reimagined): the adoption curve holds above the
+    // line AND the transformation underneath it (proof, redesign, managers coaching) actually happened.
+    var landed = plan.filter(function (id) { return !(res.notes[id] && res.notes[id].muted); }).length;
+    var adoptionCrossed = res.crossedWeek;            // curve sustained above the line
+    var identityWeek = res.milestones.identity;        // Phase 4 reached (in order)
+    var trueEscape = adoptionCrossed !== null && identityWeek !== null;
+    // how far the ordered phase progression got, and which phase is next
+    var PHASE_ORDER = ['vision', 'proof', 'redesign', 'identity', 'outcome'];
+    var phasesReached = 0;
+    while (phasesReached < PHASE_ORDER.length && res.milestones[PHASE_ORDER[phasesReached]] !== null) phasesReached++;
+    var nextKey = phasesReached < PHASE_ORDER.length ? PHASE_ORDER[phasesReached] : null;
+    var nextLabel = ''; MILESTONES.forEach(function (m) { if (m.key === nextKey) nextLabel = m.label; });
+    var MISSING = {
+      vision:   'no guiding coalition is visibly behind it yet — neither an executive sponsor nor a proof-plus-managers grassroots base — so the change still reads as optional',
+      proof:    'there\'s no visible early-adopter win for the majority\'s belief to stand on',
+      redesign: 'the workflow itself hasn\'t been redesigned: adoption is riding on the old process, so it\'s a faster old way, not a new one',
+      identity: 'managers aren\'t yet coaching the shift from using the tool to exercising judgment: usage crossed the line, but work identity didn\'t',
+      outcome:  'the value isn\'t durable yet'
+    };
+    var ts = el.thresholdStatus, thrLabel;
+    // a plan with no Executive Sponsorship play that still lifted the cap did it the hard way: it earned it.
+    var earnedTag = (res.sponsorEarned && plan.indexOf('sponsor') === -1)
+      ? ' <em>Sponsorship here was earned bottom-up: proof and active managers demonstrated results that won it, with no executive mandate up front — the slower, harder route.</em>' : '';
+
+    // escape-velocity flag on the curve — only when the transformation (not just adoption) crossed
+    if (trueEscape) {
+      var cwv = res.series[identityWeek], cx = x(identityWeek), cy = y(cwv), tx, anch;
+      if (cx > 610) { tx = 696; anch = 'end'; }
+      else if (cx < 96) { tx = 48; anch = 'start'; }
+      else { tx = cx; anch = 'middle'; }
+      el.crossMarker.innerHTML =
+        '<line class="cross-line" x1="' + cx.toFixed(1) + '" y1="20" x2="' + cx.toFixed(1) + '" y2="340"></line>' +
+        '<circle class="cross-dot" cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="5"></circle>' +
+        '<text class="cross-flag" x="' + tx.toFixed(1) + '" y="14" text-anchor="' + anch + '">Escape velocity · wk ' + identityWeek + '</text>';
+    } else {
+      el.crossMarker.innerHTML = '';
+    }
+
+    if (!plan.length) {
+      ts.className = 'threshold-status liminal';
+      ts.innerHTML = '<span class="ts-head">Below the line</span>Build a sequence and watch whether it gathers enough inertia to cross into self-sustaining transformation, or stalls in the liminal phase below.';
+      thrLabel = 'no plan yet';
+    } else if (trueEscape) {
+      ts.className = 'threshold-status crossed';
+      ts.innerHTML = '<span class="ts-head">Escape velocity · week ' + identityWeek + '</span>' + landed + ' of ' + plan.length + ' interventions landed cleanly, all five phases through <strong>Work identity reimagined</strong> are lit, and the curve crossed the line and held. The belief flips from deployment to transformation. The role itself is redrawn: what AI replaces, what it augments, and what must stay durably human. Managers coach that judgment instead of enforcing compliance, and adoption reinforces itself. The seams close. This is no longer a project you manage, it is a change that holds on its own.' + earnedTag;
+      thrLabel = 'ESCAPE VELOCITY · work identity reimagined & sustained at week ' + identityWeek + ' (' + landed + '/' + plan.length + ' plays landed)' + (earnedTag ? ' · sponsorship earned bottom-up' : '');
+    } else if (adoptionCrossed !== null) {
+      // the curve crosses, but the transformation phases haven't completed — the fragile, misleading case
+      ts.className = 'threshold-status fragile';
+      ts.innerHTML = '<span class="ts-head">Adoption crossed the line, but the transformation hasn\'t</span>Your curve holds above the self-sustaining line, yet the change underneath it hasn\'t caught up: you\'ve reached <strong>' + phasesReached + ' of 5 phases</strong>, and the next, <strong>' + nextLabel + '</strong>, hasn\'t happened because ' + (MISSING[nextKey] || 'a phase is still open') + '. Above-the-line adoption without it is the fragile kind (a faster old process, not a reimagined one) that slips back the moment attention moves. Light that phase and the crossing becomes real escape velocity.' + earnedTag;
+      thrLabel = 'adoption crossed but stalled at phase ' + phasesReached + ' of 5 (' + (nextKey || '') + ' not reached)';
+    } else if (res.touched) {
+      ts.className = 'threshold-status fragile';
+      ts.innerHTML = '<span class="ts-head">You touched the line, then slipped back</span>Momentum without inertia. A play or two is landing out of order, so the gain doesn\'t hold. The passage isn\'t complete. Transformation this fragile slides back to the old workflow the moment attention moves.';
+      thrLabel = 'touched threshold but not sustained';
+    } else {
+      ts.className = 'threshold-status liminal';
+      ts.innerHTML = '<span class="ts-head">Still in the liminal phase</span>Usage exists, but below this line the change is reversible: a faster tool on the old process, not a transformation. This is where deployment narratives stall and “Pilots and Passengers” harden. You have not yet built the inertia to make the change self-sustaining.';
+      thrLabel = 'below threshold, still liminal';
+    }
+
+    // left-side groundwork ladder: what to get right at each step, in order, for the next to land
+    if (!plan.length) {
+      el.groundworkLadder.innerHTML = '<div class="gw-empty">Build a sequence above and the groundwork for each step appears here, in order, with any break in the chain flagged.</div>';
+    } else {
+      var steps = plan.map(function (id, i) {
+        var p = PLAY_BY_ID[id], n = res.notes[id] || {}, broke = !!n.muted;
+        var mp = broke ? { late: [], absent: [] } : missingPrereqsLive(plan, i, n.overallAtStart);
+        var misordered = mp.late.length > 0 || mp.absent.length > 0;
+        var absentOnly = mp.absent.length > 0 && mp.late.length === 0;
+        var next = i < plan.length - 1 ? PLAY_BY_ID[plan[i + 1]] : null;
+        var tail;
+        if (broke) {
+          tail = n.reason === 'timing'
+            ? '<div class="gw-break-note">✕ Too early: institutionalization only lands once adoption is real enough to lock in — which arrives sooner in a fast transformation and later in a large one, not on a fixed date. Codifying a change nobody lives yet reads as theater, spending trust the later steps need.</div>'
+            : (n.reason === 'overflow'
+              ? '<div class="gw-break-note">✕ Runs past week 24: even with overlap the plan can\'t fit this in the window, so its benefit never lands. Trim or reorder so it completes inside the 24 weeks.</div>'
+              : '<div class="gw-break-note">✕ Out of order: this runs before the proof it needs, so it can\'t land, and pushing people who aren\'t ready breeds quiet resistance, which drops how they respond to every move after.</div>');
+        } else if (misordered) {
+          var parts = [];
+          if (mp.late.length) parts.push('leans on “' + mp.late.join('” and “') + ',” which you\'ve placed later');
+          if (mp.absent.length) parts.push('runs without “' + mp.absent.join('” and “') + ',” which isn\'t in your plan');
+          tail = '<div class="gw-warn-note">⧗ Foundation not in place: this ' + parts.join('; and it ') + '. It still lands, but weaker, and a visible misfire spends trust, so the moves after it land weaker too.</div>';
+        } else if (next) {
+          tail = '<div class="gw-carry">→ Done right, this is what lets “' + next.name + '” land next.</div>';
+        } else {
+          tail = '<div class="gw-carry">→ Final move: the change now holds on its own.</div>';
+        }
+        var gwSpan = n.start ? ('Week ' + n.start + (n.end > n.start ? '–' + n.end : '')) : 'Week —';
+        var state = broke ? 'broke' : (misordered ? 'misordered' : 'landed');
+        var pip = broke ? '✕' : (misordered ? '⧗' : (i + 1));
+        // out-of-order plays invert the organizational outcome: show the specific adverse result, in red.
+        var offOrder = broke || misordered;
+        var adv = adverseFor(id, mp);
+        var valEyebrow, valHead, valBody;
+        if (offOrder && adv) {
+          valEyebrow = broke
+            ? (n.reason === 'timing' ? 'Adverse impact: fired too early' : (n.reason === 'overflow' ? 'Adverse impact: runs past week 24' : 'Adverse impact: it doesn’t land'))
+            : (absentOnly ? 'Adverse impact: missing its foundation' : 'Adverse impact: runs out of order');
+          valHead = adv.head;
+          valBody = adv.body;
+        } else {
+          valEyebrow = 'Outcome for the organization';
+          valHead = VALUE_OUTCOME[id] || '';
+          valBody = VALUE_IMPACT[id] || '';
+        }
+        return '<div class="gw-step ' + state + '" data-step="' + i + '">' +
+          '<span class="gw-pip">' + pip + '</span>' +
+          '<div class="gw-main">' +
+            '<div class="gw-week">' + gwSpan + ' · Step ' + (i + 1) + '</div>' +
+            '<div class="gw-play">' + p.name + '</div>' +
+            '<div class="gw-task"><strong>Get right:</strong> ' + GROUNDWORK[id] + '</div>' +
+            tail +
+          '</div>' +
+          '<div class="gw-value' + (offOrder && adv ? ' adverse' : '') + '">' +
+            '<div class="gw-value-eyebrow">' + valEyebrow + '</div>' +
+            '<div class="gw-value-head">' + valHead + '</div>' +
+            '<div class="gw-value-body">' + valBody + '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      // closing comment: specific to THIS plan — what carried it (or the gap), plus how it could be sharper
+      var closer = planCloser(plan, res, {
+        trueEscape: trueEscape, adoptionCrossed: adoptionCrossed,
+        phasesReached: phasesReached, nextLabel: nextLabel, nextKey: nextKey
+      });
+      var leverage = flagLeverage(plan, flagged, res);
+      el.groundworkLadder.innerHTML = steps + closer + leverage;
+    }
+
+    // hidden form fields
+    el.fFlagged.value = flagKeys.length ? flagKeys.join(', ') : '(none flagged)';
+    el.fPlan.value = plan.length ? plan.map(function (id, i) {
+      var nn = res.notes[id] || {};
+      var sp = nn.start ? ('wk ' + nn.start + (nn.end > nn.start ? '–' + nn.end : '')) : 'wk ?';
+      return (i + 1) + '. ' + PLAY_BY_ID[id].name + ' (' + sp + ')';
+    }).join('  |  ') : '(empty)';
+    el.fPlanRes.value = rP + '%'; el.fBaseRes.value = rB + '%'; el.fGapRes.value = '+' + rG + ' points';
+    el.fThr.value = thrLabel;
+    el.fPhases.value = MILESTONES.map(function (m) {
+      var wk = res.milestones[m.key];
+      return m.label + ': ' + (wk !== null && wk !== undefined ? 'wk ' + wk : 'not reached');
+    }).join('  |  ');
+  }
+
+  // plan controls — remove (delegated)
+  el.planList.addEventListener('click', function (e) {
+    var btn = e.target.closest('button'); if (!btn) return;
+    if (btn.dataset.act === 'rm') { plan.splice(+btn.dataset.i, 1); render(); }
+  });
+  el.planClear.addEventListener('click', function () { plan = []; render(); });
+
+  // click a play dot on the curve → scroll to that step's detail below and flash it
+  el.markers.addEventListener('click', function (e) {
+    var g = e.target.closest('[data-step]'); if (!g) return;
+    var target = el.groundworkLadder.querySelector('.gw-step[data-step="' + g.getAttribute('data-step') + '"]');
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    target.classList.add('gw-flash');
+    setTimeout(function () { target.classList.remove('gw-flash'); }, 1600);
+  });
+
+  // one-click apply for a leverage recommendation: adopt the exact plan the model projected for that move
+  el.groundworkLadder.addEventListener('click', function (e) {
+    var btn = e.target.closest('.lev-apply'); if (!btn) return;
+    var ids = btn.getAttribute('data-plan');
+    plan = ids ? ids.split(',').filter(Boolean) : [];
+    render();
+    if (el.groundworkLadder.scrollIntoView) el.groundworkLadder.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  // collapse the per-step "Outcome for the organization" column by default; toggle keeps the ladder scannable
+  (function () {
+    var panel = document.querySelector('.groundwork'), tog = document.getElementById('gwOutcomesToggle');
+    if (!panel || !tog) return;
+    tog.addEventListener('click', function () {
+      var on = panel.classList.toggle('show-outcomes');
+      tog.setAttribute('aria-expanded', on ? 'true' : 'false');
+      tog.textContent = on ? 'Hide organizational outcomes' : 'Show organizational outcomes';
+    });
+  })();
+
+  // plan reorder — drag to slide (pointer events: mouse + touch)
+  var drag = null;
+  el.planList.addEventListener('pointerdown', function (e) {
+    if (e.button && e.button !== 0) return;          // primary button / touch only
+    var li = e.target.closest('.plan-item'); if (!li) return;
+    if (e.target.closest('.plan-rm')) return;        // let the remove button work
+    drag = { index: +li.getAttribute('data-i') };
+    li.classList.add('dragging');
+    document.body.classList.add('plan-dragging');
+    e.preventDefault();
+  });
+  document.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var items = Array.prototype.slice.call(el.planList.querySelectorAll('.plan-item'));
+    var target = items.length - 1;
+    for (var k = 0; k < items.length; k++) {
+      var r = items[k].getBoundingClientRect();
+      if (e.clientY < r.top + r.height / 2) { target = k; break; }
+    }
+    if (target !== drag.index) {
+      var moved = plan.splice(drag.index, 1)[0];
+      plan.splice(target, 0, moved);
+      drag.index = target;
+      render();
+      var now = el.planList.querySelector('.plan-item[data-i="' + target + '"]');
+      if (now) now.classList.add('dragging');
+    }
+  });
+  function endDrag() {
+    if (!drag) return;
+    drag = null;
+    document.body.classList.remove('plan-dragging');
+    render();
+  }
+  document.addEventListener('pointerup', endDrag);
+  document.addEventListener('pointercancel', endDrag);
+
+  render();
+
+  // ===== lead-gen: build a summary image of what they built and attach it to the submission =====
+  var CHART_CSS =
+    '.grid-line{stroke:#D9D3CA;stroke-width:1}' +
+    '.axis-label{fill:#6B6B6B;font-family:Inter,Arial,sans-serif;font-size:12px}' +
+    '.curve-base{fill:none;stroke:#C44536;stroke-width:2.5;stroke-dasharray:6 5;stroke-linecap:round}' +
+    '.curve-plan{fill:none;stroke:#4A7C9E;stroke-width:3;stroke-linecap:round}' +
+    '.curve-value{fill:none;stroke:#4E8B72;stroke-width:2;stroke-linecap:round}' +
+    '.gap-area{fill:#4A7C9E;opacity:.09}.sustain-zone{fill:#4A7C9E;opacity:.05}' +
+    '.phase-band-sustain{fill:#4E8B72;opacity:.05}.phase-divider{stroke:#4E8B72;stroke-width:1;stroke-dasharray:2 4;opacity:.5}' +
+    '.phase-band-label{fill:#4E8B72;font-family:Inter,Arial,sans-serif;font-size:10px;font-weight:600;letter-spacing:.04em;opacity:.8}' +
+    '.threshold-line{stroke:#1F3A5F;stroke-width:1.5;stroke-dasharray:2 4;opacity:.6}' +
+    '.threshold-label{fill:#1F3A5F;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;opacity:.8}' +
+    '.play-marker{stroke:#1F3A5F;stroke-width:1;stroke-dasharray:3 3;opacity:.35}.play-marker.break{stroke:#C44536;opacity:.55}' +
+    '.play-dot{fill:#1F3A5F}.break-x{fill:#C44536;font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:700}' +
+    '.play-num{fill:#1F3A5F;opacity:.45;font-family:Inter,Arial,sans-serif;font-size:9px;font-weight:600}.play-hit{fill:none}' +
+    '.phase-node-line{stroke:#C8950A;stroke-width:1;opacity:.55}.phase-node{fill:#C8950A;stroke:#fff;stroke-width:1.5}' +
+    '.phase-node-num{fill:#fff;font-family:Inter,Arial,sans-serif;font-size:10px;font-weight:700}' +
+    '.end-dot-b{fill:#C44536}.end-dot-p{fill:#4A7C9E}.end-dot-v{fill:#4E8B72}' +
+    '.cross-line{stroke:#C8950A;stroke-width:1.5}.cross-dot{fill:#C8950A;stroke:#fff;stroke-width:1.5}' +
+    '.cross-flag{fill:#C8950A;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:700}' +
+    '.vcross-dot{fill:#4E8B72;stroke:#fff;stroke-width:1.5}' +
+    '.vcross-flag{fill:#4E8B72;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:700}';
+
+  function chartToImage(cb) {
+    var src = document.querySelector('.sim-chart');
+    if (!src) { cb(null); return; }
+    var svg = src.cloneNode(true);
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    svg.setAttribute('width', '2160'); svg.setAttribute('height', '1140');   // 3× raster so the curve stays crisp in the PDF
+    var st = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    st.textContent = CHART_CSS; svg.insertBefore(st, svg.firstChild);
+    var str = new XMLSerializer().serializeToString(svg);
+    var img = new Image(), done = false;
+    var to = setTimeout(function () { if (!done) { done = true; cb(null); } }, 2500);
+    img.onload = function () { if (!done) { done = true; clearTimeout(to); cb(img); } };
+    img.onerror = function () { if (!done) { done = true; clearTimeout(to); cb(null); } };
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(str);
+  }
+
+  // ===== the emailed briefing: a paginated, letter-size PDF the lead can circulate internally =====
+  // Pages are painted on canvas at 150dpi-equivalent (1275×1650, rastered at 2×) using the site's own
+  // typography, then assembled client-side into a real multi-page PDF (JPEG pages, DCTDecode) — no library,
+  // nothing loaded from a CDN. If any step fails, the form still submits without the attachment.
+  var PG_W = 1275, PG_H = 1650, PG_M = 113, PG_SCALE = 2, PG_CW = PG_W - PG_M * 2;
+  var DOC_INK = '#222222', DOC_NAVY = '#1F3A5F', DOC_GRAY = '#6B6B6B', DOC_BLUE = '#4A7C9E',
+      DOC_RED = '#C44536', DOC_GREEN = '#4E8B72', DOC_GOLD = '#C8950A', DOC_LINE = '#D9D3CA', DOC_PAPER = '#F7F5F1';
+  var F_BODY = '400 21px Inter, Arial, sans-serif',
+      F_BODY_SB = '600 21px Inter, Arial, sans-serif',
+      F_SMALL = '400 17px Inter, Arial, sans-serif',
+      F_SMALL_SB = '600 17px Inter, Arial, sans-serif',
+      F_LABEL = '600 15px Inter, Arial, sans-serif',
+      F_SECTION = '600 20px Inter, Arial, sans-serif',
+      F_TITLE = '400 54px Fraunces, Georgia, serif',
+      F_BRAND = '500 30px Fraunces, Georgia, serif',
+      F_STAT = '500 40px Fraunces, Georgia, serif';
+
+  function trySpacing(x, v) { try { x.letterSpacing = v; } catch (e) {} }
+
+  // wrap runs of differently-styled words into lines that fit maxW → [[{text,font,color},…],…]
+  function wrapRuns(x, runs, maxW) {
+    var lines = [], cur = [], curW = 0;
+    runs.forEach(function (r) {
+      if (!r.text) return;
+      x.font = r.font;
+      r.text.split(' ').forEach(function (word) {
+        if (!word) return;
+        var piece = (curW ? ' ' : '') + word;
+        var w = x.measureText(piece).width;
+        if (curW && curW + w > maxW) { lines.push(cur); cur = []; curW = 0; piece = word; w = x.measureText(word).width; }
+        cur.push({ text: piece, font: r.font, color: r.color });
+        curW += w;
+      });
+    });
+    if (cur.length) lines.push(cur);
+    return lines;
+  }
+
+  function newBriefingDoc() {
+    var doc = { pages: [], ctx: null, y: 0, bottom: PG_H - PG_M - 58, secN: 0 };
+    doc.addPage = function () {
+      var c = document.createElement('canvas');
+      c.width = PG_W * PG_SCALE; c.height = PG_H * PG_SCALE;
+      var x = c.getContext('2d'); x.scale(PG_SCALE, PG_SCALE);
+      x.fillStyle = '#ffffff'; x.fillRect(0, 0, PG_W, PG_H);
+      doc.pages.push({ c: c, x: x }); doc.ctx = x;
+      if (doc.pages.length > 1) {
+        x.fillStyle = DOC_GRAY; x.font = F_LABEL; trySpacing(x, '2px');
+        x.fillText('ADOPTION SCENARIO BRIEFING', PG_M, 88); trySpacing(x, '0px');
+        x.font = F_SMALL; x.textAlign = 'right'; x.fillText('TDcatalyst · Grow', PG_W - PG_M, 88); x.textAlign = 'left';
+        x.strokeStyle = DOC_LINE; x.lineWidth = 1;
+        x.beginPath(); x.moveTo(PG_M, 106); x.lineTo(PG_W - PG_M, 106); x.stroke();
+        doc.y = 164;
+      } else doc.y = PG_M;
+      return x;
+    };
+    doc.ensure = function (h) { if (doc.y + h > doc.bottom) doc.addPage(); };
+    // paragraph of mixed-style runs; wraps, splits across pages, advances the cursor
+    doc.para = function (runs, opts) {
+      opts = opts || {};
+      if (typeof runs === 'string') runs = [{ text: runs }];
+      runs = runs.map(function (r) { return { text: r.text, font: r.font || opts.font || F_BODY, color: r.color || opts.color || DOC_INK }; });
+      var maxW = opts.width || PG_CW, lh = opts.lh || 33, left = opts.x || PG_M;
+      wrapRuns(doc.ctx, runs, maxW).forEach(function (line) {
+        doc.ensure(lh);
+        var px = left;
+        line.forEach(function (run) {
+          doc.ctx.font = run.font; doc.ctx.fillStyle = run.color;
+          doc.ctx.fillText(run.text, px, doc.y + lh - 10);
+          px += doc.ctx.measureText(run.text).width;
+        });
+        doc.y += lh;
+      });
+      doc.y += (opts.after != null ? opts.after : 16);
+    };
+    doc.section = function (title) {
+      doc.secN++;
+      doc.ensure(170);   // keep the heading attached to at least a first line of its content
+      var x = doc.ctx, fresh = doc.y <= 164;
+      if (!fresh) {
+        doc.y += 8;
+        x.strokeStyle = DOC_LINE; x.lineWidth = 1;
+        x.beginPath(); x.moveTo(PG_M, doc.y); x.lineTo(PG_W - PG_M, doc.y); x.stroke();
+        doc.y += 42;
+      } else doc.y += 16;
+      x.font = F_SECTION; trySpacing(x, '2px');
+      var num = (doc.secN < 10 ? '0' : '') + doc.secN;
+      x.fillStyle = DOC_BLUE; x.fillText(num, PG_M, doc.y);
+      var nw = x.measureText(num + '  ').width;
+      x.fillStyle = DOC_NAVY; x.fillText(title.toUpperCase(), PG_M + nw, doc.y);
+      trySpacing(x, '0px');
+      doc.y += 34;
+    };
+    doc.addPage();
+    return doc;
+  }
+
+  function paintBriefingPages(chartImg) {
+    var res = simulate(plan), base = simulate([]);
+    var rP = Math.round(res.series[WEEKS]), rB = Math.round(base.series[WEEKS]), rV = Math.round(res.valueSeries[WEEKS]);
+    var leadName = (document.getElementById('name').value || '').trim();
+    var leadOrg = (document.getElementById('company').value || '').trim();
+    var leadCtx = (document.getElementById('context').value || '').trim();
+    if (leadCtx.length > 700) leadCtx = leadCtx.slice(0, 700) + '…';
+    var persona = (document.getElementById('personaTitle').value || '').trim();
+    // "for <persona> at <org>" / "for <persona>" / "for <org>" — whichever pieces exist
+    var scopeStr = (persona ? ' for ' + persona : '') + (leadOrg ? (persona ? ' at ' : ' for ') + leadOrg : '');
+    var fl = Object.keys(flagged);
+    var dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    function segLabel(k) { for (var i = 0; i < SEGMENTS.length; i++) { if (SEGMENTS[i].key === k) return SEGMENTS[i].label; } return k; }
+    function cellName(key) { var q = key.split('-'); return segLabel(q[0]) + ' · ' + (STAGE_FULL[q[1]] || q[1]); }
+    function weeksSpan(n) { return n.start ? ('Weeks ' + n.start + (n.end > n.start ? '–' + n.end : '')) : ''; }
+    function seqStatus(n) {
+      if (n.muted) {
+        if (n.reason === 'overflow') return { c: DOC_RED, t: '✕ Does not finish inside the 24-week window' };
+        if (n.reason === 'timing') return { c: DOC_RED, t: '✕ Ran before adoption was mature enough to institutionalize' };
+        return { c: DOC_RED, t: '✕ Deployed before the proof it depends on existed' };
+      }
+      if ((n.orderPenalty != null && n.orderPenalty < 0.99) || (n.proofGate != null && n.proofGate < 0.99) || (n.readiness != null && n.readiness < 0.85))
+        return { c: DOC_GOLD, t: '✓ Landed at reduced effect — sequencing left part of its impact behind' };
+      return { c: DOC_GREEN, t: '✓ Landed at full effect' };
+    }
+
+    var doc = newBriefingDoc(), x = doc.ctx;
+
+    // ---- masthead ----
+    x.fillStyle = DOC_NAVY; x.font = F_BRAND; x.fillText('TDcatalyst', PG_M, 152);
+    var bw = x.measureText('TDcatalyst').width;
+    x.fillStyle = DOC_BLUE; x.font = '400 26px Fraunces, Georgia, serif'; x.fillText('/grow', PG_M + bw + 2, 152);
+    x.fillStyle = DOC_GRAY; x.font = F_SMALL; x.textAlign = 'right'; x.fillText(dateStr, PG_W - PG_M, 152); x.textAlign = 'left';
+    x.fillStyle = DOC_BLUE; x.fillRect(PG_M, 176, 84, 3);
+    x.strokeStyle = DOC_LINE; x.lineWidth = 1;
+    x.beginPath(); x.moveTo(PG_M + 84, 177.5); x.lineTo(PG_W - PG_M, 177.5); x.stroke();
+
+    x.fillStyle = DOC_BLUE; x.font = F_LABEL; trySpacing(x, '3px');
+    x.fillText('AI TRANSFORMATION SIMULATION', PG_M, 248); trySpacing(x, '0px');
+    x.fillStyle = DOC_NAVY; x.font = F_TITLE;
+    x.fillText('Adoption Scenario Briefing', PG_M, 316);
+    doc.y = 348;
+    doc.para('A sequenced set of adoption interventions' + (persona ? ' for ' + persona : '') + ', modeled over 24 weeks against the trajectory the organization follows if nothing changes.', { color: DOC_GRAY, after: 30 });
+
+    // prepared-for band
+    var bandTop = doc.y, bandH = 112, col2 = PG_M + Math.round(PG_CW * 0.56);
+    x.fillStyle = DOC_PAPER; x.fillRect(PG_M, bandTop, PG_CW, bandH);
+    x.fillStyle = DOC_GRAY; x.font = F_LABEL; trySpacing(x, '1px');
+    x.fillText('PREPARED FOR', PG_M + 28, bandTop + 42);
+    x.fillText('PREPARED BY', col2, bandTop + 42);
+    trySpacing(x, '0px');
+    var pf = leadName + (leadOrg ? ' · ' + leadOrg : '');
+    x.fillStyle = DOC_NAVY; x.font = F_BODY_SB;
+    if (x.measureText(pf).width > col2 - PG_M - 60) x.font = F_SMALL_SB;
+    x.fillText(pf, PG_M + 28, bandTop + 80);
+    x.font = F_BODY_SB;
+    x.fillText('Thomas Delaporte · TDcatalyst', col2, bandTop + 80);
+    doc.y = bandTop + bandH + 26;
+
+    // ---- executive summary ----
+    doc.section('Executive summary');
+    if (plan.length) {
+      doc.para('This briefing summarizes an AI adoption scenario built with the TDcatalyst transformation simulation' + scopeStr + '. It models a sequence of ' + plan.length + ' intervention' + (plan.length > 1 ? 's' : '') + ' over ' + res.totalWeeks + ' calendar weeks' + (fl.length ? ', aimed at ' + fl.length + ' adoption stall' + (fl.length > 1 ? 's' : '') + ' flagged on the segment-by-stage matrix' : '') + '.');
+      doc.para('With the sequence in place, modeled adoption reaches ' + rP + '% of the organization at week 24; the same organization reaches ' + rB + '% if nothing changes. The sequence adds ' + (rP - rB) + ' points of adoption and ends with ' + rV + '% of the attainable value realized — a measure that combines reach with the capability to convert usage into output.');
+      if (res.crossedWeek !== null) doc.para('The model projects the transformation crossing the self-sustaining threshold (' + THRESHOLD + '% adoption) at week ' + res.crossedWeek + ' — the point where the new way of working starts to carry itself.');
+      else doc.para('The modeled curve ends below the self-sustaining threshold of ' + THRESHOLD + '% adoption, which means the gains remain reversible and the plan needs further reinforcement to hold.');
+      doc.para('The pages that follow show the modeled trajectory, the sequence and its timing, the transformation phases the plan reaches, and the conditions each step depends on. The plan is explicit and has been tested against the model; what remains is execution.', { after: 28 });
+    } else {
+      doc.para('This briefing summarizes a baseline scenario from the TDcatalyst transformation simulation' + scopeStr + '. No intervention sequence was selected, so the model shows the trajectory the organization follows on its own: adoption reaches ' + rB + '% at week 24 and stays below the ' + THRESHOLD + '% self-sustaining threshold.', { after: 28 });
+    }
+
+    var tiles = [
+      { label: 'WITH THIS PLAN', value: rP + '%', cap: 'adoption at week 24', color: DOC_BLUE },
+      { label: 'IF NOTHING CHANGES', value: rB + '%', cap: 'adoption at week 24', color: DOC_RED },
+      { label: 'ADOPTION ADDED', value: '+' + (rP - rB) + ' pts', cap: 'gained by the sequence', color: DOC_NAVY },
+      { label: 'VALUE REALIZED', value: rV + '%', cap: 'reach × capability', color: DOC_GREEN }
+    ];
+    var tGap = 22, tw = Math.floor((PG_CW - tGap * 3) / 4);
+    doc.ensure(170);
+    tiles.forEach(function (t, i) {
+      var xo = PG_M + i * (tw + tGap), top = doc.y, tx = doc.ctx;
+      tx.strokeStyle = DOC_LINE; tx.lineWidth = 1; tx.strokeRect(xo + 0.5, top + 0.5, tw, 140);
+      tx.fillStyle = t.color; tx.fillRect(xo, top, tw, 4);
+      tx.fillStyle = DOC_GRAY; tx.font = F_LABEL; trySpacing(tx, '1px'); tx.fillText(t.label, xo + 20, top + 42); trySpacing(tx, '0px');
+      tx.fillStyle = t.color; tx.font = F_STAT; tx.fillText(t.value, xo + 20, top + 98);
+      tx.fillStyle = DOC_GRAY; tx.font = F_SMALL; tx.fillText(t.cap, xo + 20, top + 126);
+    });
+    doc.y += 166;
+    if (res.crossedWeek !== null) doc.para([{ text: '✓  Self-sustaining: ', font: F_BODY_SB, color: DOC_GREEN }, { text: 'the modeled curve crosses the ' + THRESHOLD + '% threshold at week ' + res.crossedWeek + ' and holds above it.', font: F_BODY, color: DOC_INK }], { after: 24 });
+    else doc.para([{ text: '○  Below threshold: ', font: F_BODY_SB, color: DOC_GRAY }, { text: 'the modeled curve ends under the ' + THRESHOLD + '% self-sustaining line at week 24.', font: F_BODY, color: DOC_INK }], { after: 24 });
+
+    if (leadCtx) {
+      doc.ensure(120);
+      var qTop = doc.y, qPage = doc.pages.length;
+      doc.para([{ text: 'DEPLOYMENT CONTEXT, AS DESCRIBED IN THE REQUEST', font: F_LABEL, color: DOC_GRAY }], { x: PG_M + 26, width: PG_CW - 26, lh: 24, after: 6 });
+      doc.para(leadCtx, { font: 'italic 400 20px Inter, Arial, sans-serif', color: DOC_INK, x: PG_M + 26, width: PG_CW - 26, lh: 31, after: 8 });
+      if (doc.pages.length === qPage) { doc.ctx.fillStyle = DOC_BLUE; doc.ctx.fillRect(PG_M, qTop + 4, 3, doc.y - qTop - 18); }
+      doc.y += 14;
+    }
+
+    // ---- the curve ----
+    doc.section('The modeled trajectory');
+    var chW = PG_CW, chH = Math.round(chW * 380 / 720);
+    doc.ensure(chH + 24);
+    var cx = doc.ctx;
+    if (chartImg) cx.drawImage(chartImg, PG_M, doc.y, chW, chH);
+    else {
+      cx.fillStyle = DOC_GRAY; cx.font = F_SMALL; cx.textAlign = 'center';
+      cx.fillText('The interactive curve is available at tdcatalyst.com/grow/ai-transformation-simulation', PG_M + chW / 2, doc.y + chH / 2);
+      cx.textAlign = 'left';
+    }
+    cx.strokeStyle = DOC_LINE; cx.lineWidth = 1; cx.strokeRect(PG_M + 0.5, doc.y + 0.5, chW, chH);
+    doc.y += chH + 18;
+    doc.para('Modeled adoption over 24 weeks: the planned sequence in blue, the same organization with no intervention in dashed red, and value realized in green. Numbered markers show where each intervention starts; gold nodes mark the transformation phases as they are reached.', { font: F_SMALL, color: DOC_GRAY, lh: 26, after: 10 });
+
+    // ---- flagged stalls ----
+    doc.section('Where adoption is stalled');
+    if (!fl.length) doc.para('No stalled cells were flagged on the adoption matrix for this scenario.');
+    else {
+      doc.para('The scenario flags ' + fl.length + ' cell' + (fl.length > 1 ? 's' : '') + ' of the adoption matrix — a population segment at a specific stage of change — as stalled today. Interventions that hit a flagged cell pull harder in the model, weighted by how much of the organization sits there.', { after: 14 });
+      fl.forEach(function (k) {
+        doc.ensure(70);
+        doc.para([{ text: '◆  ', font: F_BODY, color: DOC_RED }, { text: cellName(k), font: F_BODY_SB, color: DOC_NAVY }, { text: '    ≈ ' + Math.round(cellShare(k)) + '% of the organization', font: F_SMALL, color: DOC_GRAY }], { after: 0, lh: 34 });
+        doc.para(SYMPTOMS[k] || '', { font: F_SMALL, color: DOC_GRAY, x: PG_M + 34, width: PG_CW - 34, lh: 26, after: 12 });
+      });
+    }
+
+    // ---- the sequence ----
+    doc.section('The intervention sequence');
+    if (!plan.length) doc.para('No interventions were selected in this scenario.');
+    else {
+      doc.para('The schedule below is order-aware: each intervention starts at the earliest week that respects its prerequisites, the chosen order, and a bandwidth cap of ' + MAX_CONCURRENT + ' concurrent workstreams. The result column reports how each move landed in the simulation.', { after: 18 });
+      doc.ensure(140);
+      var hx = doc.ctx;
+      hx.fillStyle = DOC_GRAY; hx.font = F_LABEL; trySpacing(hx, '1px');
+      hx.fillText('#', PG_M, doc.y + 14);
+      hx.fillText('INTERVENTION', PG_M + 46, doc.y + 14);
+      hx.fillText('TIMING', PG_M + 620, doc.y + 14);
+      hx.fillText('MODELED RESULT', PG_M + 782, doc.y + 14);
+      trySpacing(hx, '0px');
+      doc.y += 26;
+      hx.strokeStyle = DOC_LINE; hx.beginPath(); hx.moveTo(PG_M, doc.y); hx.lineTo(PG_W - PG_M, doc.y); hx.stroke();
+      doc.y += 4;
+      plan.forEach(function (id, i) {
+        var p = PLAY_BY_ID[id], n = res.notes[id] || {};
+        var stt = seqStatus(n), wStatus = PG_CW - 782;
+        var fwLines = wrapRuns(doc.ctx, [{ text: p.framework, font: F_SMALL, color: DOC_GRAY }], 540);
+        var stLines = wrapRuns(doc.ctx, [{ text: stt.t, font: F_SMALL_SB, color: stt.c }], wStatus);
+        var rowH = Math.max(34 + fwLines.length * 24, 10 + stLines.length * 24) + 22;
+        doc.ensure(rowH);
+        var top = doc.y, rx = doc.ctx;
+        rx.fillStyle = DOC_GRAY; rx.font = F_SMALL; rx.fillText(String(i + 1), PG_M, top + 28);
+        rx.fillStyle = DOC_NAVY; rx.font = F_BODY_SB; rx.fillText(p.name, PG_M + 46, top + 28);
+        var fy = top + 54;
+        fwLines.forEach(function (line) {
+          var px = PG_M + 46;
+          line.forEach(function (r) { rx.font = r.font; rx.fillStyle = r.color; rx.fillText(r.text, px, fy); px += rx.measureText(r.text).width; });
+          fy += 24;
+        });
+        rx.fillStyle = DOC_INK; rx.font = F_SMALL; rx.fillText(weeksSpan(n) || '—', PG_M + 620, top + 28);
+        var sy = top + 28;
+        stLines.forEach(function (line) {
+          var px = PG_M + 782;
+          line.forEach(function (r) { rx.font = r.font; rx.fillStyle = r.color; rx.fillText(r.text, px, sy); px += rx.measureText(r.text).width; });
+          sy += 24;
+        });
+        rx.strokeStyle = DOC_LINE; rx.beginPath(); rx.moveTo(PG_M, top + rowH - 8); rx.lineTo(PG_W - PG_M, top + rowH - 8); rx.stroke();
+        doc.y += rowH;
+      });
+      doc.y += 10;
+    }
+
+    // ---- transformation phases ----
+    doc.section('Transformation phases reached');
+    doc.para('The model tracks five phases a transformation crosses in order, keyed to the state the organization has actually reached. Phases the plan reaches inside the 24-week window are marked with their arrival week.', { after: 18 });
+    MILESTONES.forEach(function (m) {
+      var wk = res.milestones[m.key], hit = wk !== null && wk !== undefined;
+      doc.ensure(96);
+      doc.para([
+        { text: (hit ? '✓  ' : '○  ') + m.label, font: F_BODY_SB, color: hit ? DOC_GREEN : DOC_GRAY },
+        { text: hit ? '    week ' + wk : '    beyond the 24-week window', font: F_SMALL, color: DOC_GRAY }
+      ], { after: 0, lh: 32 });
+      doc.para(m.note, { font: F_SMALL, color: DOC_GRAY, x: PG_M + 34, width: PG_CW - 34, lh: 26, after: 14 });
+    });
+
+    // ---- execution risks (the standalone pitfalls read) ----
+    if (plan.length) {
+      doc.section('Execution risks and dependencies');
+      doc.para('Each intervention in the sequence carries a trap most teams walk into, and a condition it quietly depends on. In order, this is the groundwork the plan assumes — and where execution is won or lost.', { after: 20 });
+      plan.forEach(function (id, i) {
+        var p = PLAY_BY_ID[id], cv = CAVEATS[id], n = res.notes[id] || {};
+        doc.ensure(150);
+        doc.para([
+          { text: (i + 1) + ' · ' + p.name, font: F_BODY_SB, color: DOC_NAVY },
+          { text: n.start ? '    ' + weeksSpan(n) : '', font: F_SMALL, color: DOC_GRAY }
+        ], { after: 6, lh: 34 });
+        doc.para([{ text: 'The pitfall: ', font: F_BODY_SB, color: DOC_INK }, { text: cv.risk, font: F_BODY, color: DOC_INK }], { x: PG_M + 26, width: PG_CW - 26, after: 6 });
+        doc.para([{ text: 'What it depends on: ', font: F_BODY_SB, color: DOC_BLUE }, { text: cv.prereq, font: F_BODY, color: DOC_INK }], { x: PG_M + 26, width: PG_CW - 26, after: 24 });
+      });
+    }
+
+    // ---- the handoff to delivery ----
+    doc.section('From simulation to execution');
+    doc.para('The value of this scenario is that the thinking is already done. The sequence is explicit about order, timing, and the conditions each intervention depends on, and it has been stress-tested against a model grounded in established adoption research. What the model cannot supply is the delivery: the sponsor who visibly goes first, the managers equipped to localize the change, the champions who are genuinely respected, and the workflow redesign that someone has to own.');
+    doc.para('That delivery is the work TDcatalyst does. The Adoption Reset engagement (60–90 days) takes a scenario like this one into the organization: diagnosis by role and workflow, the population mapped onto the adoption matrix, a sequenced set of interventions for the cells where adoption is actually stalled, and enablement delivered through workshops for leaders and champions. The result is a rollout run against a plan the organization has already seen, understood, and pressure-tested.', { after: 28 });
+
+    var boxPad = 28;
+    var nsText = 'A 30-minute fit call to test this sequence against the actual rollout: what was deployed, to whom, and where adoption stands today.';
+    var nsLines = wrapRuns(doc.ctx, [{ text: nsText, font: F_BODY, color: DOC_INK }], PG_CW - boxPad * 2);
+    var boxH = 60 + nsLines.length * 33 + 62;
+    doc.ensure(boxH + 12);
+    var bTop = doc.y, bx = doc.ctx;
+    bx.fillStyle = DOC_PAPER; bx.fillRect(PG_M, bTop, PG_CW, boxH);
+    bx.fillStyle = DOC_BLUE; bx.fillRect(PG_M, bTop, 4, boxH);
+    bx.font = F_LABEL; trySpacing(bx, '1px'); bx.fillStyle = DOC_BLUE; bx.fillText('NEXT STEP', PG_M + boxPad, bTop + 44); trySpacing(bx, '0px');
+    var ny = bTop + 82;
+    nsLines.forEach(function (line) {
+      var px = PG_M + boxPad;
+      line.forEach(function (r) { bx.font = r.font; bx.fillStyle = r.color; bx.fillText(r.text, px, ny); px += bx.measureText(r.text).width; });
+      ny += 33;
+    });
+    bx.fillStyle = DOC_NAVY; bx.font = F_SMALL_SB;
+    bx.fillText('Thomas Delaporte · TDcatalyst      sail@tdcatalyst.com      cal.com/tdcatalyst      tdcatalyst.com/grow', PG_M + boxPad, ny + 14);
+    doc.y = bTop + boxH + 28;
+
+    doc.para('About the model: the simulation draws on Diffusion of Innovations, Prosci and ADKAR, the transtheoretical stages of change, COM-B, implementation-intention research, and social-norms theory. It is an illustrative planning model and its figures are directional; sources are listed on the simulation page at tdcatalyst.com/grow.', { font: F_SMALL, color: DOC_GRAY, lh: 26, after: 0 });
+
+    // ---- footers (need the final page count) ----
+    var total = doc.pages.length;
+    doc.pages.forEach(function (pg, i) {
+      var fx = pg.x, fy = PG_H - 74;
+      fx.strokeStyle = DOC_LINE; fx.lineWidth = 1;
+      fx.beginPath(); fx.moveTo(PG_M, fy); fx.lineTo(PG_W - PG_M, fy); fx.stroke();
+      fx.fillStyle = DOC_GRAY; fx.font = '400 15px Inter, Arial, sans-serif';
+      fx.fillText('TDcatalyst · Grow — Adoption Scenario Briefing', PG_M, fy + 30);
+      fx.textAlign = 'center'; fx.fillText('Illustrative simulation · directional figures', PG_W / 2, fy + 30);
+      fx.textAlign = 'right'; fx.fillText('Page ' + (i + 1) + ' of ' + total, PG_W - PG_M, fy + 30);
+      fx.textAlign = 'left';
+    });
+    return doc.pages.map(function (pg) { return pg.c; });
+  }
+
+  // assemble the painted pages into a real multi-page PDF: each page a JPEG XObject on US Letter (612×792pt)
+  function pagesToPdfBlob(canvases) {
+    var jpegs = canvases.map(function (c) {
+      return { data: atob(c.toDataURL('image/jpeg', 0.85).split(',')[1]), w: c.width, h: c.height };
+    });
+    var parts = [], pos = 0, offsets = [];
+    function out(s) { parts.push(s); pos += s.length; }
+    function obj(n, body) { offsets[n] = pos; out(n + ' 0 obj\n' + body + '\nendobj\n'); }
+    var N = jpegs.length;
+    out('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+    obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+    var kids = [];
+    for (var i = 0; i < N; i++) kids.push((4 + i * 3) + ' 0 R');
+    obj(2, '<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + N + ' >>');
+    var dt = new Date();
+    function p2(v) { return (v < 10 ? '0' : '') + v; }
+    obj(3, '<< /Title (Transformation Dynamics Simulation - Adoption Scenario Briefing) /Author (TDcatalyst) /Producer (tdcatalyst.com/grow) /CreationDate (D:' + dt.getFullYear() + p2(dt.getMonth() + 1) + p2(dt.getDate()) + p2(dt.getHours()) + p2(dt.getMinutes()) + p2(dt.getSeconds()) + ') >>');
+    jpegs.forEach(function (j, k) {
+      var po = 4 + k * 3, co = po + 1, io = po + 2;
+      obj(po, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /XObject << /Im' + k + ' ' + io + ' 0 R >> /ProcSet [/PDF /ImageC] >> /Contents ' + co + ' 0 R >>');
+      var stream = 'q 612 0 0 792 0 0 cm /Im' + k + ' Do Q';
+      obj(co, '<< /Length ' + stream.length + ' >>\nstream\n' + stream + '\nendstream');
+      offsets[io] = pos;
+      out(io + ' 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + j.w + ' /Height ' + j.h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + j.data.length + ' >>\nstream\n');
+      out(j.data);
+      out('\nendstream\nendobj\n');
+    });
+    var maxObj = 3 + N * 3, xrefPos = pos;
+    var xref = 'xref\n0 ' + (maxObj + 1) + '\n0000000000 65535 f \n';
+    for (var n = 1; n <= maxObj; n++) xref += ('0000000000' + offsets[n]).slice(-10) + ' 00000 n \n';
+    out(xref);
+    out('trailer\n<< /Size ' + (maxObj + 1) + ' /Root 1 0 R /Info 3 0 R >>\nstartxref\n' + xrefPos + '\n%%EOF');
+    var full = parts.join('');
+    var bytes = new Uint8Array(full.length);
+    for (var b = 0; b < full.length; b++) bytes[b] = full.charCodeAt(b) & 0xFF;
+    return new Blob([bytes], { type: 'application/pdf' });
+  }
+
+  function buildBriefingPdf(chartImg) { return pagesToPdfBlob(paintBriefingPages(chartImg)); }
+
+  (function wireLeadGen() {
+    var form = document.querySelector('#report form');
+    var fileInput = document.getElementById('f-attach');
+    if (!form || !fileInput) return;
+    var submitting = false;
+    form.addEventListener('submit', function (e) {
+      if (submitting) return;
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      var btn = form.querySelector('button[type=submit]');
+      var orig = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Preparing your briefing…'; }
+      // subject line Tom can triage from the inbox list
+      var subj = form.querySelector('input[name=_subject]');
+      var org = (document.getElementById('company').value || '').trim();
+      var who = (document.getElementById('name').value || '').trim();
+      if (subj) subj.value = 'Simulation briefing request — ' + (org || who || 'new scenario');
+      var finished = false;
+      function go() { submitting = true; if (btn) { btn.disabled = false; btn.textContent = orig; } form.submit(); }
+      var guard = setTimeout(function () { if (!finished) { finished = true; go(); } }, 5000);
+      chartToImage(function (img) {
+        if (finished) return;
+        finished = true; clearTimeout(guard);
+        try {
+          var blob = buildBriefingPdf(img);
+          if (blob && window.DataTransfer) {
+            var dtf = new DataTransfer();
+            dtf.items.add(new File([blob], 'TDcatalyst-adoption-scenario-briefing.pdf', { type: 'application/pdf' }));
+            fileInput.files = dtf.files;
+          }
+        } catch (err) {}
+        go();
+      });
+    });
+  })();
+
+  // dev harness: ?debugreport=1 builds a sample scenario, renders the briefing pages inline, and exposes
+  // the assembled PDF as base64 (hidden textarea #pdf64) so the document can be checked without submitting.
+  if (/[?&]debugreport=1/.test(location.search)) {
+    setTimeout(function () {
+      flagged = { 'em-con': true, 'lm-pre': true, 'ia-act': true };
+      plan = ['sponsor', 'proof', 'manager', 'build', 'peer', 'policy'];
+      document.getElementById('name').value = 'Jordan Example';
+      document.getElementById('company').value = 'Acme Industries';
+      document.getElementById('context').value = 'We rolled out an AI copilot to a 900-person claims organization in March. Innovators are active but the early majority stalled after the pilot, and managers have no talking points.';
+      render();
+      var ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+      ready.then(function () {
+        chartToImage(function (img) {
+          var host = document.createElement('div');
+          host.id = 'debug-report';
+          host.style.cssText = 'background:#555;padding:20px;display:grid;gap:20px;justify-content:center;';
+          var pages = paintBriefingPages(img);
+          pages.forEach(function (c) { c.style.width = PG_W + 'px'; c.style.height = 'auto'; c.style.background = '#fff'; host.appendChild(c); });
+          document.body.insertBefore(host, document.body.firstChild);
+          var fr = new FileReader();
+          fr.onload = function () {
+            var ta = document.createElement('textarea');
+            ta.id = 'pdf64'; ta.style.display = 'none'; ta.textContent = fr.result;
+            host.appendChild(ta);
+            document.title = 'DEBUGREPORT-READY-' + pages.length;
+          };
+          fr.readAsDataURL(pagesToPdfBlob(pages));
+        });
+      });
+    }, 400);
+  }
+})();
+</script>
+</body>
+</html>
