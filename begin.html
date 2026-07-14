@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Begin — TDcatalyst</title>
+  <meta name="description" content="Start a conversation with TDcatalyst. Book a 30-minute Fit Call or write directly — for executives, enterprises, and founders working the AI transition." />
+  <link rel="canonical" href="https://tdcatalyst.com/begin" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tdcatalyst.com/begin" />
+  <meta property="og:title" content="Begin — TDcatalyst" />
+  <meta property="og:description" content="Book a 30-minute Fit Call or write directly. Three practices, one through-line: how organizations and the people in them adapt when AI enters the work." />
+  <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
+  <link rel="stylesheet" href="/style.css?v=b9fca194">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+<nav>
+  <div class="nav-inner" id="nav">
+    <div class="nav-brand">
+      <a href="/" class="nav-logo">
+        <span class="mark-td">TD</span><span class="mark-cat">catalyst</span>
+      </a>
+      <button type="button" class="brand-switch" aria-label="Switch practice" aria-haspopup="true" aria-expanded="false" onclick="var b=this.closest('.nav-brand'),o=b.classList.toggle('open');this.setAttribute('aria-expanded',o)">
+        <svg viewBox="0 0 10 6" width="11" height="7" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="brand-menu" role="menu">
+        <a href="/" role="menuitem">TDcatalyst</a>
+        <a href="/sail/" role="menuitem">Sail</a>
+        <a href="/grow/" role="menuitem">Grow</a>
+        <a href="/advise/" role="menuitem">Advise</a>
+      </div>
+    </div>
+    <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false" onclick="var o=document.getElementById('nav').classList.toggle('open');this.setAttribute('aria-expanded',o)"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="/sail/">Sail</a></li>
+      <li><a href="/grow/">Grow</a></li>
+      <li><a href="/advise/">Advise</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/begin" class="nav-cta active">Begin</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero hero--terrain" id="main-content">
+  <canvas class="terrain" data-seed="88" data-line="#1F3A5F" data-index="#1F3A5F" data-alpha="0.09" data-index-alpha="0.20" data-fade="left" data-fade-color="235,239,236" aria-hidden="true"></canvas>
+  <div class="wrap narrow">
+    <div class="hero-lines" aria-hidden="true">
+      <span class="l-red"></span>
+      <span class="l-gold"></span>
+      <span class="l-blue"></span>
+    </div>
+    <div class="eyebrow">Begin</div>
+    <h1>Start with a conversation.</h1>
+    <p class="hero-sub">Every engagement begins the same way: a thirty-minute conversation about where you are and what the work in front of you looks like. From there, the right practice usually sorts itself &mdash; executive field sessions with Sail, enterprise transformation with Grow, or founder advisory with Advise.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section>
+  <div class="wrap">
+    <div id="sent-banner" style="display:none; padding:1rem 1.2rem; margin-bottom:2rem; background:var(--seamist); border-left:3px solid var(--logo-blue); border-radius:4px;">
+      <strong>Note received.</strong> Tom will reply directly from sail@tdcatalyst.com. Expect a response within two business days.
+    </div>
+  </div>
+  <div class="wrap grid-2">
+    <div>
+      <h2>Book a Fit Call</h2>
+      <p>Video or phone. Reach out via the contact form for any accommodation requests.</p>
+      <div class="btn-row" style="margin-top:1.2rem;">
+        <a href="https://cal.com/tdcatalyst" class="btn btn-primary" target="_blank" rel="noopener">Book a Fit Call</a>
+      </div>
+    </div>
+
+    <div>
+      <h2>Start a conversation</h2>
+      <p>Prefer to write. Every note reaches Tom directly.</p>
+      <form class="form-grid" action="https://formsubmit.co/sail@tdcatalyst.com" method="POST">
+        <input type="hidden" name="_subject" value="New note from tdcatalyst.com/begin">
+        <input type="hidden" name="_captcha" value="true">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" value="https://tdcatalyst.com/begin?sent=1">
+        <div>
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+          <label for="company">Company or practice</label>
+          <input type="text" id="company" name="company">
+        </div>
+        <div>
+          <label for="role">Role</label>
+          <input type="text" id="role" name="role">
+        </div>
+        <div>
+          <label for="practice">Practice of interest</label>
+          <select id="practice" name="practice">
+            <option value="">Not sure yet</option>
+            <option value="sail">Sail &mdash; executive field sessions</option>
+            <option value="grow">Grow &mdash; enterprise transformation</option>
+            <option value="advise">Advise &mdash; founder advisory</option>
+          </select>
+        </div>
+        <div>
+          <label for="context">What is the situation</label>
+          <textarea id="context" name="context" placeholder="A few sentences on what is prompting the outreach."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
+        <p style="font-size:0.82rem; color:var(--midgray); margin-top:0.4rem;">Messages route to sail@tdcatalyst.com.</p>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRACTICE ENTRY POINTS -->
+<section class="alt">
+  <div class="wrap narrow">
+    <div class="section-head">
+      <div class="eyebrow">The practices</div>
+      <h2>Already know your way in?</h2>
+    </div>
+    <p>Each practice has its own starting point, with engagement details and a form scoped to that work.</p>
+    <p><a href="/sail/begin">Begin with Sail &mdash; executive field sessions &rarr;</a></p>
+    <p><a href="/grow/#begin">Begin with Grow &mdash; enterprise transformation &rarr;</a></p>
+    <p style="margin-bottom:0;"><a href="/advise/#begin">Begin with Advise &mdash; founder advisory &rarr;</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="tagline">TDcatalyst</div>
+      <div class="fine">Independent advisory. No affiliation with prior employers.</div>
+      <div class="fine">&copy; 2026 TDcatalyst &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></div>
+    </div>
+    <div>
+      <h4>Practices</h4>
+      <a href="/sail/">Sail</a>
+      <a href="/grow/">Grow</a>
+      <a href="/advise/">Advise</a>
+    </div>
+    <div>
+      <h4>Engage</h4>
+      <a href="/begin">Begin</a>
+      <a href="/sail/field-notes">Field Notes</a>
+      <a href="/about">About</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/script.js?v=15aca4ca"></script>
+</body>
+</html>
