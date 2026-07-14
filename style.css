@@ -1969,6 +1969,14 @@ footer .footer-practices i {
 .readout-item.value { background: var(--seamist); }
 .readout-item.value .readout-num { color: var(--value-green); }
 
+/* outcomes inflection — where realized value overtakes adoption (AI Transformation Simulation) */
+.sim-chart .vcross-dot { fill: var(--value-green); stroke: #fff; stroke-width: 1.5; }
+.sim-chart .vcross-flag { fill: var(--value-green); font-size: 11px; font-weight: 700; font-family: 'Archivo', sans-serif; }
+.value-note { margin: 0.9rem 0 0; font-size: 0.82rem; line-height: 1.55; color: var(--charcoal); background: var(--seamist); border: 1px solid var(--hairline); border-left: 4px solid var(--midgray); border-radius: 6px; padding: 0.85rem 1.1rem; }
+.value-note strong { color: var(--navy); }
+.value-note.crossed { background: rgba(78,139,114,0.12); border-color: rgba(78,139,114,0.32); border-left-color: var(--value-green); }
+.value-note.crossed strong { color: var(--value-green); }
+
 /* COM-B library group headers + full-plan lock (AI Transformation Simulation) */
 .lib-group-head { grid-column: 1 / -1; margin: 0.4rem 0 0.1rem; display: flex; align-items: baseline; gap: 0.5rem; }
 .lib-group-name { font-family: 'Besley', Georgia, serif; font-size: 0.98rem; color: var(--navy); }
