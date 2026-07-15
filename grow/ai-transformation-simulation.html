@@ -165,7 +165,7 @@
       </svg>
       <div class="sim-legend">
         <span><span class="swatch p"></span> Your sequenced plan</span>
-        <span><span class="swatch v"></span> Value realized (real output: speed, quality, results)</span>
+        <span><span class="swatch v"></span> Value potential realized (real output: speed, quality, results)</span>
         <span><span class="swatch b"></span> Do nothing (adoption erodes without reinforcement)</span>
       </div>
       </div><!-- /chart-box -->
@@ -176,7 +176,7 @@
         </div>
         <div class="readout-item value">
           <div class="readout-num" id="r-value">—</div>
-          <div class="readout-label">Week-24 value realized</div>
+          <div class="readout-label">Week-24 value potential realized</div>
         </div>
         <div class="readout-item gap">
           <div class="readout-num" id="r-gap">—</div>
@@ -239,7 +239,7 @@
         <p style="font-size:0.9rem; color:var(--midgray);">No list, no drip sequence. One human reply.</p>
       </div>
       <div>
-        <form class="form-grid" action="https://formsubmit.co/sail@tdcatalyst.com" method="POST" enctype="multipart/form-data">
+        <form class="form-grid" action="https://formsubmit.co/tom@tdcatalyst.com" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="_subject" value="Transformation Dynamics Simulation — scenario submitted">
           <input type="hidden" name="_captcha" value="true">
           <input type="hidden" name="_template" value="table">
@@ -270,7 +270,7 @@
             <textarea id="context" name="context" placeholder="What was rolled out, to whom, and where adoption is now."></textarea>
           </div>
           <button type="submit" class="btn btn-primary">Request my briefing</button>
-          <p style="font-size:0.82rem; color:var(--midgray); margin-top:0.4rem;">Messages route to sail@tdcatalyst.com. Prefer to talk? <a href="https://cal.com/tdcatalyst" target="_blank" rel="noopener">Book a Fit Call →</a></p>
+          <p style="font-size:0.82rem; color:var(--midgray); margin-top:0.4rem;">Messages route to tom@tdcatalyst.com. Prefer to talk? <a href="https://cal.com/tdcatalyst" target="_blank" rel="noopener">Book a Fit Call →</a></p>
         </form>
       </div>
     </div>
@@ -1111,7 +1111,7 @@
 
     // Capability — reach without the skill to convert it into output.
     if (!has('build')) {
-      tips.push('<strong>No Capability Build.</strong> Adoption reaches ' + endAdopt + '% but value realized ends at ' + endVal + '%. That gap is people logging in without the skill to turn usage into output. Role-based capability is the single biggest driver of real results.');
+      tips.push('<strong>No Capability Build.</strong> Adoption reaches ' + endAdopt + '% but value potential realized ends at ' + endVal + '%. That gap is people logging in without the skill to turn usage into output. Role-based capability is the single biggest driver of real results.');
     }
 
     // Manager-as-Channel placed late — it amplifies everything AFTER it, so late placement wastes it.
@@ -2029,7 +2029,7 @@
     doc.section('Executive summary');
     if (plan.length) {
       doc.para('This briefing summarizes an AI adoption scenario built with the TDcatalyst transformation simulation' + scopeStr + '. It models a sequence of ' + plan.length + ' intervention' + (plan.length > 1 ? 's' : '') + ' over ' + res.totalWeeks + ' calendar weeks' + (fl.length ? ', aimed at ' + fl.length + ' adoption stall' + (fl.length > 1 ? 's' : '') + ' flagged on the segment-by-stage matrix' : '') + '.');
-      doc.para('With the sequence in place, modeled adoption reaches ' + rP + '% of the organization at week 24; the same organization reaches ' + rB + '% if nothing changes. The sequence adds ' + (rP - rB) + ' points of adoption and ends with ' + rV + '% of the attainable value realized — a measure that combines reach with the capability to convert usage into output.');
+      doc.para('With the sequence in place, modeled adoption reaches ' + rP + '% of the organization at week 24; the same organization reaches ' + rB + '% if nothing changes. The sequence adds ' + (rP - rB) + ' points of adoption and ends with ' + rV + '% of the attainable value potential realized — a measure that combines reach with the capability to convert usage into output.');
       if (res.crossedWeek !== null) doc.para('The model projects the transformation crossing the self-sustaining threshold (' + THRESHOLD + '% adoption) at week ' + res.crossedWeek + ' — the point where the new way of working starts to carry itself.');
       else doc.para('The modeled curve ends below the self-sustaining threshold of ' + THRESHOLD + '% adoption, which means the gains remain reversible and the plan needs further reinforcement to hold.');
       doc.para('The pages that follow show the modeled trajectory, the sequence and its timing, the transformation phases the plan reaches, and the conditions each step depends on. The plan is explicit and has been tested against the model; what remains is execution.', { after: 28 });
@@ -2041,7 +2041,7 @@
       { label: 'WITH THIS PLAN', value: rP + '%', cap: 'adoption at week 24', color: DOC_BLUE },
       { label: 'IF NOTHING CHANGES', value: rB + '%', cap: 'adoption at week 24', color: DOC_RED },
       { label: 'ADOPTION ADDED', value: '+' + (rP - rB) + ' pts', cap: 'gained by the sequence', color: DOC_NAVY },
-      { label: 'VALUE REALIZED', value: rV + '%', cap: 'reach × capability', color: DOC_GREEN }
+      { label: 'VALUE POTENTIAL REALIZED', value: rV + '%', cap: 'reach × capability', color: DOC_GREEN }
     ];
     var tGap = 22, tw = Math.floor((PG_CW - tGap * 3) / 4);
     doc.ensure(170);
@@ -2079,7 +2079,7 @@
     }
     cx.strokeStyle = DOC_LINE; cx.lineWidth = 1; cx.strokeRect(PG_M + 0.5, doc.y + 0.5, chW, chH);
     doc.y += chH + 18;
-    doc.para('Modeled adoption over 24 weeks: the planned sequence in blue, the same organization with no intervention in dashed red, and value realized in green. Numbered markers show where each intervention starts; gold nodes mark the transformation phases as they are reached.', { font: F_SMALL, color: DOC_GRAY, lh: 26, after: 10 });
+    doc.para('Modeled adoption over 24 weeks: the planned sequence in blue, the same organization with no intervention in dashed red, and value potential realized in green. Numbered markers show where each intervention starts; gold nodes mark the transformation phases as they are reached.', { font: F_SMALL, color: DOC_GRAY, lh: 26, after: 10 });
 
     // ---- flagged stalls ----
     doc.section('Where adoption is stalled');
@@ -2188,7 +2188,7 @@
       ny += 33;
     });
     bx.fillStyle = DOC_NAVY; bx.font = F_SMALL_SB;
-    bx.fillText('Thomas Delaporte · TDcatalyst      sail@tdcatalyst.com      cal.com/tdcatalyst      tdcatalyst.com/grow', PG_M + boxPad, ny + 14);
+    bx.fillText('Thomas Delaporte · TDcatalyst      tom@tdcatalyst.com      cal.com/tdcatalyst      tdcatalyst.com/grow', PG_M + boxPad, ny + 14);
     doc.y = bTop + boxH + 28;
 
     doc.para('About the model: the simulation draws on Diffusion of Innovations, Prosci and ADKAR, the transtheoretical stages of change, COM-B, implementation-intention research, and social-norms theory. It is an illustrative planning model and its figures are directional; sources are listed on the simulation page at tdcatalyst.com/grow.', { font: F_SMALL, color: DOC_GRAY, lh: 26, after: 0 });
