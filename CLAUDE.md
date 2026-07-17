@@ -136,7 +136,7 @@ tdcatalyst-sail.github.io/
 
 ### Copy rules (IMPORTANT)
 
-**Tom's copy is canonical.** Styling changes must never rewrite page copy; copy edits ship only with Tom's explicit sign-off, and open questions are batched to him. Standing vocabulary: "the AI Revolution" (hub h1/title), "embodied strategic framing" (Sail), "transformation consulting" (Grow — deliberately broader than deployment/adoption). Style rules for NEW copy: claim-first headlines, no em dashes in visible copy, vary sentence shape (the hub's executives/enterprises/founders triplet is a deliberate exception), first person on the hub only.
+**Tom's copy is canonical.** Styling changes must never rewrite page copy; copy edits ship only with Tom's explicit sign-off, and open questions are batched to him. Standing vocabulary: "the AI revolution" (hub h1/title), "embodied strategic framing" (Sail), "transformation consulting" (Grow — deliberately broader than deployment/adoption). Style rules for NEW copy: claim-first headlines, no em dashes in visible copy, vary sentence shape (the hub's executives/enterprises/founders triplet is a deliberate exception), first person on the hub only.
 
 ### Images (images/ directory)
 
