@@ -47,7 +47,7 @@ tdcatalyst-sail.github.io/
 
 **Root:**
 - `index.html` — Umbrella hub: hero, three practice cards (`.practice-cards`), photo band, through-line section, CTA
-- `grow/index.html`, `advise/index.html` — Single-page **business conversion pages** for solo consulting: fixed-scope offers, proof sections citing Eightfold AI and Capgemini (quantified case studies pending — see HTML comments), an experimental "embodied strategic framing" component, anchor nav, and a contact form (`_subject` and `_next` are practice-specific; all route to tom@tdcatalyst.com via formsubmit.co)
+- `grow/index.html`, `advise/index.html` — Single-page **business conversion pages** for solo consulting: fixed-fee offers, proof sections citing Eightfold AI and Capgemini (quantified case studies pending — see HTML comments), an experimental "embodied strategic framing" component, anchor nav, and a contact form (`_subject` and `_next` are practice-specific; all route to tom@tdcatalyst.com via formsubmit.co)
 
 **Cross-linking rules:**
 - The hub (`/`) links to everything — it is the umbrella.
