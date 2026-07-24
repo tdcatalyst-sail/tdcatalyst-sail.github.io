@@ -236,8 +236,9 @@ function tdTerrainNoise(seed) {
   var HOLD_MS = 800;      // brief dwell at each peak; hover brings it back later
   var ALL_MS = 2200;      // final chord: all three pains lit together
   var FADE_MS = 900;      // then the piece settles…
-  var REST_OP = 0.26;     // …words dimmed to a whisper, still legible up close
-  var TRAIL_REST = 0.32;  // and the dashes fall back to a much lighter presence
+  var REST_OP = 0;        // …words gone completely — the map rests as dots and
+                          // a light trail; hover a dot to bring its pain back
+  var TRAIL_REST = 0.32;  // the dashes fall back to a much lighter presence
   var CLIMB_W = 2.2;      // how hard the router avoids crossing contours —
                           // the original tuning: skirts non-destination peaks,
                           // takes the gentlest line into the ones it must climb
@@ -634,8 +635,7 @@ function tdTerrainNoise(seed) {
     var rows_ = order.map(function (p, k) {
       var pt = LEN ? measure.getPointAtLength(F[k] * LEN) : { x: p.x, y: p.y };
       var cx = pt.x, cy = pt.y;
-      var isSummit = p === summit;
-      var dotR = isSummit ? 7 : 6, bgR = dotR + 3.5;
+      var dotR = 6, bgR = dotR + 3.5;   // all three dots share one format (Tom)
       var accent = p.pain.c || 'var(--navy)';
 
       var onRight = p.side === 'right';
@@ -663,8 +663,7 @@ function tdTerrainNoise(seed) {
       g.appendChild(halo);
       g.appendChild(svgEl('circle', { class: 'hp-dotbg', r: bgR }));
       var dot = svgEl('circle', { class: 'hp-dot', r: dotR });
-      if (isSummit) { dot.style.fill = accent; dot.style.stroke = 'var(--offwhite)'; dot.style.strokeWidth = '1.5'; }
-      else { dot.style.fill = 'var(--offwhite)'; dot.style.stroke = accent; }
+      dot.style.fill = 'var(--offwhite)'; dot.style.stroke = accent;
       g.appendChild(dot);
       svg.appendChild(g);
 
@@ -702,7 +701,7 @@ function tdTerrainNoise(seed) {
       hit.addEventListener('focus', function () { if (state.done) { state.hover = idx; state.paint(); } });
       hit.addEventListener('blur', function () { if (state.done) { state.hover = null; state.paint(); } });
       return { g: g, ping: ping, halo: halo, leader: leader, row: row, hit: hit,
-               cx: cx, cy: cy, isSummit: isSummit, onRight: onRight, bgR: bgR, labelLeft: labelLeft };
+               cx: cx, cy: cy, onRight: onRight, bgR: bgR, labelLeft: labelLeft };
     });
 
     var coords = document.createElement('div');
