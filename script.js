@@ -230,10 +230,15 @@ function tdTerrainNoise(seed) {
 
   // --- tuning ---------------------------------------------------------------
   var GUTTER = 56;        // clear space between the copy and the label column
-  var TRAVEL_MS = 7200;   // total time the head spends moving
-  var HOLD_MS = 2400;     // dwell at each peak — long enough to read the pain
+  var TRAVEL_MS = 5000;   // total time the head spends moving
+  var HOLD_MS = 1950;     // dwell at each peak — still long enough to read it
+  var FADE_MS = 1100;     // labels retire at the end, leaving the map quiet
   var CLIMB_W = 1.5;      // how hard the router avoids crossing contours
   var GRID = 13;          // routing grid step, px (bigger = fewer staircase jogs)
+  var MAX_LEG = 400;      // keep consecutive peaks close — no long empty walks
+  var PROM_MIN = 0.045;   // a dot must sit inside a closed contour ring to read
+                          // as a peak: that needs real prominence, not just a
+                          // local maximum on an invisible bump.
 
   var SVGNS = 'http://www.w3.org/2000/svg';
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -368,26 +373,39 @@ function tdTerrainNoise(seed) {
     // that walks left as it climbs. That lays the peaks on a rising diagonal —
     // a deliberate composition — while the exact spot is still a true local
     // maximum of the page's own noise field, so every dot sits on a real crest.
+    // Prominence: how far a candidate stands above the ground around it. A dot
+    // only reads as a peak when a closed contour ring encircles it, which needs
+    // more than one contour interval of prominence.
+    function prominence(x, y) {
+      var e = elev(x, y), ring = -1;
+      for (var a = 0; a < 10; a++) {
+        var ang = a * Math.PI / 5;
+        ring = Math.max(ring, elev(x + Math.cos(ang) * 30, y + Math.sin(ang) * 30));
+      }
+      return e - ring;
+    }
+
     var want = Math.min(PAINS.length, 4);
     var bandH = (dotMaxY - dotMinY) / want;
-    var peaks = [];
-    for (var b = 0; b < want; b++) {
+    var peaks = new Array(want);
+    // Pick bottom band first and climb: each peak can then be held near the one
+    // below it, so no leg of the walk is long and empty.
+    for (var b = want - 1; b >= 0; b--) {
       var yLo = dotMinY + b * bandH + 14, yHi = dotMinY + (b + 1) * bandH - 14;
       var frac = want > 1 ? b / (want - 1) : 0.5;
       var dotHi = stageRight - 26;
-      // most permissive limit anywhere in the band, so the diagonal bias still
-      // has room to work; each candidate is then checked against its own row
       var bandLo = Infinity;
       for (var yy = yLo; yy <= yHi; yy += 9) bandLo = Math.min(bandLo, dotLoAt(yy));
-      if (dotHi - bandLo < 50) { peaks.push(null); continue; }
+      if (dotHi - bandLo < 50) continue;
       var spanX = dotHi - bandLo;
       var cx0 = bandLo + Math.max(0, (0.10 + 0.62 * frac) - 0.16) * spanX;
       var cx1 = bandLo + Math.min(1, (0.10 + 0.62 * frac) + 0.30) * spanX;
-      var best = null, fallback = null;
-      for (var y = yLo; y <= yHi; y += 9) {
+      var prev = peaks[b + 1] || null;
+      var best = null, near = null, fallback = null;
+      for (var y = yLo; y <= yHi; y += 8) {
         var loX = Math.max(cx0, dotLoAt(y));   // this row's own clearance
         if (dotHi - loX < 10) continue;
-        for (var x = loX; x <= Math.max(cx1, loX + 40); x += 9) {
+        for (var x = loX; x <= Math.max(cx1, loX + 40); x += 8) {
           if (x > dotHi) break;
           var e = elev(x, y);
           if (!fallback || e > fallback.e) fallback = { x: x, y: y, e: e };
@@ -396,10 +414,16 @@ function tdTerrainNoise(seed) {
             var ang = a * Math.PI / 4;
             if (elev(x + Math.cos(ang) * 16, y + Math.sin(ang) * 16) >= e) isMax = false;
           }
-          if (isMax && (!best || e > best.e)) best = { x: x, y: y, e: e };
+          if (!isMax) continue;
+          var pr = prominence(x, y);
+          if (pr < PROM_MIN) continue;
+          var leg = prev ? Math.hypot(x - prev.x, y - prev.y) : 0;
+          var c = { x: x, y: y, e: e, pr: pr, leg: leg };
+          if (!best || pr > best.pr) best = c;                        // most peak-like
+          if (leg <= MAX_LEG && (!near || pr > near.pr)) near = c;     // ...within reach
         }
       }
-      peaks.push(best || fallback);
+      peaks[b] = near || best || fallback;
     }
     peaks = peaks.filter(Boolean);
     if (peaks.length < 2) return;
@@ -437,38 +461,55 @@ function tdTerrainNoise(seed) {
       return clamp(Math.round((py - gy0) / GRID), 0, rows - 1) * cols + clamp(Math.round((px - gx0) / GRID), 0, cols - 1);
     }
     function nodeXY(n) { return [gx0 + (n % cols) * GRID, gy0 + Math.floor(n / cols) * GRID]; }
-    var NB = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+    // 8 compass directions, ordered so index distance == turn angle / 45°
+    var NB = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+    // Search over (cell, heading) rather than cell alone, so a turn can be
+    // charged for. Without this the router zigzags between equal-cost cells and
+    // the result reads like a circuit trace instead of a walked line.
     function route(from, to) {
-      var dist = new Float32Array(cols * rows).fill(Infinity);
-      var prev = new Int32Array(cols * rows).fill(-1);
-      var seen = new Uint8Array(cols * rows);
+      var NS = cols * rows * 8;
+      var dist = new Float32Array(NS).fill(Infinity);
+      var prev = new Int32Array(NS).fill(-1);
+      var seen = new Uint8Array(NS);
       var h = new Heap(), s = nodeAt(from[0], from[1]), t = nodeAt(to[0], to[1]);
-      dist[s] = 0; h.push(s, 0);
+      for (var d0 = 0; d0 < 8; d0++) { dist[s * 8 + d0] = 0; h.push(s * 8 + d0, 0); }
+      var endState = -1;
       while (true) {
         var top = h.pop(); if (!top) break;
-        var n = top[1]; if (seen[n]) continue; seen[n] = 1;
-        if (n === t) break;
+        var st = top[1]; if (seen[st]) continue; seen[st] = 1;
+        var n = st >> 3, dcur = st & 7;
+        if (n === t) { endState = st; break; }
         var ni = n % cols, nj = Math.floor(n / cols);
-        for (var k = 0; k < NB.length; k++) {
+        for (var k = 0; k < 8; k++) {
           var bi = ni + NB[k][0], bj = nj + NB[k][1];
           if (bi < 0 || bj < 0 || bi >= cols || bj >= rows) continue;
-          var b = bj * cols + bi;
-          if (seen[b]) continue;
-          var d = (NB[k][0] && NB[k][1]) ? GRID * 1.4142 : GRID;
+          var b = bj * cols + bi, bst = b * 8 + k;
+          if (seen[bst]) continue;
+          var step = (NB[k][0] && NB[k][1]) ? GRID * 1.4142 : GRID;
           var de = Math.abs(E[b] - E[n]);
-          var c = d * (1 + CLIMB_W * de * 100);
+          var c = step * (1 + CLIMB_W * de * 100);
+          var turn = Math.abs(k - dcur); if (turn > 4) turn = 8 - turn;
+          c += turn * GRID * 0.55;                             // discourage kinks
           var bx = gx0 + bi * GRID, by = gy0 + bj * GRID;
           if (bx < rowEdge[bj]) c *= 9;                        // never cross the copy
           for (var z = 0; z < boxes.length; z++) {              // steer around the labels
             var bo = boxes[z];
             if (bx > bo.x0 && bx < bo.x1 && by > bo.y0 && by < bo.y1) { c *= 7; break; }
           }
-          var nd = dist[n] + c;
-          if (nd < dist[b]) { dist[b] = nd; prev[b] = n; h.push(b, nd); }
+          var nd = dist[st] + c;
+          if (nd < dist[bst]) { dist[bst] = nd; prev[bst] = st; h.push(bst, nd); }
         }
       }
-      var path = [], cur = t, guard = 0;
-      while (cur !== -1 && guard++ < 20000) { path.push(nodeXY(cur)); if (cur === s) break; cur = prev[cur]; }
+      if (endState < 0) {
+        for (var q = 0, bestD = Infinity; q < 8; q++)
+          if (dist[t * 8 + q] < bestD) { bestD = dist[t * 8 + q]; endState = t * 8 + q; }
+      }
+      var path = [], cur = endState, guard = 0;
+      while (cur >= 0 && guard++ < 40000) {
+        path.push(nodeXY(cur >> 3));
+        if ((cur >> 3) === s) break;
+        cur = prev[cur];
+      }
       path.reverse();
       return path.length > 1 ? path : [from, to];
     }
@@ -553,12 +594,14 @@ function tdTerrainNoise(seed) {
       g.appendChild(dot);
       svg.appendChild(g);
 
-      var row = document.createElement(p.pain.href ? 'a' : 'div');
+      // The label is pure display — it retires once the walk is over. The dot
+      // itself is the interactive target, and bringing it back is what a hover
+      // (or keyboard focus) does.
+      var row = document.createElement('div');
       row.className = 'hp-row';
       row.style.setProperty('--hp-accent', accent);
       row.style.width = labelW + 'px';
       row.style.left = (labelRight - labelW) + 'px';
-      if (p.pain.href) { row.href = p.pain.href; row.setAttribute('aria-label', p.pain.t + '. ' + (p.pain.d || '')); }
       var title = document.createElement('span');
       title.className = 'hp-title'; title.textContent = p.pain.t;
       row.appendChild(title);
@@ -567,18 +610,22 @@ function tdTerrainNoise(seed) {
         det.className = 'hp-detail'; det.textContent = p.pain.d;
         row.appendChild(det);
       }
-      var ev = document.createElement('span');
-      ev.className = 'hp-elev';
-      ev.textContent = p.ft.toLocaleString('en-US') + '′';
-      row.appendChild(ev);
       layer.appendChild(row);
 
+      var hit = document.createElement(p.pain.href ? 'a' : 'div');
+      hit.className = 'hp-hit';
+      hit.style.setProperty('--hp-accent', accent);
+      hit.style.left = (cx - 23) + 'px';
+      hit.style.top = (cy - 23) + 'px';
+      if (p.pain.href) { hit.href = p.pain.href; hit.setAttribute('aria-label', p.pain.t + '. ' + (p.pain.d || '')); }
+      layer.appendChild(hit);
+
       var idx = k;
-      row.addEventListener('mouseenter', function () { if (state.done) { state.hover = idx; paint(); } });
-      row.addEventListener('mouseleave', function () { if (state.done) { state.hover = null; paint(); } });
-      row.addEventListener('focus', function () { if (state.done) { state.hover = idx; paint(); } });
-      row.addEventListener('blur', function () { if (state.done) { state.hover = null; paint(); } });
-      return { g: g, ping: ping, halo: halo, leader: leader, row: row, cx: cx, cy: cy, isSummit: isSummit };
+      hit.addEventListener('mouseenter', function () { if (state.done) { state.hover = idx; state.paint(); } });
+      hit.addEventListener('mouseleave', function () { if (state.done) { state.hover = null; state.paint(); } });
+      hit.addEventListener('focus', function () { if (state.done) { state.hover = idx; state.paint(); } });
+      hit.addEventListener('blur', function () { if (state.done) { state.hover = null; state.paint(); } });
+      return { g: g, ping: ping, halo: halo, leader: leader, row: row, hit: hit, cx: cx, cy: cy, isSummit: isSummit };
     });
     // vertically centre each label on its dot once its height is known
     rows_.forEach(function (r) { r.row.style.top = (r.cy - r.row.offsetHeight / 2) + 'px'; });
@@ -610,7 +657,8 @@ function tdTerrainNoise(seed) {
       phases.push({ from: f, to: f, dur: HOLD_MS });
       tAcc += HOLD_MS; prevF = f;
     });
-    var TOTAL = tAcc;
+    var FADE_AT = tAcc;              // walk over: the labels retire from here
+    var TOTAL = tAcc + FADE_MS;
 
     function pAt(ms) {
       var t = 0;
@@ -637,7 +685,8 @@ function tdTerrainNoise(seed) {
 
       var lastArrived = -1;
       for (var i = 0; i < arriveAt.length; i++) if (ms >= arriveAt[i]) lastArrived = i;
-      var focus = state.done ? state.hover : lastArrived;
+      // once the walk is done the type stands down and the map is just dots
+      var labelGlobal = state.done ? 0 : (ms >= FADE_AT ? 1 - smoothstep(clamp((ms - FADE_AT) / FADE_MS, 0, 1)) : 1);
 
       rows_.forEach(function (r, k) {
         var since = ms - arriveAt[k];
@@ -645,7 +694,8 @@ function tdTerrainNoise(seed) {
         var active = state.done ? (state.hover === k) : (k === lastArrived);
         var dimF = 1;
         if (!state.done && lastArrived >= 0 && k !== lastArrived) dimF = 0.5;
-        if (state.done && state.hover != null) dimF = active ? 1 : 0.32;
+        if (state.done && state.hover != null) dimF = active ? 1 : 0.45;
+        var labelOp = active && state.done ? 1 : appear * dimF * labelGlobal;
 
         var pop = eob(clamp(since / 430, 0, 1));
         r.g.style.transition = state.done ? 'transform .35s cubic-bezier(.2,.7,.2,1),opacity .3s ease' : 'none';
@@ -659,12 +709,12 @@ function tdTerrainNoise(seed) {
         r.halo.style.opacity = (state.done && active) ? 0.35 : 0;
         var lp = clamp(since / 480, 0, 1);
         r.leader.style.strokeDashoffset = (1 - lp).toFixed(3);
-        r.leader.style.opacity = (lp * 0.9 * dimF).toFixed(3);
+        r.leader.style.opacity = (lp * 0.9 * labelOp).toFixed(3);
         r.leader.style.stroke = active ? r.row.style.getPropertyValue('--hp-accent') : 'var(--hp-leader)';
-        r.row.style.transition = state.done ? 'opacity .3s ease' : 'none';
-        r.row.style.opacity = (appear * dimF).toFixed(3);
-        r.row.classList.toggle('is-active', !!active && appear > 0.6);
-        r.row.style.pointerEvents = state.done ? 'auto' : 'none';
+        r.row.style.transition = state.done ? 'opacity .32s ease' : 'none';
+        r.row.style.opacity = labelOp.toFixed(3);
+        r.row.classList.toggle('is-active', !!active && labelOp > 0.6);
+        r.hit.style.pointerEvents = state.done ? 'auto' : 'none';
       });
       coords.style.opacity = clamp((ms - TOTAL * 0.55) / 700, 0, 1).toFixed(3);
       replay.style.opacity = state.done ? 1 : 0;
