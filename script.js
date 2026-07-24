@@ -245,6 +245,7 @@ function tdTerrainNoise(seed) {
   var GRID = 9;           // routing grid step, px
   var FRAME_W = 760;      // the whole walk stays inside this right-hand frame —
                           // it never wanders out over the headline (Tom)
+  var BELOW_W = 210;      // width of a label placed under its dot
   var PROM_MIN = 0.035;   // a dot must sit inside a closed contour ring to read
                           // as a peak: that needs real prominence, not just a
                           // local maximum on an invisible bump.
@@ -460,6 +461,33 @@ function tdTerrainNoise(seed) {
         else if (b2.side === 'right' && b2.leftOK) b2.side = 'left';
       }
     }
+    // Middle peak: put its label UNDER the dot when that fits (Tom) — it
+    // balances the three text boxes around the cluster instead of stacking
+    // two on the right. Falls back to the side flip when the space isn't there.
+    if (peaks.length === 3 && peaks[1].side === 'right') {
+      var mid = peaks[1], low = peaks[2];
+      var yTop2 = mid.y + 22, yBot2 = yTop2 + 132;
+      var xLo2 = copyRightAt(yTop2, yBot2) + 14;
+      var bx2 = Math.max(mid.x - BELOW_W / 2, xLo2);
+      // the lower peak's own label box — on whichever side it sits — must stay
+      // clear; try sliding the below-label, otherwise keep the side flip
+      var lowBox = low.side === 'right'
+        ? { x0: low.x + 14, x1: low.x + 34 + labelW }
+        : { x0: low.x - 34 - labelW, x1: low.x - 14 };
+      var yMeets = (low.y + 80 > yTop2) && (low.y - 80 < yBot2);
+      function clearOf(x) {
+        return !yMeets || x + BELOW_W + 8 <= lowBox.x0 || x - 8 >= lowBox.x1;
+      }
+      var ok2 = false;
+      if (bx2 >= xLo2 && bx2 + BELOW_W <= stageRight && clearOf(bx2)) ok2 = true;
+      else if (yMeets) {
+        var shiftL = lowBox.x0 - 12 - BELOW_W;
+        var shiftR = lowBox.x1 + 12;
+        if (shiftL >= xLo2) { bx2 = shiftL; ok2 = true; }
+        else if (shiftR + BELOW_W <= stageRight) { bx2 = shiftR; ok2 = true; }
+      }
+      if (ok2) { mid.side = 'below'; mid.belowX = bx2; }
+    }
 
     // Bands run top to bottom, and height on screen is what a reader reads as
     // "how acute" — so the topmost peak carries the most acute pain.
@@ -475,6 +503,9 @@ function tdTerrainNoise(seed) {
     // Label boxes, so the router can steer the trail around the type instead of
     // being confined to a narrow corridor beside it.
     var boxes = peaks.map(function (p) {
+      if (p.side === 'below') {
+        return { x0: p.belowX - 8, x1: p.belowX + BELOW_W + 8, y0: p.y + 16, y1: p.y + 152 };
+      }
       if (p.side === 'right') {
         var left = p.x + 20;
         return { x0: left - 6, x1: left + labelW + 14, y0: p.y - 62, y1: p.y + 62 };
@@ -638,10 +669,14 @@ function tdTerrainNoise(seed) {
       var dotR = 6, bgR = dotR + 3.5;   // all three dots share one format (Tom)
       var accent = p.pain.c || 'var(--navy)';
 
-      var onRight = p.side === 'right';
+      var onRight = p.side === 'right', onBelow = p.side === 'below';
       var leader = svgEl('path', { class: 'hp-leader', pathLength: '1' });
       var labelLeft;   // where the label block starts
-      if (onRight) {
+      if (onBelow) {
+        // short vertical drop from the dot to the label's top edge
+        leader.setAttribute('d', 'M ' + cx.toFixed(1) + ' ' + (cy + bgR + 3).toFixed(1) + ' L ' + cx.toFixed(1) + ' ' + (cy + bgR + 16).toFixed(1));
+        labelLeft = p.belowX;
+      } else if (onRight) {
         var labelStart = cx + bgR + 26;
         leader.setAttribute('d', 'M ' + (cx + bgR + 3).toFixed(1) + ' ' + cy.toFixed(1) + ' L ' + (labelStart - 8).toFixed(1) + ' ' + cy.toFixed(1));
         labelLeft = labelStart;
@@ -671,9 +706,9 @@ function tdTerrainNoise(seed) {
       // itself is the interactive target, and bringing it back is what a hover
       // (or keyboard focus) does.
       var row = document.createElement('div');
-      row.className = 'hp-row' + (onRight ? ' hp-row--right' : '');
+      row.className = 'hp-row' + (onRight ? ' hp-row--right' : onBelow ? ' hp-row--below' : '');
       row.style.setProperty('--hp-accent', accent);
-      row.style.width = labelW + 'px';
+      row.style.width = (onBelow ? BELOW_W : labelW) + 'px';
       row.style.left = labelLeft + 'px';
       var title = document.createElement('span');
       title.className = 'hp-title'; title.textContent = p.pain.t;
@@ -701,7 +736,7 @@ function tdTerrainNoise(seed) {
       hit.addEventListener('focus', function () { if (state.done) { state.hover = idx; state.paint(); } });
       hit.addEventListener('blur', function () { if (state.done) { state.hover = null; state.paint(); } });
       return { g: g, ping: ping, halo: halo, leader: leader, row: row, hit: hit,
-               cx: cx, cy: cy, onRight: onRight, bgR: bgR, labelLeft: labelLeft };
+               cx: cx, cy: cy, onRight: onRight, onBelow: onBelow, bgR: bgR, labelLeft: labelLeft };
     });
 
     var coords = document.createElement('div');
@@ -725,9 +760,11 @@ function tdTerrainNoise(seed) {
     // Vertically centre each label on its dot, then resolve collisions: when two
     // same-side labels overlap (tight peak clusters), slide the lower one down
     // and let its leader run diagonally to the dot — standard map labelling.
-    rows_.forEach(function (r) { r.row.style.top = (r.cy - r.row.offsetHeight / 2) + 'px'; });
+    rows_.forEach(function (r) {
+      r.row.style.top = r.onBelow ? (r.cy + r.bgR + 14) + 'px' : (r.cy - r.row.offsetHeight / 2) + 'px';
+    });
     ['left-side', 'right-side'].forEach(function (_, sideIdx) {
-      var group = rows_.filter(function (r) { return r.onRight === (sideIdx === 1); })
+      var group = rows_.filter(function (r) { return !r.onBelow && r.onRight === (sideIdx === 1); })
         .sort(function (a2, b2) { return a2.cy - b2.cy; });
       var prevBottom = -1e9;
       group.forEach(function (r) {
