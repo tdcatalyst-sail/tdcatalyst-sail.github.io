@@ -2183,11 +2183,18 @@ footer .footer-practices i {
 .hp-dotbg { fill: var(--offwhite); }
 .hp-dot { stroke-width: 2; }
 
-/* label block: right-aligned, sits to the left of its dot with a hairline leader */
+/* label block: right-aligned, sits to the left of its dot with a hairline leader.
+   Display only — it retires when the walk ends; the dot is the target. */
 .hp-row {
-  position: absolute; display: block; text-align: right; text-decoration: none; border: 0;
-  pointer-events: auto; opacity: 0;
+  position: absolute; display: block; text-align: right;
+  pointer-events: none; opacity: 0;
 }
+/* the dot's own hit area, comfortably larger than the dot itself */
+.hp-hit {
+  position: absolute; width: 46px; height: 46px; border-radius: 50%;
+  border: 0; pointer-events: none; cursor: pointer;
+}
+.hp-hit:focus-visible { outline: 2px solid var(--hp-accent); outline-offset: 3px; }
 .hp-title {
   display: inline-block; font-family: 'Besley', Georgia, serif; font-weight: 600;
   font-size: 17px; line-height: 1.22; color: var(--navy);
@@ -2201,12 +2208,6 @@ footer .footer-practices i {
   font-size: 12.5px; line-height: 1.45; color: var(--midgray);
   text-shadow: 0 0 7px var(--offwhite), 0 0 4px var(--offwhite);
 }
-.hp-elev {
-  display: block; margin-top: 6px; font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.14em; color: var(--hp-accent); opacity: 0.75;
-  text-shadow: 0 0 6px var(--offwhite);
-}
-a.hp-row:focus-visible { outline: 2px solid var(--hp-accent); outline-offset: 6px; border-radius: 2px; }
 
 .hp-coords {
   position: absolute; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em;
