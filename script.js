@@ -1,3 +1,14 @@
+// Cloudflare Web Analytics — inject the beacon on every page that loads this script
+// (privacy-friendly, cookieless; token is public by design). Redirect stubs don't
+// load script.js and bounce instantly, so they're intentionally untracked.
+(function () {
+  var s = document.createElement('script');
+  s.defer = true;
+  s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+  s.setAttribute('data-cf-beacon', '{"token": "ea193c24f5b84666b3740d4b39e64260"}');
+  document.head.appendChild(s);
+})();
+
 // Show confirmation banner after form submit (?sent=1)
 (function () {
   if (new URLSearchParams(window.location.search).get('sent') !== '1') return;
