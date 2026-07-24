@@ -2159,20 +2159,34 @@ footer .footer-practices i {
 .hero--terrain > canvas.terrain { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero--terrain .wrap { position: relative; }
 
+/* Terrain band behind a JS-rendered app (diagnostic): fixed-height strip at the
+   top of <main>, outside the re-rendered container, fading out downward */
+.diag-terrain-host { position: relative; }
+.diag-terrain {
+  position: absolute; top: 0; left: 0; right: 0; height: 660px;
+  overflow: hidden; pointer-events: none;
+}
+.diag-terrain > canvas.terrain { position: absolute; inset: 0; width: 100%; height: 100%; }
+.diag-terrain-host > #diag-app { position: relative; }
+
 /* --- Hero peaks: a trail routed over the hero's OWN contour field ------------
    Pure overlay: the hero's markup and layout are untouched. script.js reads the
    same seeded noise the canvas draws, finds real summits in the space left of
    the copy, and routes a least-cost trail between them (see "hero peaks" there).
    Desktop only — the whole overlay is display:none below 1024px. */
 .hero--peaks .wrap { z-index: 3; }
+/* Above .wrap, not below it: .wrap is a full-width block, so at z-index 2 it
+   swallowed the hover on any dot sitting over it (every dot but the outermost).
+   The layer itself is pointer-events:none, so raising it blocks nothing — only
+   the small .hp-hit circles take the pointer. */
 .hero-peaks {
   --hp-leader: color-mix(in srgb, var(--navy) 42%, transparent);
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  position: absolute; inset: 0; z-index: 4; pointer-events: none;
 }
 @media (max-width: 1023px) { .hero-peaks { display: none; } }
 .hp-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 
-.hp-trail { fill: none; stroke: var(--navy); stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 5 7; opacity: 0.9; }
+.hp-trail { fill: none; stroke: var(--navy); stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 5 7; opacity: 0.95; }
 .hp-mask { fill: none; stroke: #fff; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
 .hp-head { fill: var(--navy); }
 .hp-leader { fill: none; stroke: var(--hp-leader); stroke-width: 1; }
@@ -2189,14 +2203,17 @@ footer .footer-practices i {
   position: absolute; display: block; text-align: right;
   pointer-events: none; opacity: 0;
 }
-/* the dot's own hover area, comfortably larger than the dot itself */
+.hp-row--right { text-align: left; }
+/* the dot's own hover/click target, comfortably larger than the dot itself */
 .hp-hit {
-  position: absolute; width: 46px; height: 46px; border-radius: 50%;
-  border: 0; pointer-events: none;
+  position: absolute; width: 50px; height: 50px; border-radius: 50%;
+  border: 0; pointer-events: none; cursor: pointer;
 }
+.hp-hit:focus-visible { outline: 2px solid var(--hp-accent); outline-offset: 3px; }
 .hp-title {
   display: inline-block; font-family: 'Besley', Georgia, serif; font-weight: 600;
-  font-size: 17px; line-height: 1.22; color: var(--navy);
+  font-size: 18.5px; line-height: 1.22; color: var(--navy);
+  text-wrap: balance;  /* no orphaned last word, same rule the headings use */
   border-bottom: 2px solid transparent; padding-bottom: 2px;
   transition: color 0.35s ease, border-color 0.35s ease;
   text-shadow: 0 0 8px var(--offwhite), 0 0 4px var(--offwhite), 0 0 2px var(--offwhite);
@@ -2213,6 +2230,14 @@ footer .footer-practices i {
   color: var(--midgray); opacity: 0; white-space: nowrap;
   text-shadow: 0 0 6px var(--offwhite), 0 0 3px var(--offwhite);
 }
+/* replay: deliberately quiet — mono whisper in the corner, not a control bar */
+.hp-replay {
+  position: absolute; opacity: 0; pointer-events: none; cursor: pointer;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em; color: var(--midgray);
+  border: 1px solid var(--hairline); background: color-mix(in srgb, var(--offwhite) 82%, transparent);
+  padding: 4px 10px; border-radius: 999px; transition: color 0.2s, border-color 0.2s, opacity 0.4s;
+}
+.hp-replay:hover { color: var(--navy); border-color: var(--navy-soft); }
 
 /* Mono utility register (captions, coordinates, small labels) */
 .band-note {
