@@ -235,13 +235,16 @@ function tdTerrainNoise(seed) {
   var FADE_MS = 1100;     // labels retire at the end, leaving the map quiet
   var CLIMB_W = 1.5;      // how hard the router avoids crossing contours
   var GRID = 13;          // routing grid step, px (bigger = fewer staircase jogs)
-  var MAX_LEG = 340;      // keep consecutive peaks close — no long empty walks
+  var MAX_LEG = 390;      // keep the legs comparable without cramping the spread
   var PROM_MIN = 0.045;   // a dot must sit inside a closed contour ring to read
                           // as a peak: that needs real prominence, not just a
                           // local maximum on an invisible bump.
 
   var SVGNS = 'http://www.w3.org/2000/svg';
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Reduced motion goes straight to the settled map. ?anim=1 is an explicit
+  // opt-in for previewing the walk on a machine that has the OS setting on.
+  var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+    && !/[?&]anim=1/.test(location.search);
   var seed = parseFloat(canvas.dataset.seed || '1');
   var scale = parseFloat(canvas.dataset.scale || '210');
   var fbm = tdTerrainNoise(seed);
@@ -582,7 +585,7 @@ function tdTerrainNoise(seed) {
       var pt = LEN ? measure.getPointAtLength(F[k] * LEN) : { x: p.x, y: p.y };
       var cx = pt.x, cy = pt.y;
       var isSummit = p === summit;
-      var dotR = isSummit ? 6 : 5, bgR = dotR + 3.5;
+      var dotR = isSummit ? 7 : 6, bgR = dotR + 3.5;
       var accent = p.pain.c || 'var(--navy)';
 
       var leader = svgEl('path', { class: 'hp-leader', pathLength: '1' });
@@ -624,20 +627,21 @@ function tdTerrainNoise(seed) {
       }
       layer.appendChild(row);
 
-      // The peaks are a diagnostic statement, not a second navigation — the
-      // practice cards below route properly, with real copy and real targets.
-      // So this is a hover affordance only; the pain text stays in the DOM
-      // (opacity 0, still exposed to assistive tech) whether it is shown or not.
-      var hit = document.createElement('div');
+      // Hovering or focusing a dot brings its pain back and follows through to
+      // that practice. The label itself stays display-only.
+      var hit = document.createElement(p.pain.href ? 'a' : 'div');
       hit.className = 'hp-hit';
-      hit.setAttribute('aria-hidden', 'true');
-      hit.style.left = (cx - 23) + 'px';
-      hit.style.top = (cy - 23) + 'px';
+      hit.style.setProperty('--hp-accent', accent);
+      hit.style.left = (cx - 25) + 'px';
+      hit.style.top = (cy - 25) + 'px';
+      if (p.pain.href) { hit.href = p.pain.href; hit.setAttribute('aria-label', p.pain.t + '. ' + (p.pain.d || '')); }
       layer.appendChild(hit);
 
       var idx = k;
       hit.addEventListener('mouseenter', function () { if (state.done) { state.hover = idx; state.paint(); } });
       hit.addEventListener('mouseleave', function () { if (state.done) { state.hover = null; state.paint(); } });
+      hit.addEventListener('focus', function () { if (state.done) { state.hover = idx; state.paint(); } });
+      hit.addEventListener('blur', function () { if (state.done) { state.hover = null; state.paint(); } });
       return { g: g, ping: ping, halo: halo, leader: leader, row: row, hit: hit, cx: cx, cy: cy, isSummit: isSummit };
     });
     // vertically centre each label on its dot once its height is known
@@ -766,7 +770,9 @@ function tdTerrainNoise(seed) {
     if (Math.abs(hero.clientWidth - lastW) < 2 && Math.abs(hero.clientHeight - lastH) < 2) return;
     lastW = hero.clientWidth; lastH = hero.clientHeight;
     clearTimeout(rt);
-    rt = setTimeout(function () { build(false); }, 220);
+    // don't let an incidental resize (scrollbar, font swap) settle a walk that
+    // has not played yet
+    rt = setTimeout(function () { build(!state.played && !reduce); }, 220);
   }
   window.addEventListener('resize', onResize);
   if (document.fonts && document.fonts.ready) {
