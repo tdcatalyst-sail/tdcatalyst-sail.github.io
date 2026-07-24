@@ -612,19 +612,20 @@ function tdTerrainNoise(seed) {
       }
       layer.appendChild(row);
 
-      var hit = document.createElement(p.pain.href ? 'a' : 'div');
+      // The peaks are a diagnostic statement, not a second navigation — the
+      // practice cards below route properly, with real copy and real targets.
+      // So this is a hover affordance only; the pain text stays in the DOM
+      // (opacity 0, still exposed to assistive tech) whether it is shown or not.
+      var hit = document.createElement('div');
       hit.className = 'hp-hit';
-      hit.style.setProperty('--hp-accent', accent);
+      hit.setAttribute('aria-hidden', 'true');
       hit.style.left = (cx - 23) + 'px';
       hit.style.top = (cy - 23) + 'px';
-      if (p.pain.href) { hit.href = p.pain.href; hit.setAttribute('aria-label', p.pain.t + '. ' + (p.pain.d || '')); }
       layer.appendChild(hit);
 
       var idx = k;
       hit.addEventListener('mouseenter', function () { if (state.done) { state.hover = idx; state.paint(); } });
       hit.addEventListener('mouseleave', function () { if (state.done) { state.hover = null; state.paint(); } });
-      hit.addEventListener('focus', function () { if (state.done) { state.hover = idx; state.paint(); } });
-      hit.addEventListener('blur', function () { if (state.done) { state.hover = null; state.paint(); } });
       return { g: g, ping: ping, halo: halo, leader: leader, row: row, hit: hit, cx: cx, cy: cy, isSummit: isSummit };
     });
     // vertically centre each label on its dot once its height is known
@@ -636,14 +637,6 @@ function tdTerrainNoise(seed) {
     coords.style.left = Math.max(freeLeftAt(H - 40), W - 560) + 'px';
     coords.style.top = (H - 40) + 'px';
     layer.appendChild(coords);
-
-    var replay = document.createElement('button');
-    replay.type = 'button'; replay.className = 'hp-replay';
-    replay.setAttribute('aria-label', 'Replay animation');
-    replay.textContent = '↻ REPLAY';
-    replay.style.right = '22px'; replay.style.top = (H - 46) + 'px';
-    replay.addEventListener('click', function () { play(); });
-    layer.appendChild(replay);
 
     hero.appendChild(layer);
     state.built = true; state.rows = rows_;
@@ -717,8 +710,6 @@ function tdTerrainNoise(seed) {
         r.hit.style.pointerEvents = state.done ? 'auto' : 'none';
       });
       coords.style.opacity = clamp((ms - TOTAL * 0.55) / 700, 0, 1).toFixed(3);
-      replay.style.opacity = state.done ? 1 : 0;
-      replay.style.pointerEvents = state.done ? 'auto' : 'none';
     }
 
     function play() {
