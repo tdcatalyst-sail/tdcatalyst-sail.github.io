@@ -66,30 +66,33 @@ function closeBrandMenu() {
 // Gate for reveal styles (content stays visible when JS is off)
 document.documentElement.classList.add('js');
 
+// Value-noise field behind every terrain canvas. Hoisted to file scope so the
+// hero-peaks overlay can sample the SAME field the contours are drawn from.
+function tdTerrainNoise(seed) {
+  function hash(x, y) {
+    var h = Math.sin(x * 127.1 + y * 311.7 + seed * 74.7) * 43758.5453;
+    return h - Math.floor(h);
+  }
+  function smooth(t) { return t * t * (3 - 2 * t); }
+  function noise(x, y) {
+    var xi = Math.floor(x), yi = Math.floor(y);
+    var xf = x - xi, yf = y - yi;
+    var a = hash(xi, yi), b = hash(xi + 1, yi), c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
+    var u = smooth(xf), v = smooth(yf);
+    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+  }
+  return function (x, y) {
+    var val = 0, amp = 0.5, f = 1;
+    for (var i = 0; i < 4; i++) { val += amp * noise(x * f, y * f); f *= 2; amp *= 0.5; }
+    return val;
+  };
+}
+
 (function () {
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var makeNoise = tdTerrainNoise;
 
   // --- Topographic contour renderer (marching squares over value noise) ---
-  function makeNoise(seed) {
-    function hash(x, y) {
-      var h = Math.sin(x * 127.1 + y * 311.7 + seed * 74.7) * 43758.5453;
-      return h - Math.floor(h);
-    }
-    function smooth(t) { return t * t * (3 - 2 * t); }
-    function noise(x, y) {
-      var xi = Math.floor(x), yi = Math.floor(y);
-      var xf = x - xi, yf = y - yi;
-      var a = hash(xi, yi), b = hash(xi + 1, yi), c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
-      var u = smooth(xf), v = smooth(yf);
-      return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
-    }
-    return function (x, y) {
-      var val = 0, amp = 0.5, f = 1;
-      for (var i = 0; i < 4; i++) { val += amp * noise(x * f, y * f); f *= 2; amp *= 0.5; }
-      return val;
-    };
-  }
-
   // t drifts the noise field slowly — the terrain "breathes"
   function drawTerrain(canvas, t) {
     var d = canvas.dataset;
@@ -203,5 +206,575 @@ document.documentElement.classList.add('js');
       }, { threshold: 0.12 });
       revealEls.forEach(function (el) { io.observe(el); });
     }
+  }
+})();
+
+// ===== Hero peaks =========================================================
+// A survey trail drawn over the hero's OWN terrain. We sample the same seeded
+// noise field the canvas contours come from, find the real summits in the space
+// left of the copy, and route between them with a least-cost path that penalises
+// crossing contours — so the line traverses and switchbacks like a real route
+// instead of cutting straight across. It enters from the top and finishes on the
+// highest summit. Each peak names a pain and links to the practice that owns it;
+// elevation encodes how acute it is. Desktop only; the hero markup is untouched.
+(function () {
+  var hero = document.querySelector('.hero--peaks');
+  if (!hero) return;
+  var canvas = hero.querySelector('canvas.terrain');
+  var cfgEl = hero.querySelector('[data-peaks-config]');
+  if (!canvas || !cfgEl) return;
+  var cfg;
+  try { cfg = JSON.parse(cfgEl.textContent); } catch (e) { return; }
+  var PAINS = cfg.pains || [];
+  if (PAINS.length < 2) return;
+
+  // --- tuning ---------------------------------------------------------------
+  var GUTTER = 56;        // clear space between the copy and the label column
+  var TRAVEL_MS = 5000;   // total time the head spends moving
+  var HOLD_MS = 1950;     // dwell at each peak — still long enough to read it
+  var FADE_MS = 1100;     // labels retire at the end, leaving the map quiet
+  var CLIMB_W = 1.5;      // how hard the router avoids crossing contours
+  var GRID = 13;          // routing grid step, px (bigger = fewer staircase jogs)
+  var MAX_LEG = 340;      // keep consecutive peaks close — no long empty walks
+  var PROM_MIN = 0.045;   // a dot must sit inside a closed contour ring to read
+                          // as a peak: that needs real prominence, not just a
+                          // local maximum on an invisible bump.
+
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var seed = parseFloat(canvas.dataset.seed || '1');
+  var scale = parseFloat(canvas.dataset.scale || '210');
+  var fbm = tdTerrainNoise(seed);
+  function elev(x, y) { return fbm(x / scale, y / scale); }
+
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function smoothstep(t) { return t * t * (3 - 2 * t); }
+  function eob(t) { var c = 2.0; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); }
+  function svgEl(tag, attrs) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function crPath(pts) {
+    if (pts.length < 2) return '';
+    var d = 'M ' + pts[0][0].toFixed(1) + ' ' + pts[0][1].toFixed(1);
+    for (var i = 0; i < pts.length - 1; i++) {
+      var p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || pts[i + 1];
+      d += ' C ' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ' ' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1)
+        + ' ' + (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ' ' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1)
+        + ' ' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1);
+    }
+    return d;
+  }
+  function chaikin(pts, passes) {
+    for (var n = 0; n < passes; n++) {
+      var out = [pts[0]];
+      for (var i = 0; i < pts.length - 1; i++) {
+        var a = pts[i], b = pts[i + 1];
+        out.push([a[0] * 0.75 + b[0] * 0.25, a[1] * 0.75 + b[1] * 0.25]);
+        out.push([a[0] * 0.25 + b[0] * 0.75, a[1] * 0.25 + b[1] * 0.75]);
+      }
+      out.push(pts[pts.length - 1]);
+      pts = out;
+    }
+    return pts;
+  }
+
+  // --- min-heap for the router ---------------------------------------------
+  function Heap() { this.a = []; }
+  Heap.prototype.push = function (n, p) {
+    var a = this.a; a.push([p, n]);
+    var i = a.length - 1;
+    while (i > 0) { var q = (i - 1) >> 1; if (a[q][0] <= a[i][0]) break; var t = a[q]; a[q] = a[i]; a[i] = t; i = q; }
+  };
+  Heap.prototype.pop = function () {
+    var a = this.a; if (!a.length) return null;
+    var top = a[0], last = a.pop();
+    if (a.length) {
+      a[0] = last;
+      for (var i = 0; ;) {
+        var l = 2 * i + 1, r = l + 1, s = i;
+        if (l < a.length && a[l][0] < a[s][0]) s = l;
+        if (r < a.length && a[r][0] < a[s][0]) s = r;
+        if (s === i) break;
+        var t = a[s]; a[s] = a[i]; a[i] = t; i = s;
+      }
+    }
+    return top;
+  };
+
+  var state = { built: false, played: false, raf: 0, done: false, hover: null, rows: [], t0: 0 };
+  var layer = null;
+
+  function destroy() {
+    if (state.raf) cancelAnimationFrame(state.raf);
+    state.raf = 0;
+    if (layer && layer.parentNode) layer.parentNode.removeChild(layer);
+    layer = null; state.rows = []; state.built = false;
+  }
+
+  function build(animate) {
+    destroy();
+    var W = hero.clientWidth, H = hero.clientHeight;
+    if (!W || !H || W < 1024) return;
+
+    // Free space to the right of the copy is an L, not a column: above the
+    // headline only the logo is in the way. So collect the copy's INK — text
+    // measured line-by-line with a Range, leaves by their own rect — and ask how
+    // far right it reaches AT A GIVEN HEIGHT. The peaks can then swing left as
+    // they climb into the empty air above the headline.
+    var heroRect = hero.getBoundingClientRect();
+    var ink = [];
+    function collectInk(node) {
+      if (node.nodeType === 3) {
+        if (!node.nodeValue || !node.nodeValue.trim()) return;
+        var rg = document.createRange();
+        rg.selectNodeContents(node);
+        var rects = rg.getClientRects();
+        for (var i = 0; i < rects.length; i++) {
+          var r = rects[i];
+          if (r.width) ink.push({ x1: r.right - heroRect.left, y0: r.top - heroRect.top, y1: r.bottom - heroRect.top });
+        }
+        return;
+      }
+      if (node.nodeType !== 1) return;
+      if (node.tagName === 'IMG' || node.tagName === 'SVG' || !node.firstChild) {
+        var b = node.getBoundingClientRect();
+        if (b.width) ink.push({ x1: b.right - heroRect.left, y0: b.top - heroRect.top, y1: b.bottom - heroRect.top });
+        return;
+      }
+      for (var c = node.firstChild; c; c = c.nextSibling) collectInk(c);
+    }
+    var wrapEl = hero.querySelector('.wrap');
+    if (wrapEl) collectInk(wrapEl);
+    function copyRightAt(y0, y1) {
+      var m = 0;
+      for (var i = 0; i < ink.length; i++) {
+        var r = ink[i];
+        if (r.y1 >= y0 && r.y0 <= y1) m = Math.max(m, r.x1);
+      }
+      return m;
+    }
+
+    var stageRight = W - 20;
+    var labelW = clamp(Math.min(224, (stageRight - copyRightAt(0, H) - GUTTER) - 110), 168, 224);
+    if (stageRight - copyRightAt(0, H) - GUTTER < 300) return;
+    var dotMinY = 84, dotMaxY = H - 132;   // bottom margin clears the coords line
+    if (dotMaxY - dotMinY < 300) return;
+    // Left edge available to a label centred at y. LABEL_H2 is half a label's
+    // height: a label reaches well past its dot, so the limit has to consider
+    // the copy above and below it, not just the line beside it.
+    var LABEL_H2 = 82;
+    function freeLeftAt(y) { return copyRightAt(y - LABEL_H2, y + LABEL_H2) + GUTTER; }
+    function dotLoAt(y) { return freeLeftAt(y) + labelW + 32; }
+
+    // --- pick a real summit inside each band --------------------------------
+    // One band per pain, top to bottom, each with a preferred horizontal window
+    // that walks left as it climbs. That lays the peaks on a rising diagonal —
+    // a deliberate composition — while the exact spot is still a true local
+    // maximum of the page's own noise field, so every dot sits on a real crest.
+    // Prominence: how far a candidate stands above the ground around it. A dot
+    // only reads as a peak when a closed contour ring encircles it, which needs
+    // more than one contour interval of prominence.
+    function prominence(x, y) {
+      var e = elev(x, y), ring = -1;
+      for (var a = 0; a < 10; a++) {
+        var ang = a * Math.PI / 5;
+        ring = Math.max(ring, elev(x + Math.cos(ang) * 30, y + Math.sin(ang) * 30));
+      }
+      return e - ring;
+    }
+
+    var want = Math.min(PAINS.length, 4);
+    var bandH = (dotMaxY - dotMinY) / want;
+    var peaks = new Array(want);
+    // Pick bottom band first and climb: each peak can then be held near the one
+    // below it, so no leg of the walk is long and empty.
+    for (var b = want - 1; b >= 0; b--) {
+      var yLo = dotMinY + b * bandH + 14, yHi = dotMinY + (b + 1) * bandH - 14;
+      var frac = want > 1 ? b / (want - 1) : 0.5;
+      var dotHi = stageRight - 26;
+      var bandLo = Infinity;
+      for (var yy = yLo; yy <= yHi; yy += 9) bandLo = Math.min(bandLo, dotLoAt(yy));
+      if (dotHi - bandLo < 50) continue;
+      var prev = peaks[b + 1] || null;
+      var spanX = dotHi - bandLo, cx0, cx1;
+      if (prev) {
+        // Search only within a short walk of the peak below, drifting left as it
+        // climbs. This is what keeps the final leg from being a long empty hike.
+        // Always step LEFT of the peak below — that is what makes the walk a
+        // rising diagonal — but never further than one short leg.
+        cx0 = Math.max(bandLo, prev.x - MAX_LEG * 0.85);
+        cx1 = Math.min(dotHi, prev.x - 70);
+        if (cx1 - cx0 < 60) { cx0 = bandLo; cx1 = Math.min(dotHi, bandLo + 220); }
+      } else {
+        cx0 = bandLo + Math.max(0, (0.10 + 0.62 * frac) - 0.16) * spanX;
+        cx1 = bandLo + Math.min(1, (0.10 + 0.62 * frac) + 0.30) * spanX;
+      }
+      var best = null, near = null, fallback = null;
+      for (var y = yLo; y <= yHi; y += 8) {
+        var loX = Math.max(cx0, dotLoAt(y));   // this row's own clearance
+        if (dotHi - loX < 10) continue;
+        for (var x = loX; x <= Math.max(cx1, loX + 40); x += 8) {
+          if (x > dotHi) break;
+          var e = elev(x, y);
+          if (!fallback || e > fallback.e) fallback = { x: x, y: y, e: e };
+          var isMax = true;
+          for (var a = 0; a < 8 && isMax; a++) {
+            var ang = a * Math.PI / 4;
+            if (elev(x + Math.cos(ang) * 16, y + Math.sin(ang) * 16) >= e) isMax = false;
+          }
+          if (!isMax) continue;
+          var pr = prominence(x, y);
+          if (pr < PROM_MIN) continue;
+          var leg = prev ? Math.hypot(x - prev.x, y - prev.y) : 0;
+          // the window already caps the walk, so pick purely on how well the
+          // spot reads as a peak
+          var c = { x: x, y: y, e: e, pr: pr, leg: leg };
+          if (!best || pr > best.pr) best = c;                          // most peak-like
+          if (leg <= MAX_LEG && (!near || pr > near.pr)) near = c;       // ...within reach
+        }
+      }
+      peaks[b] = near || best || fallback;
+    }
+    peaks = peaks.filter(Boolean);
+    if (peaks.length < 2) return;
+
+    // Bands run top to bottom, and height on screen is what a reader reads as
+    // "how acute" — so the topmost peak carries the most acute pain.
+    peaks.forEach(function (p, i) { p.pain = PAINS[i]; });
+    peaks.forEach(function (p) { p.ft = Math.round((420 + (dotMaxY - p.y) * 1.15) / 10) * 10; });
+
+    // Visit order: enter from the right, climb bottom-to-top, finish on the
+    // summit — the most acute pain lands last and highest.
+    var summit = peaks[0];
+    var order = peaks.slice().sort(function (p, q) { return q.y - p.y; });
+    var entry = [W + 34, clamp(order[0].y + 70, 60, H - 40)];
+
+    // Label boxes, so the router can steer the trail around the type instead of
+    // being confined to a narrow corridor beside it.
+    var boxes = peaks.map(function (p) {
+      var right = p.x - 20;
+      return { x0: right - labelW - 14, x1: right + 6, y0: p.y - 62, y1: p.y + 62 };
+    });
+
+    // --- route: least-cost path that dislikes crossing contours -------------
+    var gx0 = 40, gx1 = W - 3, gy0 = -40, gy1 = H - 8;
+    var cols = Math.max(2, Math.ceil((gx1 - gx0) / GRID)), rows = Math.max(2, Math.ceil((gy1 - gy0) / GRID));
+    var E = new Float32Array(cols * rows);
+    for (var j = 0; j < rows; j++)
+      for (var i = 0; i < cols; i++) E[j * cols + i] = elev(gx0 + i * GRID, gy0 + j * GRID);
+    var rowEdge = new Float32Array(rows);   // copy's right edge per grid row
+    for (var j = 0; j < rows; j++) {
+      var ry = gy0 + j * GRID;
+      rowEdge[j] = copyRightAt(ry - 26, ry + 26) + 26;
+    }
+    function nodeAt(px, py) {
+      return clamp(Math.round((py - gy0) / GRID), 0, rows - 1) * cols + clamp(Math.round((px - gx0) / GRID), 0, cols - 1);
+    }
+    function nodeXY(n) { return [gx0 + (n % cols) * GRID, gy0 + Math.floor(n / cols) * GRID]; }
+    // 8 compass directions, ordered so index distance == turn angle / 45°
+    var NB = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+    // Search over (cell, heading) rather than cell alone, so a turn can be
+    // charged for. Without this the router zigzags between equal-cost cells and
+    // the result reads like a circuit trace instead of a walked line.
+    function route(from, to) {
+      var NS = cols * rows * 8;
+      var dist = new Float32Array(NS).fill(Infinity);
+      var prev = new Int32Array(NS).fill(-1);
+      var seen = new Uint8Array(NS);
+      var h = new Heap(), s = nodeAt(from[0], from[1]), t = nodeAt(to[0], to[1]);
+      for (var d0 = 0; d0 < 8; d0++) { dist[s * 8 + d0] = 0; h.push(s * 8 + d0, 0); }
+      var endState = -1;
+      while (true) {
+        var top = h.pop(); if (!top) break;
+        var st = top[1]; if (seen[st]) continue; seen[st] = 1;
+        var n = st >> 3, dcur = st & 7;
+        if (n === t) { endState = st; break; }
+        var ni = n % cols, nj = Math.floor(n / cols);
+        for (var k = 0; k < 8; k++) {
+          var bi = ni + NB[k][0], bj = nj + NB[k][1];
+          if (bi < 0 || bj < 0 || bi >= cols || bj >= rows) continue;
+          var b = bj * cols + bi, bst = b * 8 + k;
+          if (seen[bst]) continue;
+          var step = (NB[k][0] && NB[k][1]) ? GRID * 1.4142 : GRID;
+          var de = Math.abs(E[b] - E[n]);
+          var c = step * (1 + CLIMB_W * de * 100);
+          var turn = Math.abs(k - dcur); if (turn > 4) turn = 8 - turn;
+          c += turn * GRID * 0.55;                             // discourage kinks
+          var bx = gx0 + bi * GRID, by = gy0 + bj * GRID;
+          if (bx < rowEdge[bj]) c *= 9;                        // never cross the copy
+          for (var z = 0; z < boxes.length; z++) {              // steer around the labels
+            var bo = boxes[z];
+            if (bx > bo.x0 && bx < bo.x1 && by > bo.y0 && by < bo.y1) { c *= 7; break; }
+          }
+          var nd = dist[st] + c;
+          if (nd < dist[bst]) { dist[bst] = nd; prev[bst] = st; h.push(bst, nd); }
+        }
+      }
+      if (endState < 0) {
+        for (var q = 0, bestD = Infinity; q < 8; q++)
+          if (dist[t * 8 + q] < bestD) { bestD = dist[t * 8 + q]; endState = t * 8 + q; }
+      }
+      var path = [], cur = endState, guard = 0;
+      while (cur >= 0 && guard++ < 40000) {
+        path.push(nodeXY(cur >> 3));
+        if ((cur >> 3) === s) break;
+        cur = prev[cur];
+      }
+      path.reverse();
+      return path.length > 1 ? path : [from, to];
+    }
+
+    var poly = [entry], joins = [];
+    var cursor = entry;
+    order.forEach(function (p) {
+      var seg = route(cursor, [p.x, p.y]);
+      for (var i = 1; i < seg.length; i++) poly.push(seg[i]);
+      poly.push([p.x, p.y]);
+      joins.push(poly.length - 1);
+      cursor = [p.x, p.y];
+    });
+    // measure raw polyline so we know roughly where each peak falls
+    var cum = [0], total = 0;
+    for (var i = 1; i < poly.length; i++) { total += Math.hypot(poly[i][0] - poly[i - 1][0], poly[i][1] - poly[i - 1][1]); cum.push(total); }
+    var roughF = joins.map(function (idx) { return total ? cum[idx] / total : 1; });
+    var d = crPath(chaikin(poly, 4));
+
+    // --- DOM ---------------------------------------------------------------
+    layer = document.createElement('div');
+    layer.className = 'hero-peaks';
+    var svg = svgEl('svg', { class: 'hp-svg', viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'none', 'aria-hidden': 'true', focusable: 'false' });
+    layer.appendChild(svg);
+    var uid = 'hp' + Math.floor(Math.random() * 1e6);
+    var defs = svgEl('defs', {});
+    var mask = svgEl('mask', { id: uid });
+    var maskPath = svgEl('path', { d: d, pathLength: '1', class: 'hp-mask' });
+    mask.appendChild(maskPath); defs.appendChild(mask); svg.appendChild(defs);
+    var trail = svgEl('path', { d: d, class: 'hp-trail', mask: 'url(#' + uid + ')' });
+    svg.appendChild(trail);
+    var measure = svgEl('path', { d: d });
+    measure.style.display = 'none';
+    svg.appendChild(measure);
+    var LEN = measure.getTotalLength ? measure.getTotalLength() : 0;
+
+    // exact fraction of each peak along the smoothed path
+    var F = roughF.map(function (rf, k) {
+      if (!LEN) return rf;
+      var p = order[k], best = rf, bestD = Infinity;
+      var lo = Math.max(0, rf - 0.12), hi = Math.min(1, rf + 0.12);
+      for (var f = lo; f <= hi; f += 0.0015) {
+        var pt = measure.getPointAtLength(f * LEN);
+        var dd = Math.hypot(pt.x - p.x, pt.y - p.y);
+        if (dd < bestD) { bestD = dd; best = f; }
+      }
+      return best;
+    });
+    F[F.length - 1] = 1;
+    for (var k = 1; k < F.length; k++) if (F[k] <= F[k - 1]) F[k] = Math.min(1, F[k - 1] + 0.02);
+
+    var head = svgEl('circle', { class: 'hp-head', r: 3.4, cx: entry[0], cy: entry[1] });
+    head.style.opacity = 0;
+    svg.appendChild(head);
+
+    // markers + labels, in visit order
+    var rows_ = order.map(function (p, k) {
+      var pt = LEN ? measure.getPointAtLength(F[k] * LEN) : { x: p.x, y: p.y };
+      var cx = pt.x, cy = pt.y;
+      var isSummit = p === summit;
+      var dotR = isSummit ? 6 : 5, bgR = dotR + 3.5;
+      var accent = p.pain.c || 'var(--navy)';
+
+      var leader = svgEl('path', { class: 'hp-leader', pathLength: '1' });
+      var labelRight = cx - bgR - 12;
+      leader.setAttribute('d', 'M ' + (cx - bgR - 3).toFixed(1) + ' ' + cy.toFixed(1) + ' L ' + (labelRight - 6).toFixed(1) + ' ' + cy.toFixed(1));
+      leader.style.strokeDasharray = '1'; leader.style.strokeDashoffset = '1'; leader.style.opacity = 0;
+      svg.appendChild(leader);
+
+      var g = svgEl('g', { class: 'hp-marker' });
+      g.style.transform = 'translate(' + cx + 'px,' + cy + 'px) scale(0)';
+      var ping = svgEl('circle', { class: 'hp-ping', r: dotR });
+      ping.style.stroke = accent; ping.style.opacity = 0;
+      g.appendChild(ping);
+      var halo = svgEl('circle', { class: 'hp-halo', r: dotR + 5 });
+      halo.style.stroke = accent; halo.style.opacity = 0; halo.style.transform = 'scale(2)'; halo.style.transformOrigin = '0 0';
+      g.appendChild(halo);
+      g.appendChild(svgEl('circle', { class: 'hp-dotbg', r: bgR }));
+      var dot = svgEl('circle', { class: 'hp-dot', r: dotR });
+      if (isSummit) { dot.style.fill = accent; dot.style.stroke = 'var(--offwhite)'; dot.style.strokeWidth = '1.5'; }
+      else { dot.style.fill = 'var(--offwhite)'; dot.style.stroke = accent; }
+      g.appendChild(dot);
+      svg.appendChild(g);
+
+      // The label is pure display — it retires once the walk is over. The dot
+      // itself is the interactive target, and bringing it back is what a hover
+      // (or keyboard focus) does.
+      var row = document.createElement('div');
+      row.className = 'hp-row';
+      row.style.setProperty('--hp-accent', accent);
+      row.style.width = labelW + 'px';
+      row.style.left = (labelRight - labelW) + 'px';
+      var title = document.createElement('span');
+      title.className = 'hp-title'; title.textContent = p.pain.t;
+      row.appendChild(title);
+      if (p.pain.d) {
+        var det = document.createElement('span');
+        det.className = 'hp-detail'; det.textContent = p.pain.d;
+        row.appendChild(det);
+      }
+      layer.appendChild(row);
+
+      // The peaks are a diagnostic statement, not a second navigation — the
+      // practice cards below route properly, with real copy and real targets.
+      // So this is a hover affordance only; the pain text stays in the DOM
+      // (opacity 0, still exposed to assistive tech) whether it is shown or not.
+      var hit = document.createElement('div');
+      hit.className = 'hp-hit';
+      hit.setAttribute('aria-hidden', 'true');
+      hit.style.left = (cx - 23) + 'px';
+      hit.style.top = (cy - 23) + 'px';
+      layer.appendChild(hit);
+
+      var idx = k;
+      hit.addEventListener('mouseenter', function () { if (state.done) { state.hover = idx; state.paint(); } });
+      hit.addEventListener('mouseleave', function () { if (state.done) { state.hover = null; state.paint(); } });
+      return { g: g, ping: ping, halo: halo, leader: leader, row: row, hit: hit, cx: cx, cy: cy, isSummit: isSummit };
+    });
+    // vertically centre each label on its dot once its height is known
+    rows_.forEach(function (r) { r.row.style.top = (r.cy - r.row.offsetHeight / 2) + 'px'; });
+
+    var coords = document.createElement('div');
+    coords.className = 'hp-coords';
+    coords.textContent = cfg.coords || '';
+    coords.style.left = Math.max(freeLeftAt(H - 40), W - 560) + 'px';
+    coords.style.top = (H - 40) + 'px';
+    layer.appendChild(coords);
+
+    hero.appendChild(layer);
+    state.built = true; state.rows = rows_;
+
+    // --- timeline -----------------------------------------------------------
+    var phases = [], arriveAt = [], prevF = 0, tAcc = 0;
+    F.forEach(function (f, k) {
+      var dur = Math.max(500, TRAVEL_MS * (f - prevF));
+      phases.push({ from: prevF, to: f, dur: dur });
+      tAcc += dur; arriveAt.push(tAcc);
+      phases.push({ from: f, to: f, dur: HOLD_MS });
+      tAcc += HOLD_MS; prevF = f;
+    });
+    var FADE_AT = tAcc;              // walk over: the labels retire from here
+    var TOTAL = tAcc + FADE_MS;
+
+    function pAt(ms) {
+      var t = 0;
+      for (var i = 0; i < phases.length; i++) {
+        var ph = phases[i];
+        if (ms < t + ph.dur) {
+          var lp = (ms - t) / ph.dur;
+          return ph.from + (ph.to - ph.from) * smoothstep(lp);
+        }
+        t += ph.dur;
+      }
+      return 1;
+    }
+
+    function paint(ms) {
+      if (ms === undefined) ms = state.done ? TOTAL : 0;
+      var p = state.done ? 1 : pAt(ms);
+      maskPath.style.strokeDashoffset = (1 - p).toFixed(4);
+      if (LEN) {
+        var hp = measure.getPointAtLength(p * LEN);
+        head.setAttribute('cx', hp.x.toFixed(1)); head.setAttribute('cy', hp.y.toFixed(1));
+      }
+      head.style.opacity = state.done ? 0 : clamp(Math.min(ms / 260, (TOTAL - ms) / 500), 0, 1);
+
+      var lastArrived = -1;
+      for (var i = 0; i < arriveAt.length; i++) if (ms >= arriveAt[i]) lastArrived = i;
+      // once the walk is done the type stands down and the map is just dots
+      var labelGlobal = state.done ? 0 : (ms >= FADE_AT ? 1 - smoothstep(clamp((ms - FADE_AT) / FADE_MS, 0, 1)) : 1);
+
+      rows_.forEach(function (r, k) {
+        var since = ms - arriveAt[k];
+        var appear = clamp(since / 420, 0, 1);
+        var active = state.done ? (state.hover === k) : (k === lastArrived);
+        var dimF = 1;
+        if (!state.done && lastArrived >= 0 && k !== lastArrived) dimF = 0.5;
+        if (state.done && state.hover != null) dimF = active ? 1 : 0.45;
+        var labelOp = active && state.done ? 1 : appear * dimF * labelGlobal;
+
+        var pop = eob(clamp(since / 430, 0, 1));
+        r.g.style.transition = state.done ? 'transform .35s cubic-bezier(.2,.7,.2,1),opacity .3s ease' : 'none';
+        r.g.style.transform = 'translate(' + r.cx + 'px,' + r.cy + 'px) scale(' + (pop * (state.done && active ? 1.18 : 1)).toFixed(3) + ')';
+        r.g.style.opacity = (appear * dimF).toFixed(3);
+        var pingP = clamp(since / 760, 0, 1);
+        r.ping.style.transform = 'scale(' + (0.6 + pingP * 2.6).toFixed(2) + ')';
+        r.ping.style.transformOrigin = '0 0';
+        r.ping.style.opacity = (since >= 0 ? (1 - pingP) * 0.55 : 0).toFixed(3);
+        r.halo.style.transition = 'opacity .3s ease';
+        r.halo.style.opacity = (state.done && active) ? 0.35 : 0;
+        var lp = clamp(since / 480, 0, 1);
+        r.leader.style.strokeDashoffset = (1 - lp).toFixed(3);
+        r.leader.style.opacity = (lp * 0.9 * labelOp).toFixed(3);
+        r.leader.style.stroke = active ? r.row.style.getPropertyValue('--hp-accent') : 'var(--hp-leader)';
+        r.row.style.transition = state.done ? 'opacity .32s ease' : 'none';
+        r.row.style.opacity = labelOp.toFixed(3);
+        r.row.classList.toggle('is-active', !!active && labelOp > 0.6);
+        r.hit.style.pointerEvents = state.done ? 'auto' : 'none';
+      });
+      coords.style.opacity = clamp((ms - TOTAL * 0.55) / 700, 0, 1).toFixed(3);
+    }
+
+    function play() {
+      if (state.raf) cancelAnimationFrame(state.raf);
+      state.done = false; state.hover = null;
+      var start = performance.now();
+      (function tick(now) {
+        var ms = now - start;
+        if (ms >= TOTAL) { state.done = true; state.played = true; paint(TOTAL); return; }
+        paint(ms);
+        state.raf = requestAnimationFrame(tick);
+      })(performance.now());
+    }
+
+    state.paint = paint; state.play = play; state.TOTAL = TOTAL;
+
+    if (animate) {
+      paint(0);
+      var begun = false;
+      var go = function () { if (begun) return; begun = true; play(); };
+      try {
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (es) {
+            if (es.some(function (e) { return e.isIntersecting; })) { go(); io.disconnect(); }
+          }, { threshold: 0.2 });
+          io.observe(hero);
+        } else go();
+      } catch (e) { go(); }
+      setTimeout(go, 900);
+    } else {
+      state.done = true; paint(TOTAL);
+    }
+  }
+
+  function paint() { if (state.paint) state.paint(state.done ? state.TOTAL : 0); }
+
+  build(!reduce);
+  if (reduce) { state.done = true; }
+
+  var rt = null, lastW = hero.clientWidth, lastH = hero.clientHeight;
+  function onResize() {
+    if (Math.abs(hero.clientWidth - lastW) < 2 && Math.abs(hero.clientHeight - lastH) < 2) return;
+    lastW = hero.clientWidth; lastH = hero.clientHeight;
+    clearTimeout(rt);
+    rt = setTimeout(function () { build(false); }, 220);
+  }
+  window.addEventListener('resize', onResize);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () {
+      if (Math.abs(hero.clientWidth - lastW) > 1 || Math.abs(hero.clientHeight - lastH) > 1) {
+        lastW = hero.clientWidth; lastH = hero.clientHeight;
+        build(!state.played && !reduce);
+      }
+    });
   }
 })();
