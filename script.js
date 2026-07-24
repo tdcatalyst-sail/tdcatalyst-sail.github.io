@@ -155,8 +155,10 @@ function tdTerrainNoise(seed) {
       ctx.stroke();
     }
     ctx.globalAlpha = 1;
-    if (d.fade === 'left' || d.fade === 'top') {
-      var g = d.fade === 'left' ? ctx.createLinearGradient(w, 0, 0, 0) : ctx.createLinearGradient(0, h, 0, 0);
+    if (d.fade === 'left' || d.fade === 'top' || d.fade === 'bottom') {
+      var g = d.fade === 'left' ? ctx.createLinearGradient(w, 0, 0, 0)
+        : d.fade === 'top' ? ctx.createLinearGradient(0, h, 0, 0)
+        : ctx.createLinearGradient(0, 0, 0, h);   // 'bottom': dissolve downward
       g.addColorStop(0, 'rgba(' + d.fadeColor + ',0)');
       g.addColorStop(1, 'rgba(' + d.fadeColor + ',0.92)');
       ctx.fillStyle = g;
@@ -230,18 +232,28 @@ function tdTerrainNoise(seed) {
 
   // --- tuning ---------------------------------------------------------------
   var GUTTER = 56;        // clear space between the copy and the label column
-  var TRAVEL_MS = 5000;   // total time the head spends moving
-  var HOLD_MS = 1950;     // dwell at each peak — still long enough to read it
-  var FADE_MS = 1100;     // labels retire at the end, leaving the map quiet
-  var CLIMB_W = 1.5;      // how hard the router avoids crossing contours
-  var GRID = 13;          // routing grid step, px (bigger = fewer staircase jogs)
-  var MAX_LEG = 340;      // keep consecutive peaks close — no long empty walks
-  var PROM_MIN = 0.045;   // a dot must sit inside a closed contour ring to read
+  var TRAVEL_MS = 3600;   // total time the head spends moving (~1.2s a leg)
+  var HOLD_MS = 800;      // brief dwell at each peak; hover brings it back later
+  var ALL_MS = 2200;      // final chord: all three pains lit together
+  var FADE_MS = 900;      // then the piece settles…
+  var REST_OP = 0.26;     // …words dimmed to a whisper, still legible up close
+  var TRAIL_REST = 0.32;  // and the dashes fall back to a much lighter presence
+  var CLIMB_W = 2.2;      // how hard the router avoids crossing contours —
+                          // the original tuning: skirts non-destination peaks,
+                          // takes the gentlest line into the ones it must climb
+  var GRID = 9;           // routing grid step, px
+  var FRAME_W = 760;      // the whole walk stays inside this right-hand frame —
+                          // it never wanders out over the headline (Tom)
+  var PROM_MIN = 0.035;   // a dot must sit inside a closed contour ring to read
                           // as a peak: that needs real prominence, not just a
                           // local maximum on an invisible bump.
 
   var SVGNS = 'http://www.w3.org/2000/svg';
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Tom's call (2026-07): the walk plays for everyone, including under OS
+  // reduced-motion — it is a single 6s pass with no flashing and no loop, and
+  // it carries content. It remains skippable in effect: the settled map is the
+  // end state either way.
+  var reduce = false;
   var seed = parseFloat(canvas.dataset.seed || '1');
   var scale = parseFloat(canvas.dataset.scale || '210');
   var fbm = tdTerrainNoise(seed);
@@ -313,9 +325,16 @@ function tdTerrainNoise(seed) {
     layer = null; state.rows = []; state.built = false;
   }
 
+  var zeroRetries = 0;
   function build(animate) {
     destroy();
     var W = hero.clientWidth, H = hero.clientHeight;
+    // an uncomposited tab can measure 0×0 at load: retry until it has a size
+    if ((!W || !H) && zeroRetries < 40) {
+      zeroRetries++;
+      setTimeout(function () { if (!state.built) build(animate); }, 250);
+      return;
+    }
     if (!W || !H || W < 1024) return;
 
     // Free space to the right of the copy is an L, not a column: above the
@@ -357,7 +376,9 @@ function tdTerrainNoise(seed) {
     }
 
     var stageRight = W - 20;
-    var labelW = clamp(Math.min(224, (stageRight - copyRightAt(0, H) - GUTTER) - 110), 168, 224);
+    // wide enough that "The org chart no longer matches the work" breaks as
+    // two lines, not three with an orphan
+    var labelW = clamp(Math.min(252, (stageRight - copyRightAt(0, H) - GUTTER) - 110), 168, 252);
     if (stageRight - copyRightAt(0, H) - GUTTER < 300) return;
     var dotMinY = 84, dotMaxY = H - 132;   // bottom margin clears the coords line
     if (dotMaxY - dotMinY < 300) return;
@@ -376,69 +397,68 @@ function tdTerrainNoise(seed) {
     // Prominence: how far a candidate stands above the ground around it. A dot
     // only reads as a peak when a closed contour ring encircles it, which needs
     // more than one contour interval of prominence.
-    function prominence(x, y) {
+    function prominence(x, y, r) {
       var e = elev(x, y), ring = -1;
-      for (var a = 0; a < 10; a++) {
-        var ang = a * Math.PI / 5;
-        ring = Math.max(ring, elev(x + Math.cos(ang) * 30, y + Math.sin(ang) * 30));
+      for (var a = 0; a < 14; a++) {
+        var ang = a * Math.PI / 7;
+        ring = Math.max(ring, elev(x + Math.cos(ang) * r, y + Math.sin(ang) * r));
       }
       return e - ring;
     }
+    // Measured at RING_R, not a few px out: a dot has to sit inside a closed
+    // contour big enough to see, otherwise it reads as a mark on open ground.
+    var RING_R = 46;
 
     var want = Math.min(PAINS.length, 4);
-    var bandH = (dotMaxY - dotMinY) / want;
-    var peaks = new Array(want);
-    // Pick bottom band first and climb: each peak can then be held near the one
-    // below it, so no leg of the walk is long and empty.
-    for (var b = want - 1; b >= 0; b--) {
-      var yLo = dotMinY + b * bandH + 14, yHi = dotMinY + (b + 1) * bandH - 14;
-      var frac = want > 1 ? b / (want - 1) : 0.5;
-      var dotHi = stageRight - 26;
-      var bandLo = Infinity;
-      for (var yy = yLo; yy <= yHi; yy += 9) bandLo = Math.min(bandLo, dotLoAt(yy));
-      if (dotHi - bandLo < 50) continue;
-      var prev = peaks[b + 1] || null;
-      var spanX = dotHi - bandLo, cx0, cx1;
-      if (prev) {
-        // Search only within a short walk of the peak below, drifting left as it
-        // climbs. This is what keeps the final leg from being a long empty hike.
-        // Always step LEFT of the peak below — that is what makes the walk a
-        // rising diagonal — but never further than one short leg.
-        cx0 = Math.max(bandLo, prev.x - MAX_LEG * 0.85);
-        cx1 = Math.min(dotHi, prev.x - 70);
-        if (cx1 - cx0 < 60) { cx0 = bandLo; cx1 = Math.min(dotHi, bandLo + 220); }
-      } else {
-        cx0 = bandLo + Math.max(0, (0.10 + 0.62 * frac) - 0.16) * spanX;
-        cx1 = bandLo + Math.min(1, (0.10 + 0.62 * frac) + 0.30) * spanX;
-      }
-      var best = null, near = null, fallback = null;
-      for (var y = yLo; y <= yHi; y += 8) {
-        var loX = Math.max(cx0, dotLoAt(y));   // this row's own clearance
-        if (dotHi - loX < 10) continue;
-        for (var x = loX; x <= Math.max(cx1, loX + 40); x += 8) {
-          if (x > dotHi) break;
-          var e = elev(x, y);
-          if (!fallback || e > fallback.e) fallback = { x: x, y: y, e: e };
-          var isMax = true;
-          for (var a = 0; a < 8 && isMax; a++) {
-            var ang = a * Math.PI / 4;
-            if (elev(x + Math.cos(ang) * 16, y + Math.sin(ang) * 16) >= e) isMax = false;
-          }
-          if (!isMax) continue;
-          var pr = prominence(x, y);
-          if (pr < PROM_MIN) continue;
-          var leg = prev ? Math.hypot(x - prev.x, y - prev.y) : 0;
-          // the window already caps the walk, so pick purely on how well the
-          // spot reads as a peak
-          var c = { x: x, y: y, e: e, pr: pr, leg: leg };
-          if (!best || pr > best.pr) best = c;                          // most peak-like
-          if (leg <= MAX_LEG && (!near || pr > near.pr)) near = c;       // ...within reach
+    // Rank every ringed local maximum in the frame, then greedily take the most
+    // peak-like ones subject to spacing. No horizontal bands: the field decides
+    // where its peaks are, we only insist they are separated and labelable.
+    // (On this field/frame that finds the three visible rings and nothing else.)
+    var dotHi = stageRight - 26;
+    var cands = [];
+    for (var y = dotMinY + 10; y <= dotMaxY - 10; y += 7) {
+      var copyR = copyRightAt(y - LABEL_H2, y + LABEL_H2);
+      var xFrom = Math.max(copyR + 40, W - FRAME_W);
+      for (var x = xFrom; x <= dotHi; x += 7) {
+        var leftOK = (x - 24 - labelW) >= copyR + 12;
+        var rightOK = (x + 24 + labelW) <= stageRight;
+        if (!leftOK && !rightOK) continue;
+        var e = elev(x, y);
+        var isMax = true;
+        for (var a = 0; a < 8 && isMax; a++) {
+          var ang = a * Math.PI / 4;
+          if (elev(x + Math.cos(ang) * 15, y + Math.sin(ang) * 15) >= e) isMax = false;
         }
+        if (!isMax) continue;
+        // three radii so wide domes count as well as tight knolls
+        var pr = Math.max(prominence(x, y, RING_R), prominence(x, y, 75), prominence(x, y, 110));
+        if (pr < PROM_MIN) continue;
+        cands.push({ x: x, y: y, e: e, pr: pr, leftOK: leftOK, rightOK: rightOK });
       }
-      peaks[b] = near || best || fallback;
     }
-    peaks = peaks.filter(Boolean);
+    cands.sort(function (p, q) { return q.pr - p.pr; });
+    var peaks = [];
+    cands.forEach(function (c) {
+      if (peaks.length >= want) return;
+      for (var i = 0; i < peaks.length; i++) {
+        if (Math.abs(c.y - peaks[i].y) < 75) return;                    // stacked too close
+        if (Math.hypot(c.x - peaks[i].x, c.y - peaks[i].y) < 130) return;
+      }
+      peaks.push(c);
+    });
     if (peaks.length < 2) return;
+    peaks.sort(function (p, q) { return p.y - q.y; });
+
+    // Label sides: left by preference; flip to the right when the left is
+    // crowded, or when two neighbours would stack their labels on one side.
+    peaks.forEach(function (p) { p.side = p.leftOK ? 'left' : 'right'; });
+    for (var i = 1; i < peaks.length; i++) {
+      var a2 = peaks[i - 1], b2 = peaks[i];
+      if (b2.y - a2.y < 145 && a2.side === b2.side) {
+        if (b2.side === 'left' && b2.rightOK) b2.side = 'right';
+        else if (b2.side === 'right' && b2.leftOK) b2.side = 'left';
+      }
+    }
 
     // Bands run top to bottom, and height on screen is what a reader reads as
     // "how acute" — so the topmost peak carries the most acute pain.
@@ -454,12 +474,18 @@ function tdTerrainNoise(seed) {
     // Label boxes, so the router can steer the trail around the type instead of
     // being confined to a narrow corridor beside it.
     var boxes = peaks.map(function (p) {
+      if (p.side === 'right') {
+        var left = p.x + 20;
+        return { x0: left - 6, x1: left + labelW + 14, y0: p.y - 62, y1: p.y + 62 };
+      }
       var right = p.x - 20;
       return { x0: right - labelW - 14, x1: right + 6, y0: p.y - 62, y1: p.y + 62 };
     });
 
     // --- route: least-cost path that dislikes crossing contours -------------
-    var gx0 = 40, gx1 = W - 3, gy0 = -40, gy1 = H - 8;
+    // fenced to the frame (with a small margin), so a detour can never swing
+    // the trail out over the middle of the page
+    var gx0 = Math.max(40, W - FRAME_W - 60), gx1 = W - 3, gy0 = -40, gy1 = H - 8;
     var cols = Math.max(2, Math.ceil((gx1 - gx0) / GRID)), rows = Math.max(2, Math.ceil((gy1 - gy0) / GRID));
     var E = new Float32Array(cols * rows);
     for (var j = 0; j < rows; j++)
@@ -484,7 +510,15 @@ function tdTerrainNoise(seed) {
       var prev = new Int32Array(NS).fill(-1);
       var seen = new Uint8Array(NS);
       var h = new Heap(), s = nodeAt(from[0], from[1]), t = nodeAt(to[0], to[1]);
-      for (var d0 = 0; d0 < 8; d0++) { dist[s * 8 + d0] = 0; h.push(s * 8 + d0, 0); }
+      // A*, not plain Dijkstra: in a flat "moat" every direction costs the
+      // same, and without a pull toward the goal the expansion wanders along
+      // grid axes and locks in boxy detours. The slightly greedy heuristic
+      // (×1.02) keeps the line purposeful.
+      var tx = gx0 + (t % cols) * GRID, ty = gy0 + Math.floor(t / cols) * GRID;
+      function hst(b) {
+        return 1.08 * Math.hypot(gx0 + (b % cols) * GRID - tx, gy0 + Math.floor(b / cols) * GRID - ty);
+      }
+      for (var d0 = 0; d0 < 8; d0++) { dist[s * 8 + d0] = 0; h.push(s * 8 + d0, hst(s)); }
       var endState = -1;
       while (true) {
         var top = h.pop(); if (!top) break;
@@ -500,8 +534,13 @@ function tdTerrainNoise(seed) {
           var step = (NB[k][0] && NB[k][1]) ? GRID * 1.4142 : GRID;
           var de = Math.abs(E[b] - E[n]);
           var c = step * (1 + CLIMB_W * de * 100);
+          // deterministic micro-jitter from the field itself: in a dead-flat
+          // moat every route costs the same, and ties resolve into long
+          // axis-aligned runs — this makes the line meander like a walked trail
+          c *= 1 + ((E[b] * 997) % 1) * 0.10;
           var turn = Math.abs(k - dcur); if (turn > 4) turn = 8 - turn;
-          c += turn * GRID * 0.55;                             // discourage kinks
+          c += turn * GRID * 0.06;      // whisper of smoothing only — a real
+                                        // turn cost makes the route boxy
           var bx = gx0 + bi * GRID, by = gy0 + bj * GRID;
           if (bx < rowEdge[bj]) c *= 9;                        // never cross the copy
           for (var z = 0; z < boxes.length; z++) {              // steer around the labels
@@ -509,7 +548,7 @@ function tdTerrainNoise(seed) {
             if (bx > bo.x0 && bx < bo.x1 && by > bo.y0 && by < bo.y1) { c *= 7; break; }
           }
           var nd = dist[st] + c;
-          if (nd < dist[bst]) { dist[bst] = nd; prev[bst] = st; h.push(bst, nd); }
+          if (nd < dist[bst]) { dist[bst] = nd; prev[bst] = st; h.push(bst, nd + hst(b)); }
         }
       }
       if (endState < 0) {
@@ -535,6 +574,20 @@ function tdTerrainNoise(seed) {
       joins.push(poly.length - 1);
       cursor = [p.x, p.y];
     });
+    // A walked line is never straight: displace each point perpendicular to
+    // the local direction by a slow noise wave. Grid-optimal routes contain
+    // long axis-aligned runs (wide flat valleys really are cheapest in a
+    // straight line) and this is what breaks them. Endpoints and the points
+    // near each peak stay pinned so docks land exactly on the dots.
+    var pinned = {};
+    joins.forEach(function (idx) { for (var q = -2; q <= 2; q++) pinned[idx + q] = true; });
+    for (var i = 1; i < poly.length - 1; i++) {
+      if (pinned[i]) continue;
+      var dx = poly[i + 1][0] - poly[i - 1][0], dy = poly[i + 1][1] - poly[i - 1][1];
+      var len = Math.hypot(dx, dy) || 1;
+      var wob = (fbm(poly[i][0] * 0.011 + 7.3, poly[i][1] * 0.011) - 0.5) * 26;
+      poly[i] = [poly[i][0] - (dy / len) * wob, poly[i][1] + (dx / len) * wob];
+    }
     // measure raw polyline so we know roughly where each peak falls
     var cum = [0], total = 0;
     for (var i = 1; i < poly.length; i++) { total += Math.hypot(poly[i][0] - poly[i - 1][0], poly[i][1] - poly[i - 1][1]); cum.push(total); }
@@ -582,12 +635,21 @@ function tdTerrainNoise(seed) {
       var pt = LEN ? measure.getPointAtLength(F[k] * LEN) : { x: p.x, y: p.y };
       var cx = pt.x, cy = pt.y;
       var isSummit = p === summit;
-      var dotR = isSummit ? 6 : 5, bgR = dotR + 3.5;
+      var dotR = isSummit ? 7 : 6, bgR = dotR + 3.5;
       var accent = p.pain.c || 'var(--navy)';
 
+      var onRight = p.side === 'right';
       var leader = svgEl('path', { class: 'hp-leader', pathLength: '1' });
-      var labelRight = cx - bgR - 12;
-      leader.setAttribute('d', 'M ' + (cx - bgR - 3).toFixed(1) + ' ' + cy.toFixed(1) + ' L ' + (labelRight - 6).toFixed(1) + ' ' + cy.toFixed(1));
+      var labelLeft;   // where the label block starts
+      if (onRight) {
+        var labelStart = cx + bgR + 26;
+        leader.setAttribute('d', 'M ' + (cx + bgR + 3).toFixed(1) + ' ' + cy.toFixed(1) + ' L ' + (labelStart - 8).toFixed(1) + ' ' + cy.toFixed(1));
+        labelLeft = labelStart;
+      } else {
+        var labelRight = cx - bgR - 12;
+        leader.setAttribute('d', 'M ' + (cx - bgR - 3).toFixed(1) + ' ' + cy.toFixed(1) + ' L ' + (labelRight - 6).toFixed(1) + ' ' + cy.toFixed(1));
+        labelLeft = labelRight - labelW;
+      }
       leader.style.strokeDasharray = '1'; leader.style.strokeDashoffset = '1'; leader.style.opacity = 0;
       svg.appendChild(leader);
 
@@ -610,10 +672,10 @@ function tdTerrainNoise(seed) {
       // itself is the interactive target, and bringing it back is what a hover
       // (or keyboard focus) does.
       var row = document.createElement('div');
-      row.className = 'hp-row';
+      row.className = 'hp-row' + (onRight ? ' hp-row--right' : '');
       row.style.setProperty('--hp-accent', accent);
       row.style.width = labelW + 'px';
-      row.style.left = (labelRight - labelW) + 'px';
+      row.style.left = labelLeft + 'px';
       var title = document.createElement('span');
       title.className = 'hp-title'; title.textContent = p.pain.t;
       row.appendChild(title);
@@ -624,24 +686,24 @@ function tdTerrainNoise(seed) {
       }
       layer.appendChild(row);
 
-      // The peaks are a diagnostic statement, not a second navigation — the
-      // practice cards below route properly, with real copy and real targets.
-      // So this is a hover affordance only; the pain text stays in the DOM
-      // (opacity 0, still exposed to assistive tech) whether it is shown or not.
-      var hit = document.createElement('div');
+      // Hovering or focusing a dot brings its pain back and follows through to
+      // that practice. The label itself stays display-only.
+      var hit = document.createElement(p.pain.href ? 'a' : 'div');
       hit.className = 'hp-hit';
-      hit.setAttribute('aria-hidden', 'true');
-      hit.style.left = (cx - 23) + 'px';
-      hit.style.top = (cy - 23) + 'px';
+      hit.style.setProperty('--hp-accent', accent);
+      hit.style.left = (cx - 25) + 'px';
+      hit.style.top = (cy - 25) + 'px';
+      if (p.pain.href) { hit.href = p.pain.href; hit.setAttribute('aria-label', p.pain.t + '. ' + (p.pain.d || '')); }
       layer.appendChild(hit);
 
       var idx = k;
       hit.addEventListener('mouseenter', function () { if (state.done) { state.hover = idx; state.paint(); } });
       hit.addEventListener('mouseleave', function () { if (state.done) { state.hover = null; state.paint(); } });
-      return { g: g, ping: ping, halo: halo, leader: leader, row: row, hit: hit, cx: cx, cy: cy, isSummit: isSummit };
+      hit.addEventListener('focus', function () { if (state.done) { state.hover = idx; state.paint(); } });
+      hit.addEventListener('blur', function () { if (state.done) { state.hover = null; state.paint(); } });
+      return { g: g, ping: ping, halo: halo, leader: leader, row: row, hit: hit,
+               cx: cx, cy: cy, isSummit: isSummit, onRight: onRight, bgR: bgR, labelLeft: labelLeft };
     });
-    // vertically centre each label on its dot once its height is known
-    rows_.forEach(function (r) { r.row.style.top = (r.cy - r.row.offsetHeight / 2) + 'px'; });
 
     var coords = document.createElement('div');
     coords.className = 'hp-coords';
@@ -650,7 +712,40 @@ function tdTerrainNoise(seed) {
     coords.style.top = (H - 40) + 'px';
     layer.appendChild(coords);
 
+    var replay = document.createElement('button');
+    replay.type = 'button'; replay.className = 'hp-replay';
+    replay.setAttribute('aria-label', 'Replay animation');
+    replay.textContent = '↻ replay';
+    replay.style.right = '22px'; replay.style.top = (H - 46) + 'px';
+    replay.addEventListener('click', function () { play(); });
+    layer.appendChild(replay);
+
     hero.appendChild(layer);
+    // (labels can only be measured once the layer is attached — offsetHeight of
+    //  a detached element is 0, which silently top-anchored every label before)
+    // Vertically centre each label on its dot, then resolve collisions: when two
+    // same-side labels overlap (tight peak clusters), slide the lower one down
+    // and let its leader run diagonally to the dot — standard map labelling.
+    rows_.forEach(function (r) { r.row.style.top = (r.cy - r.row.offsetHeight / 2) + 'px'; });
+    ['left-side', 'right-side'].forEach(function (_, sideIdx) {
+      var group = rows_.filter(function (r) { return r.onRight === (sideIdx === 1); })
+        .sort(function (a2, b2) { return a2.cy - b2.cy; });
+      var prevBottom = -1e9;
+      group.forEach(function (r) {
+        var h = r.row.offsetHeight;
+        var topY = r.cy - h / 2;
+        if (topY < prevBottom + 12) topY = prevBottom + 12;
+        r.row.style.top = topY + 'px';
+        prevBottom = topY + h;
+        var labelCY = topY + h / 2;
+        if (Math.abs(labelCY - r.cy) > 2) {   // re-aim the leader diagonally
+          var d2 = r.onRight
+            ? 'M ' + (r.cx + r.bgR + 3).toFixed(1) + ' ' + r.cy.toFixed(1) + ' L ' + (r.labelLeft - 8).toFixed(1) + ' ' + labelCY.toFixed(1)
+            : 'M ' + (r.cx - r.bgR - 3).toFixed(1) + ' ' + r.cy.toFixed(1) + ' L ' + (r.labelLeft + labelW - 6).toFixed(1) + ' ' + labelCY.toFixed(1);
+          r.leader.setAttribute('d', d2);
+        }
+      });
+    });
     state.built = true; state.rows = rows_;
 
     // --- timeline -----------------------------------------------------------
@@ -662,7 +757,9 @@ function tdTerrainNoise(seed) {
       phases.push({ from: f, to: f, dur: HOLD_MS });
       tAcc += HOLD_MS; prevF = f;
     });
-    var FADE_AT = tAcc;              // walk over: the labels retire from here
+    var ALL_AT = tAcc;               // summit docked: all three lit together
+    tAcc += ALL_MS;
+    var FADE_AT = tAcc;              // then the labels dim to their rest state
     var TOTAL = tAcc + FADE_MS;
 
     function pAt(ms) {
@@ -690,16 +787,20 @@ function tdTerrainNoise(seed) {
 
       var lastArrived = -1;
       for (var i = 0; i < arriveAt.length; i++) if (ms >= arriveAt[i]) lastArrived = i;
-      // once the walk is done the type stands down and the map is just dots
-      var labelGlobal = state.done ? 0 : (ms >= FADE_AT ? 1 - smoothstep(clamp((ms - FADE_AT) / FADE_MS, 0, 1)) : 1);
+      // after the final chord the piece settles: words dim to a whisper (still
+      // slightly visible at rest), the trail falls back to a light presence
+      var fadeP = state.done ? 1 : (ms >= FADE_AT ? smoothstep(clamp((ms - FADE_AT) / FADE_MS, 0, 1)) : 0);
+      var labelGlobal = 1 - fadeP * (1 - REST_OP);
+      var allLit = !state.done && ms >= ALL_AT;
+      trail.style.opacity = (0.95 - fadeP * (0.95 - TRAIL_REST)).toFixed(3);
 
       rows_.forEach(function (r, k) {
         var since = ms - arriveAt[k];
         var appear = clamp(since / 420, 0, 1);
-        var active = state.done ? (state.hover === k) : (k === lastArrived);
+        var active = state.done ? (state.hover === k) : (k === lastArrived && !allLit) || allLit;
         var dimF = 1;
-        if (!state.done && lastArrived >= 0 && k !== lastArrived) dimF = 0.5;
-        if (state.done && state.hover != null) dimF = active ? 1 : 0.45;
+        if (!state.done && lastArrived >= 0 && k !== lastArrived && !allLit) dimF = 0.5;
+        if (state.done && state.hover != null) dimF = active ? 1 : 0.6;
         var labelOp = active && state.done ? 1 : appear * dimF * labelGlobal;
 
         var pop = eob(clamp(since / 430, 0, 1));
@@ -722,6 +823,8 @@ function tdTerrainNoise(seed) {
         r.hit.style.pointerEvents = state.done ? 'auto' : 'none';
       });
       coords.style.opacity = clamp((ms - TOTAL * 0.55) / 700, 0, 1).toFixed(3);
+      replay.style.opacity = state.done ? 1 : 0;
+      replay.style.pointerEvents = state.done ? 'auto' : 'none';
     }
 
     function play() {
@@ -758,20 +861,35 @@ function tdTerrainNoise(seed) {
 
   function paint() { if (state.paint) state.paint(state.done ? state.TOTAL : 0); }
 
-  build(!reduce);
-  if (reduce) { state.done = true; }
+  // Deferred one frame: this script runs at the end of body, so anything done
+  // here synchronously delays the page's FIRST PAINT. The ambient contours draw
+  // in the block above (they should be there at first paint); the peak scan and
+  // route search wait a frame so they never hold the page blank.
+  // (setTimeout, not requestAnimationFrame: rAF never fires in an unfocused /
+  // uncomposited tab, which would leave the overlay unbuilt there.)
+  var lastW = hero.clientWidth, lastH = hero.clientHeight;
+  setTimeout(function () {
+    lastW = hero.clientWidth; lastH = hero.clientHeight;
+    build(!reduce);
+    if (reduce) { state.done = true; }
+  }, 0);
 
-  var rt = null, lastW = hero.clientWidth, lastH = hero.clientHeight;
+  var rt = null;
   function onResize() {
     if (Math.abs(hero.clientWidth - lastW) < 2 && Math.abs(hero.clientHeight - lastH) < 2) return;
     lastW = hero.clientWidth; lastH = hero.clientHeight;
     clearTimeout(rt);
-    rt = setTimeout(function () { build(false); }, 220);
+    // don't let an incidental resize (scrollbar, font swap) settle a walk that
+    // has not played yet
+    rt = setTimeout(function () { build(!state.played && !reduce); }, 220);
   }
   window.addEventListener('resize', onResize);
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () {
-      if (Math.abs(hero.clientWidth - lastW) > 1 || Math.abs(hero.clientHeight - lastH) > 1) {
+      // Rebuild only on a REAL geometry shift. The font swap lands right after
+      // the walk begins; rebuilding on a 1-2px delta was destroying and
+      // restarting it, which read as the animation taking ages to get going.
+      if (Math.abs(hero.clientWidth - lastW) > 10 || Math.abs(hero.clientHeight - lastH) > 10) {
         lastW = hero.clientWidth; lastH = hero.clientHeight;
         build(!state.played && !reduce);
       }
