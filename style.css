@@ -2159,6 +2159,99 @@ footer .footer-practices i {
 .hero--terrain > canvas.terrain { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero--terrain .wrap { position: relative; }
 
+/* --- Terrain hero stage: named-peaks reveal drawn over the ambient field ---
+   The stage lives in a 500x640 design space; it is scaled as one block so its
+   px-positioned labels stay locked to the SVG geometry. Text sits left in
+   .hero-copy; the stage overlays the right of the field. (script.js builds it.) */
+.hero--stage .hero-copy { position: relative; z-index: 3; max-width: min(56%, 560px); }
+.hero--stage { --tp-scale: 0.82; }
+@media (min-width: 1024px) { .hero--stage { min-height: 600px; display: flex; align-items: center; } }
+
+.terrain-stage {
+  --tp-leader: color-mix(in srgb, var(--navy) 45%, transparent);
+  position: absolute; top: 50%; right: -48px;
+  width: 500px; height: 640px;
+  transform: translateY(-50%) scale(var(--tp-scale));
+  transform-origin: right center;
+  pointer-events: none; z-index: 2;
+}
+.tp-svg { position: absolute; inset: 0; width: 500px; height: 640px; display: block; overflow: visible; pointer-events: none; }
+
+/* field motion: fog drift + summit pulse (idle loops after landing) */
+@keyframes tpFog { 0% { transform: translateX(-3%); } 50% { transform: translateX(3%); } 100% { transform: translateX(-3%); } }
+@keyframes tpPulse { 0% { transform: scale(1); opacity: 0.4; } 70% { transform: scale(2.7); opacity: 0; } 100% { transform: scale(2.7); opacity: 0; } }
+.tp-fog { transform-origin: center; animation: tpFog 14s ease-in-out infinite; }
+
+.tp-trail { fill: none; stroke: var(--navy); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 5 7; opacity: 0.92; }
+.tp-maskpath { fill: none; stroke: #fff; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.tp-head { fill: var(--navy); opacity: 0; }
+.tp-leader { fill: none; stroke: var(--tp-leader); stroke-width: 1; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; }
+
+.tp-marker { transform-origin: 0 0; opacity: 0; }
+.tp-ping { fill: none; stroke-width: 1.5; opacity: 0; transform-origin: 0 0; }
+.tp-pulse { fill: none; stroke-width: 1.3; opacity: 0; transform-origin: 0 0; animation: tpPulse 3.6s ease-out 0.6s infinite; }
+.tp-halo { fill: none; stroke-width: 1; opacity: 0; transform: scale(2.1); transform-origin: 0 0; }
+.tp-dotbg { fill: var(--offwhite); }
+.tp-dot { stroke-width: 2; }
+
+/* pain rows: each a right-aligned label in a fixed x0..190 column, made a link */
+.tp-row {
+  position: absolute; left: 0; width: 190px;
+  transform: translateY(-50%);
+  display: flex; align-items: center; justify-content: flex-end;
+  min-height: 72px; padding-right: 4px;
+  text-decoration: none; border: 0; opacity: 0;
+}
+.tp-label { text-align: right; }
+/* soft same-ground halo keeps the type crisp where it crosses contour lines / the trail */
+.tp-title {
+  font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 18px; line-height: 1.2;
+  color: var(--navy); border-bottom: 2px solid transparent; padding-bottom: 2px;
+  transition: border-color 0.3s ease;
+  text-shadow: 0 0 7px var(--offwhite), 0 0 4px var(--offwhite), 0 0 2px var(--offwhite);
+}
+.tp-row--summit .tp-title { font-size: 20px; }
+.tp-title.is-active { border-bottom-color: var(--tp-accent); }
+.tp-detail {
+  display: block; margin-top: 5px;
+  font-family: 'Archivo', sans-serif; font-size: 12.5px; line-height: 1.45; color: var(--midgray);
+  text-shadow: 0 0 6px var(--offwhite), 0 0 3px var(--offwhite);
+}
+a.tp-row:focus-visible { outline: 2px solid var(--tp-accent); outline-offset: 4px; border-radius: 3px; }
+
+.tp-coords {
+  position: absolute; left: 18px; bottom: 16px; right: 100px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em; color: var(--midgray); opacity: 0;
+  text-shadow: 0 0 6px var(--offwhite), 0 0 3px var(--offwhite);
+}
+.tp-hint {
+  position: absolute; left: 18px; top: 16px; display: none; pointer-events: none;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--midgray);
+  background: color-mix(in srgb, var(--offwhite) 80%, transparent); padding: 5px 9px;
+}
+.tp-replay {
+  position: absolute; right: 14px; bottom: 11px; display: none; z-index: 6; cursor: pointer; pointer-events: auto;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--midgray);
+  border: 1px solid var(--hairline); background: color-mix(in srgb, var(--offwhite) 85%, transparent);
+  padding: 5px 11px; border-radius: 999px; transition: color 0.2s, border-color 0.2s;
+}
+.tp-replay:hover { color: var(--navy); border-color: var(--navy-soft); }
+
+/* mobile: hide the stage, surface the three pains as a plain linked list */
+.tp-fallback { display: none; }
+@media (max-width: 860px) {
+  .terrain-stage { display: none; }
+  .hero--stage .hero-copy { max-width: 100%; }
+  .hero--stage { min-height: 0; }
+  .tp-fallback { display: block; margin-top: 2rem; border-top: 1px solid var(--hairline); padding-top: 1.5rem; }
+  .tp-fallback li { list-style: none; margin-bottom: 1.1rem; }
+  .tp-fallback a { display: block; border: 0; }
+  .tp-fallback .tp-fb-title { font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.05rem; color: var(--navy); border-bottom: 2px solid var(--tp-accent); display: inline-block; padding-bottom: 1px; }
+  .tp-fallback .tp-fb-detail { display: block; margin-top: 4px; font-size: 0.95rem; color: var(--midgray); }
+}
+@media (prefers-reduced-motion: reduce) { .tp-fog, .tp-pulse { animation: none !important; } }
+
 /* Mono utility register (captions, coordinates, small labels) */
 .band-note {
   font-family: var(--mono) !important;
