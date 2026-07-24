@@ -2230,6 +2230,14 @@ footer .footer-practices i {
   color: var(--midgray); opacity: 0; white-space: nowrap;
   text-shadow: 0 0 6px var(--offwhite), 0 0 3px var(--offwhite);
 }
+/* replay: deliberately quiet — mono whisper in the corner, not a control bar */
+.hp-replay {
+  position: absolute; opacity: 0; pointer-events: none; cursor: pointer;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em; color: var(--midgray);
+  border: 1px solid var(--hairline); background: color-mix(in srgb, var(--offwhite) 82%, transparent);
+  padding: 4px 10px; border-radius: 999px; transition: color 0.2s, border-color 0.2s, opacity 0.4s;
+}
+.hp-replay:hover { color: var(--navy); border-color: var(--navy-soft); }
 
 /* Mono utility register (captions, coordinates, small labels) */
 .band-note {

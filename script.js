@@ -235,12 +235,13 @@ function tdTerrainNoise(seed) {
   var TRAVEL_MS = 3600;   // total time the head spends moving (~1.2s a leg)
   var HOLD_MS = 800;      // brief dwell at each peak; hover brings it back later
   var FADE_MS = 700;      // labels retire at the end, leaving the map quiet
-  var CLIMB_W = 1.5;      // how hard the router avoids crossing contours
-  var GRID = 13;          // routing grid step, px (bigger = fewer staircase jogs)
-  var MAX_LEG = 640;      // search radius for the next peak; the per-px leg
-                          // discount in the score keeps legs short when
-                          // similar-quality peaks are available nearer
-  var PROM_MIN = 0.04;    // a dot must sit inside a closed contour ring to read
+  var CLIMB_W = 2.2;      // how hard the router avoids crossing contours —
+                          // the original tuning: skirts non-destination peaks,
+                          // takes the gentlest line into the ones it must climb
+  var GRID = 9;           // routing grid step, px
+  var FRAME_W = 760;      // the whole walk stays inside this right-hand frame —
+                          // it never wanders out over the headline (Tom)
+  var PROM_MIN = 0.035;   // a dot must sit inside a closed contour ring to read
                           // as a peak: that needs real prominence, not just a
                           // local maximum on an invisible bump.
 
@@ -406,53 +407,55 @@ function tdTerrainNoise(seed) {
     var RING_R = 46;
 
     var want = Math.min(PAINS.length, 4);
-    var bandH = (dotMaxY - dotMinY) / want;
-    var peaks = new Array(want);
-    // Pick the bottom band first and climb, each peak scored against the one
-    // below it. A peak is usable if its label fits on EITHER side of the dot —
-    // left by preference, right when the copy crowds the left. The flip is what
-    // lets the walk reach the strong ringed summits over on the left, instead
-    // of being trapped near the right edge by label clearance.
-    for (var b = want - 1; b >= 0; b--) {
-      var yLo = dotMinY + b * bandH + 14, yHi = dotMinY + (b + 1) * bandH - 14;
-      var dotHi = stageRight - 26;
-      var prev = peaks[b + 1] || null;
-      var best = null, fallback = null;
-      for (var y = yLo; y <= yHi; y += 7) {
-        var copyR = copyRightAt(y - LABEL_H2, y + LABEL_H2);
-        var xFrom = copyR + 40, xTo = dotHi;
-        if (prev) {                     // keep stepping up-left as it climbs
-          xFrom = Math.max(xFrom, prev.x - MAX_LEG);
-          xTo = Math.min(xTo, prev.x - 60);
-        } else {                        // first (lowest) peak sits out right
-          xFrom = Math.max(xFrom, copyR + 40 + (dotHi - copyR - 40) * 0.45);
+    // Rank every ringed local maximum in the frame, then greedily take the most
+    // peak-like ones subject to spacing. No horizontal bands: the field decides
+    // where its peaks are, we only insist they are separated and labelable.
+    // (On this field/frame that finds the three visible rings and nothing else.)
+    var dotHi = stageRight - 26;
+    var cands = [];
+    for (var y = dotMinY + 10; y <= dotMaxY - 10; y += 7) {
+      var copyR = copyRightAt(y - LABEL_H2, y + LABEL_H2);
+      var xFrom = Math.max(copyR + 40, W - FRAME_W);
+      for (var x = xFrom; x <= dotHi; x += 7) {
+        var leftOK = (x - 24 - labelW) >= copyR + 12;
+        var rightOK = (x + 24 + labelW) <= stageRight;
+        if (!leftOK && !rightOK) continue;
+        var e = elev(x, y);
+        var isMax = true;
+        for (var a = 0; a < 8 && isMax; a++) {
+          var ang = a * Math.PI / 4;
+          if (elev(x + Math.cos(ang) * 15, y + Math.sin(ang) * 15) >= e) isMax = false;
         }
-        if (xTo - xFrom < 10) continue;
-        for (var x = xFrom; x <= xTo; x += 7) {
-          var leftOK = (x - 24 - labelW) >= copyR + 12;
-          var rightOK = (x + 24 + labelW) <= stageRight;
-          if (!leftOK && !rightOK) continue;
-          var e = elev(x, y);
-          if (!fallback || e > fallback.e) fallback = { x: x, y: y, e: e, side: leftOK ? 'left' : 'right' };
-          var isMax = true;
-          for (var a = 0; a < 8 && isMax; a++) {
-            var ang = a * Math.PI / 4;
-            if (elev(x + Math.cos(ang) * 15, y + Math.sin(ang) * 15) >= e) isMax = false;
-          }
-          if (!isMax) continue;
-          // two radii so wide domes count as well as tight knolls
-          var pr = Math.max(prominence(x, y, RING_R), prominence(x, y, 75));
-          if (pr < PROM_MIN) continue;
-          var leg = prev ? Math.hypot(x - prev.x, y - prev.y) : 0;
-          // peak-likeness, lightly discounted by the walk needed to reach it
-          var score = pr - leg * 0.00004;
-          if (!best || score > best.score) best = { x: x, y: y, e: e, pr: pr, score: score, side: leftOK ? 'left' : 'right' };
-        }
+        if (!isMax) continue;
+        // three radii so wide domes count as well as tight knolls
+        var pr = Math.max(prominence(x, y, RING_R), prominence(x, y, 75), prominence(x, y, 110));
+        if (pr < PROM_MIN) continue;
+        cands.push({ x: x, y: y, e: e, pr: pr, leftOK: leftOK, rightOK: rightOK });
       }
-      peaks[b] = best || fallback;
     }
-    peaks = peaks.filter(Boolean);
+    cands.sort(function (p, q) { return q.pr - p.pr; });
+    var peaks = [];
+    cands.forEach(function (c) {
+      if (peaks.length >= want) return;
+      for (var i = 0; i < peaks.length; i++) {
+        if (Math.abs(c.y - peaks[i].y) < 75) return;                    // stacked too close
+        if (Math.hypot(c.x - peaks[i].x, c.y - peaks[i].y) < 130) return;
+      }
+      peaks.push(c);
+    });
     if (peaks.length < 2) return;
+    peaks.sort(function (p, q) { return p.y - q.y; });
+
+    // Label sides: left by preference; flip to the right when the left is
+    // crowded, or when two neighbours would stack their labels on one side.
+    peaks.forEach(function (p) { p.side = p.leftOK ? 'left' : 'right'; });
+    for (var i = 1; i < peaks.length; i++) {
+      var a2 = peaks[i - 1], b2 = peaks[i];
+      if (b2.y - a2.y < 145 && a2.side === b2.side) {
+        if (b2.side === 'left' && b2.rightOK) b2.side = 'right';
+        else if (b2.side === 'right' && b2.leftOK) b2.side = 'left';
+      }
+    }
 
     // Bands run top to bottom, and height on screen is what a reader reads as
     // "how acute" — so the topmost peak carries the most acute pain.
@@ -477,7 +480,9 @@ function tdTerrainNoise(seed) {
     });
 
     // --- route: least-cost path that dislikes crossing contours -------------
-    var gx0 = 40, gx1 = W - 3, gy0 = -40, gy1 = H - 8;
+    // fenced to the frame (with a small margin), so a detour can never swing
+    // the trail out over the middle of the page
+    var gx0 = Math.max(40, W - FRAME_W - 60), gx1 = W - 3, gy0 = -40, gy1 = H - 8;
     var cols = Math.max(2, Math.ceil((gx1 - gx0) / GRID)), rows = Math.max(2, Math.ceil((gy1 - gy0) / GRID));
     var E = new Float32Array(cols * rows);
     for (var j = 0; j < rows; j++)
@@ -502,7 +507,15 @@ function tdTerrainNoise(seed) {
       var prev = new Int32Array(NS).fill(-1);
       var seen = new Uint8Array(NS);
       var h = new Heap(), s = nodeAt(from[0], from[1]), t = nodeAt(to[0], to[1]);
-      for (var d0 = 0; d0 < 8; d0++) { dist[s * 8 + d0] = 0; h.push(s * 8 + d0, 0); }
+      // A*, not plain Dijkstra: in a flat "moat" every direction costs the
+      // same, and without a pull toward the goal the expansion wanders along
+      // grid axes and locks in boxy detours. The slightly greedy heuristic
+      // (×1.02) keeps the line purposeful.
+      var tx = gx0 + (t % cols) * GRID, ty = gy0 + Math.floor(t / cols) * GRID;
+      function hst(b) {
+        return 1.08 * Math.hypot(gx0 + (b % cols) * GRID - tx, gy0 + Math.floor(b / cols) * GRID - ty);
+      }
+      for (var d0 = 0; d0 < 8; d0++) { dist[s * 8 + d0] = 0; h.push(s * 8 + d0, hst(s)); }
       var endState = -1;
       while (true) {
         var top = h.pop(); if (!top) break;
@@ -518,8 +531,13 @@ function tdTerrainNoise(seed) {
           var step = (NB[k][0] && NB[k][1]) ? GRID * 1.4142 : GRID;
           var de = Math.abs(E[b] - E[n]);
           var c = step * (1 + CLIMB_W * de * 100);
+          // deterministic micro-jitter from the field itself: in a dead-flat
+          // moat every route costs the same, and ties resolve into long
+          // axis-aligned runs — this makes the line meander like a walked trail
+          c *= 1 + ((E[b] * 997) % 1) * 0.10;
           var turn = Math.abs(k - dcur); if (turn > 4) turn = 8 - turn;
-          c += turn * GRID * 0.55;                             // discourage kinks
+          c += turn * GRID * 0.06;      // whisper of smoothing only — a real
+                                        // turn cost makes the route boxy
           var bx = gx0 + bi * GRID, by = gy0 + bj * GRID;
           if (bx < rowEdge[bj]) c *= 9;                        // never cross the copy
           for (var z = 0; z < boxes.length; z++) {              // steer around the labels
@@ -527,7 +545,7 @@ function tdTerrainNoise(seed) {
             if (bx > bo.x0 && bx < bo.x1 && by > bo.y0 && by < bo.y1) { c *= 7; break; }
           }
           var nd = dist[st] + c;
-          if (nd < dist[bst]) { dist[bst] = nd; prev[bst] = st; h.push(bst, nd); }
+          if (nd < dist[bst]) { dist[bst] = nd; prev[bst] = st; h.push(bst, nd + hst(b)); }
         }
       }
       if (endState < 0) {
@@ -553,6 +571,20 @@ function tdTerrainNoise(seed) {
       joins.push(poly.length - 1);
       cursor = [p.x, p.y];
     });
+    // A walked line is never straight: displace each point perpendicular to
+    // the local direction by a slow noise wave. Grid-optimal routes contain
+    // long axis-aligned runs (wide flat valleys really are cheapest in a
+    // straight line) and this is what breaks them. Endpoints and the points
+    // near each peak stay pinned so docks land exactly on the dots.
+    var pinned = {};
+    joins.forEach(function (idx) { for (var q = -2; q <= 2; q++) pinned[idx + q] = true; });
+    for (var i = 1; i < poly.length - 1; i++) {
+      if (pinned[i]) continue;
+      var dx = poly[i + 1][0] - poly[i - 1][0], dy = poly[i + 1][1] - poly[i - 1][1];
+      var len = Math.hypot(dx, dy) || 1;
+      var wob = (fbm(poly[i][0] * 0.011 + 7.3, poly[i][1] * 0.011) - 0.5) * 26;
+      poly[i] = [poly[i][0] - (dy / len) * wob, poly[i][1] + (dx / len) * wob];
+    }
     // measure raw polyline so we know roughly where each peak falls
     var cum = [0], total = 0;
     for (var i = 1; i < poly.length; i++) { total += Math.hypot(poly[i][0] - poly[i - 1][0], poly[i][1] - poly[i - 1][1]); cum.push(total); }
@@ -607,8 +639,8 @@ function tdTerrainNoise(seed) {
       var leader = svgEl('path', { class: 'hp-leader', pathLength: '1' });
       var labelLeft;   // where the label block starts
       if (onRight) {
-        var labelStart = cx + bgR + 12;
-        leader.setAttribute('d', 'M ' + (cx + bgR + 3).toFixed(1) + ' ' + cy.toFixed(1) + ' L ' + (labelStart + 6).toFixed(1) + ' ' + cy.toFixed(1));
+        var labelStart = cx + bgR + 26;
+        leader.setAttribute('d', 'M ' + (cx + bgR + 3).toFixed(1) + ' ' + cy.toFixed(1) + ' L ' + (labelStart - 8).toFixed(1) + ' ' + cy.toFixed(1));
         labelLeft = labelStart;
       } else {
         var labelRight = cx - bgR - 12;
@@ -666,10 +698,9 @@ function tdTerrainNoise(seed) {
       hit.addEventListener('mouseleave', function () { if (state.done) { state.hover = null; state.paint(); } });
       hit.addEventListener('focus', function () { if (state.done) { state.hover = idx; state.paint(); } });
       hit.addEventListener('blur', function () { if (state.done) { state.hover = null; state.paint(); } });
-      return { g: g, ping: ping, halo: halo, leader: leader, row: row, hit: hit, cx: cx, cy: cy, isSummit: isSummit };
+      return { g: g, ping: ping, halo: halo, leader: leader, row: row, hit: hit,
+               cx: cx, cy: cy, isSummit: isSummit, onRight: onRight, bgR: bgR, labelLeft: labelLeft };
     });
-    // vertically centre each label on its dot once its height is known
-    rows_.forEach(function (r) { r.row.style.top = (r.cy - r.row.offsetHeight / 2) + 'px'; });
 
     var coords = document.createElement('div');
     coords.className = 'hp-coords';
@@ -678,7 +709,40 @@ function tdTerrainNoise(seed) {
     coords.style.top = (H - 40) + 'px';
     layer.appendChild(coords);
 
+    var replay = document.createElement('button');
+    replay.type = 'button'; replay.className = 'hp-replay';
+    replay.setAttribute('aria-label', 'Replay animation');
+    replay.textContent = '↻ replay';
+    replay.style.right = '22px'; replay.style.top = (H - 46) + 'px';
+    replay.addEventListener('click', function () { play(); });
+    layer.appendChild(replay);
+
     hero.appendChild(layer);
+    // (labels can only be measured once the layer is attached — offsetHeight of
+    //  a detached element is 0, which silently top-anchored every label before)
+    // Vertically centre each label on its dot, then resolve collisions: when two
+    // same-side labels overlap (tight peak clusters), slide the lower one down
+    // and let its leader run diagonally to the dot — standard map labelling.
+    rows_.forEach(function (r) { r.row.style.top = (r.cy - r.row.offsetHeight / 2) + 'px'; });
+    ['left-side', 'right-side'].forEach(function (_, sideIdx) {
+      var group = rows_.filter(function (r) { return r.onRight === (sideIdx === 1); })
+        .sort(function (a2, b2) { return a2.cy - b2.cy; });
+      var prevBottom = -1e9;
+      group.forEach(function (r) {
+        var h = r.row.offsetHeight;
+        var topY = r.cy - h / 2;
+        if (topY < prevBottom + 12) topY = prevBottom + 12;
+        r.row.style.top = topY + 'px';
+        prevBottom = topY + h;
+        var labelCY = topY + h / 2;
+        if (Math.abs(labelCY - r.cy) > 2) {   // re-aim the leader diagonally
+          var d2 = r.onRight
+            ? 'M ' + (r.cx + r.bgR + 3).toFixed(1) + ' ' + r.cy.toFixed(1) + ' L ' + (r.labelLeft - 8).toFixed(1) + ' ' + labelCY.toFixed(1)
+            : 'M ' + (r.cx - r.bgR - 3).toFixed(1) + ' ' + r.cy.toFixed(1) + ' L ' + (r.labelLeft + labelW - 6).toFixed(1) + ' ' + labelCY.toFixed(1);
+          r.leader.setAttribute('d', d2);
+        }
+      });
+    });
     state.built = true; state.rows = rows_;
 
     // --- timeline -----------------------------------------------------------
@@ -750,6 +814,8 @@ function tdTerrainNoise(seed) {
         r.hit.style.pointerEvents = state.done ? 'auto' : 'none';
       });
       coords.style.opacity = clamp((ms - TOTAL * 0.55) / 700, 0, 1).toFixed(3);
+      replay.style.opacity = state.done ? 1 : 0;
+      replay.style.pointerEvents = state.done ? 'auto' : 'none';
     }
 
     function play() {
