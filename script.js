@@ -234,7 +234,10 @@ function tdTerrainNoise(seed) {
   var GUTTER = 56;        // clear space between the copy and the label column
   var TRAVEL_MS = 3600;   // total time the head spends moving (~1.2s a leg)
   var HOLD_MS = 800;      // brief dwell at each peak; hover brings it back later
-  var FADE_MS = 700;      // labels retire at the end, leaving the map quiet
+  var ALL_MS = 2200;      // final chord: all three pains lit together
+  var FADE_MS = 900;      // then the piece settles…
+  var REST_OP = 0.26;     // …words dimmed to a whisper, still legible up close
+  var TRAIL_REST = 0.32;  // and the dashes fall back to a much lighter presence
   var CLIMB_W = 2.2;      // how hard the router avoids crossing contours —
                           // the original tuning: skirts non-destination peaks,
                           // takes the gentlest line into the ones it must climb
@@ -754,7 +757,9 @@ function tdTerrainNoise(seed) {
       phases.push({ from: f, to: f, dur: HOLD_MS });
       tAcc += HOLD_MS; prevF = f;
     });
-    var FADE_AT = tAcc;              // walk over: the labels retire from here
+    var ALL_AT = tAcc;               // summit docked: all three lit together
+    tAcc += ALL_MS;
+    var FADE_AT = tAcc;              // then the labels dim to their rest state
     var TOTAL = tAcc + FADE_MS;
 
     function pAt(ms) {
@@ -782,16 +787,20 @@ function tdTerrainNoise(seed) {
 
       var lastArrived = -1;
       for (var i = 0; i < arriveAt.length; i++) if (ms >= arriveAt[i]) lastArrived = i;
-      // once the walk is done the type stands down and the map is just dots
-      var labelGlobal = state.done ? 0 : (ms >= FADE_AT ? 1 - smoothstep(clamp((ms - FADE_AT) / FADE_MS, 0, 1)) : 1);
+      // after the final chord the piece settles: words dim to a whisper (still
+      // slightly visible at rest), the trail falls back to a light presence
+      var fadeP = state.done ? 1 : (ms >= FADE_AT ? smoothstep(clamp((ms - FADE_AT) / FADE_MS, 0, 1)) : 0);
+      var labelGlobal = 1 - fadeP * (1 - REST_OP);
+      var allLit = !state.done && ms >= ALL_AT;
+      trail.style.opacity = (0.95 - fadeP * (0.95 - TRAIL_REST)).toFixed(3);
 
       rows_.forEach(function (r, k) {
         var since = ms - arriveAt[k];
         var appear = clamp(since / 420, 0, 1);
-        var active = state.done ? (state.hover === k) : (k === lastArrived);
+        var active = state.done ? (state.hover === k) : (k === lastArrived && !allLit) || allLit;
         var dimF = 1;
-        if (!state.done && lastArrived >= 0 && k !== lastArrived) dimF = 0.5;
-        if (state.done && state.hover != null) dimF = active ? 1 : 0.45;
+        if (!state.done && lastArrived >= 0 && k !== lastArrived && !allLit) dimF = 0.5;
+        if (state.done && state.hover != null) dimF = active ? 1 : 0.6;
         var labelOp = active && state.done ? 1 : appear * dimF * labelGlobal;
 
         var pop = eob(clamp(since / 430, 0, 1));
