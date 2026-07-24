@@ -2163,18 +2163,23 @@ footer .footer-practices i {
    The stage lives in a 500x640 design space; it is scaled as one block so its
    px-positioned labels stay locked to the SVG geometry. Text sits left in
    .hero-copy; the stage overlays the right of the field. (script.js builds it.) */
-.hero--stage .hero-copy { position: relative; z-index: 3; max-width: min(56%, 560px); }
-.hero--stage { --tp-scale: 0.82; }
-@media (min-width: 1024px) { .hero--stage { min-height: 600px; display: flex; align-items: center; } }
+.hero--stage .hero-copy { position: relative; z-index: 3; max-width: min(52%, 545px); }
+.hero--stage .hero-copy .hero-sub { max-width: 46ch; }
+.hero--stage { --tp-scale: 0.86; }
+@media (min-width: 1024px) { .hero--stage { min-height: 640px; display: flex; align-items: center; } }
 
+/* The stage is pulled hard right and bled past the wrap: its labels hang to the
+   LEFT of the peak dots, so the right bleed is what buys the gutter between the
+   label column and the body copy. */
 .terrain-stage {
   --tp-leader: color-mix(in srgb, var(--navy) 45%, transparent);
-  position: absolute; top: 50%; right: -48px;
+  position: absolute; top: 50%; right: clamp(-150px, calc(50% - 100vw / 2 + 40px), -90px);
   width: 500px; height: 640px;
   transform: translateY(-50%) scale(var(--tp-scale));
   transform-origin: right center;
   pointer-events: none; z-index: 2;
 }
+@media (max-width: 1200px) { .hero--stage { --tp-scale: 0.76; } .terrain-stage { right: -70px; } }
 .tp-svg { position: absolute; inset: 0; width: 500px; height: 640px; display: block; overflow: visible; pointer-events: none; }
 
 /* field motion: fog drift + summit pulse (idle loops after landing) */
