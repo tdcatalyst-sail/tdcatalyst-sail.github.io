@@ -235,7 +235,7 @@ function tdTerrainNoise(seed) {
   var FADE_MS = 1100;     // labels retire at the end, leaving the map quiet
   var CLIMB_W = 1.5;      // how hard the router avoids crossing contours
   var GRID = 13;          // routing grid step, px (bigger = fewer staircase jogs)
-  var MAX_LEG = 400;      // keep consecutive peaks close — no long empty walks
+  var MAX_LEG = 340;      // keep consecutive peaks close — no long empty walks
   var PROM_MIN = 0.045;   // a dot must sit inside a closed contour ring to read
                           // as a peak: that needs real prominence, not just a
                           // local maximum on an invisible bump.
@@ -397,10 +397,20 @@ function tdTerrainNoise(seed) {
       var bandLo = Infinity;
       for (var yy = yLo; yy <= yHi; yy += 9) bandLo = Math.min(bandLo, dotLoAt(yy));
       if (dotHi - bandLo < 50) continue;
-      var spanX = dotHi - bandLo;
-      var cx0 = bandLo + Math.max(0, (0.10 + 0.62 * frac) - 0.16) * spanX;
-      var cx1 = bandLo + Math.min(1, (0.10 + 0.62 * frac) + 0.30) * spanX;
       var prev = peaks[b + 1] || null;
+      var spanX = dotHi - bandLo, cx0, cx1;
+      if (prev) {
+        // Search only within a short walk of the peak below, drifting left as it
+        // climbs. This is what keeps the final leg from being a long empty hike.
+        // Always step LEFT of the peak below — that is what makes the walk a
+        // rising diagonal — but never further than one short leg.
+        cx0 = Math.max(bandLo, prev.x - MAX_LEG * 0.85);
+        cx1 = Math.min(dotHi, prev.x - 70);
+        if (cx1 - cx0 < 60) { cx0 = bandLo; cx1 = Math.min(dotHi, bandLo + 220); }
+      } else {
+        cx0 = bandLo + Math.max(0, (0.10 + 0.62 * frac) - 0.16) * spanX;
+        cx1 = bandLo + Math.min(1, (0.10 + 0.62 * frac) + 0.30) * spanX;
+      }
       var best = null, near = null, fallback = null;
       for (var y = yLo; y <= yHi; y += 8) {
         var loX = Math.max(cx0, dotLoAt(y));   // this row's own clearance
@@ -418,9 +428,11 @@ function tdTerrainNoise(seed) {
           var pr = prominence(x, y);
           if (pr < PROM_MIN) continue;
           var leg = prev ? Math.hypot(x - prev.x, y - prev.y) : 0;
+          // the window already caps the walk, so pick purely on how well the
+          // spot reads as a peak
           var c = { x: x, y: y, e: e, pr: pr, leg: leg };
-          if (!best || pr > best.pr) best = c;                        // most peak-like
-          if (leg <= MAX_LEG && (!near || pr > near.pr)) near = c;     // ...within reach
+          if (!best || pr > best.pr) best = c;                          // most peak-like
+          if (leg <= MAX_LEG && (!near || pr > near.pr)) near = c;       // ...within reach
         }
       }
       peaks[b] = near || best || fallback;
