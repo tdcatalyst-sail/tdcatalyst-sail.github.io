@@ -2159,6 +2159,16 @@ footer .footer-practices i {
 .hero--terrain > canvas.terrain { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero--terrain .wrap { position: relative; }
 
+/* Terrain band behind a JS-rendered app (diagnostic): fixed-height strip at the
+   top of <main>, outside the re-rendered container, fading out downward */
+.diag-terrain-host { position: relative; }
+.diag-terrain {
+  position: absolute; top: 0; left: 0; right: 0; height: 660px;
+  overflow: hidden; pointer-events: none;
+}
+.diag-terrain > canvas.terrain { position: absolute; inset: 0; width: 100%; height: 100%; }
+.diag-terrain-host > #diag-app { position: relative; }
+
 /* --- Hero peaks: a trail routed over the hero's OWN contour field ------------
    Pure overlay: the hero's markup and layout are untouched. script.js reads the
    same seeded noise the canvas draws, finds real summits in the space left of
@@ -2193,6 +2203,7 @@ footer .footer-practices i {
   position: absolute; display: block; text-align: right;
   pointer-events: none; opacity: 0;
 }
+.hp-row--right { text-align: left; }
 /* the dot's own hover/click target, comfortably larger than the dot itself */
 .hp-hit {
   position: absolute; width: 50px; height: 50px; border-radius: 50%;
@@ -2202,6 +2213,7 @@ footer .footer-practices i {
 .hp-title {
   display: inline-block; font-family: 'Besley', Georgia, serif; font-weight: 600;
   font-size: 18.5px; line-height: 1.22; color: var(--navy);
+  text-wrap: balance;  /* no orphaned last word, same rule the headings use */
   border-bottom: 2px solid transparent; padding-bottom: 2px;
   transition: color 0.35s ease, border-color 0.35s ease;
   text-shadow: 0 0 8px var(--offwhite), 0 0 4px var(--offwhite), 0 0 2px var(--offwhite);
