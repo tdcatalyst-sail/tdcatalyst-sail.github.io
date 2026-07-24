@@ -2189,12 +2189,11 @@ footer .footer-practices i {
   position: absolute; display: block; text-align: right;
   pointer-events: none; opacity: 0;
 }
-/* the dot's own hit area, comfortably larger than the dot itself */
+/* the dot's own hover area, comfortably larger than the dot itself */
 .hp-hit {
   position: absolute; width: 46px; height: 46px; border-radius: 50%;
-  border: 0; pointer-events: none; cursor: pointer;
+  border: 0; pointer-events: none;
 }
-.hp-hit:focus-visible { outline: 2px solid var(--hp-accent); outline-offset: 3px; }
 .hp-title {
   display: inline-block; font-family: 'Besley', Georgia, serif; font-weight: 600;
   font-size: 17px; line-height: 1.22; color: var(--navy);
@@ -2214,13 +2213,6 @@ footer .footer-practices i {
   color: var(--midgray); opacity: 0; white-space: nowrap;
   text-shadow: 0 0 6px var(--offwhite), 0 0 3px var(--offwhite);
 }
-.hp-replay {
-  position: absolute; opacity: 0; pointer-events: auto; cursor: pointer;
-  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em; color: var(--midgray);
-  border: 1px solid var(--hairline); background: color-mix(in srgb, var(--offwhite) 82%, transparent);
-  padding: 5px 11px; border-radius: 999px; transition: color 0.2s, border-color 0.2s, opacity 0.4s;
-}
-.hp-replay:hover { color: var(--navy); border-color: var(--navy-soft); }
 
 /* Mono utility register (captions, coordinates, small labels) */
 .band-note {
