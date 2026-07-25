@@ -229,6 +229,12 @@ function tdTerrainNoise(seed) {
   try { cfg = JSON.parse(cfgEl.textContent); } catch (e) { return; }
   var PAINS = cfg.pains || [];
   if (PAINS.length < 2) return;
+  // Two presentations of the same peak map:
+  //   'flags' — the pains are planted on the peaks as small pennant flags in a
+  //             quick sequence; no trail. (The hub: a surveyed map.)
+  //   'walk'  — a dashed trail is routed over the field and docks at each peak
+  //             in turn. (Sail: the walk is the product.)
+  var MODE = cfg.mode === 'walk' ? 'walk' : 'flags';
 
   // --- tuning ---------------------------------------------------------------
   var GUTTER = 56;        // clear space between the copy and the label column
@@ -416,26 +422,53 @@ function tdTerrainNoise(seed) {
     // peak-like ones subject to spacing. No horizontal bands: the field decides
     // where its peaks are, we only insist they are separated and labelable.
     // (On this field/frame that finds the three visible rings and nothing else.)
+    // The scan samples the noise once into a grid and does the local-max test on
+    // array lookups — ~9× fewer noise evaluations than testing each cell's
+    // neighbourhood point-by-point, which is what made the page feel slow.
     var dotHi = stageRight - 26;
+    var STEP = 7, SX = Math.max(40, W - FRAME_W), SY = dotMinY + 10;
+    var nx = Math.max(2, Math.floor((dotHi - SX) / STEP) + 1);
+    var ny = Math.max(2, Math.floor((dotMaxY - 10 - SY) / STEP) + 1);
+    var EG = new Float32Array(nx * ny);
+    for (var gj = 0; gj < ny; gj++)
+      for (var gi = 0; gi < nx; gi++) EG[gj * nx + gi] = elev(SX + gi * STEP, SY + gj * STEP);
+    var rowCopyR = new Float32Array(ny);
+    for (var gj2 = 0; gj2 < ny; gj2++) {
+      var ry2 = SY + gj2 * STEP;
+      rowCopyR[gj2] = copyRightAt(ry2 - LABEL_H2, ry2 + LABEL_H2);
+    }
     var cands = [];
-    for (var y = dotMinY + 10; y <= dotMaxY - 10; y += 7) {
-      var copyR = copyRightAt(y - LABEL_H2, y + LABEL_H2);
-      var xFrom = Math.max(copyR + 40, W - FRAME_W);
-      for (var x = xFrom; x <= dotHi; x += 7) {
+    for (var j3 = 1; j3 < ny - 1; j3++) {
+      for (var i3 = 1; i3 < nx - 1; i3++) {
+        var e = EG[j3 * nx + i3];
+        if (e <= EG[j3 * nx + i3 - 1] || e <= EG[j3 * nx + i3 + 1] ||
+            e <= EG[(j3 - 1) * nx + i3] || e <= EG[(j3 + 1) * nx + i3] ||
+            e <= EG[(j3 - 1) * nx + i3 - 1] || e <= EG[(j3 - 1) * nx + i3 + 1] ||
+            e <= EG[(j3 + 1) * nx + i3 - 1] || e <= EG[(j3 + 1) * nx + i3 + 1]) continue;
+        var x = SX + i3 * STEP, y = SY + j3 * STEP;
+        // hill-climb to the true summit — a grid cell only approximates it, and
+        // prominence measured a few px off a weak dome's crest under-scores it
+        for (var hc = 0; hc < 6; hc++) {
+          var bestE = elev(x, y), bx3 = x, by3 = y, moved = false;
+          for (var a3 = 0; a3 < 8; a3++) {
+            var an3 = a3 * Math.PI / 4;
+            var tx3 = x + Math.cos(an3) * 4, ty3 = y + Math.sin(an3) * 4;
+            var te3 = elev(tx3, ty3);
+            if (te3 > bestE) { bestE = te3; bx3 = tx3; by3 = ty3; moved = true; }
+          }
+          if (!moved) break;
+          x = bx3; y = by3;
+        }
+        if (y < SY || y > dotMaxY - 10) continue;
+        var copyR = rowCopyR[Math.max(0, Math.min(ny - 1, Math.round((y - SY) / STEP)))];
+        if (x < copyR + 40 || x > dotHi) continue;
         var leftOK = (x - 24 - labelW) >= copyR + 12;
         var rightOK = (x + 24 + labelW) <= stageRight;
         if (!leftOK && !rightOK) continue;
-        var e = elev(x, y);
-        var isMax = true;
-        for (var a = 0; a < 8 && isMax; a++) {
-          var ang = a * Math.PI / 4;
-          if (elev(x + Math.cos(ang) * 15, y + Math.sin(ang) * 15) >= e) isMax = false;
-        }
-        if (!isMax) continue;
         // three radii so wide domes count as well as tight knolls
         var pr = Math.max(prominence(x, y, RING_R), prominence(x, y, 75), prominence(x, y, 110));
         if (pr < PROM_MIN) continue;
-        cands.push({ x: x, y: y, e: e, pr: pr, leftOK: leftOK, rightOK: rightOK });
+        cands.push({ x: x, y: y, e: elev(x, y), pr: pr, leftOK: leftOK, rightOK: rightOK });
       }
     }
     cands.sort(function (p, q) { return q.pr - p.pr; });
@@ -514,153 +547,159 @@ function tdTerrainNoise(seed) {
       return { x0: right - labelW - 14, x1: right + 6, y0: p.y - 62, y1: p.y + 62 };
     });
 
-    // --- route: least-cost path that dislikes crossing contours -------------
-    // fenced to the frame (with a small margin), so a detour can never swing
-    // the trail out over the middle of the page
-    var gx0 = Math.max(40, W - FRAME_W - 60), gx1 = W - 3, gy0 = -40, gy1 = H - 8;
-    var cols = Math.max(2, Math.ceil((gx1 - gx0) / GRID)), rows = Math.max(2, Math.ceil((gy1 - gy0) / GRID));
-    var E = new Float32Array(cols * rows);
-    for (var j = 0; j < rows; j++)
-      for (var i = 0; i < cols; i++) E[j * cols + i] = elev(gx0 + i * GRID, gy0 + j * GRID);
-    var rowEdge = new Float32Array(rows);   // copy's right edge per grid row
-    for (var j = 0; j < rows; j++) {
-      var ry = gy0 + j * GRID;
-      rowEdge[j] = copyRightAt(ry - 26, ry + 26) + 26;
-    }
-    function nodeAt(px, py) {
-      return clamp(Math.round((py - gy0) / GRID), 0, rows - 1) * cols + clamp(Math.round((px - gx0) / GRID), 0, cols - 1);
-    }
-    function nodeXY(n) { return [gx0 + (n % cols) * GRID, gy0 + Math.floor(n / cols) * GRID]; }
-    // 8 compass directions, ordered so index distance == turn angle / 45°
-    var NB = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
-    // Search over (cell, heading) rather than cell alone, so a turn can be
-    // charged for. Without this the router zigzags between equal-cost cells and
-    // the result reads like a circuit trace instead of a walked line.
-    function route(from, to) {
-      var NS = cols * rows * 8;
-      var dist = new Float32Array(NS).fill(Infinity);
-      var prev = new Int32Array(NS).fill(-1);
-      var seen = new Uint8Array(NS);
-      var h = new Heap(), s = nodeAt(from[0], from[1]), t = nodeAt(to[0], to[1]);
-      // A*, not plain Dijkstra: in a flat "moat" every direction costs the
-      // same, and without a pull toward the goal the expansion wanders along
-      // grid axes and locks in boxy detours. The slightly greedy heuristic
-      // (×1.02) keeps the line purposeful.
-      var tx = gx0 + (t % cols) * GRID, ty = gy0 + Math.floor(t / cols) * GRID;
-      function hst(b) {
-        return 1.08 * Math.hypot(gx0 + (b % cols) * GRID - tx, gy0 + Math.floor(b / cols) * GRID - ty);
+    var d = null;
+    if (MODE === 'walk') {
+      // --- route: least-cost path that dislikes crossing contours -------------
+      // fenced to the frame (with a small margin), so a detour can never swing
+      // the trail out over the middle of the page
+      var gx0 = Math.max(40, W - FRAME_W - 60), gx1 = W - 3, gy0 = -40, gy1 = H - 8;
+      var cols = Math.max(2, Math.ceil((gx1 - gx0) / GRID)), rows = Math.max(2, Math.ceil((gy1 - gy0) / GRID));
+      var E = new Float32Array(cols * rows);
+      for (var j = 0; j < rows; j++)
+        for (var i = 0; i < cols; i++) E[j * cols + i] = elev(gx0 + i * GRID, gy0 + j * GRID);
+      var rowEdge = new Float32Array(rows);   // copy's right edge per grid row
+      for (var j = 0; j < rows; j++) {
+        var ry = gy0 + j * GRID;
+        rowEdge[j] = copyRightAt(ry - 26, ry + 26) + 26;
       }
-      for (var d0 = 0; d0 < 8; d0++) { dist[s * 8 + d0] = 0; h.push(s * 8 + d0, hst(s)); }
-      var endState = -1;
-      while (true) {
-        var top = h.pop(); if (!top) break;
-        var st = top[1]; if (seen[st]) continue; seen[st] = 1;
-        var n = st >> 3, dcur = st & 7;
-        if (n === t) { endState = st; break; }
-        var ni = n % cols, nj = Math.floor(n / cols);
-        for (var k = 0; k < 8; k++) {
-          var bi = ni + NB[k][0], bj = nj + NB[k][1];
-          if (bi < 0 || bj < 0 || bi >= cols || bj >= rows) continue;
-          var b = bj * cols + bi, bst = b * 8 + k;
-          if (seen[bst]) continue;
-          var step = (NB[k][0] && NB[k][1]) ? GRID * 1.4142 : GRID;
-          var de = Math.abs(E[b] - E[n]);
-          var c = step * (1 + CLIMB_W * de * 100);
-          // deterministic micro-jitter from the field itself: in a dead-flat
-          // moat every route costs the same, and ties resolve into long
-          // axis-aligned runs — this makes the line meander like a walked trail
-          c *= 1 + ((E[b] * 997) % 1) * 0.10;
-          var turn = Math.abs(k - dcur); if (turn > 4) turn = 8 - turn;
-          c += turn * GRID * 0.06;      // whisper of smoothing only — a real
-                                        // turn cost makes the route boxy
-          var bx = gx0 + bi * GRID, by = gy0 + bj * GRID;
-          if (bx < rowEdge[bj]) c *= 9;                        // never cross the copy
-          for (var z = 0; z < boxes.length; z++) {              // steer around the labels
-            var bo = boxes[z];
-            if (bx > bo.x0 && bx < bo.x1 && by > bo.y0 && by < bo.y1) { c *= 7; break; }
-          }
-          var nd = dist[st] + c;
-          if (nd < dist[bst]) { dist[bst] = nd; prev[bst] = st; h.push(bst, nd + hst(b)); }
+      function nodeAt(px, py) {
+        return clamp(Math.round((py - gy0) / GRID), 0, rows - 1) * cols + clamp(Math.round((px - gx0) / GRID), 0, cols - 1);
+      }
+      function nodeXY(n) { return [gx0 + (n % cols) * GRID, gy0 + Math.floor(n / cols) * GRID]; }
+      // 8 compass directions, ordered so index distance == turn angle / 45°
+      var NB = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+      // Search over (cell, heading) rather than cell alone, so a turn can be
+      // charged for. Without this the router zigzags between equal-cost cells and
+      // the result reads like a circuit trace instead of a walked line.
+      function route(from, to) {
+        var NS = cols * rows * 8;
+        var dist = new Float32Array(NS).fill(Infinity);
+        var prev = new Int32Array(NS).fill(-1);
+        var seen = new Uint8Array(NS);
+        var h = new Heap(), s = nodeAt(from[0], from[1]), t = nodeAt(to[0], to[1]);
+        // A*, not plain Dijkstra: in a flat "moat" every direction costs the
+        // same, and without a pull toward the goal the expansion wanders along
+        // grid axes and locks in boxy detours. The slightly greedy heuristic
+        // (×1.02) keeps the line purposeful.
+        var tx = gx0 + (t % cols) * GRID, ty = gy0 + Math.floor(t / cols) * GRID;
+        function hst(b) {
+          return 1.08 * Math.hypot(gx0 + (b % cols) * GRID - tx, gy0 + Math.floor(b / cols) * GRID - ty);
         }
+        for (var d0 = 0; d0 < 8; d0++) { dist[s * 8 + d0] = 0; h.push(s * 8 + d0, hst(s)); }
+        var endState = -1;
+        while (true) {
+          var top = h.pop(); if (!top) break;
+          var st = top[1]; if (seen[st]) continue; seen[st] = 1;
+          var n = st >> 3, dcur = st & 7;
+          if (n === t) { endState = st; break; }
+          var ni = n % cols, nj = Math.floor(n / cols);
+          for (var k = 0; k < 8; k++) {
+            var bi = ni + NB[k][0], bj = nj + NB[k][1];
+            if (bi < 0 || bj < 0 || bi >= cols || bj >= rows) continue;
+            var b = bj * cols + bi, bst = b * 8 + k;
+            if (seen[bst]) continue;
+            var step = (NB[k][0] && NB[k][1]) ? GRID * 1.4142 : GRID;
+            var de = Math.abs(E[b] - E[n]);
+            var c = step * (1 + CLIMB_W * de * 100);
+            // deterministic micro-jitter from the field itself: in a dead-flat
+            // moat every route costs the same, and ties resolve into long
+            // axis-aligned runs — this makes the line meander like a walked trail
+            c *= 1 + ((E[b] * 997) % 1) * 0.10;
+            var turn = Math.abs(k - dcur); if (turn > 4) turn = 8 - turn;
+            c += turn * GRID * 0.06;      // whisper of smoothing only — a real
+                                          // turn cost makes the route boxy
+            var bx = gx0 + bi * GRID, by = gy0 + bj * GRID;
+            if (bx < rowEdge[bj]) c *= 9;                        // never cross the copy
+            for (var z = 0; z < boxes.length; z++) {              // steer around the labels
+              var bo = boxes[z];
+              if (bx > bo.x0 && bx < bo.x1 && by > bo.y0 && by < bo.y1) { c *= 7; break; }
+            }
+            var nd = dist[st] + c;
+            if (nd < dist[bst]) { dist[bst] = nd; prev[bst] = st; h.push(bst, nd + hst(b)); }
+          }
+        }
+        if (endState < 0) {
+          for (var q = 0, bestD = Infinity; q < 8; q++)
+            if (dist[t * 8 + q] < bestD) { bestD = dist[t * 8 + q]; endState = t * 8 + q; }
+        }
+        var path = [], cur = endState, guard = 0;
+        while (cur >= 0 && guard++ < 40000) {
+          path.push(nodeXY(cur >> 3));
+          if ((cur >> 3) === s) break;
+          cur = prev[cur];
+        }
+        path.reverse();
+        return path.length > 1 ? path : [from, to];
       }
-      if (endState < 0) {
-        for (var q = 0, bestD = Infinity; q < 8; q++)
-          if (dist[t * 8 + q] < bestD) { bestD = dist[t * 8 + q]; endState = t * 8 + q; }
-      }
-      var path = [], cur = endState, guard = 0;
-      while (cur >= 0 && guard++ < 40000) {
-        path.push(nodeXY(cur >> 3));
-        if ((cur >> 3) === s) break;
-        cur = prev[cur];
-      }
-      path.reverse();
-      return path.length > 1 ? path : [from, to];
-    }
 
-    var poly = [entry], joins = [];
-    var cursor = entry;
-    order.forEach(function (p) {
-      var seg = route(cursor, [p.x, p.y]);
-      for (var i = 1; i < seg.length; i++) poly.push(seg[i]);
-      poly.push([p.x, p.y]);
-      joins.push(poly.length - 1);
-      cursor = [p.x, p.y];
-    });
-    // A walked line is never straight: displace each point perpendicular to
-    // the local direction by a slow noise wave. Grid-optimal routes contain
-    // long axis-aligned runs (wide flat valleys really are cheapest in a
-    // straight line) and this is what breaks them. Endpoints and the points
-    // near each peak stay pinned so docks land exactly on the dots.
-    var pinned = {};
-    joins.forEach(function (idx) { for (var q = -2; q <= 2; q++) pinned[idx + q] = true; });
-    for (var i = 1; i < poly.length - 1; i++) {
-      if (pinned[i]) continue;
-      var dx = poly[i + 1][0] - poly[i - 1][0], dy = poly[i + 1][1] - poly[i - 1][1];
-      var len = Math.hypot(dx, dy) || 1;
-      var wob = (fbm(poly[i][0] * 0.011 + 7.3, poly[i][1] * 0.011) - 0.5) * 26;
-      poly[i] = [poly[i][0] - (dy / len) * wob, poly[i][1] + (dx / len) * wob];
+      var poly = [entry], joins = [];
+      var cursor = entry;
+      order.forEach(function (p) {
+        var seg = route(cursor, [p.x, p.y]);
+        for (var i = 1; i < seg.length; i++) poly.push(seg[i]);
+        poly.push([p.x, p.y]);
+        joins.push(poly.length - 1);
+        cursor = [p.x, p.y];
+      });
+      // A walked line is never straight: displace each point perpendicular to
+      // the local direction by a slow noise wave. Grid-optimal routes contain
+      // long axis-aligned runs (wide flat valleys really are cheapest in a
+      // straight line) and this is what breaks them. Endpoints and the points
+      // near each peak stay pinned so docks land exactly on the dots.
+      var pinned = {};
+      joins.forEach(function (idx) { for (var q = -2; q <= 2; q++) pinned[idx + q] = true; });
+      for (var i = 1; i < poly.length - 1; i++) {
+        if (pinned[i]) continue;
+        var dx = poly[i + 1][0] - poly[i - 1][0], dy = poly[i + 1][1] - poly[i - 1][1];
+        var len = Math.hypot(dx, dy) || 1;
+        var wob = (fbm(poly[i][0] * 0.011 + 7.3, poly[i][1] * 0.011) - 0.5) * 26;
+        poly[i] = [poly[i][0] - (dy / len) * wob, poly[i][1] + (dx / len) * wob];
+      }
+      // measure raw polyline so we know roughly where each peak falls
+      var cum = [0], total = 0;
+      for (var i = 1; i < poly.length; i++) { total += Math.hypot(poly[i][0] - poly[i - 1][0], poly[i][1] - poly[i - 1][1]); cum.push(total); }
+      var roughF = joins.map(function (idx) { return total ? cum[idx] / total : 1; });
+      d = crPath(chaikin(poly, 4));
     }
-    // measure raw polyline so we know roughly where each peak falls
-    var cum = [0], total = 0;
-    for (var i = 1; i < poly.length; i++) { total += Math.hypot(poly[i][0] - poly[i - 1][0], poly[i][1] - poly[i - 1][1]); cum.push(total); }
-    var roughF = joins.map(function (idx) { return total ? cum[idx] / total : 1; });
-    var d = crPath(chaikin(poly, 4));
 
     // --- DOM ---------------------------------------------------------------
     layer = document.createElement('div');
     layer.className = 'hero-peaks';
     var svg = svgEl('svg', { class: 'hp-svg', viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'none', 'aria-hidden': 'true', focusable: 'false' });
     layer.appendChild(svg);
-    var uid = 'hp' + Math.floor(Math.random() * 1e6);
-    var defs = svgEl('defs', {});
-    var mask = svgEl('mask', { id: uid });
-    var maskPath = svgEl('path', { d: d, pathLength: '1', class: 'hp-mask' });
-    mask.appendChild(maskPath); defs.appendChild(mask); svg.appendChild(defs);
-    var trail = svgEl('path', { d: d, class: 'hp-trail', mask: 'url(#' + uid + ')' });
-    svg.appendChild(trail);
-    var measure = svgEl('path', { d: d });
-    measure.style.display = 'none';
-    svg.appendChild(measure);
-    var LEN = measure.getTotalLength ? measure.getTotalLength() : 0;
+    var maskPath = null, trail = null, measure = null, head = null, LEN = 0, F = null;
+    if (MODE === 'walk') {
+      var uid = 'hp' + Math.floor(Math.random() * 1e6);
+      var defs = svgEl('defs', {});
+      var mask = svgEl('mask', { id: uid });
+      maskPath = svgEl('path', { d: d, pathLength: '1', class: 'hp-mask' });
+      mask.appendChild(maskPath); defs.appendChild(mask); svg.appendChild(defs);
+      trail = svgEl('path', { d: d, class: 'hp-trail', mask: 'url(#' + uid + ')' });
+      svg.appendChild(trail);
+      measure = svgEl('path', { d: d });
+      measure.style.display = 'none';
+      svg.appendChild(measure);
+      LEN = measure.getTotalLength ? measure.getTotalLength() : 0;
 
-    // exact fraction of each peak along the smoothed path
-    var F = roughF.map(function (rf, k) {
-      if (!LEN) return rf;
-      var p = order[k], best = rf, bestD = Infinity;
-      var lo = Math.max(0, rf - 0.12), hi = Math.min(1, rf + 0.12);
-      for (var f = lo; f <= hi; f += 0.0015) {
-        var pt = measure.getPointAtLength(f * LEN);
-        var dd = Math.hypot(pt.x - p.x, pt.y - p.y);
-        if (dd < bestD) { bestD = dd; best = f; }
-      }
-      return best;
-    });
-    F[F.length - 1] = 1;
-    for (var k = 1; k < F.length; k++) if (F[k] <= F[k - 1]) F[k] = Math.min(1, F[k - 1] + 0.02);
+      // exact fraction of each peak along the smoothed path
+      F = roughF.map(function (rf, k) {
+        if (!LEN) return rf;
+        var p = order[k], best = rf, bestD = Infinity;
+        var lo = Math.max(0, rf - 0.12), hi = Math.min(1, rf + 0.12);
+        for (var f = lo; f <= hi; f += 0.0015) {
+          var pt = measure.getPointAtLength(f * LEN);
+          var dd = Math.hypot(pt.x - p.x, pt.y - p.y);
+          if (dd < bestD) { bestD = dd; best = f; }
+        }
+        return best;
+      });
+      F[F.length - 1] = 1;
+      for (var k = 1; k < F.length; k++) if (F[k] <= F[k - 1]) F[k] = Math.min(1, F[k - 1] + 0.02);
 
-    var head = svgEl('circle', { class: 'hp-head', r: 3.4, cx: entry[0], cy: entry[1] });
-    head.style.opacity = 0;
-    svg.appendChild(head);
+      head = svgEl('circle', { class: 'hp-head', r: 3.4, cx: entry[0], cy: entry[1] });
+      head.style.opacity = 0;
+      svg.appendChild(head);
+    }
 
     // markers + labels, in visit order
     var rows_ = order.map(function (p, k) {
@@ -696,10 +735,24 @@ function tdTerrainNoise(seed) {
       var halo = svgEl('circle', { class: 'hp-halo', r: dotR + 5 });
       halo.style.stroke = accent; halo.style.opacity = 0; halo.style.transform = 'scale(2)'; halo.style.transformOrigin = '0 0';
       g.appendChild(halo);
-      g.appendChild(svgEl('circle', { class: 'hp-dotbg', r: bgR }));
-      var dot = svgEl('circle', { class: 'hp-dot', r: dotR });
-      dot.style.fill = 'var(--offwhite)'; dot.style.stroke = accent;
-      g.appendChild(dot);
+      if (MODE === 'flags') {
+        // a small survey flag planted on the crest: base dot, pole, pennant
+        g.appendChild(svgEl('circle', { class: 'hp-dotbg', r: 6.5 }));
+        var base = svgEl('circle', { class: 'hp-flagbase', r: 2.6 });
+        base.style.fill = accent;
+        g.appendChild(base);
+        var pole = svgEl('path', { class: 'hp-flagpole', d: 'M 0 0 L 0 -17' });
+        pole.style.stroke = 'var(--navy)';
+        g.appendChild(pole);
+        var pennant = svgEl('path', { class: 'hp-pennant', d: 'M 0 -17 L 12 -13.2 L 0 -9.4 Z' });
+        pennant.style.fill = accent;
+        g.appendChild(pennant);
+      } else {
+        g.appendChild(svgEl('circle', { class: 'hp-dotbg', r: bgR }));
+        var dot = svgEl('circle', { class: 'hp-dot', r: dotR });
+        dot.style.fill = 'var(--offwhite)'; dot.style.stroke = accent;
+        g.appendChild(dot);
+      }
       svg.appendChild(g);
 
       // The label is pure display — it retires once the walk is over. The dot
@@ -786,14 +839,20 @@ function tdTerrainNoise(seed) {
 
     // --- timeline -----------------------------------------------------------
     var phases = [], arriveAt = [], prevF = 0, tAcc = 0;
-    F.forEach(function (f, k) {
-      var dur = Math.max(500, TRAVEL_MS * (f - prevF));
-      phases.push({ from: prevF, to: f, dur: dur });
-      tAcc += dur; arriveAt.push(tAcc);
-      phases.push({ from: f, to: f, dur: HOLD_MS });
-      tAcc += HOLD_MS; prevF = f;
-    });
-    var ALL_AT = tAcc;               // summit docked: all three lit together
+    if (MODE === 'walk') {
+      F.forEach(function (f, k) {
+        var dur = Math.max(500, TRAVEL_MS * (f - prevF));
+        phases.push({ from: prevF, to: f, dur: dur });
+        tAcc += dur; arriveAt.push(tAcc);
+        phases.push({ from: f, to: f, dur: HOLD_MS });
+        tAcc += HOLD_MS; prevF = f;
+      });
+    } else {
+      // flags plant in a quick sequence, lowest first, summit last
+      order.forEach(function (_, k) { arriveAt.push(450 + k * 520); });
+      tAcc = arriveAt[arriveAt.length - 1] + 520;
+    }
+    var ALL_AT = tAcc;               // everything placed: all pains lit together
     tAcc += ALL_MS;
     var FADE_AT = tAcc;              // then the labels dim to their rest state
     var TOTAL = tAcc + FADE_MS;
@@ -813,13 +872,15 @@ function tdTerrainNoise(seed) {
 
     function paint(ms) {
       if (ms === undefined) ms = state.done ? TOTAL : 0;
-      var p = state.done ? 1 : pAt(ms);
-      maskPath.style.strokeDashoffset = (1 - p).toFixed(4);
-      if (LEN) {
-        var hp = measure.getPointAtLength(p * LEN);
-        head.setAttribute('cx', hp.x.toFixed(1)); head.setAttribute('cy', hp.y.toFixed(1));
+      if (MODE === 'walk') {
+        var p = state.done ? 1 : pAt(ms);
+        maskPath.style.strokeDashoffset = (1 - p).toFixed(4);
+        if (LEN) {
+          var hp = measure.getPointAtLength(p * LEN);
+          head.setAttribute('cx', hp.x.toFixed(1)); head.setAttribute('cy', hp.y.toFixed(1));
+        }
+        head.style.opacity = state.done ? 0 : clamp(Math.min(ms / 260, (TOTAL - ms) / 500), 0, 1);
       }
-      head.style.opacity = state.done ? 0 : clamp(Math.min(ms / 260, (TOTAL - ms) / 500), 0, 1);
 
       var lastArrived = -1;
       for (var i = 0; i < arriveAt.length; i++) if (ms >= arriveAt[i]) lastArrived = i;
@@ -828,7 +889,7 @@ function tdTerrainNoise(seed) {
       var fadeP = state.done ? 1 : (ms >= FADE_AT ? smoothstep(clamp((ms - FADE_AT) / FADE_MS, 0, 1)) : 0);
       var labelGlobal = 1 - fadeP * (1 - REST_OP);
       var allLit = !state.done && ms >= ALL_AT;
-      trail.style.opacity = (0.95 - fadeP * (0.95 - TRAIL_REST)).toFixed(3);
+      if (trail) trail.style.opacity = (0.95 - fadeP * (0.95 - TRAIL_REST)).toFixed(3);
 
       rows_.forEach(function (r, k) {
         var since = ms - arriveAt[k];
@@ -876,6 +937,7 @@ function tdTerrainNoise(seed) {
     }
 
     state.paint = paint; state.play = play; state.TOTAL = TOTAL;
+
 
     if (animate) {
       paint(0);

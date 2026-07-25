@@ -2196,6 +2196,8 @@ footer .footer-practices i {
 .hp-halo { stroke-width: 1; }
 .hp-dotbg { fill: var(--offwhite); }
 .hp-dot { stroke-width: 2; }
+.hp-flagpole { fill: none; stroke-width: 1.6; stroke-linecap: round; }
+.hp-pennant { stroke: none; }
 
 /* label block: right-aligned, sits to the left of its dot with a hairline leader.
    Display only — it retires when the walk ends; the dot is the target. */
