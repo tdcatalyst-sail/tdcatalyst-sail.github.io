@@ -938,10 +938,6 @@ function tdTerrainNoise(seed) {
 
     state.paint = paint; state.play = play; state.TOTAL = TOTAL;
 
-    var fz = /[?&]hpfreeze=(\d+)/.exec(location.search); // TEMP-VERIFY
-    if (fz) { state.done = parseFloat(fz[1]) >= TOTAL; paint(Math.min(parseFloat(fz[1]), TOTAL)); return; }
-
-
     if (animate) {
       paint(0);
       var begun = false;
