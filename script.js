@@ -526,14 +526,11 @@ function tdTerrainNoise(seed) {
       function clearOf(x) {
         return !yMeets || x + BELOW_W + 8 <= lowBox.x0 || x - 8 >= lowBox.x1;
       }
-      var ok2 = false;
-      if (bx2 >= xLo2 && bx2 + BELOW_W <= stageRight && clearOf(bx2)) ok2 = true;
-      else if (yMeets) {
-        var shiftL = lowBox.x0 - 12 - BELOW_W;
-        var shiftR = lowBox.x1 + 12;
-        if (shiftL >= xLo2) { bx2 = shiftL; ok2 = true; }
-        else if (shiftR + BELOW_W <= stageRight) { bx2 = shiftR; ok2 = true; }
-      }
+      // A below-label has to actually sit under its flag: sliding it sideways
+      // to dodge a neighbour detached it from the flag it names (Tom). Modest
+      // offsets only — otherwise keep the side label, which hugs its flag.
+      var ok2 = bx2 + BELOW_W <= stageRight && clearOf(bx2) &&
+                Math.abs(bx2 + BELOW_W / 2 - mid.x) <= 44;
       if (ok2) { mid.side = 'below'; mid.belowX = bx2; }
     }
 
@@ -676,7 +673,7 @@ function tdTerrainNoise(seed) {
 
     // --- DOM ---------------------------------------------------------------
     layer = document.createElement('div');
-    layer.className = 'hero-peaks';
+    layer.className = 'hero-peaks' + (MODE === 'flags' ? ' hero-peaks--flags' : '');
     var svg = svgEl('svg', { class: 'hp-svg', viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'none', 'aria-hidden': 'true', focusable: 'false' });
     layer.appendChild(svg);
     var maskPath = null, trail = null, measure = null, head = null, LEN = 0, F = null;
@@ -724,8 +721,10 @@ function tdTerrainNoise(seed) {
       var leader = svgEl('path', { class: 'hp-leader', pathLength: '1' });
       var labelLeft;   // where the label block starts
       if (onBelow) {
-        // short vertical drop from the dot to the label's top edge
-        leader.setAttribute('d', 'M ' + cx.toFixed(1) + ' ' + (cy + bgR + 3).toFixed(1) + ' L ' + cx.toFixed(1) + ' ' + (cy + bgR + 16).toFixed(1));
+        // short drop from the dot to the label's top edge — aimed at the box
+        // centre, so a slightly offset label still points at its own flag
+        var bcx = p.belowX + BELOW_W / 2;
+        leader.setAttribute('d', 'M ' + cx.toFixed(1) + ' ' + (cy + bgR + 3).toFixed(1) + ' L ' + bcx.toFixed(1) + ' ' + (cy + bgR + 16).toFixed(1));
         labelLeft = p.belowX;
       } else if (onRight) {
         var labelStart = cx + bgR + 26;
@@ -748,15 +747,16 @@ function tdTerrainNoise(seed) {
       halo.style.stroke = accent; halo.style.opacity = 0; halo.style.transform = 'scale(2)'; halo.style.transformOrigin = '0 0';
       g.appendChild(halo);
       if (MODE === 'flags') {
-        // a small survey flag planted on the crest: base dot, pole, pennant
-        g.appendChild(svgEl('circle', { class: 'hp-dotbg', r: 6.5 }));
-        var base = svgEl('circle', { class: 'hp-flagbase', r: 2.6 });
+        // a survey flag planted on the crest: base dot, pole, pennant —
+        // sized to be read as the marker, not squinted at (Tom)
+        g.appendChild(svgEl('circle', { class: 'hp-dotbg', r: 8 }));
+        var base = svgEl('circle', { class: 'hp-flagbase', r: 3.2 });
         base.style.fill = accent;
         g.appendChild(base);
-        var pole = svgEl('path', { class: 'hp-flagpole', d: 'M 0 0 L 0 -17' });
+        var pole = svgEl('path', { class: 'hp-flagpole', d: 'M 0 0 L 0 -26' });
         pole.style.stroke = 'var(--navy)';
         g.appendChild(pole);
-        var pennant = svgEl('path', { class: 'hp-pennant', d: 'M 0 -17 L 12 -13.2 L 0 -9.4 Z' });
+        var pennant = svgEl('path', { class: 'hp-pennant', d: 'M 0 -26 L 17 -20.5 L 0 -15 Z' });
         pennant.style.fill = accent;
         g.appendChild(pennant);
       } else {
@@ -767,14 +767,17 @@ function tdTerrainNoise(seed) {
       }
       svg.appendChild(g);
 
-      // The label is pure display — it retires once the walk is over. The dot
-      // itself is the interactive target, and bringing it back is what a hover
-      // (or keyboard focus) does.
-      var row = document.createElement('div');
+      // The label is a link too (Tom): flag and text are one target, and either
+      // lights the practice card it leads to.
+      var row = document.createElement(p.pain.href ? 'a' : 'div');
       row.className = 'hp-row' + (onRight ? ' hp-row--right' : onBelow ? ' hp-row--below' : '');
       row.style.setProperty('--hp-accent', accent);
+      // titles carry the flag's color; a pain can override the TEXT tone via
+      // "tc" (gold reads as terracotta in type — the brand's own WCAG rule)
+      row.style.setProperty('--hp-accent-text', p.pain.tc || accent);
       row.style.width = (onBelow ? BELOW_W : labelW) + 'px';
       row.style.left = labelLeft + 'px';
+      if (p.pain.href) row.href = p.pain.href;
       var title = document.createElement('span');
       title.className = 'hp-title'; title.textContent = p.pain.t;
       row.appendChild(title);
@@ -785,21 +788,30 @@ function tdTerrainNoise(seed) {
       }
       layer.appendChild(row);
 
-      // Hovering or focusing a dot brings its pain back and follows through to
-      // that practice. The label itself stays display-only.
+      // Hovering or focusing the flag (or the label) lifts its pain and lights
+      // the matching practice card down the page; both follow through as links.
       var hit = document.createElement(p.pain.href ? 'a' : 'div');
       hit.className = 'hp-hit';
       hit.style.setProperty('--hp-accent', accent);
-      hit.style.left = (cx - 25) + 'px';
-      hit.style.top = (cy - 25) + 'px';
+      hit.style.left = (cx - 28) + 'px';
+      hit.style.top = (cy - 33) + 'px';   // reaches over the pole and pennant
       if (p.pain.href) { hit.href = p.pain.href; hit.setAttribute('aria-label', p.pain.t + '. ' + (p.pain.d || '')); }
       layer.appendChild(hit);
 
+      function litCard(on) {
+        var m = p.pain.href && /^\/(sail|grow|advise)\/?$/.exec(p.pain.href);
+        var card = m && document.querySelector('.prac-card.' + m[1]);
+        if (card) card.classList.toggle('prac-card--lit', on);
+      }
       var idx = k;
-      hit.addEventListener('mouseenter', function () { if (state.done) { state.hover = idx; state.paint(); } });
-      hit.addEventListener('mouseleave', function () { if (state.done) { state.hover = null; state.paint(); } });
-      hit.addEventListener('focus', function () { if (state.done) { state.hover = idx; state.paint(); } });
-      hit.addEventListener('blur', function () { if (state.done) { state.hover = null; state.paint(); } });
+      function over() { if (state.done) { state.hover = idx; state.paint(); litCard(true); } }
+      function out() { if (state.done) { state.hover = null; state.paint(); litCard(false); } }
+      [hit, row].forEach(function (el) {
+        el.addEventListener('mouseenter', over);
+        el.addEventListener('mouseleave', out);
+        el.addEventListener('focus', over);
+        el.addEventListener('blur', out);
+      });
       return { g: g, ping: ping, halo: halo, leader: leader, row: row, hit: hit,
                cx: cx, cy: cy, onRight: onRight, onBelow: onBelow, bgR: bgR, labelLeft: labelLeft };
     });
@@ -910,8 +922,10 @@ function tdTerrainNoise(seed) {
         var since = ms - arriveAt[k];
         var appear = clamp(since / 420, 0, 1);
         var active = state.done ? (state.hover === k) : (k === lastArrived && !allLit) || allLit;
+        // Every station stays fully lit once the walk reaches it (Tom) — the
+        // current one is distinguished by its accent underline, not by dimming
+        // the ones already visited.
         var dimF = 1;
-        if (!state.done && lastArrived >= 0 && k !== lastArrived && !allLit) dimF = 0.5;
         if (state.done && state.hover != null) dimF = active ? 1 : 0.6;
         var labelOp = active && state.done ? 1 : appear * dimF * labelGlobal;
 
@@ -933,6 +947,7 @@ function tdTerrainNoise(seed) {
         r.row.style.opacity = labelOp.toFixed(3);
         r.row.classList.toggle('is-active', !!active && labelOp > 0.6);
         r.hit.style.pointerEvents = state.done ? 'auto' : 'none';
+        r.row.style.pointerEvents = state.done && r.row.tagName === 'A' ? 'auto' : 'none';
       });
       coords.style.opacity = clamp((ms - TOTAL * 0.55) / 700, 0, 1).toFixed(3);
       if (replay) {
