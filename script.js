@@ -479,7 +479,37 @@ function tdTerrainNoise(seed) {
     }
     cands.sort(function (p, q) { return q.pr - p.pr; });
     var peaks = [];
-    cands.forEach(function (c) {
+    // On the flag map the middle flag has to sit BETWEEN the other two, not
+    // against one of them (Tom). Among labelable summit triples with real
+    // vertical coverage, take the most peak-like one whose middle peak splits
+    // the span fairly; when the field offers none, fall back to the plain
+    // prominence-greedy pick below.
+    if (MODE === 'flags' && want === 3 && cands.length >= 3) {
+      var C3 = cands.slice(0, 24), bestScore = -1, bestTriple = null;
+      var minSpan = Math.min(340, (dotMaxY - dotMinY) * 0.6);
+      for (var ia = 0; ia < C3.length; ia++)
+        for (var ib = ia + 1; ib < C3.length; ib++)
+          for (var ic = ib + 1; ic < C3.length; ic++) {
+            var tri = [C3[ia], C3[ib], C3[ic]].sort(function (p, q) { return p.y - q.y; });
+            var ok3 = true;
+            for (var u = 0; u < 3 && ok3; u++)
+              for (var v = u + 1; v < 3; v++)
+                if (Math.abs(tri[u].y - tri[v].y) < 75 ||
+                    Math.hypot(tri[u].x - tri[v].x, tri[u].y - tri[v].y) < 130) { ok3 = false; break; }
+            if (!ok3) continue;
+            var span3 = tri[2].y - tri[0].y;
+            if (span3 < minSpan) continue;
+            var g1 = tri[1].y - tri[0].y, g2 = span3 - g1;
+            if (Math.min(g1, g2) < span3 * 0.3) continue;   // middle stays in the middle
+            // prominence carries the choice; a light evenness term breaks ties
+            // between comparable triples toward the balanced one
+            var score = tri[0].pr + tri[1].pr + tri[2].pr
+                      + (1 - Math.abs(g1 - g2) / span3) * 0.05;
+            if (score > bestScore) { bestScore = score; bestTriple = tri; }
+          }
+      if (bestTriple) peaks = bestTriple;
+    }
+    if (!peaks.length) cands.forEach(function (c) {
       if (peaks.length >= want) return;
       for (var i = 0; i < peaks.length; i++) {
         if (Math.abs(c.y - peaks[i].y) < 75) return;                    // stacked too close
