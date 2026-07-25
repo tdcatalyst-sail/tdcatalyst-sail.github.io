@@ -2198,7 +2198,7 @@ footer .footer-practices i {
 .hp-halo { stroke-width: 1; }
 .hp-dotbg { fill: var(--offwhite); }
 .hp-dot { stroke-width: 2; }
-.hp-flagpole { fill: none; stroke-width: 1.6; stroke-linecap: round; }
+.hp-flagpole { fill: none; stroke-width: 2.2; stroke-linecap: round; }
 .hp-pennant { stroke: none; }
 
 /* label block: right-aligned, sits to the left of its dot with a hairline leader.
@@ -2211,9 +2211,9 @@ footer .footer-practices i {
 .hp-row--below { text-align: center; }
 /* one type size for all three labels wherever they sit (Tom) — the under-dot
    corridor is widened in script.js (BELOW_W) instead of shrinking the type */
-/* the dot's own hover/click target, comfortably larger than the dot itself */
+/* the flag's own hover/click target — tall enough to cover pole and pennant */
 .hp-hit {
-  position: absolute; width: 50px; height: 50px; border-radius: 50%;
+  position: absolute; width: 56px; height: 62px; border-radius: 50%;
   border: 0; pointer-events: none; cursor: pointer;
 }
 .hp-hit:focus-visible { outline: 2px solid var(--hp-accent); outline-offset: 3px; }
@@ -2226,6 +2226,15 @@ footer .footer-practices i {
   text-shadow: 0 0 8px var(--offwhite), 0 0 4px var(--offwhite), 0 0 2px var(--offwhite);
 }
 .hp-row.is-active .hp-title { border-bottom-color: var(--hp-accent); }
+/* flag map only (the walk keeps navy titles): each title carries its flag's
+   color plus the bar, at rest — gold reads as terracotta in type via
+   --hp-accent-text (the brand's own WCAG rule) */
+.hero-peaks--flags .hp-title {
+  color: var(--hp-accent-text, var(--hp-accent));
+  border-bottom-color: var(--hp-accent);
+}
+/* the row doubles as the practice link — defeat the global anchor underline */
+a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 .hp-detail {
   display: block; margin-top: 5px; font-family: 'Archivo', sans-serif;
   font-size: 12.5px; line-height: 1.45; color: var(--midgray);
@@ -2276,6 +2285,15 @@ footer .footer-practices i {
 .prac-card.sail:hover { border-color: var(--logo-blue); }
 .prac-card.grow:hover { border-color: var(--logo-gold); }
 .prac-card.advise:hover { border-color: var(--logo-red); }
+/* lit from afar: hovering a hero flag (or its label) activates the practice
+   card it links to — same presentation as the card's own hover */
+.prac-card--lit {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(22, 40, 63, 0.07), 0 18px 40px rgba(22, 40, 63, 0.13);
+}
+.prac-card.sail.prac-card--lit { border-color: var(--logo-blue); }
+.prac-card.grow.prac-card--lit { border-color: var(--logo-gold); }
+.prac-card.advise.prac-card--lit { border-color: var(--logo-red); }
 .card-terrain {
   position: absolute; left: 0; right: 0; bottom: 0;
   height: 130px; width: 100%;
