@@ -445,9 +445,17 @@ section:has(+ .hero) {
   border: 1px solid rgba(255, 255, 255, 0.55);
 }
 .btn-ghost-light:hover { background: rgba(255, 255, 255, 0.15); color: #fff; border-color: rgba(255,255,255,0.8); }
-.thesis-photo { border-bottom: none; }
-.thesis-photo p { color: rgba(235, 239, 236, 0.88); font-size: 1.12rem; line-height: 1.75; }
+/* Thesis band — the practice's central claim, so it runs wider and larger than body copy */
+.thesis-photo { border-bottom: none; padding: 6.5rem 0 6rem; }
+.thesis-photo .wrap { max-width: 920px; }
+.thesis-photo p {
+  color: rgba(235, 239, 236, 0.9);
+  font-size: clamp(1.15rem, 1.85vw, 1.45rem);
+  line-height: 1.68;
+  margin-bottom: 1.5rem;
+}
 .thesis-photo strong { color: #fff; }
+@media (max-width: 780px) { .thesis-photo { padding: 4rem 0 3.75rem; } }
 
 /* Headshot frame — smaller, face-centered, not too zoomed */
 .headshot-frame {
