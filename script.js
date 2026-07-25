@@ -331,6 +331,7 @@ function tdTerrainNoise(seed) {
   function destroy() {
     if (state.raf) cancelAnimationFrame(state.raf);
     state.raf = 0;
+    if (state.rollStop) { state.rollStop(); state.rollStop = null; }
     if (layer && layer.parentNode) layer.parentNode.removeChild(layer);
     layer = null; state.rows = []; state.built = false;
   }
@@ -834,7 +835,11 @@ function tdTerrainNoise(seed) {
         if (card) card.classList.toggle('prac-card--lit', on);
       }
       var idx = k;
-      function over() { if (state.done) { state.hover = idx; state.paint(); litCard(true); } }
+      function over() {
+        if (!state.done) return;
+        if (state.rollStop) { state.rollStop(); state.rollStop = null; }  // pointer beats roll call
+        state.hover = idx; state.paint(); litCard(true);
+      }
       function out() { if (state.done) { state.hover = null; state.paint(); litCard(false); } }
       [hit, row].forEach(function (el) {
         el.addEventListener('mouseenter', over);
@@ -1026,23 +1031,60 @@ function tdTerrainNoise(seed) {
       setTimeout(go, 900);
     } else {
       state.done = true; paint(TOTAL);
+      // One roll call when the map first scrolls into view (Tom): each flag
+      // takes its hover state for a beat — yellow first, up through blue to
+      // the summit — then the map settles. A real pointer cancels it.
+      if (MODE === 'flags' && !state.played) {
+        var roll = function () {
+          if (state.played || state.rows !== rows_) return;
+          state.played = true;
+          var timers = rows_.map(function (_, k) {
+            return setTimeout(function () { state.hover = k; paint(); }, 400 + k * 750);
+          });
+          timers.push(setTimeout(function () {
+            state.hover = null; paint(); state.rollStop = null;
+          }, 400 + rows_.length * 750));
+          state.rollStop = function () { timers.forEach(clearTimeout); };
+        };
+        var begun2 = false;
+        var go2 = function () { if (begun2) return; begun2 = true; roll(); };
+        try {
+          if ('IntersectionObserver' in window) {
+            var io2 = new IntersectionObserver(function (es) {
+              if (es.some(function (e) { return e.isIntersecting; })) { go2(); io2.disconnect(); }
+            }, { threshold: 0.2 });
+            io2.observe(hero);
+          } else go2();
+        } catch (e) { go2(); }
+        setTimeout(go2, 900);
+      }
     }
   }
 
   function paint() { if (state.paint) state.paint(state.done ? state.TOTAL : 0); }
 
-  // Deferred one frame: this script runs at the end of body, so anything done
-  // here synchronously delays the page's FIRST PAINT. The ambient contours draw
-  // in the block above (they should be there at first paint); the peak scan and
-  // route search wait a frame so they never hold the page blank.
-  // (setTimeout, not requestAnimationFrame: rAF never fires in an unfocused /
-  // uncomposited tab, which would leave the overlay unbuilt there.)
+  // Deferred until the WEBFONTS are in (raced against a short cap): the copy's
+  // ink — and so the peak/label layout — is measured from rendered text, and
+  // building on fallback-font metrics meant the fonts.ready rebuild below then
+  // destroyed and RESTARTED a walk already in flight, which read as the
+  // animation taking ages to start. Self-hosted fonts land well inside the
+  // cap; the cap keeps the overlay from hanging if the font load stalls.
+  // (Deferred at all so this never holds the page's first paint; setTimeout,
+  // not requestAnimationFrame: rAF never fires in an unfocused / uncomposited
+  // tab, which would leave the overlay unbuilt there.)
   var lastW = hero.clientWidth, lastH = hero.clientHeight;
-  setTimeout(function () {
+  var builtOnce = false;
+  function buildOnce() {
+    if (builtOnce) return;
+    builtOnce = true;
     lastW = hero.clientWidth; lastH = hero.clientHeight;
     build(!reduce);
     if (reduce) { state.done = true; }
-  }, 0);
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { setTimeout(buildOnce, 0); });
+  }
+  setTimeout(buildOnce, 600);
 
   var rt = null;
   function onResize() {
@@ -1056,10 +1098,11 @@ function tdTerrainNoise(seed) {
   window.addEventListener('resize', onResize);
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () {
-      // Rebuild only on a REAL geometry shift. The font swap lands right after
-      // the walk begins; rebuilding on a 1-2px delta was destroying and
-      // restarting it, which read as the animation taking ages to get going.
-      if (Math.abs(hero.clientWidth - lastW) > 10 || Math.abs(hero.clientHeight - lastH) > 10) {
+      // Safety net for the 600ms-cap path only: if the overlay was built
+      // before the fonts landed AND the swap really moved the hero geometry,
+      // rebuild once. When buildOnce ran on fonts.ready this is a no-op.
+      if (builtOnce &&
+          (Math.abs(hero.clientWidth - lastW) > 10 || Math.abs(hero.clientHeight - lastH) > 10)) {
         lastW = hero.clientWidth; lastH = hero.clientHeight;
         build(!state.played && !reduce);
       }
