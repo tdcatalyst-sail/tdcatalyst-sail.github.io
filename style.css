@@ -2209,10 +2209,8 @@ footer .footer-practices i {
 }
 .hp-row--right { text-align: left; }
 .hp-row--below { text-align: center; }
-/* the under-dot label lives in a narrow corridor between copy and the next
-   label — slightly smaller type so the title breaks as two lines, not three */
-.hp-row--below .hp-title { font-size: 16.5px; }
-.hp-row--below .hp-detail { font-size: 12px; }
+/* one type size for all three labels wherever they sit (Tom) — the under-dot
+   corridor is widened in script.js (BELOW_W) instead of shrinking the type */
 /* the dot's own hover/click target, comfortably larger than the dot itself */
 .hp-hit {
   position: absolute; width: 50px; height: 50px; border-radius: 50%;

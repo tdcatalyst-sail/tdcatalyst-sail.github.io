@@ -242,8 +242,9 @@ function tdTerrainNoise(seed) {
   var HOLD_MS = 800;      // brief dwell at each peak; hover brings it back later
   var ALL_MS = 2200;      // final chord: all three pains lit together
   var FADE_MS = 900;      // then the piece settles…
-  var REST_OP = 0;        // …words gone completely — the map rests as dots and
-                          // a light trail; hover a dot to bring its pain back
+  var REST_OP = 1;        // …but the labels stay put, both modes (Tom: don't
+                          // dim the text away, it can stay). Hovering a marker
+                          // still brings its own line forward.
   var TRAIL_REST = 0.32;  // the dashes fall back to a much lighter presence
   var CLIMB_W = 2.2;      // how hard the router avoids crossing contours —
                           // the original tuning: skirts non-destination peaks,
@@ -251,7 +252,8 @@ function tdTerrainNoise(seed) {
   var GRID = 9;           // routing grid step, px
   var FRAME_W = 760;      // the whole walk stays inside this right-hand frame —
                           // it never wanders out over the headline (Tom)
-  var BELOW_W = 210;      // width of a label placed under its dot
+  var BELOW_W = 240;      // width of a label placed under its dot — wide enough
+                          // for the full-size type (labels share one type size)
   var PROM_MIN = 0.035;   // a dot must sit inside a closed contour ring to read
                           // as a peak: that needs real prominence, not just a
                           // local maximum on an invisible bump.
@@ -336,6 +338,10 @@ function tdTerrainNoise(seed) {
   var zeroRetries = 0;
   function build(animate) {
     destroy();
+    // The flag map is no longer choreographed (Tom: the plant-in sequence added
+    // little once the labels stopped retiring) — it renders settled, flags and
+    // labels simply there. The walk keeps its animation.
+    if (MODE === 'flags') animate = false;
     var W = hero.clientWidth, H = hero.clientHeight;
     // an uncomposited tab can measure 0×0 at load: retry until it has a size
     if ((!W || !H) && zeroRetries < 40) {
@@ -483,13 +489,22 @@ function tdTerrainNoise(seed) {
     });
     if (peaks.length < 2) return;
     peaks.sort(function (p, q) { return p.y - q.y; });
+    // Bands run top to bottom, and height on screen is what a reader reads as
+    // "how acute" — so the topmost peak carries the most acute pain.
+    peaks.forEach(function (p, i) { p.pain = PAINS[i]; });
 
     // Label sides: left by preference; flip to the right when the left is
     // crowded, or when two neighbours would stack their labels on one side.
-    peaks.forEach(function (p) { p.side = p.leftOK ? 'left' : 'right'; });
+    // A pain can pin its side from the config ("side": "right") when the space
+    // allows — Tom reads "AI adoption is stuck" after its flag, not before it.
+    peaks.forEach(function (p) {
+      if (p.pain.side === 'right' && p.rightOK) { p.side = 'right'; p.pinned = true; }
+      else if (p.pain.side === 'left' && p.leftOK) { p.side = 'left'; p.pinned = true; }
+      else p.side = p.leftOK ? 'left' : 'right';
+    });
     for (var i = 1; i < peaks.length; i++) {
       var a2 = peaks[i - 1], b2 = peaks[i];
-      if (b2.y - a2.y < 145 && a2.side === b2.side) {
+      if (b2.y - a2.y < 145 && a2.side === b2.side && !b2.pinned) {
         if (b2.side === 'left' && b2.rightOK) b2.side = 'right';
         else if (b2.side === 'right' && b2.leftOK) b2.side = 'left';
       }
@@ -497,7 +512,7 @@ function tdTerrainNoise(seed) {
     // Middle peak: put its label UNDER the dot when that fits (Tom) — it
     // balances the three text boxes around the cluster instead of stacking
     // two on the right. Falls back to the side flip when the space isn't there.
-    if (peaks.length === 3 && peaks[1].side === 'right') {
+    if (peaks.length === 3 && peaks[1].side === 'right' && !peaks[1].pinned) {
       var mid = peaks[1], low = peaks[2];
       var yTop2 = mid.y + 22, yBot2 = yTop2 + 132;
       var xLo2 = copyRightAt(yTop2, yBot2) + 14;
@@ -522,9 +537,6 @@ function tdTerrainNoise(seed) {
       if (ok2) { mid.side = 'below'; mid.belowX = bx2; }
     }
 
-    // Bands run top to bottom, and height on screen is what a reader reads as
-    // "how acute" — so the topmost peak carries the most acute pain.
-    peaks.forEach(function (p, i) { p.pain = PAINS[i]; });
     peaks.forEach(function (p) { p.ft = Math.round((420 + (dotMaxY - p.y) * 1.15) / 10) * 10; });
 
     // Visit order: enter from the right, climb bottom-to-top, finish on the
@@ -799,13 +811,16 @@ function tdTerrainNoise(seed) {
     coords.style.top = (H - 40) + 'px';
     layer.appendChild(coords);
 
-    var replay = document.createElement('button');
-    replay.type = 'button'; replay.className = 'hp-replay';
-    replay.setAttribute('aria-label', 'Replay animation');
-    replay.textContent = '↻ replay';
-    replay.style.right = '22px'; replay.style.top = (H - 46) + 'px';
-    replay.addEventListener('click', function () { play(); });
-    layer.appendChild(replay);
+    var replay = null;
+    if (MODE === 'walk') {   // nothing to replay on the settled flag map
+      replay = document.createElement('button');
+      replay.type = 'button'; replay.className = 'hp-replay';
+      replay.setAttribute('aria-label', 'Replay animation');
+      replay.textContent = '↻ replay';
+      replay.style.right = '22px'; replay.style.top = (H - 46) + 'px';
+      replay.addEventListener('click', function () { play(); });
+      layer.appendChild(replay);
+    }
 
     hero.appendChild(layer);
     // (labels can only be measured once the layer is attached — offsetHeight of
@@ -920,8 +935,10 @@ function tdTerrainNoise(seed) {
         r.hit.style.pointerEvents = state.done ? 'auto' : 'none';
       });
       coords.style.opacity = clamp((ms - TOTAL * 0.55) / 700, 0, 1).toFixed(3);
-      replay.style.opacity = state.done ? 1 : 0;
-      replay.style.pointerEvents = state.done ? 'auto' : 'none';
+      if (replay) {
+        replay.style.opacity = state.done ? 1 : 0;
+        replay.style.pointerEvents = state.done ? 'auto' : 'none';
+      }
     }
 
     function play() {
@@ -937,6 +954,17 @@ function tdTerrainNoise(seed) {
     }
 
     state.paint = paint; state.play = play; state.TOTAL = TOTAL;
+
+    // Debug aid, permanent by design: ?hpat=<ms> freezes the sequence at that
+    // moment so a frame can be inspected or screenshotted (?hpat=99999 = the
+    // settled state). Inert without the parameter.
+    var at = /[?&]hpat=(\d+)/.exec(location.search);
+    if (at) {
+      var atMs = Math.min(parseFloat(at[1]), TOTAL);
+      state.done = parseFloat(at[1]) >= TOTAL;
+      paint(atMs);
+      return;
+    }
 
     if (animate) {
       paint(0);
