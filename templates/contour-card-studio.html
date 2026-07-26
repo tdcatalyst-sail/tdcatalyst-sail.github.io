@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <title>Contour Card Studio — TDcatalyst internal</title>
+  <meta name="description" content="Internal tool: renders Instagram contour cards on the brand terrain device." />
+  <link rel="stylesheet" href="/style.css?v=8b3b9d5e">
+</head>
+<body class="doc-body">
+
+<div class="doc-toolbar">
+  <span>TDcatalyst &middot; Contour Card Studio &middot; internal tool for @pacifica.strategy.walks</span>
+  <span style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
+    <a href="/" style="color:var(--offwhite); text-decoration:none;">&larr; tdcatalyst.com</a>
+    <button type="button" id="download">Download PNG (2160px)</button>
+  </span>
+</div>
+
+<div class="studio-main">
+  <div class="studio-controls">
+
+    <div class="studio-field">
+      <label for="cardtext">Card sentence (Besley)</label>
+      <textarea id="cardtext">Adaptability is the leadership capability the AI revolution demands.</textarea>
+    </div>
+
+    <div class="studio-field">
+      <label for="coords">Coordinate line (mono, base of card)</label>
+      <input type="text" id="coords" value="37.61&deg; N &middot; 122.49&deg; W &middot; Pacifica">
+    </div>
+
+    <div class="studio-field">
+      <label>Format</label>
+      <div class="studio-seg" role="group" aria-label="Card format">
+        <button type="button" data-format="square" aria-pressed="true">1:1 &middot; 1080&times;1080</button>
+        <button type="button" data-format="portrait" aria-pressed="false">4:5 &middot; 1080&times;1350</button>
+      </div>
+    </div>
+
+    <div class="studio-field">
+      <label>Ground</label>
+      <div class="studio-seg" role="group" aria-label="Card ground">
+        <button type="button" data-ground="navy" aria-pressed="true">Navy field</button>
+        <button type="button" data-ground="offwhite" aria-pressed="false">Offwhite</button>
+      </div>
+    </div>
+
+    <div class="studio-field">
+      <label for="seed">Terrain seed (one per card, never reused)</label>
+      <div class="studio-row">
+        <input type="number" id="seed" value="500" min="1" step="1" style="width:7rem;">
+        <button type="button" class="btn btn-ghost" id="reseed">New ground</button>
+      </div>
+    </div>
+
+    <div class="studio-field">
+      <label for="textsize">Text size</label>
+      <input type="range" id="textsize" min="60" max="130" value="92">
+    </div>
+
+    <div class="studio-seedlog">
+      <b>Exported seeds (kept in this browser):</b>
+      <div id="seedlog">none yet</div>
+    </div>
+
+    <p style="font-size:0.85rem; color:var(--midgray); margin:0;">Same rule as the site and the photography: every card gets a unique seed, no ground repeats. The log above tracks what this browser has exported. Site seeds are already taken; the studio starts at 500 to stay clear of them.</p>
+  </div>
+
+  <div class="studio-preview">
+    <canvas id="card" aria-label="Card preview"></canvas>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // Same value-noise + marching-squares contour renderer as script.js, adapted
+  // to draw at export resolution instead of CSS pixels.
+  function tdTerrainNoise(seed) {
+    function hash(x, y) {
+      var h = Math.sin(x * 127.1 + y * 311.7 + seed * 74.7) * 43758.5453;
+      return h - Math.floor(h);
+    }
+    function smooth(t) { return t * t * (3 - 2 * t); }
+    function noise(x, y) {
+      var xi = Math.floor(x), yi = Math.floor(y);
+      var xf = x - xi, yf = y - yi;
+      var a = hash(xi, yi), b = hash(xi + 1, yi), c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
+      var u = smooth(xf), v = smooth(yf);
+      return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+    }
+    return function (x, y) {
+      var val = 0, amp = 0.5, f = 1;
+      for (var i = 0; i < 4; i++) { val += amp * noise(x * f, y * f); f *= 2; amp *= 0.5; }
+      return val;
+    };
+  }
+
+  var GROUNDS = {
+    navy:     { bg: '#16283F', line: '#3d5a7c', index: '#E8B003', text: '#EBEFEC', mono: '#8FA3B4', rule: '#E8B003', alpha: 0.35, indexAlpha: 0.5 },
+    offwhite: { bg: '#EBEFEC', line: '#1F3A5F', index: '#E8B003', text: '#16283F', mono: '#6B6B6B', rule: '#E8B003', alpha: 0.14, indexAlpha: 0.35 }
+  };
+  var FORMATS = { square: { w: 2160, h: 2160 }, portrait: { w: 2160, h: 2700 } };
+
+  var state = { format: 'square', ground: 'navy' };
+  var canvas = document.getElementById('card');
+  var ctx = canvas.getContext('2d');
+
+  function drawContours(w, h, seed, g) {
+    var fbm = tdTerrainNoise(seed);
+    // cell/scale chosen so contour density at 2160px matches the site's feel at ~1080 CSS px
+    var cell = 12, scale = 640;
+    var cols = Math.ceil(w / cell) + 1, rows = Math.ceil(h / cell) + 1;
+    var field = [];
+    for (var j = 0; j < rows; j++) {
+      field[j] = [];
+      for (var i = 0; i < cols; i++) field[j][i] = fbm(i * cell / scale, j * cell / scale);
+    }
+    var levels = 14;
+    for (var li = 0; li < levels; li++) {
+      var iso = 0.18 + (li / (levels - 1)) * 0.62;
+      var isIndex = li % 5 === 0;
+      ctx.strokeStyle = isIndex ? g.index : g.line;
+      ctx.lineWidth = isIndex ? 2.8 : 1.2;
+      ctx.globalAlpha = isIndex ? g.indexAlpha : g.alpha;
+      ctx.beginPath();
+      for (j = 0; j < rows - 1; j++) {
+        for (i = 0; i < cols - 1; i++) {
+          var tl = field[j][i], tr = field[j][i + 1], br = field[j + 1][i + 1], bl = field[j + 1][i];
+          var c = 0;
+          if (tl > iso) c |= 8;
+          if (tr > iso) c |= 4;
+          if (br > iso) c |= 2;
+          if (bl > iso) c |= 1;
+          if (c === 0 || c === 15) continue;
+          var x = i * cell, y = j * cell;
+          var top = [x + cell * (iso - tl) / (tr - tl), y];
+          var right = [x + cell, y + cell * (iso - tr) / (br - tr)];
+          var bottom = [x + cell * (iso - bl) / (br - bl), y + cell];
+          var left = [x, y + cell * (iso - tl) / (bl - tl)];
+          function seg(p, q) { ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); }
+          switch (c) {
+            case 1: case 14: seg(left, bottom); break;
+            case 2: case 13: seg(bottom, right); break;
+            case 3: case 12: seg(left, right); break;
+            case 4: case 11: seg(top, right); break;
+            case 6: case 9: seg(top, bottom); break;
+            case 7: case 8: seg(left, top); break;
+            case 5: seg(left, top); seg(bottom, right); break;
+            case 10: seg(top, right); seg(left, bottom); break;
+          }
+        }
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function wrapText(text, font, maxWidth) {
+    ctx.font = font;
+    var words = text.trim().split(/\s+/), lines = [], line = '';
+    for (var i = 0; i < words.length; i++) {
+      var probe = line ? line + ' ' + words[i] : words[i];
+      if (ctx.measureText(probe).width > maxWidth && line) {
+        lines.push(line);
+        line = words[i];
+      } else {
+        line = probe;
+      }
+    }
+    if (line) lines.push(line);
+    return lines;
+  }
+
+  function render() {
+    var f = FORMATS[state.format];
+    var g = GROUNDS[state.ground];
+    var seed = parseFloat(document.getElementById('seed').value) || 500;
+    var text = document.getElementById('cardtext').value;
+    var coords = document.getElementById('coords').value;
+    var size = parseFloat(document.getElementById('textsize').value);
+
+    canvas.width = f.w;
+    canvas.height = f.h;
+    canvas.style.aspectRatio = f.w + ' / ' + f.h;
+
+    ctx.fillStyle = g.bg;
+    ctx.fillRect(0, 0, f.w, f.h);
+    drawContours(f.w, f.h, seed, g);
+
+    var margin = Math.round(f.w * 0.105);
+    var maxWidth = f.w - margin * 2;
+
+    // Gold rule above the sentence, matching .doc-rule / .prac-rule
+    var font = '500 ' + size + 'px Besley, Georgia, serif';
+    var lines = wrapText(text, font, maxWidth);
+    var lineHeight = size * 1.24;
+    var blockH = lines.length * lineHeight;
+    var textTop = (f.h - blockH) / 2 + lineHeight * 0.8;
+
+    ctx.fillStyle = g.rule;
+    ctx.fillRect(margin, textTop - lineHeight * 1.35, Math.round(f.w * 0.055), Math.max(6, Math.round(f.w * 0.0045)));
+
+    ctx.font = font;
+    ctx.fillStyle = g.text;
+    ctx.textBaseline = 'alphabetic';
+    for (var i = 0; i < lines.length; i++) {
+      ctx.fillText(lines[i], margin, textTop + i * lineHeight);
+    }
+
+    // Base line: brand left, coordinates right, in mono
+    var monoSize = Math.round(f.w * 0.0155);
+    ctx.font = '500 ' + monoSize + 'px "IBM Plex Mono", monospace';
+    var baseY = f.h - margin * 0.72;
+    ctx.fillStyle = g.mono;
+    var spaced = coords.replace(/\s+/g, ' ').toUpperCase();
+    var cw = ctx.measureText(spaced).width;
+    ctx.fillText(spaced, f.w - margin - cw, baseY);
+    // Brand mark: TD bold + catalyst regular, in Besley like the nav logo
+    var brandSize = Math.round(f.w * 0.019);
+    ctx.font = '700 ' + brandSize + 'px Besley, Georgia, serif';
+    ctx.fillStyle = g.text;
+    ctx.fillText('TD', margin, baseY);
+    var tdW = ctx.measureText('TD').width;
+    ctx.font = '400 ' + brandSize + 'px Besley, Georgia, serif';
+    ctx.fillText('catalyst', margin + tdW, baseY);
+  }
+
+  // --- seed log: enforce the no-repeat rule across sessions in this browser ---
+  var LOG_KEY = 'td-card-seeds';
+  function getLog() {
+    try { return JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); } catch (e) { return []; }
+  }
+  function showLog() {
+    var log = getLog();
+    document.getElementById('seedlog').textContent = log.length ? log.join(' · ') : 'none yet';
+  }
+  function nextFreeSeed() {
+    var used = getLog();
+    var s = Math.floor(500 + Math.random() * 9000);
+    while (used.indexOf(s) !== -1) s++;
+    return s;
+  }
+
+  document.getElementById('reseed').addEventListener('click', function () {
+    document.getElementById('seed').value = nextFreeSeed();
+    render();
+  });
+
+  document.getElementById('download').addEventListener('click', function () {
+    render();
+    var seed = parseFloat(document.getElementById('seed').value) || 500;
+    var log = getLog();
+    if (log.indexOf(seed) === -1) {
+      log.push(seed);
+      try { localStorage.setItem(LOG_KEY, JSON.stringify(log)); } catch (e) {}
+    }
+    showLog();
+    var a = document.createElement('a');
+    a.download = 'td-contour-card-seed' + seed + '-' + state.format + '.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  });
+
+  document.querySelectorAll('[data-format]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      state.format = btn.dataset.format;
+      document.querySelectorAll('[data-format]').forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      render();
+    });
+  });
+  document.querySelectorAll('[data-ground]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      state.ground = btn.dataset.ground;
+      document.querySelectorAll('[data-ground]').forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      render();
+    });
+  });
+  ['cardtext', 'coords', 'seed', 'textsize'].forEach(function (id) {
+    document.getElementById(id).addEventListener('input', render);
+  });
+
+  showLog();
+  // Fonts must be resolved before canvas text draws, or Besley silently
+  // falls back to Georgia on first paint.
+  if (document.fonts && document.fonts.ready) {
+    Promise.all([
+      document.fonts.load('500 92px Besley'),
+      document.fonts.load('700 40px Besley'),
+      document.fonts.load('500 34px "IBM Plex Mono"')
+    ]).then(render);
+    document.fonts.ready.then(render);
+  }
+  render();
+})();
+</script>
+</body>
+</html>
