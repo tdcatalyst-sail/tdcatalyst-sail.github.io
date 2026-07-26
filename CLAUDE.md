@@ -138,6 +138,18 @@ tdcatalyst-sail.github.io/
 
 **Tom's copy is canonical.** Styling changes must never rewrite page copy; copy edits ship only with Tom's explicit sign-off, and open questions are batched to him. Standing vocabulary: "the AI revolution" (hub h1/title), "embodied strategic framing" (Sail), "transformation consulting" (Grow — deliberately broader than deployment/adoption). Style rules for NEW copy: claim-first headlines, no em dashes in visible copy, vary sentence shape (the hub's executives/enterprises/founders triplet is a deliberate exception), first person on the hub only.
 
+### Positioning & channel doctrine (2026-07, standing reference)
+
+From a competitive read of tenex.co (Tenex Labs, NYC — Lieberman/Hezarkhani; NOT tenex.ai, the unrelated cybersecurity firm). Full survey with all drafted copy lives in a private Claude artifact Tom holds: `https://claude.ai/code/artifact/764641a6-9795-4d7e-b78f-a3df1ae5f614` (access-controlled; re-read it before any marketing/copy session). Sourcing caveat: their pages were reconstructed from search indexes, not fetched directly — wording close but not certified verbatim.
+
+**Structural mechanics worth adopting** (structure, never their language): a named artifact terminating every engagement; a stated foil ("what this is not") without naming competitors; one standing thesis sentence repeated across every surface; an owned email audience under the content; free artifacts usable in a meeting the day they're downloaded.
+
+**Deliberate refusals — do not drift here:** speed/throughput language (10x, "startup speed" — opposite of the practice's thesis and commoditizing); "Chief AI Officer" framing (puts Tom inside the org chart; the leverage is the outsider seat); founder-influencer posting volume; tool-tutorial content (practitioner audience, not the executive buyer); anything resembling engineering pods.
+
+**Standing advantages to protect in any redesign/copy change:** published fixed fees, the interactive Simulation + diagnostic (interactive beats downloadable), named behavioral frameworks, the buyer-side track record, and the field/terrain identity (photography, contours, the walk) — the one asset competitors cannot follow.
+
+**Proposed and PENDING TOM'S SIGN-OFF (not yet on any page — do not ship without it):** the six site moves in leverage order (1 quantified case study; 2 named deliverables — working names *The Portfolio Verdict*, *The Adoption Reset Plan*, *The Operating Model Blueprint*, and *The Field Diagnostic* for Sail's written output; 3 promote the "seam" sentence from the hub through-line into a standing thesis line; 4 a "What this is not" section on Grow; 5 a `/field-kit/` page of four one-page tools with email capture beneath it — requires a real email platform first, formsubmit cannot hold a list; 6 restate the published fixed fee as a claim). Channel doctrine: LinkedIn at 3 posts/week in three fixed types (field dispatch / artifact / receipt), 90% value 10% marketing, never both in one post; Instagram as a field record, not a marketing feed — three rotating tile types (field frame / contour card on navy with gold contours / artifact crop), coordinate line as the cross-channel signature. Drafted post and section copy for all of this is in the artifact above.
+
 ### Images (images/ directory)
 
 - `logo-v2.jpg` — Main logo (used in heroes)
