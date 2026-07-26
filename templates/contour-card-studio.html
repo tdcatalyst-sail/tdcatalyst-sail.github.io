@@ -45,6 +45,16 @@
       <div class="studio-seg" role="group" aria-label="Card ground">
         <button type="button" data-ground="navy" aria-pressed="true">Navy field</button>
         <button type="button" data-ground="offwhite" aria-pressed="false">Offwhite</button>
+        <button type="button" data-ground="seamist" aria-pressed="false">Seamist</button>
+      </div>
+    </div>
+
+    <div class="studio-field">
+      <label>Accent (index contours + rule)</label>
+      <div class="studio-seg" role="group" aria-label="Card accent">
+        <button type="button" data-accent="gold" aria-pressed="true">Gold</button>
+        <button type="button" data-accent="blue" aria-pressed="false">Sail blue</button>
+        <button type="button" data-accent="red" aria-pressed="false">Advise red</button>
       </div>
     </div>
 
@@ -101,16 +111,24 @@
   }
 
   var GROUNDS = {
-    navy:     { bg: '#16283F', line: '#3d5a7c', index: '#E8B003', text: '#EBEFEC', mono: '#8FA3B4', rule: '#E8B003', alpha: 0.35, indexAlpha: 0.5 },
-    offwhite: { bg: '#EBEFEC', line: '#1F3A5F', index: '#E8B003', text: '#16283F', mono: '#6B6B6B', rule: '#E8B003', alpha: 0.14, indexAlpha: 0.35 }
+    navy:     { bg: '#16283F', line: '#3d5a7c', text: '#EBEFEC', mono: '#8FA3B4', alpha: 0.35, indexAlpha: 0.5,  dark: true },
+    offwhite: { bg: '#EBEFEC', line: '#1F3A5F', text: '#16283F', mono: '#6B6B6B', alpha: 0.14, indexAlpha: 0.35, dark: false },
+    seamist:  { bg: '#D9E2E6', line: '#1F3A5F', text: '#16283F', mono: '#6B6B6B', alpha: 0.16, indexAlpha: 0.38, dark: false }
+  };
+  // Accents stay logo-exact on light grounds. Dark grounds get the same hue
+  // lifted for contrast, the same precedent as --terracotta-soft in style.css.
+  var ACCENTS = {
+    gold: { light: '#E8B003', dark: '#E8B003' },
+    blue: { light: '#0348CA', dark: '#5B8DEF' },
+    red:  { light: '#DB160E', dark: '#FF5A52' }
   };
   var FORMATS = { square: { w: 2160, h: 2160 }, portrait: { w: 2160, h: 2700 } };
 
-  var state = { format: 'square', ground: 'navy' };
+  var state = { format: 'square', ground: 'navy', accent: 'gold' };
   var canvas = document.getElementById('card');
   var ctx = canvas.getContext('2d');
 
-  function drawContours(w, h, seed, g) {
+  function drawContours(w, h, seed, g, accent) {
     var fbm = tdTerrainNoise(seed);
     // cell/scale chosen so contour density at 2160px matches the site's feel at ~1080 CSS px
     var cell = 12, scale = 640;
@@ -124,7 +142,7 @@
     for (var li = 0; li < levels; li++) {
       var iso = 0.18 + (li / (levels - 1)) * 0.62;
       var isIndex = li % 5 === 0;
-      ctx.strokeStyle = isIndex ? g.index : g.line;
+      ctx.strokeStyle = isIndex ? accent : g.line;
       ctx.lineWidth = isIndex ? 2.8 : 1.2;
       ctx.globalAlpha = isIndex ? g.indexAlpha : g.alpha;
       ctx.beginPath();
@@ -179,6 +197,7 @@
   function render() {
     var f = FORMATS[state.format];
     var g = GROUNDS[state.ground];
+    var accent = ACCENTS[state.accent][g.dark ? 'dark' : 'light'];
     var seed = parseFloat(document.getElementById('seed').value) || 500;
     var text = document.getElementById('cardtext').value;
     var coords = document.getElementById('coords').value;
@@ -190,7 +209,7 @@
 
     ctx.fillStyle = g.bg;
     ctx.fillRect(0, 0, f.w, f.h);
-    drawContours(f.w, f.h, seed, g);
+    drawContours(f.w, f.h, seed, g, accent);
 
     var margin = Math.round(f.w * 0.105);
     var maxWidth = f.w - margin * 2;
@@ -202,7 +221,7 @@
     var blockH = lines.length * lineHeight;
     var textTop = (f.h - blockH) / 2 + lineHeight * 0.8;
 
-    ctx.fillStyle = g.rule;
+    ctx.fillStyle = accent;
     ctx.fillRect(margin, textTop - lineHeight * 1.35, Math.round(f.w * 0.055), Math.max(6, Math.round(f.w * 0.0045)));
 
     ctx.font = font;
@@ -277,6 +296,13 @@
     btn.addEventListener('click', function () {
       state.ground = btn.dataset.ground;
       document.querySelectorAll('[data-ground]').forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      render();
+    });
+  });
+  document.querySelectorAll('[data-accent]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      state.accent = btn.dataset.accent;
+      document.querySelectorAll('[data-accent]').forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
       render();
     });
   });
