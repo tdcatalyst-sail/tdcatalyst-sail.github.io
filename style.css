@@ -25,6 +25,7 @@
   --logo-gold: #E8B003;
   --logo-blue: #0348CA;
   --value-green: #4E8B72;
+  --paper: #FFFFFF;              /* sheet ground for /templates/ and /field-kit/ print docs */
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
   /* North-east "opens a tool" arrow, drawn crisply as SVG (see .tool-tag) */
   --tool-tag-arrow: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='black'%20stroke-width='2.75'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cline%20x1='7'%20y1='17'%20x2='17'%20y2='7'/%3E%3Cpolyline%20points='7%207%2017%207%2017%2017'/%3E%3C/svg%3E");
@@ -2466,3 +2467,70 @@ html.js .cards .reveal:nth-child(3) { transition-delay: 0.2s; }
 /* three equal columns when a grid holds exactly three cards */
 .outcomes-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 900px) { .outcomes-grid.cols-3 { grid-template-columns: 1fr; } }
+
+/* ===== FIELD KIT (/field-kit/ — free one-page instruments) ===== */
+.deliverable-name {
+  font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--terracotta);
+  margin: -0.2rem 0 0.9rem;
+}
+.fk-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+.fk-note {
+  border-left: 3px solid var(--logo-gold); background: #fff;
+  padding: 1rem 1.2rem; font-size: 0.92rem; color: var(--midgray);
+  margin-top: 2rem; border-radius: 4px;
+}
+
+/* Fill-in blanks and checklists on printed field-kit sheets */
+.doc-blank {
+  display: inline-block; min-width: 4.5rem;
+  border-bottom: 1px solid var(--charcoal); height: 1.1em;
+  vertical-align: bottom;
+}
+.doc-blank.wide { min-width: 100%; margin-top: 0.35rem; }
+.doc-check {
+  display: inline-block; width: 0.85em; height: 0.85em;
+  border: 1.5px solid var(--charcoal); border-radius: 2px;
+  vertical-align: -0.05em; margin-right: 0.55em; flex: none;
+}
+.doc-qa { margin: 0 0 0.9rem; }
+.doc-qa dt { font-weight: 600; color: var(--navy); margin-bottom: 0.15rem; }
+.doc-qa dd { margin: 0; font-size: 0.92rem; }
+.doc-list { list-style: none; padding: 0; margin: 0.4rem 0 1rem; }
+.doc-list li { display: flex; align-items: baseline; padding: 0.32rem 0; font-size: 0.92rem; }
+
+/* ===== CONTOUR CARD STUDIO (/templates/contour-card-studio.html) ===== */
+.studio-main {
+  display: grid; grid-template-columns: minmax(280px, 380px) 1fr;
+  gap: 2rem; align-items: start;
+  width: min(100% - 2.4rem, 1180px); margin: 2rem auto 3rem;
+}
+@media (max-width: 800px) { .studio-main { grid-template-columns: 1fr; } }
+.studio-controls { display: flex; flex-direction: column; gap: 1.1rem; }
+.studio-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.studio-field label {
+  font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--midgray);
+}
+.studio-field textarea, .studio-field input[type="text"], .studio-field input[type="number"] {
+  font-family: 'Archivo', sans-serif; font-size: 0.95rem;
+  padding: 0.55rem 0.7rem; border: 1px solid var(--hairline);
+  border-radius: 4px; background: #fff; color: var(--charcoal); width: 100%;
+}
+.studio-field textarea { min-height: 5.5rem; resize: vertical; font-family: 'Besley', Georgia, serif; }
+.studio-row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+.studio-row .btn { padding: 0.5rem 1.1rem; font-size: 0.85rem; }
+.studio-seg { display: flex; border: 1px solid var(--hairline); border-radius: 999px; overflow: hidden; }
+.studio-seg button {
+  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em;
+  background: #fff; color: var(--midgray); border: 0;
+  padding: 0.45rem 0.95rem; cursor: pointer;
+}
+.studio-seg button[aria-pressed="true"] { background: var(--navy-deep); color: var(--offwhite); }
+.studio-preview { position: sticky; top: 4.5rem; }
+.studio-preview canvas {
+  width: 100%; max-width: 560px; height: auto; display: block;
+  box-shadow: 0 12px 34px rgba(22, 40, 63, 0.3); border-radius: 2px;
+}
+.studio-seedlog { font-family: var(--mono); font-size: 0.7rem; color: var(--midgray); line-height: 1.9; overflow-wrap: anywhere; }
+.studio-seedlog b { color: var(--terracotta); font-weight: 500; }
