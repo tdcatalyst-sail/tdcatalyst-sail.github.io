@@ -15,6 +15,7 @@
   <span>TDcatalyst &middot; Contour Card Studio &middot; internal tool</span>
   <span style="display:flex; gap:0.6rem; align-items:center; flex-wrap:wrap;">
     <a href="/" style="color:var(--offwhite); text-decoration:none;">&larr; tdcatalyst.com</a>
+    <button type="button" id="share" hidden>Share / Save to Photos</button>
     <button type="button" id="download">Download PNG (2160px)</button>
   </span>
 </div>
@@ -280,20 +281,50 @@
     render();
   });
 
-  document.getElementById('download').addEventListener('click', function () {
-    render();
-    var seed = parseFloat(document.getElementById('seed').value) || 500;
+  function logSeed(seed) {
     var log = getLog();
     if (log.indexOf(seed) === -1) {
       log.push(seed);
       try { localStorage.setItem(LOG_KEY, JSON.stringify(log)); } catch (e) {}
     }
     showLog();
-    var a = document.createElement('a');
-    a.download = 'td-contour-card-seed' + seed + '-' + state.format + '.png';
-    a.href = canvas.toDataURL('image/png');
-    a.click();
+  }
+  function exportCard(deliver) {
+    render();
+    var seed = parseFloat(document.getElementById('seed').value) || 500;
+    var name = 'td-contour-card-seed' + seed + '-' + state.format + '.png';
+    canvas.toBlob(function (blob) {
+      if (!blob) return;
+      deliver(blob, name, seed);
+    }, 'image/png');
+  }
+
+  document.getElementById('download').addEventListener('click', function () {
+    exportCard(function (blob, name, seed) {
+      logSeed(seed);
+      var a = document.createElement('a');
+      var url = URL.createObjectURL(blob);
+      a.download = name;
+      a.href = url;
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+    });
   });
+
+  // On phones, the native share sheet reaches Photos and Instagram directly;
+  // a Downloads-folder PNG does not. Shown only where the API can take files.
+  var shareBtn = document.getElementById('share');
+  if (navigator.canShare && navigator.canShare({ files: [new File([''], 't.png', { type: 'image/png' })] })) {
+    shareBtn.hidden = false;
+    shareBtn.addEventListener('click', function () {
+      exportCard(function (blob, name, seed) {
+        var file = new File([blob], name, { type: 'image/png' });
+        navigator.share({ files: [file] }).then(function () {
+          logSeed(seed);
+        }).catch(function () { /* user closed the sheet; seed stays unlogged */ });
+      });
+    });
+  }
 
   document.querySelectorAll('[data-format]').forEach(function (btn) {
     btn.addEventListener('click', function () {
