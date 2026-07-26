@@ -7,7 +7,7 @@
   <title>The manager talking track — TDcatalyst Deploy Kit</title>
   <meta name="description" content="One page a line manager can read before the first team conversation about what AI changes: what to say, the questions that will come, and what not to promise." />
   <link rel="canonical" href="https://tdcatalyst.com/grow/deploy-kit/manager-talking-track" />
-  <link rel="stylesheet" href="/style.css?v=f0e3f73a">
+  <link rel="stylesheet" href="/style.css?v=b84cf781">
 </head>
 <body class="doc-body">
 
@@ -25,15 +25,16 @@
   <div class="doc-num">Instrument 03 &middot; The manager talking track</div>
   <h1 class="doc-title" style="font-size:1.9rem;">The first team conversation about AI, on one page.</h1>
   <p style="margin-top:0.8rem; font-size:0.94rem;">You are the highest-leverage channel in this rollout, and the townhall did not equip you. This page does three things: gives you the beats, predicts the questions, and marks the promises not to make. Localize freely. Your team trusts your words, not the program's.</p>
+  <p class="doc-screen-hint" style="font-size:0.85rem; color:var(--midgray); margin-top:0.5rem;">Check items off as you prepare; ticks stay in this browser only and print with the sheet.</p>
 
   <div class="doc-section" style="margin-top:1.3rem;">
     <h3>The five beats, in your own words</h3>
     <ul class="doc-list">
-      <li><span class="doc-check" aria-hidden="true"></span><span><strong>Name the change plainly.</strong> What the tool is, which of the team's tasks it touches, starting when. No vision language. One concrete example from your team's actual work beats any slide.</span></li>
-      <li><span class="doc-check" aria-hidden="true"></span><span><strong>Say what does not change.</strong> Who they report to, what they are measured on this quarter, and the standard of the work. Uncertainty fills silence; fill it first.</span></li>
-      <li><span class="doc-check" aria-hidden="true"></span><span><strong>Be honest about what is unknown.</strong> Roles will evolve as this lands, and you will tell them what you learn when you learn it. Said once, plainly, this builds more trust than any reassurance.</span></li>
-      <li><span class="doc-check" aria-hidden="true"></span><span><strong>Make the first step small and dated.</strong> One task, this week, with the tool. Not a commitment to transform. An experiment with a review date.</span></li>
-      <li><span class="doc-check" aria-hidden="true"></span><span><strong>Show your own use.</strong> Name the task you have moved to the tool yourself. If you have not, do that before this meeting. Teams adopt what their manager visibly does, not what their manager announces.</span></li>
+      <li><input type="checkbox" class="doc-check" data-store="c0" aria-label="Item 1 done"><span><strong>Name the change plainly.</strong> What the tool is, which of the team's tasks it touches, starting when. No vision language. One concrete example from your team's actual work beats any slide.</span></li>
+      <li><input type="checkbox" class="doc-check" data-store="c1" aria-label="Item 2 done"><span><strong>Say what does not change.</strong> Who they report to, what they are measured on this quarter, and the standard of the work. Uncertainty fills silence; fill it first.</span></li>
+      <li><input type="checkbox" class="doc-check" data-store="c2" aria-label="Item 3 done"><span><strong>Be honest about what is unknown.</strong> Roles will evolve as this lands, and you will tell them what you learn when you learn it. Said once, plainly, this builds more trust than any reassurance.</span></li>
+      <li><input type="checkbox" class="doc-check" data-store="c3" aria-label="Item 4 done"><span><strong>Make the first step small and dated.</strong> One task, this week, with the tool. Not a commitment to transform. An experiment with a review date.</span></li>
+      <li><input type="checkbox" class="doc-check" data-store="c4" aria-label="Item 5 done"><span><strong>Show your own use.</strong> Name the task you have moved to the tool yourself. If you have not, do that before this meeting. Teams adopt what their manager visibly does, not what their manager announces.</span></li>
     </ul>
   </div>
 
@@ -62,9 +63,9 @@
   <div class="doc-section">
     <h3>Three promises not to make</h3>
     <ul class="doc-list">
-      <li><span class="doc-check" aria-hidden="true"></span><span>&ldquo;Nobody's job will change.&rdquo; Jobs will change; that is the point. Promise honesty about it, not the absence of it.</span></li>
-      <li><span class="doc-check" aria-hidden="true"></span><span>&ldquo;This will make everything easier.&rdquo; The first month is harder. Say so, and say what the second month buys.</span></li>
-      <li><span class="doc-check" aria-hidden="true"></span><span>&ldquo;It is optional.&rdquo; If the organization has decided, softening it locally only delays the conversation and spends your credibility.</span></li>
+      <li><input type="checkbox" class="doc-check" data-store="c5" aria-label="Item 6 done"><span>&ldquo;Nobody's job will change.&rdquo; Jobs will change; that is the point. Promise honesty about it, not the absence of it.</span></li>
+      <li><input type="checkbox" class="doc-check" data-store="c6" aria-label="Item 7 done"><span>&ldquo;This will make everything easier.&rdquo; The first month is harder. Say so, and say what the second month buys.</span></li>
+      <li><input type="checkbox" class="doc-check" data-store="c7" aria-label="Item 8 done"><span>&ldquo;It is optional.&rdquo; If the organization has decided, softening it locally only delays the conversation and spends your credibility.</span></li>
     </ul>
   </div>
 
@@ -76,5 +77,19 @@
   </div>
 </div>
 
+
+<script>
+(function () {
+  'use strict';
+  var KEY = 'td-dk-track', store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+  document.querySelectorAll('[data-store]').forEach(function (el) {
+    var k = el.dataset.store;
+    if (store[k] !== undefined) el.checked = !!store[k];
+    el.addEventListener('change', function () { store[k] = el.checked; save(); });
+  });
+})();
+</script>
 </body>
 </html>
