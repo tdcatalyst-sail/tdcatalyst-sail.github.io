@@ -129,10 +129,10 @@ tdcatalyst-sail.github.io/
 - **Motion:** `.reveal` elements fade up on scroll (IntersectionObserver, `html.js`-gated so no-JS still shows content); the first `canvas.terrain[data-animate]` drifts slowly on desktop. Everything respects `prefers-reduced-motion`.
 - **Deck assets:** pre-rendered 1920×1080 terrain backgrounds for Google Slides live in `/images/deck/`.
 
-### Delivery templates & brand guideline (`/templates/`, noindex + robots-disallowed)
+### Internal tools (`/templates/`, noindex + robots-disallowed)
 
-- `templates/diagnostic-report.html`, `templates/proposal.html` — print-ready client documents sharing `/style.css` (`.doc-body`/`.sheet` classes; edit in browser via contenteditable, print to PDF, US Letter). Placeholders are `.ph` spans.
-- `templates/brand-guideline.html` — the one-page brand reference (colors, type, terrain rules, Google Slides setup, voice rules). Keep it in sync with brand changes.
+- `templates/contour-card-studio.html` — the Instagram contour-card generator (site terrain renderer, venue presets, ground/accent options, seed log, 2160px PNG export). Publicly reachable by URL but unlinked, noindexed, and robots-disallowed.
+- **The delivery templates (diagnostic report, proposal, brand guideline) do NOT live here anymore** — they were moved to the private `tdcatalyst-delivery` repo (commit 93ff9b1) so client documents are never publicly served. Their `.doc-body`/`.sheet`/`.ph` CSS remains in `/style.css` and is shared by the Deploy Kit instruments. Do not recreate client-facing documents in this public repo.
 
 ### Copy rules (IMPORTANT)
 
