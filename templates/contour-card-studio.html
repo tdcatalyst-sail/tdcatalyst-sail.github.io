@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <title>Contour Card Studio — TDcatalyst internal</title>
   <meta name="description" content="Internal tool: renders contour cards on the brand terrain device." />
-  <link rel="stylesheet" href="/style.css?v=8b3b9d5e">
+  <link rel="stylesheet" href="/style.css?v=f0e3f73a">
 </head>
 <body class="doc-body">
 
@@ -28,8 +28,18 @@
     </div>
 
     <div class="studio-field">
-      <label for="coords">Coordinate line (mono, base of card)</label>
-      <input type="text" id="coords" value="37.61&deg; N &middot; 122.49&deg; W &middot; Pacifica">
+      <label for="venue">Venue preset (fills the coordinate line)</label>
+      <div class="studio-seg" role="group" aria-label="Venue preset">
+        <button type="button" data-venue="37.61&deg; N &middot; 122.49&deg; W &middot; Mori Point, Pacifica" aria-pressed="true">Mori Point</button>
+        <button type="button" data-venue="37.60&deg; N &middot; 122.52&deg; W &middot; Pedro Point Headlands" aria-pressed="false">Pedro Point</button>
+        <button type="button" data-venue="37.58&deg; N &middot; 122.48&deg; W &middot; San Pedro Valley" aria-pressed="false">San Pedro Valley</button>
+        <button type="button" data-venue="37.41&deg; N &middot; 122.29&deg; W &middot; The Methuselah grove" aria-pressed="false">Methuselah</button>
+      </div>
+    </div>
+
+    <div class="studio-field">
+      <label for="coords">Coordinate line (mono, base of card; edit freely)</label>
+      <input type="text" id="coords" value="37.61&deg; N &middot; 122.49&deg; W &middot; Mori Point, Pacifica">
     </div>
 
     <div class="studio-field">
@@ -296,6 +306,13 @@
     btn.addEventListener('click', function () {
       state.ground = btn.dataset.ground;
       document.querySelectorAll('[data-ground]').forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      render();
+    });
+  });
+  document.querySelectorAll('[data-venue]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.getElementById('coords').value = btn.dataset.venue;
+      document.querySelectorAll('[data-venue]').forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
       render();
     });
   });
