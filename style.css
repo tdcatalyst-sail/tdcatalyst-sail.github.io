@@ -2535,3 +2535,56 @@ html.js .cards .reveal:nth-child(3) { transition-delay: 0.2s; }
 }
 .studio-seedlog { font-family: var(--mono); font-size: 0.7rem; color: var(--midgray); line-height: 1.9; overflow-wrap: anywhere; }
 .studio-seedlog b { color: var(--terracotta); font-weight: 500; }
+
+/* ===== DEPLOY KIT v2: fillable sheets + interactive matrix ===== */
+/* Editable blanks that print with their values */
+.doc-fill {
+  font: inherit; color: var(--navy);
+  border: 0; border-bottom: 1px solid var(--charcoal);
+  background: transparent; border-radius: 0;
+  padding: 0 0.15em 1px; min-width: 3.5rem; width: 100%;
+}
+.doc-fill:focus { outline: none; border-bottom: 2px solid var(--logo-gold); }
+.doc-fill--num { width: 3.2rem; min-width: 0; text-align: center; font-variant-numeric: tabular-nums; }
+input.doc-fill::-webkit-outer-spin-button, input.doc-fill::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input.doc-fill[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+/* Checkable version of the print checkbox */
+input[type="checkbox"].doc-check {
+  appearance: none; -webkit-appearance: none;
+  cursor: pointer; position: relative; margin-top: 0.1em;
+}
+input[type="checkbox"].doc-check:checked::after {
+  content: "\2713";
+  position: absolute; top: -0.32em; left: 0.02em;
+  font-size: 1em; font-weight: 700; color: var(--navy);
+}
+input[type="checkbox"].doc-check:focus-visible { outline: 2px solid var(--logo-blue); outline-offset: 2px; }
+
+/* Interactive matrix grid */
+.mx-table td { position: relative; }
+.mx-cellpct {
+  font-family: var(--mono); font-size: 0.72rem; color: var(--midgray);
+  white-space: nowrap;
+}
+.mx-hot-1, .mx-hot-2, .mx-hot-3 {
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.mx-hot-1 { background: rgba(232, 176, 3, 0.32); }
+.mx-hot-2 { background: rgba(232, 176, 3, 0.20); }
+.mx-hot-3 { background: rgba(232, 176, 3, 0.11); }
+.mx-rowsum { font-family: var(--mono); font-size: 0.68rem; color: var(--midgray); white-space: nowrap; }
+.mx-rowsum.bad { color: var(--logo-red); font-weight: 500; }
+.mx-results { margin-top: 1.4rem; }
+.mx-result {
+  border-left: 3px solid var(--logo-gold);
+  background: rgba(232, 176, 3, 0.07);
+  padding: 0.8rem 1rem; margin-bottom: 0.7rem;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.mx-result h4 { font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 0.95rem; margin: 0 0 0.25rem; color: var(--navy); }
+.mx-result p { font-size: 0.88rem; margin: 0; }
+.mx-result .mx-ind { font-size: 0.8rem; color: var(--midgray); margin-top: 0.3rem; }
+.mx-controls { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin: 1rem 0 0; }
+.mx-controls .btn { padding: 0.45rem 1rem; font-size: 0.82rem; }
+@media print { .mx-controls, .doc-screen-hint { display: none; } }
