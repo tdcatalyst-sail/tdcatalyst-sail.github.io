@@ -2520,7 +2520,8 @@ html.js .cards .reveal:nth-child(3) { transition-delay: 0.2s; }
 .studio-field textarea { min-height: 5.5rem; resize: vertical; font-family: 'Besley', Georgia, serif; }
 .studio-row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
 .studio-row .btn { padding: 0.5rem 1.1rem; font-size: 0.85rem; }
-.studio-seg { display: flex; border: 1px solid var(--hairline); border-radius: 999px; overflow: hidden; }
+.studio-seg { display: flex; flex-wrap: wrap; border: 1px solid var(--hairline); border-radius: 18px; overflow: hidden; }
+.studio-seg button { flex: 1 1 auto; }
 .studio-seg button {
   font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em;
   background: #fff; color: var(--midgray); border: 0;
