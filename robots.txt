@@ -3,5 +3,6 @@ Allow: /
 Disallow: /contact-card.html
 Disallow: /calling-card.html
 Disallow: /templates/
+Disallow: /grow/deploy-kit/
 
 Sitemap: https://tdcatalyst.com/sitemap.xml
