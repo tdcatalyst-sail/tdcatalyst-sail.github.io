@@ -140,6 +140,15 @@ On top of pageviews, `script.js` fires **named GoatCounter events** for the acti
 
 Add `?utm_source=…&utm_medium=…&utm_campaign=…&utm_content=…` to LinkedIn and email links; GoatCounter records the campaign against these events.
 
+### Naming the simulator (two names, one rule)
+
+The tool at `/grow/ai-transformation-simulation` carries two names, and which one you use depends on the surface:
+
+- **Wayfinding and machine-readable surfaces get "AI Adoption Simulator"** — `<title>`, OG tags, the hero eyebrow, nav and footer labels, the hub's featured band, the JSON-LD `name`, and BreadcrumbList. This is the language buyers actually search; "AI adoption tool/assessment" was rejected because that SERP belongs to readiness quizzes and usage dashboards, which is neither what this is nor the intent it would attract.
+- **Prose, legal and deliverables keep "Transformation Dynamics Simulation&trade;"** — the Grow body copy that introduces the model, `/privacy`, `/terms` (which asserts the trademark), the briefing form's `_subject`, and the exported PDF title. It is the product's name and the mark needs using.
+
+The JSON-LD carries both: `name` is the searchable label, `alternateName` the trademark. **The URL does not change** — inbound links, the `/grow/adoption-simulator` redirect stub, and the canonical all point at `ai-transformation-simulation`.
+
 ### Terrain device & motion (brand v3)
 
 - **Terrain contours** (the brand's graphic device — generated topographic lines, every fifth line heavier in the accent) are drawn by `script.js` into any `canvas.terrain` / `canvas.card-terrain` with `data-seed / data-line / data-index / data-alpha / data-index-alpha / data-fade / data-scale` attributes. Every page/artifact gets a UNIQUE seed (same rule as photography: no ground repeats). Site alphas: hub hero 0.14/0.35, interior heroes 0.09/0.20, navy panels 0.35/0.5, card bases 0.09–0.13. Wrap hero sections with class `hero--terrain`; navy CTA panels use `cta-panel cta-panel--field` + a canvas.
