@@ -146,6 +146,10 @@ git checkout fba8ba4 -- grow/deploy-kit
 
 When it does come back, the inbound links and sitemap entries have to be re-added too (see commit "Take the Deploy Kit offline" for the exact removals to reverse). The `.doc-body`/`.sheet`/`.ph` CSS the instruments used is still in `/style.css` — leave it. Do not put the kit back on the site, and do not link to it, until Tom says it is ready.
 
+**Why it was pulled, and the bar for bringing it back (Tom, 2026-08-03):** the copy and the instruments were both too generic — not anchored enough in his own insights. A worksheet, a question list, and a talking track that any competent consultant could have assembled are exactly the standard frameworks this practice's positioning refuses. So the return is a **rebuild, not a copy pass**, and the bar is that **every instrument carries at least one call a generalist could not make** — the operator judgment from having run this work, not what the literature says.
+
+**This is the standing failure mode to avoid on any build here, not just the kit.** Sessions default to well-formed generic frameworks because that is what is reachable without Tom's specific knowledge in the room. Before drafting an instrument or a page, identify the operator-specific judgment it has to carry, and if that knowledge isn't already recorded, **ask Tom for it rather than filling the gap with something competent-sounding and general**. A deliverable a generalist could have produced is a failed deliverable here, however polished.
+
 ### Copy rules (IMPORTANT)
 
 **Tom's copy is canonical.** Styling changes must never rewrite page copy; copy edits ship only with Tom's explicit sign-off, and open questions are batched to him. Standing vocabulary: "the AI revolution" (hub h1/title), "embodied strategic framing" (Sail), "transformation consulting" (Grow — deliberately broader than deployment/adoption). Style rules for NEW copy: claim-first headlines, no em dashes in visible copy, vary sentence shape (the hub's executives/enterprises/founders triplet is a deliberate exception), first person on the hub only.
