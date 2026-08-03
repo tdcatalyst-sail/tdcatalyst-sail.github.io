@@ -20,7 +20,94 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=b84cf781">
+  <link rel="stylesheet" href="/style.css?v=06d825d0">
+    <!-- Structured data: a machine-readable restatement of what this page already says. -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "Organization",
+        "ProfessionalService"
+      ],
+      "@id": "https://tdcatalyst.com/#organization",
+      "name": "TDcatalyst",
+      "url": "https://tdcatalyst.com/",
+      "logo": "https://tdcatalyst.com/images/logo-og.jpg",
+      "image": "https://tdcatalyst.com/images/logo-og.jpg",
+      "email": "tom@tdcatalyst.com",
+      "founder": {
+        "@id": "https://tdcatalyst.com/#tom"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/tdcatalyst/"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Pacifica",
+        "addressRegion": "CA",
+        "addressCountry": "US"
+      },
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "United States"
+        },
+        {
+          "@type": "Place",
+          "name": "San Francisco Bay Area"
+        }
+      ],
+      "description": "Independent advisory practice by Tom Delaporte for the AI revolution, with three ways in: Sail, executive field sessions on adaptability; Grow, AI transformation consulting for enterprises and the public sector; Advise, enterprise-readiness advisory for startup founders."
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://tdcatalyst.com/grow/ai-transformation-simulation#app",
+      "name": "Transformation Dynamics Simulation",
+      "description": "An interactive simulation: flag where your AI transformation is stalling, sequence a library of interventions, and watch the adoption curve evolve, including the threshold where change becomes self-sustaining.",
+      "url": "https://tdcatalyst.com/grow/ai-transformation-simulation",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any modern web browser",
+      "browserRequirements": "Requires JavaScript",
+      "author": {
+        "@id": "https://tdcatalyst.com/#tom"
+      },
+      "publisher": {
+        "@id": "https://tdcatalyst.com/#organization"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "TDcatalyst",
+          "item": "https://tdcatalyst.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Grow",
+          "item": "https://tdcatalyst.com/grow/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Transformation Dynamics Simulation",
+          "item": "https://tdcatalyst.com/grow/ai-transformation-simulation"
+        }
+      ]
+    }
+  ]
+}
+  </script>
 </head>
 <body class="brand-grow">
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -240,7 +327,7 @@
         <p style="font-size:0.9rem; color:var(--midgray);">No list, no drip sequence. One human reply.</p>
       </div>
       <div>
-        <form class="form-grid" action="https://formsubmit.co/tom@tdcatalyst.com" method="POST" enctype="multipart/form-data">
+        <form class="form-grid" action="https://formsubmit.co/tom@tdcatalyst.com" method="POST" enctype="multipart/form-data" data-gc-form="simulation-report">
           <input type="hidden" name="_subject" value="Transformation Dynamics Simulation — scenario submitted">
           <input type="hidden" name="_captcha" value="true">
           <input type="hidden" name="_template" value="table">
@@ -344,13 +431,13 @@
     </div>
     <div>
       <h4>Engage</h4>
-      <a href="/grow/ai-transformation-simulation" target="_blank">Simulation&trade;<span class="tool-tag" aria-hidden="true">&#8599;</span></a>
+      <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">Simulation&trade;<span class="tool-tag" aria-hidden="true">&#8599;</span></a>
       <a href="/grow/#begin">Begin</a>
     </div>
   </div>
 </footer>
 
-<script src="/script.js?v=9cf38b1c"></script>
+<script src="/script.js?v=e436be06"></script>
 <script>
 (function () {
   // ===== matrix definition =====
@@ -1283,6 +1370,18 @@
       '<p class="gw-lev-foot">These point a direction rather than promise a number. Whether any of them lands comes down to the people doing the work.</p></div>';
   }
 
+  // ===== funnel instrumentation =====
+  // Which of these steps people reach is the only way to tell whether the
+  // simulation is a lead instrument or an expensive toy. Each name fires once
+  // per session and carries no identifiers — see script.js for the transport.
+  var simSeen = {};
+  function simTrack(name, title) {
+    if (simSeen[name]) return;
+    simSeen[name] = true;
+    if (window.tdTrack) window.tdTrack(name, title);
+  }
+  simTrack('simulation-open', 'Simulation opened');
+
   // ===== build the matrix grid =====
   SEGMENTS.forEach(function (seg) {
     var head = document.createElement('div');
@@ -1297,10 +1396,24 @@
       cell.dataset.key = ckey;
       cell.textContent = SYMPTOMS[ckey] || STAGE_ABBR[stage];
       cell.title = seg.label + ' · ' + STAGE_ABBR[stage];
-      cell.addEventListener('click', function () {
-        if (flagged[cell.dataset.key]) { delete flagged[cell.dataset.key]; cell.classList.remove('flagged'); }
-        else { flagged[cell.dataset.key] = true; cell.classList.add('flagged'); }
+      // A styled div, not a <button>, so the grid CSS still applies — but it
+      // has to answer to the keyboard and announce itself like the toggle it is.
+      cell.setAttribute('role', 'button');
+      cell.setAttribute('tabindex', '0');
+      cell.setAttribute('aria-pressed', 'false');
+      cell.setAttribute('aria-label', 'Flag as stalled: ' + seg.label + ' · ' + STAGE_ABBR[stage]);
+      function toggleCell() {
+        var on;
+        if (flagged[cell.dataset.key]) { delete flagged[cell.dataset.key]; cell.classList.remove('flagged'); on = false; }
+        else { flagged[cell.dataset.key] = true; cell.classList.add('flagged'); on = true; }
+        cell.setAttribute('aria-pressed', on ? 'true' : 'false');
+        simTrack('simulation-start', 'Simulation first interaction');
+        simTrack('simulation-cell-flagged', 'Simulation cell flagged');
         render();
+      }
+      cell.addEventListener('click', toggleCell);
+      cell.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ' || ev.key === 'Spacebar') { ev.preventDefault(); toggleCell(); }
       });
       el.matrix.appendChild(cell);
     });
@@ -1358,12 +1471,25 @@
         '<div class="play-framework">' + p.framework + '</div>' +
         '<span class="play-match">↳ Targets a stalled cell you flagged</span>' +
         sustainTag;
-      card.addEventListener('click', function () {
+      // Same treatment as the matrix cells: keep the card styling, gain the
+      // keyboard and an accessible name that says what activating it does.
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-pressed', 'false');
+      card.setAttribute('aria-label', 'Add to plan: ' + p.name + ', ' + dur);
+      function togglePlay() {
         var i = plan.indexOf(p.id);
         if (i !== -1) { plan.splice(i, 1); render(); return; }   // already in plan → click removes it
         if (planCalendarWeeks(plan.concat([p.id])) > WEEKS) return;   // adding it would overrun the 24 calendar weeks
         plan.push(p.id);
+        simTrack('simulation-start', 'Simulation first interaction');
+        simTrack('simulation-plan-first', 'Simulation first intervention added');
+        if (plan.length >= 3) simTrack('simulation-plan-built', 'Simulation plan of three or more');
         render();
+      }
+      card.addEventListener('click', togglePlay);
+      card.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ' || ev.key === 'Spacebar') { ev.preventDefault(); togglePlay(); }
       });
       el.lib.appendChild(card);
     });
@@ -1378,6 +1504,11 @@
     // simulate
     var res = simulate(plan);
     var base = simulate([]);
+
+    // "Completed" means the sequence they built actually holds above the
+    // transformation threshold — reaching that is the moment worth counting,
+    // not merely scrolling to the bottom of the page.
+    if (res.crossedWeek !== null) simTrack('simulation-complete', 'Simulation plan crossed the threshold');
 
     // week budget — now CALENDAR time (last completion), since overlap lets plays share weeks.
     // effort = total person-weeks; the difference is what overlap saved you.
@@ -1404,6 +1535,7 @@
       var matches = pl.cells.some(function (c) { return flagged[c]; });
       card.classList.toggle('matches', matches);
       card.classList.toggle('added', added);
+      card.setAttribute('aria-pressed', added ? 'true' : 'false');
       card.classList.toggle('locked', !added && planCalendarWeeks(plan.concat([card.dataset.id])) > WEEKS);
     });
 

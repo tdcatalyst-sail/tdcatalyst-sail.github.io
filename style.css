@@ -45,6 +45,22 @@
 }
 .skip-link:focus { top: 0; }
 
+/* Reachable by screen readers and crawlers, invisible on screen. For headings
+   a page needs structurally but shows typographically some other way — the
+   contact card's name block, for instance. */
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }

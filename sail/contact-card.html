@@ -26,6 +26,19 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
+    /* This page is self-contained and does not load /style.css, so the
+       visually-hidden utility is repeated here rather than shared. */
+    .vh {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -203,15 +216,18 @@
 <body class="brand-sail">
 
 <div class="card-wrap">
+  <!-- The card shows the name typographically, so the page's heading is set
+       for screen readers and crawlers rather than drawn twice. -->
+  <h1 class="vh">Tom Delaporte — Founder, TDcatalyst</h1>
   <div class="calling-card">
 
     <!-- Pacifica coastline — Aramai band of the Ramaytush Ohlone ancestral territory -->
     <div class="card-landscape">
       <img
         src="/images/pacifica-fog-valley.jpg"
+        width="1536" height="942"
         alt="The marine layer over the valley — Pacifica, ancestral lands of the Aramai band of the Ramaytush Ohlone"
-        onerror="this.style.display='none';"
-      >
+        onerror="this.style.display='none';" width="1536" height="942">
       <div class="card-landscape-overlay"></div>
       <div class="card-land-note">Pacifica · Aramai band of the Ramaytush Ohlone · ancestral territory</div>
     </div>
@@ -226,7 +242,7 @@
 
       <div class="card-main">
         <div class="card-logo-wrap">
-          <img src="/images/logo-v2.jpg" alt="TDcatalyst" class="card-logo">
+          <img src="/images/logo-v2.jpg" alt="TDcatalyst" class="card-logo" width="1213" height="1213">
         </div>
         <div class="card-name">Tom Delaporte</div>
         <div class="card-role">Founder · TDcatalyst</div>
@@ -258,7 +274,7 @@
         </div>
 
         <a href="https://www.linkedin.com/company/tdcatalyst/" target="_blank" rel="noopener" class="qr-wrap" title="Scan to visit TDcatalyst on LinkedIn">
-          <img src="/images/qr-linkedin.png" alt="QR code — TDcatalyst LinkedIn" class="qr-img">
+          <img src="/images/qr-linkedin.png" alt="QR code — TDcatalyst LinkedIn" class="qr-img" width="300" height="300">
         </a>
 
       </div>

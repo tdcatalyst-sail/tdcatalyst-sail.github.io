@@ -14,7 +14,45 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=b84cf781">
+  <link rel="stylesheet" href="/style.css?v=06d825d0">
+  <!-- Structured data: a machine-readable restatement of what this page already says. -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://tdcatalyst.com/privacy#page",
+      "url": "https://tdcatalyst.com/privacy",
+      "name": "Privacy — TDcatalyst",
+      "description": "How TDcatalyst handles personal information: what the contact forms and diagnostic collect, which services process it, and how to reach us about your data.",
+      "publisher": {
+        "@id": "https://tdcatalyst.com/#organization"
+      },
+      "isPartOf": {
+        "@id": "https://tdcatalyst.com/#website"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "TDcatalyst",
+          "item": "https://tdcatalyst.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Privacy",
+          "item": "https://tdcatalyst.com/privacy"
+        }
+      ]
+    }
+  ]
+}
+  </script>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -50,8 +88,8 @@
   <div class="wrap narrow">
     <div class="eyebrow">Privacy</div>
     <h1>How this site handles your information.</h1>
-    <p class="hero-sub">TDcatalyst collects the minimum it needs to respond to you, uses no cookies and no analytics, and never sells or shares personal data. This page says exactly what is collected, where it goes, and how to have it removed.</p>
-    <p class="hero-sub" style="font-size:0.95rem; opacity:0.8;">Effective July 10, 2026.</p>
+    <p class="hero-sub">TDcatalyst collects the minimum it needs to respond to you, sets no cookies and no persistent identifiers, and never sells or shares personal data. Aggregate, cookieless analytics tell us which pages are read. This page says exactly what is collected, where it goes, and how to have it removed.</p>
+    <p class="hero-sub" style="font-size:0.95rem; opacity:0.8;">Effective August 3, 2026.</p>
   </div>
 </section>
 
@@ -64,13 +102,15 @@
     <h2>What we collect, and where it goes</h2>
     <p><strong>Contact forms.</strong> The forms on this site (Begin, Grow, Advise) ask for your name, email, and optionally your company, role, and a message. Submissions are relayed by <a href="https://formsubmit.co" target="_blank" rel="noopener">FormSubmit</a>, a third-party form service, and delivered to us by email. We use them solely to respond to your inquiry.</p>
     <p><strong>The AI Transformation Stall Diagnostic.</strong> Your answers are processed in your browser. If you choose to share your contact details at the end, your name, email, company, department, your responses, and basic technical context (browser user agent and referring page) are transmitted to us and stored in our Google Workspace account. We use this to prepare and send your diagnostic readout and to follow up if you ask us to. If you complete the diagnostic without sharing contact details, we receive the responses without any identifying information beyond that technical context.</p>
-    <p><strong>The Transformation Dynamics Simulation&trade;</strong> runs entirely in your browser. Nothing you enter is transmitted or stored.</p>
+    <p><strong>Diagnostic progress events.</strong> So that we can tell how far people get before they stop, the diagnostic also sends us a short event when you begin, as you move between questions, and when you finish. Each event carries a session identifier generated at random in your browser, the question number, a timestamp, your browser user agent, and the referring page. The identifier is held in memory for that one sitting only: it is never stored on your device, and it cannot be linked back to you unless you separately give us your contact details.</p>
+    <p><strong>The Transformation Dynamics Simulation&trade;</strong> runs entirely in your browser. Building and running a scenario transmits nothing. If you request a written briefing at the end, the form sends us your name, email, organization, your optional note about the deployment, and the scenario you built (the cells you flagged, the sequence you planned, and the resulting figures).</p>
     <p><strong>Scheduling.</strong> Booking a call happens on <a href="https://cal.com" target="_blank" rel="noopener">Cal.com</a>, under Cal.com's own privacy policy.</p>
-    <p><strong>Chat.</strong> One page hosts a chat widget provided by Asksila. Conversations you have with it are processed by that service.</p>
-    <p><strong>Technical delivery.</strong> Like most websites, this site loads fonts from Google Fonts and a small number of images from external image services. Serving those files necessarily exposes your IP address to those providers. The site itself is hosted on GitHub Pages, which may log requests for operational purposes.</p>
+    <p><strong>Chat.</strong> One page &mdash; <a href="/sail/about">About, on Sail</a> &mdash; hosts a chat widget provided by Asksila. Conversations you have with it are processed by that service under its own terms. No other page loads it.</p>
+    <p><strong>Analytics.</strong> Every page carries two privacy-friendly, aggregate analytics services: <a href="https://www.goatcounter.com" target="_blank" rel="noopener">GoatCounter</a> and <a href="https://www.cloudflare.com/web-analytics/" target="_blank" rel="noopener">Cloudflare Web Analytics</a>. Neither sets a cookie, and neither assigns you an identifier that persists between visits. They record which page was loaded, roughly where in the world the request came from, and which site referred you, plus a small number of named events &mdash; that a scheduling link was clicked, that a form was started or sent, that a tool was opened or completed &mdash; so we can see which pages lead to a conversation. Those events record the action, never who took it.</p>
+    <p><strong>Technical delivery.</strong> Fonts are served from this site itself, not from a font network. A small number of images load from external image services, which necessarily exposes your IP address to those providers. The site is hosted on GitHub Pages, which may log requests for operational purposes.</p>
 
     <h2>What we do not do</h2>
-    <p>This site sets no cookies of its own, runs no analytics, uses no tracking pixels, and carries no advertising. We do not sell, rent, or share personal information with anyone, and we do not use it for automated decision-making or profiling.</p>
+    <p>This site sets no cookies, stores nothing on your device, uses no tracking pixels, and carries no advertising. Nothing here follows you between visits or across other websites. We do not sell, rent, or share personal information with anyone, and we do not use it for automated decision-making or profiling.</p>
 
     <h2>Retention</h2>
     <p>Correspondence and diagnostic submissions are kept for as long as they are relevant to an ongoing or prospective conversation, and deleted when they no longer are — or immediately on your request.</p>
@@ -79,7 +119,7 @@
     <p>Wherever you are, you can ask us what we hold about you, ask for it to be corrected, or ask for it to be deleted. Email <a href="mailto:tom@tdcatalyst.com">tom@tdcatalyst.com</a> and we will act on the request promptly. If you are in the EU/EEA or UK, these requests are honored in line with the GDPR; if you are a California resident, in line with the CCPA.</p>
 
     <h2>Changes</h2>
-    <p>If this policy changes, the new version will be posted here with an updated effective date. The substance — minimal collection, no tracking, no selling — is not going to change.</p>
+    <p>If this policy changes, the new version will be posted here with an updated effective date. The substance — minimal collection, no cookies, no cross-site tracking, no selling — is not going to change.</p>
   </div>
 </section>
 
@@ -105,7 +145,7 @@
   </div>
 </footer>
 
-<script src="/script.js?v=9cf38b1c"></script>
+<script src="/script.js?v=e436be06"></script>
 <script data-goatcounter="https://tdcatalyst.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
