@@ -140,6 +140,10 @@ On top of pageviews, `script.js` fires **named GoatCounter events** for the acti
 
 Add `?utm_source=…&utm_medium=…&utm_campaign=…&utm_content=…` to LinkedIn and email links; GoatCounter records the campaign against these events.
 
+### Campaign pages carry their own scoped styles (deliberate exception)
+
+`grow/ai-adoption-recovery.html` is an outreach conversion page and deliberately does NOT use the site's editorial design (Besley serif headings, pill buttons, terrain heroes). Tom's call, 2026-08-04: it should read as a modern funded-company landing page. Its styles live in a `<style>` block scoped under `.lp` inside the page itself — an explicit exception to the "edit style.css only" rule. Do not port `.lp` styles into style.css, do not "fix" the page back to the editorial system, and do not copy this pattern to site pages. It keeps `.btn`/`.nav-cta` class names so the shared conversion-event layer still names its clicks, loads `/style.css` for the skip link and event hooks, and follows every other production-checklist rule (one h1, JSON-LD, dims, noopener, GoatCounter).
+
 ### Naming the simulator (two names, one rule)
 
 The tool at `/grow/ai-transformation-simulation` carries two names, and which one you use depends on the surface:
