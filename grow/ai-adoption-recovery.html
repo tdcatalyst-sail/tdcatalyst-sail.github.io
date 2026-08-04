@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/favicon.png">
   <title>Stalled AI Rollout? The 10-Day Adoption Recovery Review | TDcatalyst</title>
-  <meta name="description" content="Most enterprise AI rollouts plateau at 15 to 30 percent adoption. The Adoption Recovery Review is a 10-business-day assessment that identifies why yours stalled and delivers a written scale, repair, or stop decision with a 90-day plan. $12,500 fixed." />
+  <meta name="description" content="Most enterprise AI rollouts plateau at 15 to 30 percent adoption. The Adoption Recovery Review is a 10-day, AI-native assessment that identifies why yours stalled and delivers a scale, repair, or stop decision with a 90-day intervention roadmap. $12,500 fixed launch pricing." />
   <link rel="canonical" href="https://tdcatalyst.com/grow/ai-adoption-recovery" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://tdcatalyst.com/grow/ai-adoption-recovery" />
   <meta property="og:title" content="Stalled AI rollout? The 10-day Adoption Recovery Review" />
-  <meta property="og:description" content="A 10-business-day assessment that identifies why your AI rollout stalled and delivers a written scale, repair, or stop decision with a 90-day plan. $12,500 fixed, credited toward a full Adoption Reset." />
+  <meta property="og:description" content="AI-native diagnostics, simulation, and delivery: why your rollout stalled, and a 90-day intervention roadmap to fix it. $12,500 fixed, credited toward a full Adoption Reset." />
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
@@ -46,7 +46,7 @@
       "@type": "Service",
       "@id": "https://tdcatalyst.com/grow/ai-adoption-recovery#service",
       "name": "Adoption Recovery Review",
-      "description": "A 10-business-day assessment for enterprises whose AI rollout has stalled: five to eight stakeholder interviews, a review of usage and workflow evidence, one executive working session, and a written scale, repair, or stop decision with a 90-day recovery plan.",
+      "description": "A 10-day, AI-native assessment for enterprises whose AI rollout has stalled: diagnostic pattern-matching, intervention simulation, an executive working session, and a scale, repair, or stop decision delivered with a 90-day intervention roadmap.",
       "url": "https://tdcatalyst.com/grow/ai-adoption-recovery",
       "provider": { "@id": "https://tdcatalyst.com/#organization" },
       "serviceType": "AI transformation consulting",
@@ -57,7 +57,7 @@
       "offers": {
         "@type": "Offer",
         "name": "Adoption Recovery Review",
-        "description": "Ten business days. Fixed fee, credited in full toward an Adoption Reset started within 30 days of delivery.",
+        "description": "Ten days of engagement plus production and delivery. Fixed launch fee, credited in full toward an Adoption Reset started within 30 days of delivery.",
         "priceSpecification": {
           "@type": "PriceSpecification",
           "price": "12500",
@@ -94,9 +94,9 @@
     --lp-line: #E4E7EC;
     --lp-bg: #FFFFFF;
     --lp-bg-alt: #F8FAFB;
-    --lp-dark: #10233F;      /* brand navy-deep, cooled */
+    --lp-dark: #10233F;
     --lp-dark-2: #16283F;
-    --lp-accent: #E8B003;    /* logo gold: highlights only, never long text */
+    --lp-accent: #E8B003;
     --lp-accent-ink: #8A6302;
     --lp-radius: 10px;
     --lp-radius-lg: 16px;
@@ -108,7 +108,7 @@
     background: var(--lp-bg);
     -webkit-font-smoothing: antialiased;
   }
-  .lp h1, .lp h2, .lp h3 {
+  .lp h1, .lp h2, .lp h3, .lp h4 {
     font-family: var(--lp-font);
     color: var(--lp-ink);
     font-weight: 700;
@@ -119,7 +119,7 @@
   }
   .lp p { margin: 0; text-wrap: pretty; }
   .lp .wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(1.1rem, 4vw, 2rem); }
-  .lp section { padding: clamp(3.2rem, 7vw, 5.5rem) 0; }
+  .lp section { padding: clamp(3rem, 6.5vw, 5rem) 0; }
 
   .lp .kicker {
     display: inline-flex; align-items: center; gap: 0.5rem;
@@ -128,14 +128,13 @@
   }
   .lp .kicker::before { content: ""; width: 1.4rem; height: 2px; background: var(--lp-accent); }
 
-  /* Buttons: keep .btn class names so the shared event layer keeps naming clicks. */
   .lp .btn {
     display: inline-flex; align-items: center; justify-content: center;
     border-radius: var(--lp-radius);
     padding: 0.8rem 1.5rem;
     font-family: var(--lp-font); font-size: 0.95rem; font-weight: 600;
     letter-spacing: 0; text-decoration: none; cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    transition: background 0.15s, border-color 0.15s;
     border: 1px solid transparent;
   }
   .lp .btn-primary {
@@ -152,7 +151,6 @@
   .lp .btn-gold:hover { background: #F5BE14; color: #10233F; }
   .lp .btn:focus-visible { outline: 2px solid var(--lp-accent-ink); outline-offset: 2px; }
 
-  /* Header */
   .lp .lp-nav {
     position: sticky; top: 0; z-index: 50;
     background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(10px);
@@ -170,69 +168,111 @@
   .lp .hero {
     position: relative; overflow: hidden;
     background:
-      radial-gradient(52rem 30rem at 85% -10%, rgba(232, 176, 3, 0.10), transparent 60%),
-      radial-gradient(40rem 26rem at -10% 110%, rgba(22, 40, 63, 0.07), transparent 55%),
+      radial-gradient(52rem 30rem at 88% -10%, rgba(232, 176, 3, 0.10), transparent 60%),
+      radial-gradient(40rem 26rem at -10% 110%, rgba(22, 40, 63, 0.06), transparent 55%),
       var(--lp-bg);
   }
   .lp .hero-grid {
-    display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
     gap: clamp(2rem, 5vw, 4rem); align-items: center;
   }
-  .lp .hero h1 { font-size: clamp(2.1rem, 4.6vw, 3.15rem); margin: 1.1rem 0 1.1rem; }
-  .lp .hero .sub { font-size: clamp(1.02rem, 1.6vw, 1.13rem); max-width: 56ch; }
-  .lp .hero .btn-row { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.7rem; }
+  .lp .hero h1 { font-size: clamp(2.05rem, 4.4vw, 3.05rem); margin: 1.1rem 0 1rem; }
+  .lp .hero .sub { font-size: clamp(1rem, 1.6vw, 1.1rem); max-width: 54ch; }
+  .lp .hero .btn-row { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.6rem; }
   .lp .trust {
-    margin-top: 2.1rem; padding-top: 1.3rem; border-top: 1px solid var(--lp-line);
+    margin-top: 1.9rem; padding-top: 1.2rem; border-top: 1px solid var(--lp-line);
     font-size: 0.8rem; color: var(--lp-faint);
     display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem; align-items: center;
   }
   .lp .trust b { color: var(--lp-ink); font-weight: 600; white-space: nowrap; }
-  .lp .portrait {
-    justify-self: end; width: min(100%, 360px);
-    border-radius: var(--lp-radius-lg); overflow: hidden;
-    box-shadow: 0 12px 40px rgba(16, 35, 63, 0.16), 0 2px 8px rgba(16, 24, 40, 0.08);
-    background: var(--lp-bg-alt);
+
+  /* Chart card (hero) */
+  .lp .chart-card {
+    background: #FFFFFF; border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
+    box-shadow: 0 12px 40px rgba(16, 35, 63, 0.14), 0 2px 8px rgba(16, 24, 40, 0.06);
+    padding: 1.2rem 1.2rem 0.9rem;
   }
-  .lp .portrait img { width: 100%; height: auto; display: block; }
-  .lp .portrait figcaption {
-    padding: 0.8rem 1rem; font-size: 0.82rem; color: var(--lp-faint);
-    border-top: 1px solid var(--lp-line); background: #FFFFFF;
-  }
-  .lp .portrait figcaption b { display: block; color: var(--lp-ink); font-size: 0.92rem; font-weight: 650; }
+  .lp .chart-card svg { display: block; width: 100%; height: auto; }
+  .lp .chart-cap { font-size: 0.76rem; color: var(--lp-faint); padding-top: 0.7rem; margin-top: 0.4rem; border-top: 1px solid var(--lp-line); }
 
   /* Stat band */
   .lp .stats { border-block: 1px solid var(--lp-line); background: var(--lp-bg-alt); padding: 0; }
   .lp .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
-  .lp .stat { padding: 1.6rem 1.4rem; }
+  .lp .stat { padding: 1.5rem 1.4rem; }
   .lp .stat + .stat { border-left: 1px solid var(--lp-line); }
-  .lp .stat .n { font-size: 1.9rem; font-weight: 700; color: var(--lp-ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-  .lp .stat .l { font-size: 0.84rem; color: var(--lp-faint); margin-top: 0.15rem; }
+  .lp .stat .n { font-size: 1.8rem; font-weight: 700; color: var(--lp-ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .lp .stat .l { font-size: 0.83rem; color: var(--lp-faint); margin-top: 0.15rem; }
 
-  /* Section head */
-  .lp .sec-head { max-width: 660px; margin-bottom: clamp(1.8rem, 4vw, 2.8rem); }
-  .lp .sec-head h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); margin-top: 0.9rem; }
-  .lp .sec-head p { margin-top: 0.8rem; }
+  .lp .sec-head { max-width: 680px; margin-bottom: clamp(1.6rem, 4vw, 2.5rem); }
+  .lp .sec-head h2 { font-size: clamp(1.45rem, 2.9vw, 2rem); margin-top: 0.9rem; }
+  .lp .sec-head p { margin-top: 0.7rem; }
 
-  /* Cards */
-  .lp .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
-  .lp .card {
+  /* Archetype pills */
+  .lp .arch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .lp .arch {
     background: #FFFFFF; border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
-    padding: 1.5rem 1.4rem;
-    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    padding: 1.25rem 1.15rem; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    display: flex; flex-direction: column; gap: 0.55rem;
+    border-top: 3px solid var(--lp-accent);
   }
-  .lp .card h3 { font-size: 1.05rem; font-weight: 650; margin-bottom: 0.55rem; }
-  .lp .card p { font-size: 0.93rem; }
-  .lp .card .ic {
-    width: 2.2rem; height: 2.2rem; border-radius: 8px; margin-bottom: 0.9rem;
-    background: rgba(232, 176, 3, 0.14); color: var(--lp-accent-ink);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.95rem; font-variant-numeric: tabular-nums;
+  .lp .arch .tag {
+    align-self: flex-start; font-size: 0.66rem; font-weight: 650; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--lp-accent-ink);
+    background: rgba(232, 176, 3, 0.12); border-radius: 4px; padding: 0.2rem 0.5rem;
   }
+  .lp .arch h3 { font-size: 1rem; font-weight: 650; }
+  .lp .arch p { font-size: 0.86rem; }
 
-  /* Deliverable + timeline */
+  /* Intervention play cards */
+  .lp .plays-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .lp .play {
+    background: #FFFFFF; border: 1px solid var(--lp-line); border-radius: var(--lp-radius);
+    padding: 1.05rem 1.1rem; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    display: flex; flex-direction: column; gap: 0.4rem; position: relative;
+  }
+  .lp .play .top { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+  .lp .play .grp {
+    font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--lp-dark); background: rgba(16, 35, 63, 0.07); border-radius: 4px; padding: 0.18rem 0.45rem;
+  }
+  .lp .play .wks { font-size: 0.74rem; font-weight: 650; color: var(--lp-accent-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .lp .play h3 { font-size: 0.96rem; font-weight: 650; }
+  .lp .play .fw { font-size: 0.76rem; color: var(--lp-faint); }
+  .lp .plays-note { margin-top: 1.1rem; font-size: 0.85rem; color: var(--lp-faint); }
+  .lp .plays-note a { color: var(--lp-accent-ink); font-weight: 600; }
+
+  /* Roadmap miniature */
+  .lp .roadmap {
+    background: #FFFFFF; border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
+    box-shadow: 0 12px 40px rgba(16, 35, 63, 0.10), 0 2px 8px rgba(16, 24, 40, 0.05);
+    padding: 1.3rem 1.3rem 1.1rem;
+  }
+  .lp .rm-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.9rem; }
+  .lp .rm-head b { font-size: 0.9rem; color: var(--lp-ink); font-weight: 650; }
+  .lp .rm-head span { font-size: 0.74rem; color: var(--lp-faint); }
+  .lp .rm-months {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 0;
+    font-size: 0.66rem; color: var(--lp-faint); letter-spacing: 0.06em; text-transform: uppercase;
+    border-bottom: 1px solid var(--lp-line); padding-bottom: 0.35rem; margin-bottom: 0.7rem;
+  }
+  .lp .rm-months span:nth-child(1) { grid-column: 1 / 5; }
+  .lp .rm-months span:nth-child(2) { grid-column: 5 / 9; }
+  .lp .rm-months span:nth-child(3) { grid-column: 9 / 13; }
+  .lp .rm-rows { display: grid; gap: 0.5rem; }
+  .lp .rm-row { display: grid; grid-template-columns: repeat(12, 1fr); align-items: center; height: 1.5rem; }
+  .lp .rm-bar {
+    height: 100%; border-radius: 5px; display: flex; align-items: center;
+    padding: 0 0.55rem; font-size: 0.68rem; font-weight: 650; color: #FFFFFF; white-space: nowrap; overflow: hidden;
+  }
+  .lp .rm-bar.b1 { background: var(--lp-dark); }
+  .lp .rm-bar.b2 { background: #2C4B76; }
+  .lp .rm-bar.b3 { background: #486B99; }
+  .lp .rm-bar.b4 { background: var(--lp-accent); color: #10233F; }
+  .lp .rm-cap { margin-top: 0.85rem; padding-top: 0.7rem; border-top: 1px solid var(--lp-line); font-size: 0.76rem; color: var(--lp-faint); }
+
   .lp .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 4vw, 3rem); align-items: start; }
-  .lp .list { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; gap: 0.75rem; }
-  .lp .list li { display: flex; gap: 0.7rem; font-size: 0.95rem; }
+  .lp .list { list-style: none; margin: 1.1rem 0 0; padding: 0; display: grid; gap: 0.7rem; }
+  .lp .list li { display: flex; gap: 0.7rem; font-size: 0.94rem; }
   .lp .list li::before {
     content: "✓"; flex-shrink: 0; width: 1.35rem; height: 1.35rem; border-radius: 50%;
     background: rgba(232, 176, 3, 0.16); color: var(--lp-accent-ink);
@@ -240,44 +280,59 @@
     font-size: 0.72rem; font-weight: 700; margin-top: 0.1rem;
   }
   .lp .list b { color: var(--lp-ink); font-weight: 650; }
-  .lp .steps { list-style: none; margin: 1.2rem 0 0; padding: 0; }
-  .lp .steps li { display: flex; gap: 1rem; position: relative; padding-bottom: 1.4rem; }
-  .lp .steps li:last-child { padding-bottom: 0; }
-  .lp .steps .dot {
-    flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%;
-    background: var(--lp-dark); color: #fff; font-size: 0.72rem; font-weight: 650;
-    display: flex; align-items: center; justify-content: center; z-index: 1;
-  }
-  .lp .steps li:not(:last-child)::before {
-    content: ""; position: absolute; left: calc(1rem - 1px); top: 2rem; bottom: 0;
-    width: 2px; background: var(--lp-line);
-  }
-  .lp .steps b { display: block; color: var(--lp-ink); font-weight: 650; font-size: 0.95rem; }
-  .lp .steps p { font-size: 0.9rem; margin-top: 0.15rem; }
 
-  /* Pricing */
-  .lp .price-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 420px); gap: clamp(1.5rem, 4vw, 3rem); align-items: center; }
+  /* Economics */
+  .lp .econ-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 430px); gap: clamp(1.5rem, 4vw, 3rem); align-items: start; }
+  .lp .compare { display: grid; gap: 0.9rem; margin-top: 1.4rem; }
+  .lp .cmp { border: 1px solid var(--lp-line); border-radius: var(--lp-radius); padding: 0.95rem 1.05rem; background: #FFFFFF; }
+  .lp .cmp .cmp-top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .lp .cmp b { font-size: 0.92rem; color: var(--lp-ink); font-weight: 650; }
+  .lp .cmp .val { font-size: 0.85rem; font-weight: 650; color: var(--lp-faint); white-space: nowrap; }
+  .lp .cmp .bar { height: 0.55rem; border-radius: 4px; background: var(--lp-bg-alt); margin-top: 0.6rem; overflow: hidden; }
+  .lp .cmp .bar i { display: block; height: 100%; border-radius: 4px; }
+  .lp .cmp.internal .bar i { width: 100%; background: #C5CBD4; }
+  .lp .cmp.review .bar i { width: 18%; background: var(--lp-accent); }
+  .lp .cmp p { font-size: 0.83rem; margin-top: 0.45rem; }
+  .lp .cmp.review { border-color: rgba(232, 176, 3, 0.55); }
+
   .lp .price-card {
     background: #FFFFFF; border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
-    padding: 1.9rem 1.7rem;
+    padding: 1.8rem 1.6rem;
     box-shadow: 0 16px 44px rgba(16, 35, 63, 0.12), 0 2px 6px rgba(16, 24, 40, 0.05);
   }
-  .lp .price-card .amount { font-size: 2.5rem; font-weight: 700; color: var(--lp-ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-  .lp .price-card .amount small { font-size: 0.95rem; font-weight: 500; color: var(--lp-faint); letter-spacing: 0; }
-  .lp .price-card .credit {
-    margin-top: 1.1rem; padding: 0.8rem 0.95rem; border-radius: var(--lp-radius);
-    background: rgba(232, 176, 3, 0.10); border: 1px solid rgba(232, 176, 3, 0.35);
-    font-size: 0.87rem; color: var(--lp-ink);
+  .lp .price-card .launch {
+    display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #10233F; background: var(--lp-accent); border-radius: 999px; padding: 0.28rem 0.7rem;
   }
-  .lp .price-card .btn { width: 100%; margin-top: 1.2rem; }
-  .lp .price-card .cap { margin-top: 0.7rem; font-size: 0.8rem; color: var(--lp-faint); text-align: center; }
+  .lp .price-card .amount { font-size: 2.5rem; font-weight: 700; color: var(--lp-ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; margin-top: 0.7rem; }
+  .lp .price-card .amount small { font-size: 0.92rem; font-weight: 500; color: var(--lp-faint); letter-spacing: 0; }
+  .lp .fee-rows { margin-top: 1rem; border-top: 1px solid var(--lp-line); }
+  .lp .fee-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.6rem 0; border-bottom: 1px solid var(--lp-line); font-size: 0.86rem; }
+  .lp .fee-row span:first-child { color: var(--lp-body); }
+  .lp .fee-row span:last-child { color: var(--lp-ink); font-weight: 650; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .lp .price-card .credit {
+    margin-top: 1rem; padding: 0.75rem 0.9rem; border-radius: var(--lp-radius);
+    background: rgba(232, 176, 3, 0.10); border: 1px solid rgba(232, 176, 3, 0.35);
+    font-size: 0.85rem; color: var(--lp-ink);
+  }
+  .lp .price-card .btn { width: 100%; margin-top: 1.15rem; }
+  .lp .price-card .cap { margin-top: 0.65rem; font-size: 0.79rem; color: var(--lp-faint); text-align: center; }
 
-  /* FAQ (reuses the shared toggle script; visuals scoped here) */
+  /* Two ways in */
+  .lp .ways { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+  .lp .way {
+    background: #FFFFFF; border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
+    padding: 1.6rem 1.5rem; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  }
+  .lp .way h3 { font-size: 1.12rem; font-weight: 650; margin-top: 0.7rem; }
+  .lp .way p { font-size: 0.93rem; margin-top: 0.55rem; }
+
+  /* FAQ */
   .lp .faq-list { border-top: 1px solid var(--lp-line); margin-top: 0; max-width: 760px; }
   .lp .faq-item { border-bottom: 1px solid var(--lp-line); }
   .lp .faq-q {
     width: 100%; background: none; border: none; text-align: left; cursor: pointer;
-    padding: 1.15rem 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
+    padding: 1.1rem 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
     font-family: var(--lp-font); font-size: 1rem; font-weight: 600; color: var(--lp-ink); line-height: 1.4;
   }
   .lp .faq-icon {
@@ -286,8 +341,23 @@
     font-size: 1rem; font-weight: 400; color: var(--lp-accent-ink); margin-top: 2px; transition: transform 0.2s;
   }
   .lp .faq-item.open .faq-icon { transform: rotate(45deg); }
-  .lp .faq-a { display: none; padding: 0 2.4rem 1.3rem 0; font-size: 0.94rem; }
+  .lp .faq-a { display: none; padding: 0 2.4rem 1.2rem 0; font-size: 0.93rem; }
   .lp .faq-item.open .faq-a { display: block; }
+
+  /* About (bottom) */
+  .lp .about-row {
+    display: flex; gap: 1.4rem; align-items: center;
+    background: #FFFFFF; border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
+    padding: 1.4rem 1.5rem; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  }
+  .lp .about-row img { width: 96px; height: 96px; border-radius: 12px; object-fit: cover; object-position: center 20%; flex-shrink: 0; }
+  .lp .about-row b { display: block; color: var(--lp-ink); font-size: 1.05rem; font-weight: 650; }
+  .lp .about-row p { font-size: 0.9rem; margin-top: 0.3rem; }
+  .lp .cred-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.7rem; }
+  .lp .cred-chips span {
+    font-size: 0.76rem; font-weight: 600; color: var(--lp-ink);
+    background: var(--lp-bg-alt); border: 1px solid var(--lp-line); border-radius: 999px; padding: 0.28rem 0.7rem;
+  }
 
   /* Final CTA */
   .lp .final {
@@ -295,7 +365,7 @@
       radial-gradient(46rem 26rem at 110% -20%, rgba(232, 176, 3, 0.14), transparent 55%),
       var(--lp-dark);
   }
-  .lp .final h2 { color: #FFFFFF; font-size: clamp(1.5rem, 3vw, 2.1rem); }
+  .lp .final h2 { color: #FFFFFF; font-size: clamp(1.45rem, 2.9vw, 2rem); }
   .lp .final .sec-head p { color: #B8C4D4; }
   .lp .final .kicker { color: var(--lp-accent); }
   .lp .final .form-card {
@@ -313,38 +383,39 @@
   }
   .lp .form-card .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; margin-bottom: 0.9rem; }
   .lp .form-card .field { margin-bottom: 0.9rem; }
-  .lp .form-card textarea { min-height: 5.2rem; resize: vertical; }
+  .lp .form-card textarea { min-height: 5rem; resize: vertical; }
   .lp .fine { font-size: 0.78rem; color: var(--lp-faint); margin-top: 0.7rem; }
   .lp .fine a { color: inherit; }
   .lp .final .alt-cta { color: #B8C4D4; font-size: 0.92rem; margin-top: 1.3rem; }
   .lp .final .alt-cta a { color: #FFFFFF; font-weight: 600; }
 
-  /* Footer */
   .lp .lp-footer { border-top: 1px solid var(--lp-line); padding: 1.6rem 0; }
   .lp .lp-footer .wrap { display: flex; flex-wrap: wrap; gap: 0.5rem 1.6rem; align-items: center; justify-content: space-between; font-size: 0.8rem; color: var(--lp-faint); }
   .lp .lp-footer a { color: var(--lp-faint); }
 
-  /* Banner (?sent=1) */
   .lp #sent-banner {
     display: none; margin: 0 0 1.2rem; padding: 0.9rem 1.1rem;
     background: rgba(232, 176, 3, 0.12); border: 1px solid rgba(232, 176, 3, 0.4);
     border-radius: var(--lp-radius); color: var(--lp-ink); font-size: 0.92rem;
   }
 
-  @media (max-width: 880px) {
+  @media (max-width: 920px) {
     .lp .hero-grid { grid-template-columns: 1fr; }
-    .lp .portrait { justify-self: start; width: min(100%, 300px); }
     .lp .stats-grid { grid-template-columns: 1fr 1fr; }
     .lp .stat:nth-child(3) { border-left: none; }
     .lp .stat:nth-child(n+3) { border-top: 1px solid var(--lp-line); }
-    .lp .cards { grid-template-columns: 1fr; }
-    .lp .two-col, .lp .price-wrap { grid-template-columns: 1fr; }
+    .lp .arch-grid { grid-template-columns: 1fr 1fr; }
+    .lp .plays-grid { grid-template-columns: 1fr 1fr; }
+    .lp .two-col, .lp .econ-grid, .lp .ways { grid-template-columns: 1fr; }
     .lp .form-card .row { grid-template-columns: 1fr; gap: 0; }
     .lp .form-card .row > div { margin-bottom: 0.9rem; }
   }
+  @media (max-width: 560px) {
+    .lp .arch-grid, .lp .plays-grid { grid-template-columns: 1fr; }
+    .lp .about-row { flex-direction: column; align-items: flex-start; }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .lp .btn { transition: none; }
-    .lp .faq-icon { transition: none; }
+    .lp .btn, .lp .faq-icon { transition: none; }
   }
 </style>
 
@@ -362,19 +433,46 @@
 <section class="hero" id="main-content">
   <div class="wrap hero-grid">
     <div>
-      <span class="kicker">Adoption Recovery Review</span>
+      <span class="kicker">Adoption Recovery Review &middot; Launch offer</span>
       <h1>Recover your stalled AI rollout.</h1>
-      <p class="sub">Most enterprise AI deployments plateau at 15&ndash;30% adoption: teams keep working the old way, and the platform never earns its place in the workflow. The Adoption Recovery Review is a 10-business-day assessment that identifies why yours stalled, and delivers a written scale, repair, or stop decision with a 90-day recovery plan.</p>
+      <p class="sub">Most enterprise AI deployments plateau at 15&ndash;30% adoption. The Review runs AI-native diagnostics and simulation over your rollout, and delivers a scale, repair, or stop decision with a 90-day intervention roadmap. Ten days. $12,500 fixed.</p>
       <div class="btn-row">
         <a href="#begin" class="btn btn-primary">Discuss a stalled AI deployment</a>
-        <a href="#assessment" class="btn btn-ghost">What&rsquo;s included</a>
+        <a href="#stack" class="btn btn-ghost">See how it works</a>
       </div>
       <p class="trust"><b>Eightfold AI</b> <b>Capgemini</b> <b>Fortune 100 programs</b> <b>Public sector</b></p>
     </div>
-    <figure class="portrait">
-      <img src="/images/headshot.jpg" alt="Tom Delaporte" width="800" height="800" onerror="this.style.display='none'">
-      <figcaption><b>Tom Delaporte</b>Founder, TDcatalyst. Every engagement delivered personally.</figcaption>
-    </figure>
+    <div class="chart-card" role="img" aria-label="Chart: adoption plateaus near 24 percent without intervention; with sequenced interventions it crosses the self-sustaining threshold near 70 percent by week 24.">
+      <svg viewBox="0 0 520 320" aria-hidden="true">
+        <line x1="46" y1="20" x2="46" y2="270" stroke="#E4E7EC" stroke-width="1"/>
+        <line x1="46" y1="270" x2="500" y2="270" stroke="#E4E7EC" stroke-width="1"/>
+        <g stroke="#F2F4F7" stroke-width="1">
+          <line x1="46" y1="207.5" x2="500" y2="207.5"/>
+          <line x1="46" y1="145" x2="500" y2="145"/>
+          <line x1="46" y1="82.5" x2="500" y2="82.5"/>
+        </g>
+        <g font-family="Archivo, sans-serif" font-size="11" fill="#667085">
+          <text x="38" y="274" text-anchor="end">0%</text>
+          <text x="38" y="211" text-anchor="end">25%</text>
+          <text x="38" y="149" text-anchor="end">50%</text>
+          <text x="38" y="86" text-anchor="end">75%</text>
+          <text x="46" y="292">Week 0</text>
+          <text x="500" y="292" text-anchor="end">Week 24</text>
+        </g>
+        <line x1="46" y1="95" x2="500" y2="95" stroke="#E8B003" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text x="54" y="88" font-family="Archivo, sans-serif" font-size="11" font-weight="600" fill="#8A6302">self-sustaining threshold</text>
+        <path d="M46 268 C 110 232, 150 216, 200 213 C 280 209, 400 211, 500 213" fill="none" stroke="#C5CBD4" stroke-width="2.5" stroke-dasharray="6 5"/>
+        <text x="497" y="230" text-anchor="end" font-family="Archivo, sans-serif" font-size="11" fill="#667085">without intervention &middot; ~24%</text>
+        <path d="M46 268 C 110 232, 150 214, 200 206 C 250 196, 280 160, 330 130 C 380 100, 440 80, 500 72" fill="none" stroke="#10233F" stroke-width="3"/>
+        <g fill="#E8B003" stroke="#10233F" stroke-width="1.5">
+          <circle cx="200" cy="206" r="4.5"/>
+          <circle cx="292" cy="151" r="4.5"/>
+          <circle cx="388" cy="96" r="4.5"/>
+        </g>
+        <text x="497" y="60" text-anchor="end" font-family="Archivo, sans-serif" font-size="11" font-weight="600" fill="#10233F">sequenced interventions</text>
+      </svg>
+      <p class="chart-cap">Modeled adoption trajectories from the Transformation Dynamics Simulation&trade;. Dots mark intervention starts.</p>
+    </div>
   </div>
 </section>
 
@@ -382,123 +480,176 @@
 <section class="stats" aria-label="Key figures">
   <div class="wrap">
     <div class="stats-grid">
-      <div class="stat"><div class="n">15&ndash;30%</div><div class="l">where enterprise AI rollouts typically plateau</div></div>
-      <div class="stat"><div class="n">10 days</div><div class="l">from kickoff to a written decision</div></div>
-      <div class="stat"><div class="n">$12,500</div><div class="l">fixed fee, scoped in writing before it starts</div></div>
+      <div class="stat"><div class="n">$12,500</div><div class="l">fixed launch fee, scoped in writing before it starts</div></div>
+      <div class="stat"><div class="n">&asymp;$400/hr</div><div class="l">effective senior rate across engagement and production</div></div>
+      <div class="stat"><div class="n">10 + 10</div><div class="l">days of engagement, then production to delivery</div></div>
       <div class="stat"><div class="n">100%</div><div class="l">credited toward an Adoption Reset within 30 days</div></div>
     </div>
   </div>
 </section>
 
-<!-- WHY ROLLOUTS STALL -->
-<section id="why">
+<!-- THE STACK -->
+<section id="stack">
   <div class="wrap">
     <div class="sec-head">
-      <span class="kicker">Why rollouts stall</span>
-      <h2>Stalled adoption is an organizational problem, not a technical one.</h2>
-      <p>MIT reports that 95% of enterprise GenAI pilots produce no measurable business impact. The platform is rarely the reason. Whether the rollout is Copilot, Gemini, or a custom deployment, the same three gaps appear in nearly every stalled program.</p>
+      <span class="kicker">How it works</span>
+      <h2>AI-native diagnostics, simulation, and delivery.</h2>
+      <p>The practice runs on its own instruments. They compress what internal teams spend months assembling into a ten-day engagement.</p>
     </div>
-    <div class="cards">
-      <div class="card">
-        <div class="ic">01</div>
-        <h3>Workflow integration</h3>
-        <p>The tool runs alongside the process it was meant to change, so usage stays optional. Optional usage decays quarter over quarter.</p>
+
+    <!-- 1. Diagnostic archetypes -->
+    <h3 style="font-size: 1.05rem; margin-bottom: 0.9rem;">1 &middot; Diagnose the pattern</h3>
+    <p style="font-size: 0.93rem; max-width: 640px; margin-bottom: 1.2rem;">MIT reports 95% of enterprise GenAI pilots show no measurable P&amp;L impact. The causes are organizational, and they follow patterns. The diagnostic maps your rollout onto four researched archetypes.</p>
+    <div class="arch-grid">
+      <div class="arch">
+        <span class="tag">Archetype 01</span>
+        <h3>The Seam Organization</h3>
+        <p>AI sits in one function. The rest were brought in too late.</p>
       </div>
-      <div class="card">
-        <div class="ic">02</div>
-        <h3>Manager reinforcement</h3>
-        <p>Frontline managers were trained, not equipped. Nothing in their operating rhythm requires the new way of working, so the old way persists.</p>
+      <div class="arch">
+        <span class="tag">Archetype 02</span>
+        <h3>The Unmarked Passage</h3>
+        <p>The change has no named identity. Leadership performs a transition it has not entered.</p>
       </div>
-      <div class="card">
-        <div class="ic">03</div>
-        <h3>Value measurement</h3>
-        <p>No shared measure ties usage to an operating result. The program cannot show ROI, and the sponsor cannot defend the next phase.</p>
+      <div class="arch">
+        <span class="tag">Archetype 03</span>
+        <h3>The Operating Model Lag</h3>
+        <p>The tools arrived. The work did not change.</p>
+      </div>
+      <div class="arch">
+        <span class="tag">Archetype 04</span>
+        <h3>The Sensing Deficit</h3>
+        <p>The board is asking questions the team cannot answer yet.</p>
+      </div>
+    </div>
+
+    <!-- 2. Intervention plays -->
+    <h3 style="font-size: 1.05rem; margin: 2.6rem 0 0.9rem;">2 &middot; Simulate the interventions</h3>
+    <p style="font-size: 0.93rem; max-width: 640px; margin-bottom: 1.2rem;">Your situation is modeled in the Transformation Dynamics Simulation&trade; against a library of thirteen research-backed intervention plays. Sequence decides the outcome: the same plays in the wrong order stall.</p>
+    <div class="plays-grid">
+      <div class="play">
+        <div class="top"><span class="grp">Opportunity</span><span class="wks">2 wks</span></div>
+        <h3>Executive Sponsorship</h3>
+        <p class="fw">Prosci &middot; active sponsorship</p>
+      </div>
+      <div class="play">
+        <div class="top"><span class="grp">Opportunity</span><span class="wks">3 wks</span></div>
+        <h3>Workflow Redesign</h3>
+        <p class="fw">Fogg &middot; ability + process redesign</p>
+      </div>
+      <div class="play">
+        <div class="top"><span class="grp">Opportunity</span><span class="wks">3 wks</span></div>
+        <h3>Manager-as-Channel</h3>
+        <p class="fw">Switch &middot; rider / elephant / path</p>
+      </div>
+      <div class="play">
+        <div class="top"><span class="grp">Motivation</span><span class="wks">3 wks</span></div>
+        <h3>Proof Seeding</h3>
+        <p class="fw">Diffusion of Innovations</p>
+      </div>
+      <div class="play">
+        <div class="top"><span class="grp">Capability</span><span class="wks">6 wks</span></div>
+        <h3>Capability Build</h3>
+        <p class="fw">ADKAR &middot; Ability / COM-B</p>
+      </div>
+      <div class="play">
+        <div class="top"><span class="grp">Sustainment</span><span class="wks">2 wks</span></div>
+        <h3>Ritual &amp; Cadence</h3>
+        <p class="fw">Habit &middot; cue &rarr; routine &rarr; reward</p>
+      </div>
+    </div>
+    <p class="plays-note">Six of thirteen plays shown. Try the sequencing yourself in the <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">AI Adoption Simulator</a>.</p>
+
+    <!-- 3. Roadmap -->
+    <h3 style="font-size: 1.05rem; margin: 2.6rem 0 0.9rem;">3 &middot; Deliver the roadmap</h3>
+    <div class="two-col">
+      <div class="roadmap" role="img" aria-label="Miniature of a 90-day intervention roadmap: sponsorship and workflow redesign in month one, manager channel and proof seeding in month two, capability build and ritual and cadence through month three.">
+        <div class="rm-head"><b>90-day intervention roadmap</b><span>illustrative</span></div>
+        <div class="rm-months" aria-hidden="true"><span>Month 1</span><span>Month 2</span><span>Month 3</span></div>
+        <div class="rm-rows" aria-hidden="true">
+          <div class="rm-row"><div class="rm-bar b1" style="grid-column: 1 / 3;">Sponsorship</div></div>
+          <div class="rm-row"><div class="rm-bar b2" style="grid-column: 2 / 5;">Workflow Redesign</div></div>
+          <div class="rm-row"><div class="rm-bar b2" style="grid-column: 4 / 7;">Manager-as-Channel</div></div>
+          <div class="rm-row"><div class="rm-bar b3" style="grid-column: 5 / 8;">Proof Seeding</div></div>
+          <div class="rm-row"><div class="rm-bar b3" style="grid-column: 7 / 13;">Capability Build</div></div>
+          <div class="rm-row"><div class="rm-bar b4" style="grid-column: 11 / 13;">Ritual &amp; Cadence</div></div>
+        </div>
+        <p class="rm-cap">Every play sequenced, owned, and tied to the one metric that will show it working.</p>
+      </div>
+      <div>
+        <h2 style="font-size: clamp(1.3rem, 2.4vw, 1.6rem);">An intervention roadmap, not a report.</h2>
+        <p style="margin-top: 0.7rem; font-size: 0.95rem;">The Recovery Verdict maps the change, then schedules it. Ten days of engagement with your team, roughly 3&ndash;5 focused hours a day. Production and delivery follow over the next two weeks.</p>
+        <ul class="list">
+          <li><span><b>The pattern, named.</b> Which archetype your rollout matches, with the evidence.</span></li>
+          <li><span><b>Scale, repair, or stop.</b> A decision on each workstream, defensible to its sponsor.</span></li>
+          <li><span><b>The sequenced roadmap.</b> Plays from the library, on a 90-day calendar, each with a named owner.</span></li>
+          <li><span><b>One success metric.</b> Who reports it, to whom, and how often.</span></li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- WHAT YOU GET -->
-<section id="assessment" style="background: var(--lp-bg-alt); border-block: 1px solid var(--lp-line);">
-  <div class="wrap two-col">
-    <div>
-      <span class="kicker">The deliverable</span>
-      <h2 style="font-size: clamp(1.5rem, 3vw, 2.1rem); margin-top: 0.9rem;">A written decision, not a deck.</h2>
-      <p style="margin-top: 0.8rem;">The Recovery Verdict is a board-ready document: the assessment, the decision, and the plan. Specific enough to act on, and written to hold up when forwarded to someone who was not in the room.</p>
-      <ul class="list">
-        <li><span><b>Root cause, identified.</b> Why adoption stalled, with the evidence from your own usage data and interviews.</span></li>
-        <li><span><b>Scale, repair, or stop.</b> A clear decision on each workstream, with the reasoning attached.</span></li>
-        <li><span><b>A 90-day recovery plan.</b> Sequenced actions, each with a named owner.</span></li>
-        <li><span><b>One success metric.</b> The measure that will show it working, who reports it, and how often.</span></li>
-      </ul>
-    </div>
-    <div>
-      <span class="kicker">The process</span>
-      <h2 style="font-size: clamp(1.5rem, 3vw, 2.1rem); margin-top: 0.9rem;">Ten business days, structured.</h2>
-      <ol class="steps" style="margin-top: 1.4rem;">
-        <li><span class="dot">1&ndash;3</span><span><b>Stakeholder interviews</b><p>Five to eight conversations: the executive sponsor, the program owner, function leads, and frontline managers.</p></span></li>
-        <li><span class="dot">4&ndash;7</span><span><b>Evidence review</b><p>Usage and license data, workflow documentation, program reporting, and vendor metrics.</p></span></li>
-        <li><span class="dot">8</span><span><b>Executive working session</b><p>Findings presented to the decision-makers before anything is finalized.</p></span></li>
-        <li><span class="dot">10</span><span><b>The Recovery Verdict</b><p>Delivered in writing, on day ten.</p></span></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-<!-- WHO -->
-<section id="who">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="kicker">Who does the work</span>
-      <h2>Senior experience on both sides of the deployment.</h2>
-      <p>Every engagement is delivered personally by Tom Delaporte. No junior team, no handoff.</p>
-    </div>
-    <div class="cards">
-      <div class="card">
-        <h3>Enterprise AI, commercial side</h3>
-        <p>Built the workforce exchange customer practice at Eightfold AI from a standing start to eight-figure ARR, across Fortune 100 and public-sector accounts.</p>
-      </div>
-      <div class="card">
-        <h3>Organizational design</h3>
-        <p>Engagement Manager at Capgemini, San Francisco. Organizational design, change management, and M&amp;A integration for global companies.</p>
-      </div>
-      <div class="card">
-        <h3>Operator experience</h3>
-        <p>HR and transformation programs across five countries, accountable for delivery rather than advising on it. CCMP and SAFe certified.</p>
-      </div>
-    </div>
-    <p style="margin-top: 1.4rem; font-size: 0.8rem; color: var(--lp-faint);">Track record cited from prior roles. TDcatalyst is an independent practice, not affiliated with or endorsed by any prior employer.</p>
-  </div>
-</section>
-
-<!-- PRICING -->
+<!-- ECONOMICS / PRICE -->
 <section id="price" style="background: var(--lp-bg-alt); border-block: 1px solid var(--lp-line);">
-  <div class="wrap price-wrap">
+  <div class="wrap econ-grid">
     <div>
-      <span class="kicker">Pricing</span>
-      <h2 style="font-size: clamp(1.5rem, 3vw, 2.1rem); margin-top: 0.9rem;">One fixed fee. No variable scope.</h2>
-      <p style="margin-top: 0.8rem;">The fee is set before the engagement starts and does not move. If the review leads to a full Adoption Reset within 30 days, the entire fee is credited against it. If the decision is to stop, the review typically saves several times its cost in the first quarter.</p>
-      <p style="margin-top: 0.8rem;">One engagement runs at a time.</p>
+      <span class="kicker">Launch economics</span>
+      <h2 style="font-size: clamp(1.45rem, 2.9vw, 2rem); margin-top: 0.9rem;">More adoption per dollar than the internal route.</h2>
+      <p style="margin-top: 0.8rem;">Organizations that try to diagnose a stalled rollout internally spend months of employee-hours across functions, and the review rarely ends in a decision. The same work, compressed and delivered from outside, costs less than the license waste it stops.</p>
+      <div class="compare">
+        <div class="cmp internal">
+          <div class="cmp-top"><b>Internal working group</b><span class="val">months of employee-hours</span></div>
+          <div class="bar"><i></i></div>
+          <p>Cross-functional, part-time, and structurally unable to recommend stopping its own initiative.</p>
+        </div>
+        <div class="cmp review">
+          <div class="cmp-top"><b>Adoption Recovery Review</b><span class="val">$12,500 &middot; decision in ~4 weeks</span></div>
+          <div class="bar"><i></i></div>
+          <p>Senior, independent, AI-native. A decision and a sequenced roadmap, produced while your team keeps its day jobs.</p>
+        </div>
+      </div>
     </div>
     <div class="price-card">
-      <span class="kicker">Adoption Recovery Review</span>
-      <div class="amount" style="margin-top: 0.6rem;">$12,500 <small>fixed &middot; 10 business days</small></div>
-      <ul class="list" style="margin-top: 1.1rem;">
-        <li><span>5&ndash;8 stakeholder interviews</span></li>
-        <li><span>Usage and workflow evidence review</span></li>
-        <li><span>Executive working session</span></li>
-        <li><span>Written scale / repair / stop decision</span></li>
-        <li><span>90-day recovery plan with owners</span></li>
-      </ul>
+      <span class="launch">Launch pricing</span>
+      <div class="amount">$12,500 <small>fixed</small></div>
+      <div class="fee-rows">
+        <div class="fee-row"><span>Engagement window</span><span>10 business days</span></div>
+        <div class="fee-row"><span>Your team's involvement</span><span>3&ndash;5 hrs / day</span></div>
+        <div class="fee-row"><span>Production &amp; delivery</span><span>+2 weeks</span></div>
+        <div class="fee-row"><span>Effective senior rate</span><span>&asymp;$400 / hour</span></div>
+      </div>
       <div class="credit">100% of the fee is credited toward an Adoption Reset started within 30 days of delivery.</div>
       <a href="#begin" class="btn btn-primary">Discuss a stalled AI deployment</a>
-      <div class="cap">30-minute call. No proposal unless there is a fit.</div>
+      <div class="cap">One engagement at a time. 30-minute call, no proposal unless there is a fit.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TWO WAYS IN -->
+<section id="ways">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Two ways in</span>
+      <h2>Stalled mid-flight, or starting from zero.</h2>
+    </div>
+    <div class="ways">
+      <div class="way">
+        <span class="kicker">Recover</span>
+        <h3>Your rollout launched, then stalled.</h3>
+        <p>The Review diagnoses the pattern, simulates the interventions, and delivers the scale, repair, or stop decision with its 90-day roadmap.</p>
+      </div>
+      <div class="way">
+        <span class="kicker">Start 0 &rarr; 1</span>
+        <h3>Your team is going from zero to one with AI.</h3>
+        <p>Same ten-day format, pointed forward: we sit together and define the culture, the values, and the 90-day roadmap that takes a team, department, or organization into AI-native work.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- FAQ -->
-<section id="faq">
+<section id="faq" style="background: var(--lp-bg-alt); border-block: 1px solid var(--lp-line);">
   <div class="wrap">
     <div class="sec-head">
       <span class="kicker">Common questions</span>
@@ -511,13 +662,6 @@
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-a">Vendor adoption teams are measured on your deployment; this review is measured on whether the work changed. The two are complementary, but only an independent assessment can recommend that you stop.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">
-          Is ten days enough?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">Ten days is enough to identify why adoption stalled, which is the part that benefits from an outside assessment. The fix takes 90 days, and the sequenced plan for it is half the deliverable.</div>
       </div>
       <div class="faq-item">
         <button class="faq-q" aria-expanded="false">
@@ -541,6 +685,26 @@
         <div class="faq-a">This is the entry point, sized to fit inside an existing program budget. It stands alone, and if the larger work is warranted, the full fee is credited against it.</div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="who">
+  <div class="wrap">
+    <div class="about-row">
+      <img src="/images/headshot.jpg" alt="Tom Delaporte" width="800" height="800" onerror="this.style.display='none'">
+      <div>
+        <b>Tom Delaporte &middot; Founder, TDcatalyst</b>
+        <p>Every engagement is delivered personally. Built the workforce exchange practice at Eightfold AI from a standing start to eight-figure ARR across Fortune 100 and public-sector accounts; led organizational design and change at Capgemini; ran HR and transformation programs across five countries.</p>
+        <div class="cred-chips">
+          <span>Eightfold AI &middot; 8-figure ARR</span>
+          <span>Capgemini &middot; org design &amp; change</span>
+          <span>Operator &middot; 5 countries</span>
+          <span>CCMP &middot; SAFe</span>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top: 1rem; font-size: 0.78rem; color: var(--lp-faint);">Track record cited from prior roles. TDcatalyst is an independent practice, not affiliated with or endorsed by any prior employer.</p>
   </div>
 </section>
 
@@ -581,7 +745,7 @@
             <input type="text" id="company" name="company">
           </div>
           <div class="field">
-            <label for="context">What is stalled?</label>
+            <label for="context">What is stalled, or what is starting?</label>
             <textarea id="context" name="context" placeholder="A few sentences on the deployment."></textarea>
           </div>
           <button type="submit" class="btn btn-primary" style="width: 100%;">Send</button>
