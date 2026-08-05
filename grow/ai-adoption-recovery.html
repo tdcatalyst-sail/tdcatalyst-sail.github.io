@@ -186,6 +186,16 @@
   .lp .hero h1 { font-size: clamp(2.15rem, 4.6vw, 3.3rem); margin: 1.15rem 0 1.05rem; }
   .lp .hero .sub { font-size: clamp(1rem, 1.6vw, 1.12rem); max-width: 56ch; }
   .lp .hero .sub b { color: var(--lp-ink); font-weight: 650; }
+  .lp .hero-price { display: flex; align-items: baseline; gap: 0.7rem; margin-top: 1.2rem; }
+  .lp .hero-price s {
+    font-size: 1.25rem; font-weight: 600; color: var(--lp-faint);
+    text-decoration-color: rgba(169, 50, 38, 0.75); text-decoration-thickness: 2.5px;
+  }
+  .lp .hero-price b {
+    font-size: clamp(2.5rem, 5.4vw, 3.4rem); font-weight: 800; color: var(--lp-ink);
+    letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums;
+  }
+  .lp .hero-price span { font-size: 0.85rem; font-weight: 650; color: var(--lp-accent-ink); line-height: 1.35; }
   .lp .hero .btn-row { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.7rem; }
   .lp .trust {
     margin-top: 2rem; padding-top: 1.2rem; border-top: 1px solid var(--lp-line);
@@ -491,12 +501,13 @@
   .lp .fee-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.6rem 0; border-bottom: 1px solid var(--lp-line); font-size: 0.86rem; }
   .lp .fee-row span:first-child { color: var(--lp-body); }
   .lp .fee-row span:last-child { color: var(--lp-ink); font-weight: 650; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .lp .price-card .why-price { background: var(--lp-bg-alt); border-color: var(--lp-line); margin-top: 0.6rem; }
   .lp .price-card .credit {
     margin-top: 1rem; padding: 0.75rem 0.9rem; border-radius: var(--lp-radius);
     background: rgba(232, 176, 3, 0.1); border: 1px solid rgba(232, 176, 3, 0.35);
     font-size: 0.85rem; color: var(--lp-ink);
   }
-  .lp .price-card .btn { width: 100%; margin-top: 1.15rem; }
+  .lp .price-card .btn { width: 100%; margin-top: 1.15rem; padding-left: 0.7rem; padding-right: 0.7rem; font-size: 0.88rem; text-align: center; white-space: normal; line-height: 1.3; }
   .lp .price-card .cap { margin-top: 0.65rem; font-size: 0.79rem; color: var(--lp-faint); text-align: center; }
 
   /* Adoption Reset preview */
@@ -1228,6 +1239,12 @@
     .lp .seq-bar { height: 27px; }
   }
 
+  /* ---- v8: scenarios merged into the sequence player ---- */
+  .lp .seq-scen-head { font-size: 0.82rem; font-weight: 650; color: var(--lp-ink); margin-top: 0.9rem; }
+  .lp .seq-scen { margin-top: 0.5rem; margin-bottom: 0.2rem; }
+  .lp .seq-bar.miss { opacity: 0.22; border-style: dashed; border-color: #A93226; border-left-style: solid; }
+  .lp .seq-bar.miss span { text-decoration: line-through; text-decoration-color: #A93226; }
+
   /* ---- v2: task sorter (overlay content) ---- */
   .lp .sorter h3 { font-size: 1.15rem; }
   .lp .sorter .st-q { margin-top: 1rem; }
@@ -1272,12 +1289,13 @@
       <span class="ribbon-txt"><b>Adoption Recovery Review</b> &middot; ten days &middot; one engagement at a time</span>
       <span class="ribbon-price"><s>$25,000</s> <b>$12,500 fixed</b> &middot; 50% off</span>
       <span class="ribbon-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
-      <span class="ribbon-cav">assumes a 50&ndash;100 person organization, with up to 3 executives leading the transformation</span>
+      <span class="ribbon-cav">assumes a 50&ndash;100 person organization, up to 3 executives leading the transformation &middot; launch cohort builds the case-study base, anonymized</span>
     </a>
     <div class="hero-grid">
     <div>
       <h1>Your AI rollout stalled. The recovery plan takes ten days.</h1>
-      <p class="sub">The Adoption Recovery Review runs AI-native diagnostics and simulation over your deployment and delivers the recovery decision with a 90-day intervention roadmap. The work a change program used to bill <b>$150,000+</b> for: <b>$12,500 fixed</b>, in ten days.</p>
+      <p class="sub">The Adoption Recovery Review runs AI-native diagnostics and simulation over your deployment and delivers the recovery decision with a 90-day intervention roadmap. The work a change program used to bill <b>$150,000+</b> for.</p>
+      <div class="hero-price"><s>$25,000</s><b>$12,500</b><span>fixed &middot; ten days<br>50% launch pricing</span></div>
       <div class="btn-row">
         <a href="#begin" class="btn btn-primary">Fix your stalled AI deployment this month!</a>
         <a href="#cases" class="btn btn-ghost">See how it works</a>
@@ -1442,6 +1460,7 @@
         <div class="fee-row"><span>Production &amp; delivery</span><span>+2 weeks</span></div>
       </div>
       <div class="credit">100% of the fee is credited toward an Adoption Reset started within 30 days of delivery.</div>
+      <div class="credit why-price">Why this price: the launch cohort builds the practice's US case-study base. Every engagement produces an anonymized case study; your name is used only with your written approval.</div>
       <a href="#begin" class="btn btn-primary">Fix your stalled AI deployment this month!</a>
       <div class="cap">One engagement at a time. 30-minute call, no proposal unless there is a fit.</div>
     </div>
@@ -1514,7 +1533,17 @@
       <svg id="seq-chart" viewBox="0 0 980 280" role="img" aria-label="The modeled 24 weeks: each play lands in order and the adoption curve compounds, crossing the 55 percent self-sustaining threshold at week 11 and reaching 80 percent by week 24."></svg>
       <div class="seq-caption" id="seq-caption"><b>The modeled 24 weeks.</b> Press play, or click any play below for its full model detail.</div>
       <div class="seq-lanes" id="seq-lanes" aria-label="The thirteen plays on the modeled schedule"></div>
-      <p class="graph-hint">The schedule is the simulator's own: two workstreams at a time, proof before the social plays, capability on the redesigned workflow, sustainment late. Click any play for the full model detail.</p>
+      <div class="seq-scen-head">Now break it: the typical negative cases, modeled on the same sequence.</div>
+      <div class="pathbtns seq-scen" role="group" aria-label="Scenarios on the same sequence">
+        <button aria-pressed="true" data-path="full">Full sequence &middot; modeled</button>
+        <button aria-pressed="false" data-path="stall5">Stopped after five plays</button>
+        <button aria-pressed="false" data-path="nomgr">Managers left out</button>
+        <button aria-pressed="false" data-path="noproof">No seeded proof</button>
+        <button aria-pressed="false" data-path="early">Early adopters only</button>
+        <button aria-pressed="false" data-path="access">Access, then silence</button>
+        <button aria-pressed="false" data-path="base">No intervention</button>
+      </div>
+      <p class="graph-hint">The schedule is the simulator's own: two workstreams at a time, proof before the social plays, capability on the redesigned workflow, sustainment late. Click any play for the full model detail, or build and score your own sequence in the <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">AI Adoption Simulator</a>.</p>
     </div>
 
     <div class="filters" role="group" aria-label="Filter plays by group">
@@ -1533,25 +1562,6 @@
         <div class="pdetail on" id="pdetail"></div>
       </div>
     </div>
-    <div class="model-card model-wide">
-      <div>
-        <h3>The model, live: where rollouts actually land.</h3>
-        <p class="mc-sub">Scored by the practice's own simulator: run the full sequence and all thirteen plays land cleanly, the rollout crosses the <b>55%</b> self-sustaining threshold at <b>week 11</b>, and reaches <b>80%</b> by week 24. That line is the modeled ceiling. Every other line is where rollouts land when one leg is missing.</p>
-      </div>
-      <div class="pathbtns" role="group" aria-label="Emphasize a scenario">
-        <button aria-pressed="true" data-path="full">Full sequence &middot; modeled</button>
-        <button aria-pressed="false" data-path="stall5">Stopped after five plays</button>
-        <button aria-pressed="false" data-path="nomgr">Managers left out</button>
-        <button aria-pressed="false" data-path="noproof">No seeded proof</button>
-        <button aria-pressed="false" data-path="early">Early adopters only</button>
-        <button aria-pressed="false" data-path="access">Access, then silence</button>
-        <button aria-pressed="false" data-path="base">No intervention</button>
-      </div>
-      <div class="model-chart"><svg id="mchart" viewBox="0 0 680 330" role="img" aria-label="Adoption over 24 weeks under six scenarios; the full sequence crosses the 55 percent self-sustaining threshold at week 11 and reaches 80 percent by week 24"></svg></div>
-      <p class="model-readout" id="model-readout">The modeled ceiling: every play lands cleanly, in order, and the change carries itself from week 11.</p>
-      <p class="model-link">Build and score your own sequence in the <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">AI Adoption Simulator</a>: it is the same engine the Review runs on your data.</p>
-    </div>
-
   </div>
 </section>
 
@@ -2197,8 +2207,9 @@
     });
     el(seqChart, 'line', { x1: SX0, y1: sqy(55), x2: SX1, y2: sqy(55), stroke: '#E8B003', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' });
     el(seqChart, 'text', { x: SX0 + 6, y: sqy(55) - 7, 'font-size': 11, 'font-weight': 600, fill: '#8A6302', 'font-family': 'Archivo, sans-serif' }, 'self-sustaining - 55%');
-    var crossFlag = el(seqChart, 'text', { x: sqx(11), y: sqy(55) - 24, 'text-anchor': 'middle', 'font-size': 12.5, 'font-weight': 750, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, 'week 11: the change starts carrying itself');
-    var endFlag = el(seqChart, 'text', { x: SX1 - 4, y: sqy(80) - 12, 'text-anchor': 'end', 'font-size': 12.5, 'font-weight': 700, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, '80% by week 24');
+    var crossFlag = el(seqChart, 'text', { x: sqx(11), y: 38, 'text-anchor': 'middle', 'font-size': 12.5, 'font-weight': 750, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, 'week 11: the change starts carrying itself');
+    var crossTick = el(seqChart, 'line', { x1: sqx(11), y1: 44, x2: sqx(11), y2: sqy(55), stroke: '#E8B003', 'stroke-width': 1.2, 'stroke-dasharray': '3 3', opacity: 0 });
+    var endFlag = el(seqChart, 'text', { x: SX1 - 4, y: 48, 'text-anchor': 'end', 'font-size': 12.5, 'font-weight': 700, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, '80% by week 24');
     var curve = el(seqChart, 'polyline', { fill: 'none', stroke: '#10233F', 'stroke-width': 3, points: '' });
     var head = el(seqChart, 'line', { x1: sqx(0), y1: SY1, x2: sqx(0), y2: SY0, stroke: '#8A6302', 'stroke-width': 1.5, 'stroke-dasharray': '3 3', opacity: 0 });
     var markers = {};
@@ -2221,7 +2232,7 @@
       bar.addEventListener('click', function () { seqPause(); selectPlay(s[0]); });
       seqLanes.appendChild(bar);
     });
-    seqEls = { curve: curve, head: head, markers: markers, crossFlag: crossFlag, endFlag: endFlag };
+    seqEls = { curve: curve, head: head, markers: markers, crossFlag: crossFlag, crossTick: crossTick, endFlag: endFlag };
   })();
   var seqW = 0, seqRunning = false, seqRaf = null, seqLast = null;
   var SEQ_SPEED = 1.9;
@@ -2255,6 +2266,7 @@
       b.classList.toggle('live', w >= s[1] && w <= s[2] + 0.999);
     });
     seqEls.crossFlag.setAttribute('opacity', w >= 11 ? 1 : 0);
+    seqEls.crossTick.setAttribute('opacity', w >= 11 ? 0.8 : 0);
     seqEls.endFlag.setAttribute('opacity', w >= 23.5 ? 1 : 0);
     if (seqCap) {
       if (w <= 0.05) {
@@ -2360,98 +2372,79 @@
     });
   });
 
-  /* ---- Live model: six scenarios, one chart (calibrated to the simulator) ---- */
-  var mchart = document.getElementById('mchart');
-  var mReadout = document.getElementById('model-readout');
-  function mlog(w, base, span, mid, k) { return base + span / (1 + Math.exp(-(w - mid) / k)); }
-  function mrf(w, base, peak, wpeak, floor, rate) {
-    var atPeak = base + (peak - base) * (1 - Math.exp(-3));
-    if (w <= wpeak) return base + (peak - base) * (1 - Math.exp(-3 * w / wpeak));
+  /* ---- Scenario overlays: the negative cases, on the same sequence ---- */
+  function mlog(w, b2, span, mid, k) { return b2 + span / (1 + Math.exp(-(w - mid) / k)); }
+  function mrf(w, b2, peak, wpeak, floor, rate) {
+    var atPeak = b2 + (peak - b2) * (1 - Math.exp(-3));
+    if (w <= wpeak) return b2 + (peak - b2) * (1 - Math.exp(-3 * w / wpeak));
     return floor + (atPeak - floor) * Math.exp(-rate * (w - wpeak));
   }
-  var SCEN_ORDER = ['full', 'stall5', 'nomgr', 'noproof', 'early', 'access', 'base'];
   var SCEN = {
-    full: { color: '#10233F', label: 'Full sequence', f: function (w) { return mlog(w, 18, 64, 10.2, 2.4); },
+    full: { color: '#10233F', label: 'Full sequence',
       read: 'The modeled ceiling: all thirteen plays land cleanly, the threshold is crossed at week 11, and adoption reaches 80% by week 24. It is the ceiling the sequence earns, never the default.' },
-    stall5: { color: '#10233F', dash: '7 5', label: 'Stopped after five plays',
-      f: function (w) { var V = [18, 18.5, 19.5, 21, 23, 26, 30, 33, 31, 34, 39, 43, 45.5, 46.5, 47, 47, 47, 47, 46.9, 46.8, 46.8, 46.7, 46.7, 46.6, 46.6]; return V[w]; },
-      read: 'The negative case from the library, scored in the simulator: the first five plays land, then the effort stops. The redesign dip recovers, the curve climbs to 47% and flatlines below the threshold. Gains hold only while pushed, and stay reversible: capability and sustainment never land.' },
-    nomgr: { color: '#B42318', label: 'Managers left out', f: function (w) { return mrf(w, 18, 37, 9, 30, 0.09); },
+    stall5: { color: '#10233F', dash: '7 5',
+      f: function (w) { var V = [18, 18.5, 19.5, 21, 23, 26, 30, 33, 31, 34, 39, 43, 45.5, 46.5, 47, 47, 47, 47, 46.9, 46.8, 46.8, 46.7, 46.7, 46.6, 46.6]; return V[w] !== undefined ? V[w] : 46.6; },
+      read: 'The first five plays land, then the effort stops: the curve climbs to 47% and flatlines below the threshold. Gains hold only while pushed, and stay reversible.' },
+    nomgr: { color: '#B42318', f: function (w) { return mrf(w, 18, 37, 9, 30, 0.09); },
       read: 'Awareness and training land, but managers never get authority over workflow redesign or the new performance expectations: the rollout stalls in the mid-30s and drifts.' },
-    noproof: { color: '#C99A05', label: 'No seeded proof', f: function (w) { return mrf(w, 18, 41, 7, 26, 0.12); },
+    noproof: { color: '#C99A05', f: function (w) { return mrf(w, 18, 41, 7, 26, 0.12); },
       read: 'Without seeded proof, the social plays fire on thin air: an early spike, then decay toward the mid-20s as the skeptics call the bluff.' },
-    early: { color: '#0E7569', label: 'Early adopters only', f: function (w) { return mlog(w, 18, 7, 3.5, 1.6); },
+    early: { color: '#0E7569', f: function (w) { return mlog(w, 18, 7, 3.5, 1.6); },
       read: 'Only the enthusiasts are addressed: the innovator 16% move fast, the early and late majority never enter, and the curve flatlines near 25%.' },
-    access: { color: '#4E5BA6', label: 'Access, then silence', f: function (w) { return mrf(w, 18, 24, 5, 13, 0.1); },
-      read: 'Access, licenses, and a resources page, with barely any follow-up communication or engagement: usage peaks by week 5 and fades back toward the do-nothing line.' },
-    base: { color: '#98A2B3', label: 'No intervention', dash: '6 5', f: function (w) { return 18 - 6 * (1 - Math.exp(-w / 8)); },
+    access: { color: '#4E5BA6', f: function (w) { return mrf(w, 18, 24, 5, 13, 0.1); },
+      read: 'Access, licenses, and a resources page, with barely any follow-up communication or engagement: usage peaks by week 5 and fades back to the do-nothing line.' },
+    base: { color: '#98A2B3', dash: '6 5', f: function (w) { return 18 - 6 * (1 - Math.exp(-w / 8)); },
       read: 'The do-nothing trajectory from the simulator: early enthusiasm decays to 12% by week 24.' }
   };
-  var MX0 = 52, MX1 = 500, MY0 = 272, MY1 = 24;
-  function mx(w) { return MX0 + (MX1 - MX0) * w / 24; }
-  function my(p) { return MY0 - (MY0 - MY1) * p / 100; }
-  (function buildMChart() {
-    if (!mchart) return;
-    var NS = 'http://www.w3.org/2000/svg';
-    function el(tag, attrs, txt) {
-      var n = document.createElementNS(NS, tag);
-      for (var k in attrs) n.setAttribute(k, attrs[k]);
-      if (txt) n.textContent = txt;
-      mchart.appendChild(n);
-      return n;
-    }
-    el('line', { x1: MX0, y1: MY1 - 4, x2: MX0, y2: MY0, stroke: '#E6E3D7' });
-    el('line', { x1: MX0, y1: MY0, x2: MX1, y2: MY0, stroke: '#E6E3D7' });
-    [25, 50, 75, 100].forEach(function (p) {
-      el('line', { x1: MX0, y1: my(p), x2: MX1, y2: my(p), stroke: '#F1EFE6' });
-      el('text', { x: MX0 - 8, y: my(p) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#7A776C' }, p + '%');
-    });
-    el('text', { x: MX0 - 8, y: MY0 + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#7A776C' }, '0%');
-    [0, 6, 12, 18, 24].forEach(function (w) {
-      el('text', { x: mx(w), y: MY0 + 20, 'text-anchor': w === 0 ? 'start' : (w === 24 ? 'end' : 'middle'), 'font-size': 11, fill: '#7A776C' }, 'wk ' + w);
-    });
-    el('line', { x1: MX0, y1: my(55), x2: MX1, y2: my(55), stroke: '#E8B003', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' });
-    el('text', { x: MX0 + 6, y: my(55) - 6, 'font-size': 11, 'font-weight': 600, fill: '#8A6302' }, 'self-sustaining threshold - 55%');
-    var wk11 = el('line', { x1: mx(11), y1: my(55), x2: mx(11), y2: MY0, stroke: '#E8B003', 'stroke-width': 1, 'stroke-dasharray': '2 3', 'stroke-opacity': 0.7 });
-    el('text', { x: mx(11), y: MY0 - 6, 'text-anchor': 'middle', 'font-size': 10, fill: '#8A6302' }, 'wk 11');
-    var ends = [];
-    SCEN_ORDER.forEach(function (k) {
-      var s = SCEN[k];
-      var pts = [];
-      for (var w = 0; w <= 24; w++) pts.push(mx(w).toFixed(1) + ',' + my(s.f(w)).toFixed(1));
-      var pl = el('polyline', { points: pts.join(' '), fill: 'none', stroke: s.color, 'stroke-width': 2, id: 'ml-' + k });
-      if (s.dash) pl.setAttribute('stroke-dasharray', s.dash);
-      ends.push({ k: k, y: my(s.f(24)) });
-    });
-    ends.sort(function (a, b) { return a.y - b.y; });
-    for (var i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 16) ends[i].y = ends[i - 1].y + 16;
-    ends.forEach(function (e) {
-      var s = SCEN[e.k];
-      el('line', { x1: MX1 + 2, y1: my(s.f(24)), x2: MX1 + 12, y2: e.y - 4, stroke: s.color, 'stroke-width': 1, 'stroke-opacity': 0.6 });
-      el('text', { x: MX1 + 16, y: e.y, 'font-size': 11.5, 'font-weight': 600, fill: '#1B1A16', id: 'mlab-' + e.k }, s.label);
-    });
-  })();
-  function setScenario(k) {
-    var s = SCEN[k];
-    if (!s || !mchart) return;
-    SCEN_ORDER.forEach(function (id) {
-      var pl = document.getElementById('ml-' + id);
-      var lb = document.getElementById('mlab-' + id);
-      var on = (id === k);
-      if (pl) { pl.setAttribute('stroke-width', on ? 3 : 2); pl.setAttribute('stroke-opacity', on ? 1 : 0.3); }
-      if (lb) { lb.setAttribute('font-weight', on ? 800 : 600); lb.setAttribute('fill', on ? '#1B1A16' : '#7A776C'); }
-    });
-    if (mReadout) mReadout.innerHTML = s.read;
+  var SCENMISS = {
+    full: [],
+    stall5: ['whole', 'whenthen', 'inaction', 'build', 'ritual', 'policy', 'criteria', 'quiet'],
+    nomgr: ['manager', 'criteria'],
+    noproof: ['proof'],
+    early: ['peer', 'inaction', 'quiet'],
+    access: ['sponsor', 'manager', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual'],
+    base: ['sponsor', 'manager', 'whole', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual']
+  };
+  var scenLine = null;
+  if (seqChart) {
+    scenLine = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    scenLine.setAttribute('fill', 'none');
+    scenLine.setAttribute('stroke-width', '2.4');
+    scenLine.setAttribute('opacity', '0');
+    seqChart.appendChild(scenLine);
   }
-  document.querySelectorAll('.pathbtns button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      document.querySelectorAll('.pathbtns button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
-      b.setAttribute('aria-pressed', 'true');
-      setScenario(b.dataset.path);
-      track('recovery-model-toggle');
+  function setScenario(k) {
+    var sc = SCEN[k];
+    if (!sc) return;
+    document.querySelectorAll('.seq-scen button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.dataset.path === k ? 'true' : 'false');
     });
+    var missing = SCENMISS[k] || [];
+    document.querySelectorAll('.seq-bar').forEach(function (b) {
+      b.classList.toggle('miss', missing.indexOf(b.dataset.play) !== -1);
+    });
+    if (k === 'full') {
+      if (scenLine) scenLine.setAttribute('opacity', '0');
+      if (seqCap) seqCap.innerHTML = '<b>Full sequence.</b> ' + sc.read;
+      return;
+    }
+    seqPause();
+    seqW = 24;
+    seqRender(24);
+    if (scenLine) {
+      var pts = [];
+      for (var w = 0; w <= 24; w += 0.25) pts.push(sqx(w).toFixed(1) + ',' + sqy(sc.f(w)).toFixed(1));
+      scenLine.setAttribute('points', pts.join(' '));
+      scenLine.setAttribute('stroke', sc.color);
+      scenLine.setAttribute('stroke-dasharray', sc.dash || '');
+      scenLine.setAttribute('opacity', '1');
+    }
+    if (seqCap) seqCap.innerHTML = '<i>Negative case</i> <b>' + (document.querySelector('.seq-scen button[data-path="' + k + '"]') || { textContent: '' }).textContent + '.</b> ' + sc.read + ' The struck plays below are the ones that never land.';
+    track('recovery-model-toggle');
+  }
+  document.querySelectorAll('.seq-scen button').forEach(function (b) {
+    b.addEventListener('click', function () { setScenario(b.dataset.path); });
   });
-  setScenario('full');
 
   /* ---- Pilot scorecard (forty-pilots card) ---- */
   var pilotAns = [null, null, null, null, null];
