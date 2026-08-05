@@ -1173,6 +1173,56 @@
   }
   .lp .fee-row { padding: 0.45rem 0; }
 
+  /* ---- v7: sequence player ---- */
+  .lp .seq-card {
+    background: var(--lp-card); border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
+    padding: 1.2rem 1.3rem 1rem;
+    box-shadow: 0 1px 2px rgba(27, 26, 22, 0.05), 0 14px 38px rgba(27, 26, 22, 0.07);
+  }
+  .lp .seq-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.6rem; }
+  .lp .seq-head b { display: block; font-size: 1.08rem; font-weight: 700; color: var(--lp-ink); }
+  .lp .seq-head span { display: block; font-size: 0.86rem; color: var(--lp-body); margin-top: 0.15rem; }
+  .lp .seq-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem; flex-shrink: 0; cursor: pointer;
+    font-family: var(--lp-font); font-size: 0.9rem; font-weight: 650;
+    border: 1px solid var(--lp-ink); background: var(--lp-ink); color: #FFFFFF;
+    border-radius: 999px; padding: 0.55rem 1.2rem;
+  }
+  .lp .seq-btn:hover { background: #33312B; }
+  .lp .seq-btn svg { width: 15px; height: 15px; fill: currentColor; }
+  .lp .seq-btn em { font-style: normal; }
+  .lp #seq-chart { display: block; width: 100%; height: auto; cursor: crosshair; }
+  .lp .seq-caption { min-height: 2.7em; font-size: 0.92rem; color: var(--lp-body); padding: 0.5rem 0.2rem 0.75rem; }
+  .lp .seq-caption b { color: var(--lp-ink); }
+  .lp .seq-caption i {
+    font-style: normal; font-size: 0.7rem; font-weight: 750; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--lp-accent-ink); margin-right: 0.45rem;
+  }
+  .lp .seq-lanes {
+    position: relative; height: 140px; margin-top: 0.2rem; border-radius: 8px;
+    background: repeating-linear-gradient(90deg, transparent 0, transparent calc(100% / 24 - 1px), var(--lp-bg-alt) calc(100% / 24 - 1px), var(--lp-bg-alt) calc(100% / 24));
+  }
+  .lp .seq-bar {
+    position: absolute; height: 30px; box-sizing: border-box; cursor: pointer;
+    font-family: var(--lp-font); text-align: left; overflow: hidden;
+    background: color-mix(in srgb, var(--bc) 9%, #FFFFFF);
+    border: 1px solid color-mix(in srgb, var(--bc) 35%, #FFFFFF);
+    border-left: 3px solid var(--bc); border-radius: 7px; padding: 0 0.5rem;
+    opacity: 0.35; transition: opacity 0.25s, box-shadow 0.2s;
+    display: inline-flex; align-items: center; min-width: 26px;
+  }
+  .lp .seq-bar span { font-size: 0.7rem; font-weight: 650; color: var(--lp-ink); white-space: nowrap; }
+  .lp .seq-bar.on { opacity: 1; }
+  .lp .seq-bar.live { box-shadow: 0 0 0 2px color-mix(in srgb, var(--bc) 55%, #FFFFFF), 0 6px 16px rgba(27, 26, 22, 0.14); }
+  .lp .seq-bar.sel { border-color: var(--bc); box-shadow: 0 0 0 2px var(--bc); }
+  .lp .seq-bar:focus-visible { outline: 2px solid var(--lp-accent-ink); outline-offset: 2px; }
+  @media (max-width: 700px) {
+    .lp .seq-head { flex-wrap: wrap; }
+    .lp .seq-bar span { display: none; }
+    .lp .seq-lanes { height: 128px; }
+    .lp .seq-bar { height: 27px; }
+  }
+
   /* ---- v2: task sorter (overlay content) ---- */
   .lp .sorter h3 { font-size: 1.15rem; }
   .lp .sorter .st-q { margin-top: 1rem; }
@@ -1440,42 +1490,20 @@
     <div class="sec-head">
       <span class="kicker">Step 2 &middot; Sequence</span>
       <h2>The intervention library. The order decides the outcome.</h2>
-      <p>Your roadmap is drawn from a library of research-backed intervention plays, sequenced by the Transformation Dynamics Simulation&trade;. Hover any play to see what it depends on; select it and the full model detail opens over the page.</p>
+      <p>Thirteen research-backed plays, additive by design: each one moves the curve, and the sequence is what makes them compound. Watch the modeled 24 weeks run, then click any play for its full model detail.</p>
     </div>
-    <div class="board-card">
-      <div class="board" id="board">
-        <svg class="board-links" id="board-links" aria-hidden="true"></svg>
-        <button type="button" class="btile keystone" data-play="sponsor" style="--bc:#10233F">
-          <span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="M9 13l-2 7 5-3 5 3-2-7"/></svg></span>
-          <span class="bt-tx"><b>Executive Sponsorship</b><span>sets the ceiling on everything below: won directly, or earned by a demonstrated bottom-up win. The single strongest predictor of success.</span></span>
-          <span class="bt-wk">2 wks</span>
-        </button>
-        <div class="bcol" data-g="O">
-          <div class="bcol-head" style="--bc:#10233F"><b>Opportunity</b><span>structural &amp; social permission</span></div>
-          <button type="button" class="btile" data-play="manager" style="--bc:#10233F"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-6 4V6z"/></svg></span><span class="bt-tx"><b>Manager-as-Channel</b><span>managers equipped to localize</span></span><span class="bt-wk">3 wks</span></button>
-          <button type="button" class="btile" data-play="whole" style="--bc:#10233F"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg></span><span class="bt-tx"><b>Whole-Product Kit</b><span>the complete kit shipped</span></span><span class="bt-wk">4 wks</span></button>
-          <button type="button" class="btile" data-play="friction" style="--bc:#10233F"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="18" r="2.2"/><path d="M7 6h7a4 4 0 0 1 4 4v5.8"/></svg></span><span class="bt-tx"><b>Workflow Redesign</b><span>rebuild the task, retire the old path</span></span><span class="bt-wk">3 wks</span></button>
+    <div class="seq-card">
+      <div class="seq-head">
+        <div>
+          <b>Run the sequence</b>
+          <span>Thirteen additive plays; the order is what makes them compound. Press play and watch them land.</span>
         </div>
-        <div class="bcol" data-g="M">
-          <div class="bcol-head" style="--bc:#C99A05"><b>Motivation</b><span>belief &amp; desire</span></div>
-          <button type="button" class="btile" data-play="proof" style="--bc:#C99A05"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-7"/><path d="M12 14c0-4 3-6 7-6 0 4-3 6-7 6z"/><path d="M12 14c0-4-3-6-7-6 0 4 3 6 7 6z"/></svg></span><span class="bt-tx"><b>Proof Seeding</b><span>first wins made visible</span></span><span class="bt-wk">3 wks</span></button>
-          <button type="button" class="btile" data-play="peer" style="--bc:#C99A05"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h4v4c0 2.2-1.2 3.8-3.5 4.6"/><path d="M14 8h4v4c0 2.2-1.2 3.8-3.5 4.6"/></svg></span><span class="bt-tx"><b>Peer Proof Relay</b><span>same-function references</span></span><span class="bt-wk">2 wks</span></button>
-          <button type="button" class="btile" data-play="inaction" style="--bc:#C99A05"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10M7 21h10"/><path d="M8 3v3c0 2.5 4 3.5 4 6s-4 3.5-4 6v3"/><path d="M16 3v3c0 2.5-4 3.5-4 6s4 3.5 4 6v3"/></svg></span><span class="bt-tx"><b>Inaction-Cost Reframe</b><span>waiting becomes the risk</span></span><span class="bt-wk">2 wks</span></button>
-          <button type="button" class="btile" data-play="quiet" style="--bc:#C99A05"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20c6 0 2-7 8-7 5 0 2-6 6-6" stroke-dasharray="3 3.5"/></svg></span><span class="bt-tx"><b>Quiet Path for Laggards</b><span>laggards moved one to one</span></span><span class="bt-wk">4 wks</span></button>
-        </div>
-        <div class="bcol" data-g="C">
-          <div class="bcol-head" style="--bc:#0E7569"><b>Capability</b><span>can they do it well</span></div>
-          <button type="button" class="btile" data-play="build" style="--bc:#0E7569"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4L2 9l10 5 10-5-10-5z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/></svg></span><span class="bt-tx"><b>Capability Build</b><span>role-based skill and judgment</span></span><span class="bt-wk">6 wks</span></button>
-          <button type="button" class="btile" data-play="whenthen" style="--bc:#0E7569"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span><span class="bt-tx"><b>When-Then Prompts</b><span>triggers on the calendar</span></span><span class="bt-wk">1 wk</span></button>
-        </div>
-        <div class="bcol" data-g="S">
-          <div class="bcol-head" style="--bc:#4E5BA6"><b>Sustainment</b><span>make it stick</span></div>
-          <button type="button" class="btile" data-play="policy" style="--bc:#4E5BA6"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h6M10 15.5h6"/></svg></span><span class="bt-tx"><b>Policy &amp; Standards</b><span>the new way, codified</span></span><span class="bt-wk">3 wks</span></button>
-          <button type="button" class="btile" data-play="criteria" style="--bc:#4E5BA6"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="12" height="16" rx="2"/><path d="M9 4h6v3H9z"/><path d="M9.5 13.5l2 2 3.5-4"/></svg></span><span class="bt-tx"><b>Performance Criteria</b><span>reviews measure the new work</span></span><span class="bt-wk">3 wks</span></button>
-          <button type="button" class="btile" data-play="ritual" style="--bc:#4E5BA6"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V9h-5.5"/></svg></span><span class="bt-tx"><b>Ritual &amp; Cadence</b><span>carried by the calendar</span></span><span class="bt-wk">2 wks</span></button>
-        </div>
+        <button type="button" class="seq-btn" id="seq-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="sb-play" d="M8 5l12 7-12 7V5z"/><g class="sb-pause" style="display:none"><rect x="7" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></g></svg><em id="seq-btn-label">Play</em></button>
       </div>
-      <p class="graph-hint">Proof gates the social plays, workflow redesign precedes capability, and sustainment locks in late. Hover a play to see its dependencies on the board; click it for the full model detail.</p>
+      <svg id="seq-chart" viewBox="0 0 980 280" role="img" aria-label="The modeled 24 weeks: each play lands in order and the adoption curve compounds, crossing the 55 percent self-sustaining threshold at week 11 and reaching 80 percent by week 24."></svg>
+      <div class="seq-caption" id="seq-caption"><b>The modeled 24 weeks.</b> Press play, or click any play below for its full model detail.</div>
+      <div class="seq-lanes" id="seq-lanes" aria-label="The thirteen plays on the modeled schedule"></div>
+      <p class="graph-hint">The schedule is the simulator's own: two workstreams at a time, proof before the social plays, capability on the redesigned workflow, sustainment late. Click any play for the full model detail.</p>
     </div>
 
     <div class="filters" role="group" aria-label="Filter plays by group">
@@ -2100,95 +2128,193 @@
     track('recovery-play');
   }
 
-  /* ---- Sequence board: dependencies as routed connectors ---- */
-  var board = document.getElementById('board');
-  var linksSvg = document.getElementById('board-links');
-  function tileOf(id) { return board ? board.querySelector('.btile[data-play="' + id + '"]') : null; }
-  function drawLinks(id) {
-    if (!linksSvg || !board) return;
-    linksSvg.innerHTML = '';
-    if (!id) return;
+  /* ---- Sequence player: the modeled 24 weeks, plays landing in order ---- */
+  var SCHEDULE = [
+    ['sponsor', 1, 2], ['proof', 2, 4], ['manager', 3, 5], ['peer', 5, 6],
+    ['friction', 6, 8], ['whole', 7, 10], ['whenthen', 9, 9], ['inaction', 10, 11],
+    ['build', 11, 16], ['ritual', 13, 14], ['policy', 15, 17], ['criteria', 17, 19], ['quiet', 18, 21]
+  ];
+  var SEQWHY = {
+    sponsor: 'First, always: sponsorship sets the ceiling on everything that follows, won directly or earned by a bottom-up win.',
+    proof: 'Before any social play: the first wins have to exist before anyone can point at them.',
+    manager: 'Early, on executive cover: managers get authority to localize before the workflow moves.',
+    peer: 'Now there is proof to relay: a same-function peer carries it farther than any deck.',
+    friction: 'With managers equipped, the task is rebuilt around the tool and the old path retired. Adoption dips here, by design, then steps up durably.',
+    whole: 'The kit ships once the first stories exist to go inside it: SSO, integrations, templates, skills libraries.',
+    whenthen: 'Ability exists, so triggers convert intent into calendar reality in a single week.',
+    inaction: 'Only now is the norm true: waiting becomes the risky choice, and peers say so.',
+    build: 'Capability lands on the redesigned workflow, never the old one: six weeks of role-based skill and judgment.',
+    ritual: 'The habit moves onto the calendar, so it survives when the launch energy fades.',
+    policy: 'The behavior already works; codifying it now locks the gains instead of aging into shelfware.',
+    criteria: 'People can hit the new bar, so reviews start measuring the new work.',
+    quiet: 'Last, one to one: laggards get a pre-built path once the new way is everywhere else.'
+  };
+  var SEQROW = { Opportunity: 0, Motivation: 1, Capability: 2, Sustainment: 3 };
+  var SEQSHORT = {
+    sponsor: 'Exec Sponsorship', manager: 'Manager Channel', whole: 'Whole-Product Kit',
+    friction: 'Workflow Redesign', proof: 'Proof Seeding', peer: 'Peer Proof',
+    inaction: 'Inaction-Cost', quiet: 'Quiet Path', build: 'Capability Build',
+    whenthen: 'When-Then', policy: 'Policy & SOPs', criteria: 'Perf. Criteria', ritual: 'Ritual & Cadence'
+  };
+  var seqChart = document.getElementById('seq-chart');
+  var seqLanes = document.getElementById('seq-lanes');
+  var seqCap = document.getElementById('seq-caption');
+  var seqBtn = document.getElementById('seq-btn');
+  var SX0 = 56, SX1 = 950, SY0 = 232, SY1 = 22;
+  function sqx(w) { return SX0 + (SX1 - SX0) * w / 24; }
+  function sqy(p) { return SY0 - (SY0 - SY1) * p / 100; }
+  function seqF(w) { return 18 + 64 / (1 + Math.exp(-(w - 10.2) / 2.4)); }
+  var seqEls = null;
+  (function buildSeq() {
+    if (!seqChart || !seqLanes) return;
     var NS = 'http://www.w3.org/2000/svg';
-    var br = board.getBoundingClientRect();
-    linksSvg.setAttribute('viewBox', '0 0 ' + Math.round(br.width) + ' ' + Math.round(br.height));
-    EDGES.forEach(function (e) {
-      if (e.f !== id && e.t !== id) return;
-      var a = tileOf(e.f), b = tileOf(e.t);
-      if (!a || !b) return;
-      var ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
-      var isPre = (e.t === id);
-      var color = isPre ? '#10233F' : '#C99A05';
-      var d, hx, hy, hdx, hdy;
-      if (rb.top >= ra.bottom - 4 || ra.top >= rb.bottom - 4) {
-        var down = rb.top >= ra.bottom - 4;
-        var scx = ra.left - br.left + ra.width / 2;
-        var tcx = rb.left - br.left + rb.width / 2;
-        if (ra.width > rb.width * 1.8) scx = tcx;
-        if (rb.width > ra.width * 1.8) tcx = scx;
-        var sy = (down ? ra.bottom : ra.top) - br.top;
-        var ty = (down ? rb.top : rb.bottom) - br.top;
-        var midY = (sy + ty) / 2;
-        d = 'M' + scx.toFixed(1) + ' ' + sy.toFixed(1) + ' V' + midY.toFixed(1) + ' H' + tcx.toFixed(1) + ' V' + ty.toFixed(1);
-        hx = tcx; hy = ty; hdx = 0; hdy = down ? -1 : 1;
+    function el(parent, tag, attrs, txt) {
+      var n = document.createElementNS(NS, tag);
+      for (var k in attrs) n.setAttribute(k, attrs[k]);
+      if (txt) n.textContent = txt;
+      parent.appendChild(n);
+      return n;
+    }
+    el(seqChart, 'line', { x1: SX0, y1: SY1 - 2, x2: SX0, y2: SY0, stroke: '#E6E3D7' });
+    el(seqChart, 'line', { x1: SX0, y1: SY0, x2: SX1, y2: SY0, stroke: '#E6E3D7' });
+    [25, 50, 75].forEach(function (p) {
+      el(seqChart, 'line', { x1: SX0, y1: sqy(p), x2: SX1, y2: sqy(p), stroke: '#F1EFE6' });
+      el(seqChart, 'text', { x: SX0 - 8, y: sqy(p) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#7A776C', 'font-family': 'Archivo, sans-serif' }, p + '%');
+    });
+    [0, 6, 12, 18, 24].forEach(function (w) {
+      el(seqChart, 'text', { x: sqx(w), y: SY0 + 18, 'text-anchor': w === 0 ? 'start' : (w === 24 ? 'end' : 'middle'), 'font-size': 11, fill: '#7A776C', 'font-family': 'Archivo, sans-serif' }, 'wk ' + w);
+    });
+    el(seqChart, 'line', { x1: SX0, y1: sqy(55), x2: SX1, y2: sqy(55), stroke: '#E8B003', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' });
+    el(seqChart, 'text', { x: SX0 + 6, y: sqy(55) - 7, 'font-size': 11, 'font-weight': 600, fill: '#8A6302', 'font-family': 'Archivo, sans-serif' }, 'self-sustaining - 55%');
+    var crossFlag = el(seqChart, 'text', { x: sqx(11), y: sqy(55) - 24, 'text-anchor': 'middle', 'font-size': 12.5, 'font-weight': 750, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, 'week 11: the change starts carrying itself');
+    var endFlag = el(seqChart, 'text', { x: SX1 - 4, y: sqy(80) - 12, 'text-anchor': 'end', 'font-size': 12.5, 'font-weight': 700, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, '80% by week 24');
+    var curve = el(seqChart, 'polyline', { fill: 'none', stroke: '#10233F', 'stroke-width': 3, points: '' });
+    var head = el(seqChart, 'line', { x1: sqx(0), y1: SY1, x2: sqx(0), y2: SY0, stroke: '#8A6302', 'stroke-width': 1.5, 'stroke-dasharray': '3 3', opacity: 0 });
+    var markers = {};
+    SCHEDULE.forEach(function (s) {
+      markers[s[0]] = el(seqChart, 'circle', { cx: sqx(s[1]), cy: sqy(seqF(s[1])), r: 4.5, fill: '#E8B003', stroke: '#10233F', 'stroke-width': 1.4, opacity: 0 });
+    });
+    var GC = { Opportunity: '#10233F', Motivation: '#C99A05', Capability: '#0E7569', Sustainment: '#4E5BA6' };
+    SCHEDULE.forEach(function (s) {
+      var p = PLAYS[s[0]];
+      var bar = document.createElement('button');
+      bar.type = 'button';
+      bar.className = 'seq-bar';
+      bar.dataset.play = s[0];
+      bar.style.setProperty('--bc', GC[p.group]);
+      bar.style.top = (SEQROW[p.group] * 36) + 'px';
+      bar.style.left = ((s[1] - 1) / 24 * 100) + '%';
+      bar.style.width = (Math.max(1, s[2] - s[1] + 1) / 24 * 100) + '%';
+      bar.title = p.name + ' - weeks ' + s[1] + (s[2] > s[1] ? '-' + s[2] : '');
+      bar.innerHTML = '<span>' + SEQSHORT[s[0]] + '</span>';
+      bar.addEventListener('click', function () { seqPause(); selectPlay(s[0]); });
+      seqLanes.appendChild(bar);
+    });
+    seqEls = { curve: curve, head: head, markers: markers, crossFlag: crossFlag, endFlag: endFlag };
+  })();
+  var seqW = 0, seqRunning = false, seqRaf = null, seqLast = null;
+  var SEQ_SPEED = 1.9;
+  function seqActive(w) {
+    var best = null;
+    SCHEDULE.forEach(function (s) { if (w >= s[1] && (!best || s[1] > best[1])) best = s; });
+    return best;
+  }
+  function seqRender(w) {
+    if (!seqEls) return;
+    var pts = [];
+    for (var x = 0; x <= 24; x += 0.2) {
+      if (x > w) break;
+      pts.push(sqx(x).toFixed(1) + ',' + sqy(seqF(x)).toFixed(1));
+    }
+    if (w >= 24) pts.push(sqx(24).toFixed(1) + ',' + sqy(seqF(24)).toFixed(1));
+    seqEls.curve.setAttribute('points', pts.join(' '));
+    var hx = sqx(Math.min(w, 24)).toFixed(1);
+    seqEls.head.setAttribute('x1', hx);
+    seqEls.head.setAttribute('x2', hx);
+    seqEls.head.setAttribute('opacity', (w > 0.1 && w < 23.9) ? 0.8 : 0);
+    SCHEDULE.forEach(function (s) {
+      var m = seqEls.markers[s[0]];
+      if (m) m.setAttribute('opacity', w >= s[1] ? 1 : 0);
+    });
+    document.querySelectorAll('.seq-bar').forEach(function (b) {
+      var s = null;
+      SCHEDULE.forEach(function (x2) { if (x2[0] === b.dataset.play) s = x2; });
+      if (!s) return;
+      b.classList.toggle('on', w >= s[1]);
+      b.classList.toggle('live', w >= s[1] && w <= s[2] + 0.999);
+    });
+    seqEls.crossFlag.setAttribute('opacity', w >= 11 ? 1 : 0);
+    seqEls.endFlag.setAttribute('opacity', w >= 23.5 ? 1 : 0);
+    if (seqCap) {
+      if (w <= 0.05) {
+        seqCap.innerHTML = '<b>The modeled 24 weeks.</b> Press play, or click any play below for its full model detail.';
       } else {
-        var sy2 = ra.top - br.top + ra.height / 2;
-        var ty2 = rb.top - br.top + rb.height / 2;
-        var sx, tx, mx;
-        if (rb.left >= ra.right - 4) {
-          sx = ra.right - br.left; tx = rb.left - br.left;
-          mx = (sx + tx) / 2;
-          d = 'M' + sx.toFixed(1) + ' ' + sy2.toFixed(1) + ' H' + mx.toFixed(1) + ' V' + ty2.toFixed(1) + ' H' + tx.toFixed(1);
-          hx = tx; hy = ty2; hdx = -1; hdy = 0;
-        } else if (ra.left >= rb.right - 4) {
-          sx = ra.left - br.left; tx = rb.right - br.left;
-          mx = (sx + tx) / 2;
-          d = 'M' + sx.toFixed(1) + ' ' + sy2.toFixed(1) + ' H' + mx.toFixed(1) + ' V' + ty2.toFixed(1) + ' H' + tx.toFixed(1);
-          hx = tx; hy = ty2; hdx = 1; hdy = 0;
-        } else {
-          sx = ra.left - br.left; tx = rb.left - br.left;
-          var gx = Math.max(2, Math.min(sx, tx) - 13);
-          d = 'M' + sx.toFixed(1) + ' ' + sy2.toFixed(1) + ' H' + gx.toFixed(1) + ' V' + ty2.toFixed(1) + ' H' + tx.toFixed(1);
-          hx = tx; hy = ty2; hdx = -1; hdy = 0;
+        var a = seqActive(w);
+        if (a) {
+          var p = PLAYS[a[0]];
+          seqCap.innerHTML = '<i>Week ' + Math.min(24, Math.max(1, Math.floor(w))) + '</i> <b>' + p.name + '.</b> ' + (SEQWHY[a[0]] || '');
         }
       }
-      var path = document.createElementNS(NS, 'path');
-      path.setAttribute('d', d);
-      path.setAttribute('fill', 'none');
-      path.setAttribute('stroke', color);
-      path.setAttribute('stroke-width', '2');
-      path.setAttribute('stroke-opacity', '0.8');
-      if (!isPre) path.setAttribute('stroke-dasharray', '5 4');
-      linksSvg.appendChild(path);
-      var ah = document.createElementNS(NS, 'path');
-      var t1 = 'M' + hx.toFixed(1) + ' ' + hy.toFixed(1);
-      if (hdx !== 0) ah.setAttribute('d', t1 + ' l' + (hdx * 6) + ' -4 ' + t1 + ' l' + (hdx * 6) + ' 4');
-      else ah.setAttribute('d', t1 + ' l-4 ' + (hdy * 6) + ' ' + t1 + ' l4 ' + (hdy * 6));
-      ah.setAttribute('stroke', color);
-      ah.setAttribute('stroke-width', '2');
-      ah.setAttribute('fill', 'none');
-      linksSvg.appendChild(ah);
-    });
+    }
+  }
+  function seqBtnSet(label) {
+    var l = document.getElementById('seq-btn-label');
+    if (l) l.textContent = label;
+    var pl = seqBtn ? seqBtn.querySelector('.sb-play') : null;
+    var pa = seqBtn ? seqBtn.querySelector('.sb-pause') : null;
+    if (pl) pl.style.display = label === 'Pause' ? 'none' : '';
+    if (pa) pa.style.display = label === 'Pause' ? '' : 'none';
+  }
+  function seqStep(ts) {
+    if (!seqRunning) return;
+    if (seqLast == null) seqLast = ts;
+    seqW = Math.min(24, seqW + (ts - seqLast) / 1000 * SEQ_SPEED);
+    seqLast = ts;
+    seqRender(seqW);
+    if (seqW >= 24) { seqRunning = false; seqBtnSet('Replay'); return; }
+    seqRaf = requestAnimationFrame(seqStep);
+  }
+  function seqPlay() {
+    if (seqW >= 24) seqW = 0;
+    seqRunning = true;
+    seqLast = null;
+    seqBtnSet('Pause');
+    seqRaf = requestAnimationFrame(seqStep);
+    track('recovery-sequence-play');
+  }
+  function seqPause() {
+    seqRunning = false;
+    if (seqRaf) cancelAnimationFrame(seqRaf);
+    seqBtnSet(seqW >= 24 ? 'Replay' : 'Play');
+  }
+  if (seqBtn) seqBtn.addEventListener('click', function () { if (seqRunning) seqPause(); else seqPlay(); });
+  if (seqChart) seqChart.addEventListener('click', function (ev) {
+    var r = seqChart.getBoundingClientRect();
+    if (!r.width) return;
+    var vx = (ev.clientX - r.left) / r.width * 980;
+    if (vx < SX0 || vx > SX1) return;
+    seqPause();
+    seqW = (vx - SX0) / (SX1 - SX0) * 24;
+    seqRender(seqW);
+  });
+  if (reduceMotion) {
+    seqW = 24;
+    seqRender(24);
+    seqBtnSet('Replay');
+  } else if (seqChart && 'IntersectionObserver' in window) {
+    var seqSeen = false;
+    var seqIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e2) {
+        if (e2.isIntersecting && !seqSeen) { seqSeen = true; seqPlay(); seqIo.disconnect(); }
+      });
+    }, { threshold: 0.45 });
+    seqIo.observe(seqChart);
+    seqRender(0);
+  } else {
+    seqRender(0);
   }
   function syncWheel(id) {
-    if (!board) return;
-    board.querySelectorAll('.btile').forEach(function (t) {
-      t.classList.toggle('sel', t.dataset.play === id);
-      t.classList.remove('dep');
-      t.classList.remove('dim');
-    });
-    drawLinks(id);
-    if (id) {
-      var related = {};
-      related[id] = true;
-      EDGES.forEach(function (e) {
-        if (e.f === id) related[e.t] = true;
-        if (e.t === id) related[e.f] = true;
-      });
-      board.querySelectorAll('.btile').forEach(function (t) {
-        if (t.dataset.play !== id && related[t.dataset.play]) t.classList.add('dep');
-        t.classList.toggle('dim', !related[t.dataset.play]);
-      });
-    }
+    document.querySelectorAll('.seq-bar').forEach(function (b) { b.classList.toggle('sel', b.dataset.play === id); });
   }
   function selectPlay(id) {
     document.querySelectorAll('.play').forEach(function (x) { x.setAttribute('aria-expanded', x.dataset.play === id ? 'true' : 'false'); });
@@ -2196,35 +2322,7 @@
     openModal(detailHTML(id));
     track('recovery-play');
   }
-  if (board) {
-    board.addEventListener('mouseover', function (ev) {
-      var t = ev.target.closest('.btile');
-      if (!t) return;
-      syncWheel(t.dataset.play);
-    });
-    board.addEventListener('mouseout', function (ev) {
-      var t = ev.target.closest('.btile');
-      if (!t) return;
-      if (pmodal && pmodal.hidden) syncWheel(null);
-    });
-    board.addEventListener('click', function (ev) {
-      var t = ev.target.closest('.btile');
-      if (!t) return;
-      selectPlay(t.dataset.play);
-    });
-    board.addEventListener('focusin', function (ev) {
-      var t = ev.target.closest('.btile');
-      if (t) syncWheel(t.dataset.play);
-    });
-    board.addEventListener('keydown', function (ev) {
-      var t = ev.target.closest('.btile');
-      if (t && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); selectPlay(t.dataset.play); }
-    });
-    window.addEventListener('resize', function () {
-      var sel = board.querySelector('.btile.sel');
-      if (sel) drawLinks(sel.dataset.play);
-    });
-  }
+
   document.querySelectorAll('.play').forEach(function (c) {
     c.addEventListener('click', function () { selectPlay(c.dataset.play); });
   });
