@@ -644,24 +644,33 @@
     html.js .lp .filters, html.js .lp .pgrid { display: none; }
   }
 
-  /* Redesigned campaign ribbon */
+  /* Redesigned campaign ribbon: prominent, clickable */
   .lp .ribbon-band {
-    display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem 0.9rem;
-    border: 1px solid rgba(232, 176, 3, 0.5);
-    background: linear-gradient(90deg, rgba(232, 176, 3, 0.16), rgba(232, 176, 3, 0.05));
-    border-radius: var(--lp-radius); padding: 0.55rem 0.9rem;
-    font-size: 0.82rem; font-weight: 600; color: var(--lp-ink);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem;
+    border: 1.5px solid rgba(232, 176, 3, 0.75);
+    background: linear-gradient(90deg, rgba(232, 176, 3, 0.28), rgba(232, 176, 3, 0.08));
+    border-radius: var(--lp-radius-lg); padding: 0.8rem 1.1rem;
+    font-size: 0.9rem; font-weight: 600; color: var(--lp-ink); text-decoration: none;
     margin-bottom: clamp(1.4rem, 3vw, 2.2rem);
+    box-shadow: 0 6px 20px rgba(232, 176, 3, 0.14);
+    transition: box-shadow 0.15s, border-color 0.15s, transform 0.15s;
   }
+  .lp .ribbon-band:hover { border-color: var(--lp-accent-ink); box-shadow: 0 10px 28px rgba(232, 176, 3, 0.24); transform: translateY(-1px); color: var(--lp-ink); }
+  .lp .ribbon-band:focus-visible { outline: 2px solid var(--lp-accent-ink); outline-offset: 2px; }
   .lp .ribbon-band .pill {
     background: var(--lp-accent); color: #10233F; border-radius: 999px;
-    font-size: 0.66rem; font-weight: 750; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 0.24rem 0.65rem; white-space: nowrap;
+    font-size: 0.68rem; font-weight: 750; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.28rem 0.7rem; white-space: nowrap;
   }
-  .lp .ribbon-band .ribbon-terms { margin-left: auto; font-weight: 600; color: var(--lp-accent-ink); font-variant-numeric: tabular-nums; }
+  .lp .ribbon-band .ribbon-txt b { font-weight: 700; }
+  .lp .ribbon-price { margin-left: auto; font-weight: 700; color: var(--lp-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .lp .ribbon-price s { color: var(--lp-faint); font-weight: 600; text-decoration-color: rgba(169, 50, 38, 0.75); margin-right: 0.15rem; }
+  .lp .ribbon-go { color: var(--lp-accent-ink); display: inline-flex; }
+  .lp .ribbon-go svg { width: 20px; height: 20px; }
+  .lp .ribbon-cav { flex-basis: 100%; font-size: 0.74rem; font-weight: 500; color: var(--lp-faint); }
   @media (max-width: 700px) {
     .lp .ribbon-band { width: 100%; }
-    .lp .ribbon-band .ribbon-terms { margin-left: 0; }
+    .lp .ribbon-price { margin-left: 0; }
   }
 
   /* Founder card in hero */
@@ -996,6 +1005,17 @@
   }
   .lp .cvv svg { width: 15px; height: 15px; flex-shrink: 0; }
 
+  /* ---- v6: playbook visual variants ---- */
+  .lp .pnum { font-size: 13px; font-weight: 800; color: #10233F; }
+  .lp .pnum em { display: block; font-style: normal; font-size: 6.8px; font-weight: 600; color: #667085; }
+  .lp .pmeter { position: relative; height: 7px; border-radius: 4px; background: #EEF1F4; overflow: visible; margin: 2px 0; }
+  .lp .pmeter i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #C99A05, #E8B003); }
+  .lp .pmeter u { position: absolute; top: -2px; bottom: -2px; width: 2px; background: #10233F; }
+  .lp .pcal { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; }
+  .lp .pcal span { font-size: 6px; color: #667085; text-align: center; }
+  .lp .pcal i { display: block; font-style: normal; margin-top: 2px; height: 16px; border: 1px solid #EEF1F4; border-radius: 3px; font-size: 5.6px; line-height: 16px; color: #8A6302; }
+  .lp .pcal i.on { background: rgba(232, 176, 3, 0.2); border-color: #E8B003; font-weight: 700; }
+
   /* ---- v5: playbook mini bars ---- */
   .lp .mb-rows { display: grid; gap: 2.5px; }
   .lp .mb-row { display: grid; grid-template-columns: 58px 1fr 22px; gap: 4px; align-items: center; font-size: 6.4px; color: #667085; }
@@ -1179,14 +1199,20 @@
 <header class="lp-nav">
   <div class="lp-nav-inner">
     <a href="/grow/" class="lp-logo">TDcatalyst<span>/grow-with-ai</span></a>
-    <a href="https://cal.com/tdcatalyst" target="_blank" rel="noopener" class="btn btn-primary nav-cta"><svg class="cal-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Book a 30-minute call</a>
+    <a href="https://cal.com/tdcatalyst" target="_blank" rel="noopener" class="btn btn-primary nav-cta"><svg class="cal-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Get started!</a>
   </div>
 </header>
 
 <!-- HERO -->
 <section class="hero" id="main-content">
   <div class="wrap">
-    <div class="ribbon-band"><span class="pill">US launch campaign</span><span class="ribbon-txt">Open to any US organization with a stalled AI rollout</span><span class="ribbon-terms">$12,500 fixed &middot; ten days &middot; one engagement at a time</span></div>
+    <a class="ribbon-band" href="#begin">
+      <span class="pill">US launch campaign</span>
+      <span class="ribbon-txt"><b>Adoption Recovery Review</b> &middot; ten days &middot; one engagement at a time</span>
+      <span class="ribbon-price"><s>$25,000</s> <b>$12,500 fixed</b> &middot; 50% off</span>
+      <span class="ribbon-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      <span class="ribbon-cav">assumes a 50&ndash;100 person organization, with up to 3 executives leading the transformation</span>
+    </a>
     <div class="hero-grid">
     <div>
       <h1>Your AI rollout stalled. The recovery plan takes ten days.</h1>
@@ -1348,7 +1374,7 @@
     <div class="price-card">
       <span class="launch">US launch campaign</span>
       <div class="amount"><s class="was-price">$25,000</s> $12,500 <small>fixed</small></div>
-      <p class="was">Launch pricing: 50% off the $25,000 list fee, scoped in writing before it starts. The work a change program used to bill <s>$150,000+</s> for.</p>
+      <p class="was">Launch pricing: 50% off the $25,000 list fee, scoped in writing before it starts. The work a change program used to bill $150,000+ for.</p>
       <div class="fee-rows">
         <div class="fee-row"><span>Engagement window</span><span>10 business days</span></div>
         <div class="fee-row"><span>Your team's involvement</span><span>3&ndash;5 hrs / day, across the ten days</span></div>
@@ -1748,7 +1774,7 @@
         <p>A 30-minute call, video or phone. Uneven usage and unclear ownership are the starting point; there is nothing to resolve beforehand.</p>
       </div>
       <div style="margin-top: 1.5rem;">
-        <a href="https://cal.com/tdcatalyst" class="btn btn-gold" target="_blank" rel="noopener"><svg class="cal-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Book a 30-minute call</a>
+        <a href="https://cal.com/tdcatalyst" class="btn btn-gold" target="_blank" rel="noopener"><svg class="cal-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>Get started!</a>
       </div>
       <div class="call-out">
         <b>What the call produces</b>
@@ -2341,6 +2367,64 @@
   });
 
   /* ---- Intervention playbook minis: prototype instruments, generated from the model ---- */
+  var WVIZ = {
+    sponsor: '<div class="pblock"><b>The sponsor contract</b></div><div class="pcheck">' +
+      '<span>Runs one real task with AI, in the open, week one</span>' +
+      '<span>Funding line and protected time signed against</span>' +
+      '<span>Asks for the adoption read every Monday</span></div>' +
+      '<div class="pcrit"><span>Signed <b>sponsor + program lead</b></span></div>',
+    manager: '<div class="pblock"><b>Each manager leaves with</b></div><div class="pcheck">' +
+      '<span>The five beats <span class="wt">in their own words</span></span>' +
+      '<span>The workflow their team moves first, named</span>' +
+      '<span>1:1 commitments logged per person</span></div>',
+    whole: '<div class="pblock"><b>Kit inventory &middot; ships complete</b></div><div class="pships">' +
+      '<div class="pship"><b>Access</b>SSO, provisioning</div>' +
+      '<div class="pship"><b>Integrations</b>wired to the stack</div>' +
+      '<div class="pship"><b>Templates</b>on-brand, reusable</div>' +
+      '<div class="pship"><b>Skills libraries</b>per function</div>' +
+      '<div class="pship"><b>FAQ</b>maintained</div>' +
+      '<div class="pship"><b>Stories</b>proof inside</div></div>',
+    friction: '<div class="pblock"><b>Task disposition &middot; sample</b></div><table class="ptable">' +
+      '<tr><td>Intake triage</td><td><span class="vc repair">AUGMENT</span></td></tr>' +
+      '<tr><td>First-draft production</td><td><span class="vc scale">NEW PATH</span></td></tr>' +
+      '<tr><td>Legacy review loop</td><td><span class="vc stop">RETIRE</span></td></tr></table>',
+    proof: '<div class="pnum">1 visible win <em>wk 2, real work, real numbers</em></div>' +
+      '<div class="pcrit"><span>Team <b>named &amp; credited</b></span><span>Demo <b>live, then recorded</b></span><span>Time cleared <b>sponsor-backed</b></span></div>',
+    peer: '<div class="pblock"><b>Relay schedule &middot; 15-minute calls</b></div><div class="pagenda">' +
+      '<div><span>Tue</span>Claims ops lead &rarr; next-cohort peer</div>' +
+      '<div><span>Wed</span>Finance close analyst &rarr; skeptic pair</div>' +
+      '<div><span>Thu</span>Service team lead &rarr; two holdouts</div></div>',
+    inaction: '<div class="pblock"><b>The norm check, first</b></div>' +
+      '<div class="pmeter"><i style="width:58%"></i><u style="left:45%"></u></div>' +
+      '<div class="pcrit"><span>Peers already in <b>58%</b></span><span>Gate to invoke the norm <b>45%</b></span></div>',
+    quiet: '<div class="pblock"><b>1:1 tracker &middot; sample rows</b></div><table class="ptable">' +
+      '<tr><td>A.L. &middot; fear: exposure</td><td><span class="vc scale">ON PATH</span></td></tr>' +
+      '<tr><td>D.K. &middot; fear: obsolescence</td><td><span class="vc repair">IN TALKS</span></td></tr>' +
+      '<tr><td>S.M. &middot; not yet surfaced</td><td><span class="vc reseq">WK 2</span></td></tr></table>',
+    build: '<div class="pblock"><b>Six weeks, three tracks</b></div><div class="pgantt">' +
+      '<div class="pgrow"><span>Curriculum</span><div class="lane"><i class="g" style="grid-column:1/5"></i></div></div>' +
+      '<div class="pgrow"><span>Practice</span><div class="lane"><i style="grid-column:3/11"></i></div></div>' +
+      '<div class="pgrow"><span>Ability check</span><div class="lane"><i style="grid-column:10/13"></i></div></div></div>' +
+      '<div class="pgantt-head"><span></span><div class="mk"><span>wk 1</span><span>wk 3</span><span>wk 6</span></div></div>',
+    whenthen: '<div class="pblock"><b>Trigger log &middot; sample</b></div><div class="pcheck">' +
+      '<span><span class="wt">When</span> Monday planning opens <span class="wt">then</span> the review runs in the tool</span>' +
+      '<span><span class="wt">When</span> a ticket closes <span class="wt">then</span> the summary is drafted by AI</span>' +
+      '<span><span class="wt">When</span> the deck is due <span class="wt">then</span> the first pass is generated</span></div>',
+    policy: '<div class="pblock"><b>SOP header &middot; what makes it real</b></div><div class="pcrit">' +
+      '<span>Owner <b>named, not a committee</b></span>' +
+      '<span>Effective <b>week 3, dated</b></span>' +
+      '<span>Supersedes <b>the old page, retired</b></span>' +
+      '<span>Escalation <b>a person, not a form</b></span></div>',
+    criteria: '<div class="pblock"><b>Review rubric &middot; new weights</b></div><table class="pmatrix">' +
+      '<tr><th style="text-align:left">Criterion</th><th>Weight</th></tr>' +
+      '<tr><td style="text-align:left">AI-augmented output</td><td class="hot">40%</td></tr>' +
+      '<tr><td style="text-align:left">Judgment on AI work</td><td>30%</td></tr>' +
+      '<tr><td style="text-align:left">Redesigned workflow use</td><td>20%</td></tr>' +
+      '<tr><td style="text-align:left">Coaching others</td><td>10%</td></tr></table>',
+    ritual: '<div class="pblock"><b>Carried by the calendar</b></div><div class="pcal">' +
+      '<span>Mon<i class="on">ops read</i></span><span>Tue<i></i></span><span>Wed<i class="on">retro slot</i></span><span>Thu<i></i></span><span>Fri<i></i></span></div>' +
+      '<div class="pcrit"><span>Owner <b>named per ritual</b></span></div>'
+  };
   var WSTEPS = {
     sponsor: [['Wk 1', 'Sponsor contract signed: time, funding, the veto line'], ['Wk 1', 'First visible use: sponsor runs a real task in the open'], ['Wk 2', 'Monday cadence: sponsor asks for the adoption read']],
     manager: [['Wk 1', 'Manager brief: the five beats, localization rights'], ['Wk 2', 'Each manager names the workflow their team moves first'], ['Wk 3', '1:1 commitments logged: when-then trigger, win definition']],
@@ -2363,11 +2447,6 @@
     ORDER13.forEach(function (id) {
       var p = PLAYS[id];
       if (!p) return;
-      var segsHtml = '';
-      p.segs.forEach(function (sv, k) {
-        if (sv <= 0.02) return;
-        segsHtml += '<div class="mb-row"><span>' + SEGNAMES[k] + '</span><i><b style="width:' + Math.round(sv * 100) + '%"></b></i><em>' + Math.round(sv * 50) + 'pt</em></div>';
-      });
       var flags = [];
       if (p.proof > 0) flags.push('proof gate ' + Math.round(p.proof * 100) + '%');
       if (p.cap > 0) flags.push('capability +' + Math.round(p.cap * 100));
@@ -2387,8 +2466,7 @@
         '<div class="phead"><b>TD</b>catalyst <span>' + p.group + ' playbook</span></div><div class="pgold"></div>' +
         '<div class="ptitle">' + p.name + '</div>' +
         '<div class="psub">' + p.framework + ' \u00b7 ' + p.weeks + ' wks \u00b7 ' + p.timing + '</div>' +
-        '<div class="pblock"><b>' + (p.segMode === 'protects' ? 'Protects against decay' : 'Who it moves') + '</b></div>' +
-        '<div class="mb-rows">' + segsHtml + '</div>' +
+        (WVIZ[id] || '') +
         '<div class="pblock" style="margin-top:2px;"><b>The run</b></div>' +
         '<div class="pcrit">' + stepsHtml + '</div>' +
         (flags.length ? '<div class="pfoot">' + flags.join(' \u00b7 ') + '</div>' : '<div class="pfoot">sequenced by the Simulation\u2122</div>') +
