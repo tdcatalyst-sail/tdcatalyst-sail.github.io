@@ -977,6 +977,16 @@
   .lp .car-dots button[aria-selected="true"] { background: var(--lp-accent-ink); }
   @media (max-width: 700px) { .lp .car-nav { display: none; } .lp .car-card { flex-basis: 82vw; } }
 
+  /* ---- v5: problem/roadmap columns on case cards ---- */
+  .lp .case-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; margin-top: 0.75rem; }
+  .lp .case-col { min-width: 0; }
+  .lp .cc-lbl {
+    display: block; font-size: 0.64rem; font-weight: 750; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--lp-accent-ink); margin-bottom: 0.3rem;
+  }
+  .lp .case-col p { font-size: 0.84rem; color: var(--lp-body); margin: 0; }
+  @media (max-width: 560px) { .lp .case-cols { grid-template-columns: 1fr; gap: 0.7rem; } }
+
   /* ---- v4: vendor logo chips ---- */
   .lp .cv-vendors { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; }
   .lp .cvv {
@@ -986,19 +996,19 @@
   }
   .lp .cvv svg { width: 15px; height: 15px; flex-shrink: 0; }
 
-  /* ---- v4: library category rows ---- */
-  .lp .lib-rows { display: grid; gap: 1.4rem; min-width: 0; }
-  .lp .lib-rows > div, .lp .lib-row { min-width: 0; max-width: 100%; }
-  .lp #lib-cat-rows { display: grid; gap: 1.4rem; }
-  .lp .lib-track { min-width: 0; max-width: 100%; }
-  .lp .lib-row-head { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.5rem; }
-  .lp .lib-row-head b { font-size: 0.95rem; font-weight: 700; color: var(--lp-ink); }
-  .lp .lib-row-head span { font-size: 0.76rem; color: var(--lp-faint); }
-  .lp .lib-track {
-    display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x proximity;
-    padding: 0.3rem 0.2rem 0.7rem; scrollbar-width: thin;
+  /* ---- v5: playbook mini bars ---- */
+  .lp .mb-rows { display: grid; gap: 2.5px; }
+  .lp .mb-row { display: grid; grid-template-columns: 58px 1fr 22px; gap: 4px; align-items: center; font-size: 6.4px; color: #667085; }
+  .lp .mb-row i { display: block; height: 5px; border-radius: 2.5px; background: #EEF1F4; overflow: hidden; }
+  .lp .mb-row i b { display: block; height: 100%; border-radius: 2.5px; background: linear-gradient(90deg, #C99A05, #E8B003); }
+  .lp .mb-row em { font-style: normal; font-weight: 800; color: #10233F; text-align: right; }
+
+  /* ---- v5: two-row carousel ---- */
+  .lp .car-track.car-2row {
+    display: grid; grid-auto-flow: column; grid-template-rows: auto auto;
+    align-items: start; gap: 1rem; min-width: 0;
   }
-  .lp .lib-track .car-card { scroll-snap-align: start; }
+  .lp .car-track.car-2row .car-card { width: 280px; flex: none; scroll-snap-align: start; }
 
   /* ---- v4: reset selector ---- */
   .lp .reset-tabs { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.2rem; }
@@ -1221,11 +1231,7 @@
           <span class="case-tag">Stalled platform</span>
         </div>
         <h3>The platform launched. Usage plateaued.</h3>
-        <ul class="case-facts">
-          <li>Log-ins get counted; the work stays unchanged</li>
-          <li>Three to five workflows redesigned end to end</li>
-          <li>Measured on feature depth per workflow</li>
-        </ul>
+        <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>Licensed, launched, and stuck at 15&ndash;30% adoption, most of it performative. People run the tool beside the old way, usage decays each quarter, and renewal approaches with log-ins as the only evidence.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Re-sequence the rollout around the workflows the platform was bought for: redesign three to five of them end to end, build the capability, and hold it in the team cadence, measured on feature depth per workflow.</p></div></div>
         <div class="case-viz" aria-hidden="true">
           <div class="cv-flow">
             <span class="cvf-old">the task, as run today</span>
@@ -1250,10 +1256,7 @@
           <span class="cvv"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8.6" height="8.6" fill="#F25022"/><rect x="12.4" y="3" width="8.6" height="8.6" fill="#7FBA00"/><rect x="3" y="12.4" width="8.6" height="8.6" fill="#00A4EF"/><rect x="12.4" y="12.4" width="8.6" height="8.6" fill="#FFB900"/></svg>Copilot</span>
           <span class="cvv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.8 5.5 4.5 9.2 10 10-5.5.8-9.2 4.5-10 10-.8-5.5-4.5-9.2-10-10 5.5-.8 9.2-4.5 10-10z" fill="#4E86F7"/></svg>Gemini</span>
         </div>
-        <ul class="case-facts">
-          <li>Every task sorted by four plain questions</li>
-          <li>Freed capacity pointed at named work</li>
-        </ul>
+        <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>Seats arrived for everyone at once, with no task-level answer to who does what now. Log-ins look fine, the work is unchanged, and every role carries quiet uncertainty about what it is becoming.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Redraw each role task by task into human-led, shared, and handed-to-AI lanes, name owners wherever work changes hands, and point the freed capacity at named work.</p></div></div>
         <div class="case-viz" aria-hidden="true">
           <div class="cv-lanes">
             <span class="cvl" style="border-color:#2C4B76;color:#2C4B76">Human-led</span>
@@ -1277,10 +1280,7 @@
           <span class="case-tag">The forty pilots</span>
         </div>
         <h3>Forty pilots. Every platform now sells agents.</h3>
-        <ul class="case-facts">
-          <li>Vendor credit asks are the real arbitrage</li>
-          <li>A decision on every line, in writing</li>
-        </ul>
+        <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>The agentic push left a pilot landscape nobody governs, while every platform in the stack asks for credits to test its new agents. Enthusiasm in pockets, no institutionalization, spend rising.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>A governed portfolio: every pilot and vendor ask scored on five criteria and decided in writing (scale, institutionalize, or stop), with a standing cadence that keeps pace with what vendors ship next.</p></div></div>
         <div class="case-viz cv-score">
           <div class="cv-score-head">Score one pilot on the five criteria:</div>
           <div class="cvq"><span>Value evidence: 2+ cases in production</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
@@ -1299,11 +1299,7 @@
           <span class="case-tag">Starting 0 &rarr; 1</span>
         </div>
         <h3>A handful use AI. Some are hiding it.</h3>
-        <ul class="case-facts">
-          <li>Vision and culture before tooling</li>
-          <li>The early message decides: augmentation, said and shown</li>
-          <li>Managers repurpose the freed time, visibly</li>
-        </ul>
+        <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>Leadership has barely touched the tools, no platform is chosen, no use policy exists, and the only reportable number is log-ins. A third of employees quietly read AI as replacement.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Vision and culture first: leadership writes the charter and goes first, managers coach the new work and repurpose the freed time visibly, and monthly builder events make augmentation something people can see.</p></div></div>
         <div class="case-viz" aria-hidden="true">
           <div class="cv-hero"><b>+46%</b><span>more likely to read AI as augmentation when people trust leadership's intent to invest in them</span></div>
           <div class="cv-row"><span>read it as replacement</span><div class="cv-bar"><i class="cv-warn" style="width:33%"></i></div><b>33%</b></div>
@@ -1325,7 +1321,7 @@
     <div>
       <span class="kicker">Launch economics</span>
       <h2 style="font-size: clamp(1.55rem, 3vw, 2.15rem); margin-top: 0.9rem;">The $150K change management project, at AI-native speed.</h2>
-      <p style="margin-top: 0.8rem;">This diagnostic, simulation, and roadmap work is what a traditional change project scopes into its first phase and bills six figures for. AI-native delivery collapses the cost, and the launch campaign passes the difference on: fast, inexpensive, and professional enough to defend in front of your board.</p>
+      <p style="margin-top: 0.8rem;">This diagnostic, simulation, and roadmap work is what a traditional change project scopes into its first phase and bills six figures for. AI-native delivery collapses the cost, and the launch campaign passes the difference on: fast, inexpensive, and professional enough to defend in front of your top leadership or board.</p>
       <div class="compare">
         <div class="cmp trad">
           <div class="cmp-top"><b>Traditional change project, phase one</b><span class="val">$150K+ &middot; a quarter or more</span></div>
@@ -1522,10 +1518,9 @@
       </div>
     </div>
 
-    <div class="lib-rows">
-      <div class="lib-row">
-        <div class="lib-row-head"><b>Engagement documents</b><span>built with you, or applied from the library, during the ten days</span></div>
-        <div class="lib-track" id="car-track">
+    <div class="carousel" id="doc-carousel">
+      <button type="button" class="car-nav car-prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="car-track car-2row" id="car-track">
         <button type="button" class="car-card shelf-doc" data-blurb="Built with your team during the ten days: the recovery decision on every deployment line, the binding constraint named, the success metric owned, and the 90-day sequence on a calendar.">
           <span class="cc-head">The Recovery Plan <em class="st eng">Built with you</em></span>
   <div class="paper compact">
@@ -1643,10 +1638,10 @@
     <div class="pfoot">0&rarr;1 format &middot; repeats monthly</div>
   </div>
         </button>
-        </div>
       </div>
-      <div id="lib-cat-rows"></div>
+      <button type="button" class="car-nav car-next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
+    <div class="car-dots" id="car-dots" role="tablist" aria-label="Library pages"></div>
     <p class="car-cap">The six engagement documents ship with every Review. The thirteen playbooks are the plays the model scores today, selected from a much larger intervention library; the Review draws on the full shelf.</p>
   </div>
 </section>
@@ -2340,42 +2335,107 @@
     });
   });
 
-  /* ---- Intervention playbook rows: all 13, one row per category ---- */
-  (function buildLibraryRows() {
-    var host = document.getElementById('lib-cat-rows');
-    if (!host) return;
-    var CATS = [
-      ['Opportunity', 'structural & social permission', ['sponsor', 'manager', 'whole', 'friction']],
-      ['Motivation', 'belief & desire', ['proof', 'peer', 'inaction', 'quiet']],
-      ['Capability', 'can they do it well', ['build', 'whenthen']],
-      ['Sustainment', 'make it stick', ['policy', 'criteria', 'ritual']]
-    ];
-    CATS.forEach(function (cat) {
-      var row = document.createElement('div');
-      row.className = 'lib-row';
-      row.innerHTML = '<div class="lib-row-head"><b>' + cat[0] + ' playbooks</b><span>' + cat[1] + '</span></div><div class="lib-track"></div>';
-      var tr = row.querySelector('.lib-track');
-      cat[2].forEach(function (id) {
-        var p = PLAYS[id];
-        if (!p) return;
-        var el = document.createElement('button');
-        el.type = 'button';
-        el.className = 'car-card car-mini';
-        el.dataset.play = id;
-        el.innerHTML = '<span class="cc-head">' + p.name + ' <em class="st lib">Playbook</em></span>' +
-          '<div class="paper compact half">' +
-          '<div class="phead"><b>TD</b>catalyst <span>Intervention playbook</span></div><div class="pgold"></div>' +
-          '<div class="ptitle">' + p.name + '</div>' +
-          '<div class="psub">' + p.group + ' \u00b7 ' + p.framework + ' \u00b7 ' + p.weeks + ' wks</div>' +
-          '<div class="pblock"><b>Do</b>' + p.do + '</div>' +
-          '<div class="pblock"><b>Don\u2019t</b>' + p.dont + '</div>' +
-          '<div class="pfoot">' + (p.segMode === 'protects' ? 'protects gains against decay' : 'moves the curve: full detail on click') + '</div></div>';
-        el.addEventListener('click', function () { openModal(detailHTML(id)); track('recovery-play'); });
-        tr.appendChild(el);
+  /* ---- Intervention playbook minis: prototype instruments, generated from the model ---- */
+  var WSTEPS = {
+    sponsor: [['Wk 1', 'Sponsor contract signed: time, funding, the veto line'], ['Wk 1', 'First visible use: sponsor runs a real task in the open'], ['Wk 2', 'Monday cadence: sponsor asks for the adoption read']],
+    manager: [['Wk 1', 'Manager brief: the five beats, localization rights'], ['Wk 2', 'Each manager names the workflow their team moves first'], ['Wk 3', '1:1 commitments logged: when-then trigger, win definition']],
+    whole: [['Wk 1', 'Gap scan: SSO, integrations, templates, FAQ'], ['Wk 2-3', 'Function skills libraries assembled with team leads'], ['Wk 4', 'Kit ships with success stories; no team builds alone']],
+    friction: [['Wk 1', 'Task map: current path, handoffs, checks, cycle time'], ['Wk 2', 'New path drafted; the legacy path gets a retirement date'], ['Wk 3', 'Team runs the new path only; the dip is expected and tracked']],
+    proof: [['Wk 1', 'Respected first users picked; their calendar cleared'], ['Wk 2', 'First win white-gloved on real work'], ['Wk 3', 'Story staged: live demo, numbers, the team named']],
+    peer: [['Wk 1', 'Same-function references lined up, briefed on honesty'], ['Wk 2', '15-minute peer calls replace the deck for the next cohort']],
+    inaction: [['Wk 1', 'Verify the norm is true: adoption majority confirmed'], ['Wk 2', 'Reframe delivered by peers: waiting is now the risky choice']],
+    quiet: [['Wk 1-2', 'Manager one-to-ones surface the real fear'], ['Wk 3', 'Pre-built path offered, sustained support attached'], ['Wk 4', 'Quiet recognition; never a spotlight']],
+    build: [['Wk 1-2', 'Role-based curriculum built from the redesigned workflows'], ['Wk 3-5', 'Practice on own work; judgment drills, not feature tours'], ['Wk 6', 'Ability check against the new bar, per role']],
+    whenthen: [['Wk 1', 'Each person names the calendar trigger and logs it with their manager']],
+    policy: [['Wk 1', 'Drafted from the behavior that already works'], ['Wk 2', 'Owners, dates, and escalation written in'], ['Wk 3', 'SOP replaces the old page; the old page is retired']],
+    criteria: [['Wk 1', 'Review rubric rewritten with the managers who will use it'], ['Wk 2', 'Calibration pass on live work examples'], ['Wk 3', 'First review cycle runs on the new bar']],
+    ritual: [['Wk 1', 'The existing meeting that will carry the practice is picked'], ['Wk 2', 'Agenda slot, owner, and metric wired in']]
+  };
+  (function buildMinis() {
+    var tr = document.getElementById('car-track');
+    if (!tr) return;
+    var ORDER13 = ['sponsor', 'manager', 'whole', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual'];
+    ORDER13.forEach(function (id) {
+      var p = PLAYS[id];
+      if (!p) return;
+      var segsHtml = '';
+      p.segs.forEach(function (sv, k) {
+        if (sv <= 0.02) return;
+        segsHtml += '<div class="mb-row"><span>' + SEGNAMES[k] + '</span><i><b style="width:' + Math.round(sv * 100) + '%"></b></i><em>' + Math.round(sv * 50) + 'pt</em></div>';
       });
-      host.appendChild(row);
+      var flags = [];
+      if (p.proof > 0) flags.push('proof gate ' + Math.round(p.proof * 100) + '%');
+      if (p.cap > 0) flags.push('capability +' + Math.round(p.cap * 100));
+      if (p.structural >= 0.4) flags.push('deep structural change');
+      if (p.disrupt >= 0.15) flags.push('adoption dips first');
+      if (p.decay > 0) flags.push('cuts decay ' + Math.round(p.decay * 100) + '%');
+      if (p.value > 0) flags.push('value lift +' + Math.round(p.value * 100) + '%');
+      var stepsHtml = (WSTEPS[id] || []).map(function (st) {
+        return '<span>' + st[0] + ' <b>' + st[1] + '</b></span>';
+      }).join('');
+      var el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'car-card car-mini';
+      el.dataset.play = id;
+      el.innerHTML = '<span class="cc-head">' + p.name + ' <em class="st lib">Playbook</em></span>' +
+        '<div class="paper compact">' +
+        '<div class="phead"><b>TD</b>catalyst <span>' + p.group + ' playbook</span></div><div class="pgold"></div>' +
+        '<div class="ptitle">' + p.name + '</div>' +
+        '<div class="psub">' + p.framework + ' \u00b7 ' + p.weeks + ' wks \u00b7 ' + p.timing + '</div>' +
+        '<div class="pblock"><b>' + (p.segMode === 'protects' ? 'Protects against decay' : 'Who it moves') + '</b></div>' +
+        '<div class="mb-rows">' + segsHtml + '</div>' +
+        '<div class="pblock" style="margin-top:2px;"><b>The run</b></div>' +
+        '<div class="pcrit">' + stepsHtml + '</div>' +
+        (flags.length ? '<div class="pfoot">' + flags.join(' \u00b7 ') + '</div>' : '<div class="pfoot">sequenced by the Simulation\u2122</div>') +
+        '</div>';
+      el.addEventListener('click', function () { openModal(detailHTML(id)); track('recovery-play'); });
+      tr.appendChild(el);
     });
   })();
+
+  /* ---- Two-row carousel: both rows slide together ---- */
+  var carTrack = document.getElementById('car-track');
+  var carDots = document.getElementById('car-dots');
+  if (carTrack) {
+    var carCards = Array.prototype.slice.call(carTrack.querySelectorAll('.car-card'));
+    var nCols = Math.ceil(carCards.length / 2);
+    function colStep() {
+      return carCards.length > 2 ? carCards[2].offsetLeft - carCards[0].offsetLeft : carTrack.clientWidth;
+    }
+    function carIdx() { return Math.min(nCols - 1, Math.round(carTrack.scrollLeft / colStep())); }
+    function carGo(i) { carTrack.scrollTo({ left: i * colStep(), behavior: reduceMotion ? 'auto' : 'smooth' }); }
+    if (carDots) {
+      for (var di = 0; di < nCols; di++) {
+        (function (i2) {
+          var d = document.createElement('button');
+          d.type = 'button';
+          d.setAttribute('role', 'tab');
+          d.setAttribute('aria-label', 'Library column ' + (i2 + 1));
+          d.setAttribute('aria-selected', i2 === 0 ? 'true' : 'false');
+          d.addEventListener('click', function () { carGo(i2); });
+          carDots.appendChild(d);
+        })(di);
+      }
+    }
+    function syncDots() {
+      if (!carDots) return;
+      var i2 = carIdx();
+      Array.prototype.forEach.call(carDots.children, function (d, k) { d.setAttribute('aria-selected', k === i2 ? 'true' : 'false'); });
+    }
+    carTrack.addEventListener('scroll', function () { window.requestAnimationFrame(syncDots); });
+    var prevB = document.querySelector('.car-prev'), nextB = document.querySelector('.car-next');
+    if (prevB) prevB.addEventListener('click', function () { carGo(Math.max(0, carIdx() - 1)); });
+    if (nextB) nextB.addEventListener('click', function () { carGo(Math.min(nCols - 1, carIdx() + 1)); });
+    var carPaused = false;
+    function carTick() { if (!carPaused && pmodal && pmodal.hidden) carGo((carIdx() + 1) % nCols); }
+    if (!reduceMotion) setInterval(carTick, 4500);
+    ['pointerenter', 'focusin', 'touchstart'].forEach(function (evn) {
+      carTrack.addEventListener(evn, function () { carPaused = true; }, { passive: true });
+    });
+    ['pointerleave', 'focusout'].forEach(function (evn) {
+      carTrack.addEventListener(evn, function () { carPaused = false; }, { passive: true });
+    });
+  }
 
   /* ---- Situation selector: cases picker + Where-it-leads tabs, synced ---- */
   var SITLABEL = { platform: 'Stalled department platform', seats: 'Frontier-lab seats', pilots: 'Agentic pilot portfolio', zero: 'Starting 0 to 1' };
