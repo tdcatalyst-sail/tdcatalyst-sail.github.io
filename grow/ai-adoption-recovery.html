@@ -1146,6 +1146,11 @@
   .lp .cmp .bar { margin-top: 0.4rem; height: 0.45rem; }
   .lp .price-card { padding: 1.4rem 1.4rem; }
   .lp .price-card .amount { font-size: 2.2rem; margin-top: 0.5rem; }
+  .lp .price-card .was-price {
+    font-size: 1.15rem; font-weight: 600; color: var(--lp-faint);
+    text-decoration-color: rgba(169, 50, 38, 0.75); text-decoration-thickness: 2px;
+    margin-right: 0.2rem; vertical-align: 0.35rem;
+  }
   .lp .fee-row { padding: 0.45rem 0; }
 
   /* ---- v2: task sorter (overlay content) ---- */
@@ -1342,8 +1347,8 @@
     </div>
     <div class="price-card">
       <span class="launch">US launch campaign</span>
-      <div class="amount">$12,500 <small>fixed</small></div>
-      <p class="was">The work a change program used to bill <s>$150,000+</s> for, scoped in writing before it starts.</p>
+      <div class="amount"><s class="was-price">$25,000</s> $12,500 <small>fixed</small></div>
+      <p class="was">Launch pricing: 50% off the $25,000 list fee, scoped in writing before it starts. The work a change program used to bill <s>$150,000+</s> for.</p>
       <div class="fee-rows">
         <div class="fee-row"><span>Engagement window</span><span>10 business days</span></div>
         <div class="fee-row"><span>Your team's involvement</span><span>3&ndash;5 hrs / day, across the ten days</span></div>
