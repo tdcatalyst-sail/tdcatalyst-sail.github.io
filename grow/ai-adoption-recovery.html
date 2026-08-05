@@ -1282,7 +1282,7 @@
           <button type="button" class="btile" data-play="ritual" style="--bc:#4E5BA6"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V9h-5.5"/></svg></span><span class="bt-tx"><b>Ritual &amp; Cadence</b><span>carried by the calendar</span></span><span class="bt-wk">2 wks</span></button>
         </div>
       </div>
-      <p class="graph-hint">Proof gates the social plays, workflow redesign precedes capability, and sustainment locks in late. Hover a play: its dependencies draw on the board, and the model detail opens.</p>
+      <p class="graph-hint">Proof gates the social plays, workflow redesign precedes capability, and sustainment locks in late. Hover a play to see its dependencies on the board; click it for the full model detail.</p>
     </div>
 
     <div class="filters" role="group" aria-label="Filter plays by group">
@@ -1955,25 +1955,20 @@
     openModal(detailHTML(id));
     track('recovery-play');
   }
-  var hoverTimer = null;
   if (board) {
     board.addEventListener('mouseover', function (ev) {
       var t = ev.target.closest('.btile');
       if (!t) return;
       syncWheel(t.dataset.play);
-      clearTimeout(hoverTimer);
-      hoverTimer = setTimeout(function () { if (pmodal && pmodal.hidden) selectPlay(t.dataset.play); }, 550);
     });
     board.addEventListener('mouseout', function (ev) {
       var t = ev.target.closest('.btile');
       if (!t) return;
-      clearTimeout(hoverTimer);
       if (pmodal && pmodal.hidden) syncWheel(null);
     });
     board.addEventListener('click', function (ev) {
       var t = ev.target.closest('.btile');
       if (!t) return;
-      clearTimeout(hoverTimer);
       selectPlay(t.dataset.play);
     });
     board.addEventListener('focusin', function (ev) {
