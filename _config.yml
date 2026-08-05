@@ -1,0 +1,11 @@
+# GitHub Pages serves every tracked file by default, so repository-only files
+# would be reachable on the live domain (tdcatalyst.com/CLAUDE.md, and so on).
+# Excluding them here keeps them in git for tooling without publishing them.
+#
+# This is the ONLY thing this file configures. The site is hand-authored HTML
+# with no Jekyll layouts, includes, or front matter — do not add build behaviour
+# here, and do not rename or remove pages via this file.
+exclude:
+  - CLAUDE.md
+  - scripts/
+  - .gitattributes

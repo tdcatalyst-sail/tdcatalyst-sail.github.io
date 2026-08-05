@@ -9,6 +9,101 @@
   document.head.appendChild(s);
 })();
 
+// ===== Conversion instrumentation =====
+// GoatCounter counts pageviews out of the box, which tells us what gets read and
+// nothing about what gets acted on. This layer adds named events for the handful
+// of actions that actually precede a conversation: scheduling clicks, contact
+// forms, and the two tools. Events record the ACTION only — no identifiers, no
+// field values — so nothing here changes what the privacy page promises.
+//
+// Event names follow `cta-<practice>-<zone>` for buttons and flat names for the
+// rest (calendar-click, contact-form-start, contact-form-submit, and the
+// tool events fired from the simulation and diagnostic pages themselves).
+// window.tdTrack(name, title) is the shared entry point for those pages.
+(function () {
+  var pending = [];
+  var tries = 0;
+
+  function flush() {
+    if (!(window.goatcounter && window.goatcounter.count)) return false;
+    while (pending.length) {
+      try { window.goatcounter.count(pending.shift()); } catch (err) { /* best effort */ }
+    }
+    return true;
+  }
+
+  // count.js is async, so early clicks queue until it lands (~10s ceiling,
+  // after which we stop waiting rather than leak a timer).
+  function drain() {
+    if (flush() || tries++ > 100) return;
+    setTimeout(drain, 100);
+  }
+
+  function track(name, title) {
+    if (!name) return;
+    pending.push({ path: name, title: title || name, event: true });
+    drain();
+  }
+  window.tdTrack = track;
+
+  // Which sub-site the click happened on, for `cta-<practice>-<zone>`.
+  function practice() {
+    var c = document.body.className || '';
+    if (c.indexOf('brand-grow') > -1) return 'grow';
+    if (c.indexOf('brand-sail') > -1) return 'sail';
+    if (c.indexOf('brand-advise') > -1) return 'advise';
+    return 'hub';
+  }
+
+  // Zone = the id of the enclosing section, so a button moving between sections
+  // renames itself instead of silently reporting the wrong origin.
+  function zone(node) {
+    var sec = node.closest('section');
+    if (!sec) return 'page';
+    // Walk out to the nearest section that names itself; unnamed wrappers
+    // would otherwise collapse every button into one anonymous bucket.
+    while (sec && !sec.id) sec = sec.parentElement && sec.parentElement.closest('section');
+    if (!sec) return 'page';
+    return sec.id === 'main-content' ? 'hero' : sec.id;
+  }
+
+  var where = location.pathname;
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a, button');
+    if (!a) return;
+
+    // Explicit override wins over the derived name.
+    var named = a.getAttribute('data-gc');
+    if (named) { track(named, named + ' · ' + where); return; }
+
+    var href = a.getAttribute('href') || '';
+    if (href.indexOf('cal.com') > -1) {
+      track('calendar-click', 'Scheduling click · ' + where);
+      return;
+    }
+    if (a.classList.contains('btn') || a.classList.contains('nav-cta')) {
+      var name = 'cta-' + practice() + '-' + zone(a);
+      track(name, (a.textContent || '').trim().slice(0, 60) + ' · ' + where);
+    }
+  }, true);
+
+  // Forms: one `-start` on the first field touched, one `-submit` on send.
+  // data-gc-form renames the pair for tool forms (the simulation briefing).
+  Array.prototype.forEach.call(document.querySelectorAll('form'), function (form) {
+    var base = form.getAttribute('data-gc-form') || 'contact-form';
+    var started = false;
+    form.addEventListener('focusin', function () {
+      if (started) return;
+      started = true;
+      track(base + '-start', base + ' started · ' + where);
+    });
+    form.addEventListener('submit', function () {
+      track(base + '-submit', base + ' sent · ' + where);
+    });
+  });
+})();
+
 // Show confirmation banner after form submit (?sent=1)
 (function () {
   if (new URLSearchParams(window.location.search).get('sent') !== '1') return;

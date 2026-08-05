@@ -15,33 +15,93 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://tdcatalyst.com/#website",
-        "url": "https://tdcatalyst.com/",
-        "name": "TDcatalyst",
-        "alternateName": "TD Catalyst",
-        "publisher": { "@id": "https://tdcatalyst.com/#organization" }
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://tdcatalyst.com/#organization",
-        "name": "TDcatalyst",
-        "url": "https://tdcatalyst.com/",
-        "logo": "https://tdcatalyst.com/images/logo-og.jpg",
-        "founder": {
-          "@type": "Person",
-          "name": "Tom Delaporte"
-        },
-        "description": "Independent advisory practice by Tom Delaporte for the AI revolution, with three ways in: Sail, executive field sessions on adaptability; Grow, AI transformation consulting for enterprises and the public sector; Advise, enterprise-readiness advisory for startup founders."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://tdcatalyst.com/#website",
+      "url": "https://tdcatalyst.com/",
+      "name": "TDcatalyst",
+      "alternateName": "TD Catalyst",
+      "publisher": {
+        "@id": "https://tdcatalyst.com/#organization"
       }
-    ]
-  }
+    },
+    {
+      "@type": [
+        "Organization",
+        "ProfessionalService"
+      ],
+      "@id": "https://tdcatalyst.com/#organization",
+      "name": "TDcatalyst",
+      "url": "https://tdcatalyst.com/",
+      "logo": "https://tdcatalyst.com/images/logo-og.jpg",
+      "image": "https://tdcatalyst.com/images/logo-og.jpg",
+      "email": "tom@tdcatalyst.com",
+      "founder": {
+        "@id": "https://tdcatalyst.com/#tom"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/tdcatalyst/"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Pacifica",
+        "addressRegion": "CA",
+        "addressCountry": "US"
+      },
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "United States"
+        },
+        {
+          "@type": "Place",
+          "name": "San Francisco Bay Area"
+        }
+      ],
+      "description": "Independent advisory practice by Tom Delaporte for the AI revolution, with three ways in: Sail, executive field sessions on adaptability; Grow, AI transformation consulting for enterprises and the public sector; Advise, enterprise-readiness advisory for startup founders.",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "TDcatalyst practices",
+        "itemListElement": [
+          {
+            "@type": "Service",
+            "@id": "https://tdcatalyst.com/sail/#service",
+            "name": "TDcatalyst Sail — Executive field sessions",
+            "url": "https://tdcatalyst.com/sail/"
+          },
+          {
+            "@type": "Service",
+            "@id": "https://tdcatalyst.com/grow/#service",
+            "name": "TDcatalyst Grow — AI transformation consulting",
+            "url": "https://tdcatalyst.com/grow/"
+          },
+          {
+            "@type": "Service",
+            "@id": "https://tdcatalyst.com/advise/#service",
+            "name": "TDcatalyst Advise — Enterprise-readiness advisory",
+            "url": "https://tdcatalyst.com/advise/"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://tdcatalyst.com/#tom",
+      "name": "Tom Delaporte",
+      "jobTitle": "Founder and Principal Advisor",
+      "url": "https://tdcatalyst.com/about",
+      "image": "https://tdcatalyst.com/images/headshot.jpg",
+      "worksFor": {
+        "@id": "https://tdcatalyst.com/#organization"
+      }
+    }
+  ]
+}
   </script>
-  <link rel="stylesheet" href="/style.css?v=b84cf781">
+  <link rel="stylesheet" href="/style.css?v=06d825d0">
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -77,7 +137,7 @@
   <div class="wrap featured-inner">
     <span class="featured-flag">Featured tool</span>
     <span class="featured-text">
-      <span class="featured-title">Transformation Dynamics Simulation&trade;</span>
+      <span class="featured-title">AI Adoption Simulator</span>
       <span class="featured-hook">Sequence the interventions and watch AI adoption reach its tipping point.</span>
     </span>
     <span class="featured-go">Open the simulation <span class="tool-tag" aria-hidden="true">&#8599;</span></span>
@@ -88,7 +148,7 @@
 <section class="hero hero-with-logo hero--terrain hero--peaks" id="main-content">
   <canvas class="terrain" data-seed="19" data-line="#1F3A5F" data-index="#1F3A5F" data-alpha="0.14" data-index-alpha="0.35" data-fade="left" data-fade-color="235,239,236" aria-hidden="true"></canvas>
   <div class="wrap">
-    <img src="/images/logo-v2.jpg" alt="TDcatalyst — Precision, Catalysis, Momentum" class="hero-logo">
+    <img src="/images/logo-v2.jpg" alt="TDcatalyst — Precision, Catalysis, Momentum" class="hero-logo" width="1213" height="1213">
     <div class="hero-lines" aria-hidden="true">
       <span class="l-red"></span>
       <span class="l-gold"></span>
@@ -157,7 +217,7 @@
 
 <!-- FIELD PHOTO BAND -->
 <section class="photo-band" aria-label="Field photography">
-  <img src="/images/pacifica-ridge-trail.jpg" alt="Trail winding along the coastal ridge toward the fog-covered Pacific" loading="lazy" style="object-position: center 55%;">
+  <img src="/images/pacifica-ridge-trail.jpg" alt="Trail winding along the coastal ridge toward the fog-covered Pacific" loading="lazy" style="object-position: center 55%;" width="1800" height="1350">
   <div class="band-note">37.61&deg; N &middot; 122.49&deg; W &middot; The field, Pacifica coastal ridge</div>
 </section>
 
@@ -209,7 +269,7 @@
   </div>
 </footer>
 
-<script src="/script.js?v=9cf38b1c"></script>
+<script src="/script.js?v=e436be06"></script>
 <script data-goatcounter="https://tdcatalyst.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
