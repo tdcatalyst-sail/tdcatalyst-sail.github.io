@@ -611,6 +611,39 @@
     .lp .btn, .lp .faq-icon { transition: none; }
   }
 
+
+  /* Intervention wheel (desktop); the chip grid + filters remain the
+     small-screen and no-JS fallback. */
+  .lp .wheel-card {
+    display: none;
+    background: var(--lp-card); border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
+    padding: 1.1rem 1.1rem 0.6rem; margin-bottom: 1rem;
+    box-shadow: 0 1px 2px rgba(27, 26, 22, 0.05), 0 14px 38px rgba(27, 26, 22, 0.07);
+  }
+  .lp .wheel-card svg { display: block; width: 100%; max-width: 760px; height: auto; margin: 0 auto; }
+  .lp .wlegend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; justify-content: center; padding: 0.1rem 0 0.4rem; }
+  .lp .wlg { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.78rem; font-weight: 650; color: var(--lp-ink); }
+  .lp .wlg i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  .lp .seg { cursor: pointer; transition: fill-opacity 0.15s; outline: none; }
+  .lp .seg:hover { fill-opacity: 0.22; }
+  .lp .seg.sel { fill-opacity: 1; }
+  .lp .seg:focus-visible { stroke-width: 3; stroke-opacity: 1; }
+  .lp .segicon, .lp .outlab { pointer-events: none; }
+  .lp .hubfo {
+    width: 264px; height: 264px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 20px; box-sizing: border-box; gap: 6px; font-family: var(--lp-font);
+  }
+  .lp .hubfo h3 { font-size: 20px; }
+  .lp .hubfo .meta { font-size: 12.5px; color: var(--lp-faint); line-height: 1.45; }
+  .lp .hubfo .bars { display: flex; align-items: flex-end; gap: 4px; height: 26px; margin-top: 4px; }
+  .lp .hubfo .bars i { width: 15px; background: linear-gradient(180deg, #E8B003, #C99A05); border-radius: 2px 2px 0 0; }
+  .lp .hubfo .barcap { font-size: 10.5px; color: var(--lp-faint); letter-spacing: 0.05em; text-transform: uppercase; }
+  .lp .hubfo .hint { font-size: 11px; color: var(--lp-faint); }
+  @media (min-width: 701px) {
+    .lp .wheel-card { display: block; }
+    html.js .lp .filters, html.js .lp .pgrid { display: none; }
+  }
+
 </style>
 
 <div class="lp">
@@ -769,7 +802,7 @@
     <div class="sec-head">
       <span class="kicker">Step 2 &middot; Sequence</span>
       <h2>Thirteen plays. The order decides the outcome.</h2>
-      <p>Your roadmap is drawn from a library of thirteen research-backed intervention plays, sequenced by the Transformation Dynamics Simulation&trade;. Click any play, on the map or in the library: its dependencies light up and its real model parameters open below.</p>
+      <p>Your roadmap is drawn from a library of thirteen research-backed intervention plays, sequenced by the Transformation Dynamics Simulation&trade;. Click any play: its dependencies light up on the map and its real model parameters open below.</p>
     </div>
     <div class="graph-card">
       <svg viewBox="0 0 950 360" id="depgraph">
@@ -787,6 +820,10 @@
       </svg>
     </div>
     <p class="graph-hint">The map is the delivery logic: proof gates before social plays, workflow redesign before capability, sustainment after the threshold. Scroll sideways on small screens.</p>
+    <div class="wheel-card">
+      <div class="wlegend"><span class="wlg"><i style="background:#10233F"></i>Opportunity</span><span class="wlg"><i style="background:#C99A05"></i>Motivation</span><span class="wlg"><i style="background:#0E7569"></i>Capability</span><span class="wlg"><i style="background:#4E5BA6"></i>Sustainment</span></div>
+      <svg viewBox="0 0 860 700" id="wheel" aria-label="The thirteen intervention plays by category"><path class="seg" data-play="sponsor" d="M229.1 208.1 A246.0 246.0 0 0 1 305.8 137.7 L354.3 220.5 A150.0 150.0 0 0 0 307.5 263.5 Z" fill="#10233F" fill-opacity="0.09" stroke="#10233F" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Sponsorship"/><g class="segicon" data-play="sponsor" transform="translate(279.3 187.3) scale(1.4)" fill="none" stroke="#10233F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><circle cx="12" cy="9" r="5"/><path d="M9 13l-2 7 5-3 5 3-2-7"/></g><text class="outlab" data-play="sponsor" x="248.8" y="162.0" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Sponsorship</text><path class="seg" data-play="manager" d="M311.7 134.3 A246.0 246.0 0 0 1 411.6 104.7 L418.8 200.4 A150.0 150.0 0 0 0 357.9 218.5 Z" fill="#10233F" fill-opacity="0.09" stroke="#10233F" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Manager Channel"/><g class="segicon" data-play="manager" transform="translate(356.9 143.4) scale(1.4)" fill="none" stroke="#10233F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-6 4V6z"/></g><text class="outlab" data-play="manager" x="351.5" y="103.8" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Manager Channel</text><path class="seg" data-play="whole" d="M418.4 104.3 A246.0 246.0 0 0 1 521.1 121.5 L485.5 210.7 A150.0 150.0 0 0 0 422.9 200.2 Z" fill="#10233F" fill-opacity="0.09" stroke="#10233F" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Whole Product"/><g class="segicon" data-play="whole" transform="translate(445.9 137.9) scale(1.4)" fill="none" stroke="#10233F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></g><text class="outlab" data-play="whole" x="473.3" y="85.6" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Whole Product</text><path class="seg" data-play="friction" d="M527.4 124.1 A246.0 246.0 0 0 1 612.1 184.6 L541.1 249.2 A150.0 150.0 0 0 0 489.4 212.3 Z" fill="#10233F" fill-opacity="0.09" stroke="#10233F" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Workflow Redesign"/><g class="segicon" data-play="friction" transform="translate(528.3 172.1) scale(1.4)" fill="none" stroke="#10233F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="18" r="2.2"/><path d="M7 6h7a4 4 0 0 1 4 4v5.8"/></g><text class="outlab" data-play="friction" x="586.3" y="141.8" text-anchor="start" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Workflow Redesign</text><path d="M224.2 204.6 A252.0 252.0 0 0 1 616.6 180.6" fill="none" stroke="#10233F" stroke-width="2.5" stroke-opacity="0.7"/><path class="seg" data-play="proof" d="M630.9 208.1 A246.0 246.0 0 0 1 671.6 303.9 L577.3 321.9 A150.0 150.0 0 0 0 552.5 263.5 Z" fill="#C99A05" fill-opacity="0.09" stroke="#C99A05" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Proof Seeding"/><g class="segicon" data-play="proof" transform="translate(595.4 255.8) scale(1.4)" fill="none" stroke="#C99A05" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M12 21v-7"/><path d="M12 14c0-4 3-6 7-6 0 4-3 6-7 6z"/><path d="M12 14c0-4-3-6-7-6 0 4 3 6 7 6z"/></g><text class="outlab" data-play="proof" x="675.1" y="252.5" text-anchor="start" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Proof Seeding</text><path class="seg" data-play="peer" d="M672.8 310.6 A246.0 246.0 0 0 1 667.4 414.6 L574.7 389.4 A150.0 150.0 0 0 0 578.1 326.0 Z" fill="#C99A05" fill-opacity="0.09" stroke="#C99A05" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Peer Proof"/><g class="segicon" data-play="peer" transform="translate(610.9 343.6) scale(1.4)" fill="none" stroke="#C99A05" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M7 8h4v4c0 2.2-1.2 3.8-3.5 4.6"/><path d="M14 8h4v4c0 2.2-1.2 3.8-3.5 4.6"/></g><text class="outlab" data-play="peer" x="695.6" y="368.7" text-anchor="start" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Peer Proof</text><path class="seg" data-play="inaction" d="M665.5 421.2 A246.0 246.0 0 0 1 614.9 512.2 L542.8 448.9 A150.0 150.0 0 0 0 573.6 393.4 Z" fill="#C99A05" fill-opacity="0.09" stroke="#C99A05" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Inaction Cost"/><g class="segicon" data-play="inaction" transform="translate(586.3 429.3) scale(1.4)" fill="none" stroke="#C99A05" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M7 3h10M7 21h10"/><path d="M8 3v3c0 2.5 4 3.5 4 6s-4 3.5-4 6v3"/><path d="M16 3v3c0 2.5-4 3.5-4 6s4 3.5 4 6v3"/></g><text class="outlab" data-play="inaction" x="663.1" y="482.2" text-anchor="start" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Inaction Cost</text><path class="seg" data-play="quiet" d="M610.3 517.3 A246.0 246.0 0 0 1 525.0 576.9 L487.9 488.4 A150.0 150.0 0 0 0 540.0 452.0 Z" fill="#C99A05" fill-opacity="0.09" stroke="#C99A05" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Quiet Path"/><g class="segicon" data-play="quiet" transform="translate(526.6 495.5) scale(1.4)" fill="none" stroke="#C99A05" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M5 20c6 0 2-7 8-7 5 0 2-6 6-6" stroke-dasharray="3 3.5"/></g><text class="outlab" data-play="quiet" x="584.0" y="569.8" text-anchor="start" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Quiet Path</text><path d="M635.8 204.6 A252.0 252.0 0 0 1 527.3 582.5" fill="none" stroke="#C99A05" stroke-width="2.5" stroke-opacity="0.7"/><path class="seg" data-play="build" d="M496.6 586.8 A246.0 246.0 0 0 1 392.7 593.2 L407.3 498.3 A150.0 150.0 0 0 0 470.6 494.4 Z" fill="#0E7569" fill-opacity="0.09" stroke="#0E7569" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Capability Build"/><g class="segicon" data-play="build" transform="translate(425.3 530.8) scale(1.4)" fill="none" stroke="#0E7569" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M12 4L2 9l10 5 10-5-10-5z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/></g><text class="outlab" data-play="build" x="446.0" y="627.5" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Capability Build</text><path class="seg" data-play="whenthen" d="M385.9 592.0 A246.0 246.0 0 0 1 289.8 552.1 L344.5 473.3 A150.0 150.0 0 0 0 403.1 497.6 Z" fill="#0E7569" fill-opacity="0.09" stroke="#0E7569" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for When-Then"/><g class="segicon" data-play="whenthen" transform="translate(337.3 516.1) scale(1.4)" fill="none" stroke="#0E7569" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g><text class="outlab" data-play="whenthen" x="325.6" y="597.0" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">When-Then</text><path d="M498.3 592.6 A252.0 252.0 0 0 1 286.4 557.1" fill="none" stroke="#0E7569" stroke-width="2.5" stroke-opacity="0.7"/><path class="seg" data-play="policy" d="M266.2 533.5 A246.0 246.0 0 0 1 205.0 449.4 L292.8 410.6 A150.0 150.0 0 0 0 330.1 461.9 Z" fill="#4E5BA6" fill-opacity="0.09" stroke="#4E5BA6" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Policy"/><g class="segicon" data-play="policy" transform="translate(253.1 449.7) scale(1.4)" fill="none" stroke="#4E5BA6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h6M10 15.5h6"/></g><text class="outlab" data-play="policy" x="214.1" y="509.1" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Policy</text><path class="seg" data-play="criteria" d="M202.3 443.0 A246.0 246.0 0 0 1 184.2 340.5 L280.1 344.2 A150.0 150.0 0 0 0 291.1 406.7 Z" fill="#4E5BA6" fill-opacity="0.09" stroke="#4E5BA6" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Criteria"/><g class="segicon" data-play="criteria" transform="translate(218.2 367.6) scale(1.4)" fill="none" stroke="#4E5BA6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><rect x="6" y="5" width="12" height="16" rx="2"/><path d="M9 4h6v3H9z"/><path d="M9.5 13.5l2 2 3.5-4"/></g><text class="outlab" data-play="criteria" x="168.0" y="400.5" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Criteria</text><path class="seg" data-play="ritual" d="M184.5 333.7 A246.0 246.0 0 0 1 213.3 233.6 L297.9 279.0 A150.0 150.0 0 0 0 280.3 340.0 Z" fill="#4E5BA6" fill-opacity="0.09" stroke="#4E5BA6" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Ritual & Cadence"/><g class="segicon" data-play="ritual" transform="translate(222.9 278.5) scale(1.4)" fill="none" stroke="#4E5BA6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V9h-5.5"/></g><text class="outlab" data-play="ritual" x="174.2" y="282.7" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Ritual & Cadence</text><path d="M262.2 538.0 A252.0 252.0 0 0 1 208.0 230.8" fill="none" stroke="#4E5BA6" stroke-width="2.5" stroke-opacity="0.7"/><circle cx="430.0" cy="350.0" r="142" fill="#FFFFFF" stroke="#E6E3D7"/><foreignObject x="298" y="218" width="264" height="264"><div xmlns="http://www.w3.org/1999/xhtml" class="hubfo" id="wheel-hub"><h3>Thirteen plays</h3><div class="meta">Four categories, one library.<br/>Click any segment for the play&#x27;s model detail.</div></div></foreignObject></svg>
+    </div>
     <div class="filters" role="group" aria-label="Filter plays by group">
       <button aria-pressed="true" data-f="all">All 13 plays</button>
       <button aria-pressed="false" data-f="O">Opportunity</button>
@@ -1439,6 +1476,25 @@
       }
     });
   }
+  var wheelHub = document.getElementById('wheel-hub');
+  var hubSeed = wheelHub ? wheelHub.innerHTML : '';
+  function syncWheel(id) {
+    document.querySelectorAll('.seg').forEach(function (sgm) { sgm.classList.toggle('sel', sgm.dataset.play === id); });
+    document.querySelectorAll('.segicon').forEach(function (g) {
+      if (!g.dataset.c) g.dataset.c = g.getAttribute('stroke');
+      g.setAttribute('stroke', g.dataset.play === id ? '#FFFFFF' : g.dataset.c);
+    });
+    document.querySelectorAll('.outlab').forEach(function (t) {
+      t.setAttribute('font-weight', t.dataset.play === id ? '800' : '600');
+    });
+    if (!wheelHub) return;
+    if (!id) { wheelHub.innerHTML = hubSeed; return; }
+    var p = PLAYS[id];
+    wheelHub.innerHTML = '<h3>' + p.name + '</h3><div class="meta">' + p.group + ' \u00B7 ' + p.weeks + ' wks<br>' + p.framework + '</div>' +
+      '<div class="bars">' + p.segs.map(function (sv) { return '<i style="height:' + Math.max(12, Math.round(sv * 100)) + '%"></i>'; }).join('') + '</div>' +
+      '<div class="barcap">' + (p.segMode === 'protects' ? 'protects segments' : 'reach by segment') + '</div>' +
+      '<div class="hint">full detail below \u2193</div>';
+  }
   function selectPlay(id, scroll) {
     var open = document.querySelector('.play[aria-expanded="true"]');
     document.querySelectorAll('.play').forEach(function (x) { x.setAttribute('aria-expanded', 'false'); });
@@ -1446,17 +1502,25 @@
       pdetail.classList.remove('on');
       document.querySelectorAll('.gnode').forEach(function (x) { x.classList.remove('sel', 'up'); });
       document.querySelectorAll('.gedge').forEach(function (x) { x.classList.remove('hot'); });
+      syncWheel(null);
       return;
     }
     var chip = document.querySelector('.play[data-play="' + id + '"]');
     if (chip) chip.setAttribute('aria-expanded', 'true');
     highlightNode(id);
+    syncWheel(id);
     showDetail(id);
     track('recovery-play');
     if (scroll && pdetail) pdetail.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
   }
   document.querySelectorAll('.play').forEach(function (c) {
     c.addEventListener('click', function () { selectPlay(c.dataset.play, true); });
+  });
+  document.querySelectorAll('.seg').forEach(function (sgm) {
+    sgm.addEventListener('click', function () { selectPlay(sgm.dataset.play, true); });
+    sgm.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); selectPlay(sgm.dataset.play, true); }
+    });
   });
   document.querySelectorAll('.filters button').forEach(function (f) {
     f.addEventListener('click', function () {
