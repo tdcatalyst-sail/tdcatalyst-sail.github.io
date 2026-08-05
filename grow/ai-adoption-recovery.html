@@ -842,6 +842,166 @@
   .lp .play[data-group="C"] { border-left-color: #0E7569; }
   .lp .play[data-group="S"] { border-left-color: #4E5BA6; }
 
+  /* ---- v2: productized case cards ---- */
+  .lp .case { cursor: pointer; position: relative; transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s; }
+  .lp .case:hover { border-color: #C9C5B6; transform: translateY(-2px); }
+  .lp .case[aria-pressed="true"] { border-color: var(--lp-accent); box-shadow: 0 12px 34px rgba(27, 26, 22, 0.1); }
+  .lp .case[aria-pressed="true"] .case-cta { color: var(--lp-ink); }
+  .lp .case[aria-pressed="true"] .case-cta::after { content: " selected"; color: var(--lp-accent-ink); }
+  .lp .case:focus-visible { outline: 2px solid var(--lp-accent-ink); outline-offset: 2px; }
+  .lp .case-ic {
+    width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(232, 176, 3, 0.13); border: 1px solid rgba(232, 176, 3, 0.35); color: var(--lp-accent-ink);
+  }
+  .lp .case-ic svg { width: 22px; height: 22px; }
+  .lp .case h3 { font-size: 1.14rem; margin-top: 0.65rem; }
+  .lp .case-facts { margin: 0.7rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.4rem; }
+  .lp .case-facts li { font-size: 0.88rem; color: var(--lp-body); display: flex; gap: 0.5rem; align-items: baseline; }
+  .lp .case-facts li::before { content: ""; flex-shrink: 0; width: 6px; height: 6px; border-radius: 2px; background: var(--lp-accent); transform: translateY(-1px); }
+  .lp .case-viz { margin-top: 0.9rem; padding: 0.75rem 0.85rem; border-radius: var(--lp-radius); background: var(--lp-bg-alt); border: 1px solid var(--lp-line); }
+  .lp .cv-row { display: grid; grid-template-columns: minmax(90px, auto) 1fr 38px; gap: 0.55rem; align-items: center; font-size: 0.74rem; color: var(--lp-faint); }
+  .lp .cv-row + .cv-row { margin-top: 0.35rem; }
+  .lp .cv-row b { color: var(--lp-ink); text-align: right; font-variant-numeric: tabular-nums; }
+  .lp .cv-bar { height: 8px; border-radius: 4px; background: #FFFFFF; border: 1px solid var(--lp-line); overflow: hidden; }
+  .lp .cv-bar i { display: block; height: 100%; background: #2C4B76; border-radius: 4px; }
+  .lp .cv-bar i.cv-warn { background: var(--lp-accent); }
+  .lp .cv-cap { font-size: 0.7rem; color: var(--lp-faint); margin-top: 0.45rem; }
+  .lp .cv-lanes { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .lp .cvl { font-size: 0.74rem; font-weight: 650; border: 1.5px solid; border-radius: 999px; padding: 0.24rem 0.6rem; background: #FFFFFF; }
+  .lp .cv-triage { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+  .lp .cv-triage .vc { font-size: 0.68rem; padding: 0.28rem 0.5rem; }
+  .lp .case-sort {
+    display: inline-block; margin-top: 0.85rem; cursor: pointer;
+    font-family: var(--lp-font); font-size: 0.82rem; font-weight: 650; color: #10233F;
+    background: rgba(232, 176, 3, 0.16); border: 1px solid rgba(232, 176, 3, 0.5); border-radius: 999px; padding: 0.4rem 0.9rem;
+  }
+  .lp .case-sort:hover { background: rgba(232, 176, 3, 0.28); }
+  .lp .case-cta { display: block; margin-top: 0.85rem; font-size: 0.82rem; font-weight: 650; color: var(--lp-accent-ink); }
+  .lp .case-flag .case-cta { margin-top: 0.6rem; }
+  .lp .case-note-row { margin-top: 1rem; font-size: 0.8rem; color: var(--lp-faint); }
+
+  /* ---- v2: sequence board ---- */
+  .lp .board-card {
+    background: var(--lp-card); border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
+    padding: 1.2rem 1.3rem 0.9rem; display: none;
+    box-shadow: 0 1px 2px rgba(27, 26, 22, 0.05), 0 14px 38px rgba(27, 26, 22, 0.07);
+  }
+  @media (min-width: 701px) { .lp .board-card { display: block; } }
+  .lp .board-banner {
+    font-size: 0.78rem; font-weight: 650; color: var(--lp-accent-ink); text-align: center;
+    border: 1px dashed rgba(232, 176, 3, 0.55); background: rgba(232, 176, 3, 0.08);
+    border-radius: 8px; padding: 0.45rem 0.8rem; margin-bottom: 1rem;
+  }
+  .lp .board { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; }
+  .lp .board-links { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+  .lp .bcol { display: grid; gap: 0.6rem; align-content: start; position: relative; z-index: 0; }
+  .lp .bcol-head { border-top: 3px solid var(--bc); padding-top: 0.55rem; margin-bottom: 0.15rem; }
+  .lp .bcol-head b { display: block; font-size: 0.9rem; font-weight: 700; color: var(--lp-ink); }
+  .lp .bcol-head span { font-size: 0.72rem; color: var(--lp-faint); }
+  .lp .btile {
+    display: grid; grid-template-columns: 34px 1fr auto; gap: 0.65rem; align-items: center;
+    text-align: left; cursor: pointer; font-family: var(--lp-font);
+    background: color-mix(in srgb, var(--bc) 4%, #FFFFFF);
+    border: 1px solid color-mix(in srgb, var(--bc) 22%, #FFFFFF);
+    border-left: 3px solid var(--bc);
+    border-radius: 10px; padding: 0.7rem 0.8rem;
+    transition: box-shadow 0.15s, border-color 0.15s, opacity 0.15s;
+  }
+  .lp .btile:hover, .lp .btile.sel { border-color: var(--bc); box-shadow: 0 8px 22px rgba(27, 26, 22, 0.1); }
+  .lp .btile.dim { opacity: 0.38; }
+  .lp .btile.dep { border-color: var(--bc); box-shadow: inset 0 0 0 1px var(--bc); }
+  .lp .btile:focus-visible { outline: 2px solid var(--lp-accent-ink); outline-offset: 2px; }
+  .lp .bt-ic { width: 34px; height: 34px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--bc) 12%, #FFFFFF); }
+  .lp .bt-ic svg { width: 20px; height: 20px; fill: none; stroke: var(--bc); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .lp .bt-tx b { display: block; font-size: 0.9rem; font-weight: 650; color: var(--lp-ink); line-height: 1.25; }
+  .lp .bt-tx span { display: block; font-size: 0.74rem; color: var(--lp-faint); margin-top: 0.1rem; }
+  .lp .bt-wk { font-size: 0.7rem; font-weight: 650; color: var(--lp-faint); font-variant-numeric: tabular-nums; align-self: start; }
+
+  /* ---- v2: model chart ---- */
+  .lp .model-card.model-wide { display: block; margin-top: 1.6rem; }
+  .lp .model-card.model-wide .mc-sub { max-width: 70ch; }
+  .lp .model-card.model-wide .mc-sub b { color: var(--lp-ink); }
+  .lp #mchart { display: block; width: 100%; height: auto; margin-top: 1rem; }
+  .lp #mchart text { font-family: var(--lp-font); }
+
+  /* ---- v2: delivery flow strip + carousel ---- */
+  .lp .flow-strip {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 0.75rem;
+    background: var(--lp-card); border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
+    padding: 1rem 1.2rem; margin-bottom: 1.6rem;
+  }
+  .lp .fs-step { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
+  .lp .fs-step i {
+    font-style: normal; width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    background: var(--lp-accent); color: #10233F; font-size: 0.74rem; font-weight: 750;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .lp .fs-step b { display: block; font-size: 0.88rem; font-weight: 700; color: var(--lp-ink); line-height: 1.2; }
+  .lp .fs-step span { display: block; font-size: 0.72rem; color: var(--lp-faint); }
+  .lp .fs-core { background: rgba(16, 35, 63, 0.05); border: 1px solid rgba(16, 35, 63, 0.14); border-radius: 10px; padding: 0.45rem 0.7rem; }
+  .lp .fs-arrow { color: var(--lp-accent-ink); flex-shrink: 0; }
+  .lp .fs-arrow svg { width: 20px; height: 20px; display: block; }
+  .lp .fs-loop { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; color: var(--lp-accent-ink); font-size: 0.74rem; font-weight: 650; }
+  .lp .fs-loop svg { width: 44px; height: 20px; }
+  @media (max-width: 960px) { .lp .fs-loop { margin-left: 0; } }
+
+  .lp .carousel { position: relative; display: flex; align-items: stretch; gap: 0.6rem; }
+  .lp .car-track {
+    display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory;
+    scroll-behavior: smooth; padding: 0.4rem 0.2rem 1rem; flex: 1; min-width: 0;
+    scrollbar-width: thin;
+  }
+  .lp .car-card {
+    flex: 0 0 300px; scroll-snap-align: start; cursor: zoom-in;
+    font-family: var(--lp-font); text-align: left; background: none; border: none; padding: 0;
+    display: flex; flex-direction: column; gap: 0.5rem;
+    transition: transform 0.15s;
+  }
+  .lp .car-card:hover { transform: translateY(-3px); }
+  .lp .car-card:focus-visible { outline: 2px solid var(--lp-accent-ink); outline-offset: 3px; border-radius: 8px; }
+  .lp .cc-head { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; font-size: 0.82rem; font-weight: 650; color: var(--lp-ink); }
+  .lp .cc-head .st { font-style: normal; font-size: 0.6rem; font-weight: 650; letter-spacing: 0.07em; text-transform: uppercase; border-radius: 4px; padding: 0.12rem 0.42rem; }
+  .lp .car-card .paper { width: 100%; flex: 1; aspect-ratio: auto; height: 100%; min-height: 330px; }
+  .lp .car-card .paper.compact { gap: 3.5px; padding: 10px 11px; }
+  .lp .car-nav {
+    flex-shrink: 0; align-self: center; width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid var(--lp-line); background: var(--lp-card); color: var(--lp-ink); cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(27, 26, 22, 0.08);
+  }
+  .lp .car-nav:hover { border-color: var(--lp-ink); }
+  .lp .car-nav svg { width: 18px; height: 18px; }
+  .lp .car-dots { display: flex; gap: 0.4rem; justify-content: center; margin-top: 0.2rem; }
+  .lp .car-dots button { width: 8px; height: 8px; border-radius: 50%; border: none; background: #D6D3C8; cursor: pointer; padding: 0; }
+  .lp .car-dots button[aria-selected="true"] { background: var(--lp-accent-ink); }
+  @media (max-width: 700px) { .lp .car-nav { display: none; } .lp .car-card { flex-basis: 82vw; } }
+
+  /* ---- v2: outcome lane continuation ---- */
+  .lp .olane .obar i.cont { background: linear-gradient(90deg, #3D5A7C 55%, rgba(61, 90, 124, 0.25)); }
+  .lp .olane .obar i.og.cont { background: linear-gradient(90deg, var(--lp-accent) 55%, rgba(232, 176, 3, 0.25)); }
+  .lp .outcome { transition: border-color 0.2s, box-shadow 0.2s; }
+  .lp .outcome.sel { border-color: var(--lp-accent); box-shadow: 0 12px 34px rgba(27, 26, 22, 0.12); }
+  .lp .outcome.sel .rtag::after { content: " \00b7 your situation"; color: var(--lp-ink); }
+
+  /* ---- v2: task sorter (overlay content) ---- */
+  .lp .sorter h3 { font-size: 1.15rem; }
+  .lp .sorter .st-q { margin-top: 1rem; }
+  .lp .sorter .st-q > b { display: block; font-size: 0.9rem; color: var(--lp-ink); font-weight: 650; margin-bottom: 0.4rem; }
+  .lp .sorter .seg { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .lp .sorter .seg button {
+    font-family: var(--lp-font); font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    border: 1px solid var(--lp-line); background: var(--lp-card); color: var(--lp-body);
+    border-radius: 999px; padding: 0.4rem 0.9rem;
+  }
+  .lp .sorter .seg button[aria-pressed="true"] { background: var(--lp-ink); border-color: var(--lp-ink); color: #FFFFFF; }
+  .lp .sorter .st-res {
+    margin-top: 1.2rem; border-radius: var(--lp-radius); padding: 0.9rem 1rem;
+    border: 1px solid var(--lp-line); background: var(--lp-bg-alt); font-size: 0.9rem;
+  }
+  .lp .sorter .st-res b { display: inline-block; font-weight: 750; border-radius: 6px; padding: 0.2rem 0.6rem; color: #FFFFFF; margin-right: 0.4rem; }
+  .lp .sorter .st-note { font-size: 0.8rem; color: var(--lp-faint); margin-top: 0.8rem; }
+
 </style>
 
 <div class="lp">
@@ -896,36 +1056,93 @@
   <div class="wrap">
     <div class="sec-head">
       <span class="kicker">Where you are starting from</span>
-      <h2>Four situations, one discipline: the work has to change, and someone has to own the change.</h2>
-      <p>Enterprise AI rarely fails loudly. People run the tool in parallel with the old way, the value is never clearly architected, and usage quietly fades. MIT found <b>95%</b> of enterprise GenAI pilots show no measurable P&amp;L impact, and adoption typically plateaus at <b>15&ndash;30%</b> after launch. The Review meets you in whichever of these four situations you are in.</p>
+      <h2>Four situations, one discipline: the work has to change.</h2>
+      <p>Enterprise AI rarely fails loudly. MIT found <b>95%</b> of GenAI pilots show no measurable P&amp;L impact, and adoption typically plateaus at <b>15&ndash;30%</b>. Select your situation: the page tunes itself to it.</p>
     </div>
     <div class="case-grid">
-      <article class="case">
-        <div class="case-top"><span class="case-tag">Stalled platform</span></div>
-        <h3>The department platform launched. Usage plateaued.</h3>
-        <p>An enterprise platform (talent, service, finance, operations) licensed, launched, and stuck. Deployment is a project plan; adoption is a population of people choosing, every day, to work differently. The recovery grows use of the compounding features the platform was bought for, past log-in counts, through an explicit workflow redesign: map the task, name the augmented steps, add the new steps, build the capability, and hold it in the team cadence.</p>
-        <div class="case-chips" aria-label="Delivered into your existing stack"><span>Microsoft 365</span><span>Google Workspace</span><span>Salesforce</span><span>Slack</span><span>your ERP &amp; HRIS</span></div>
-        <p class="case-note">Delivery lands inside the suites your teams already live in, wired to the workflows, and the plan is measured on feature-depth per workflow, never on log-ins.</p>
+
+      <article class="case" role="button" tabindex="0" data-sit="platform" aria-pressed="false">
+        <div class="case-top">
+          <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 12l3-3 2.5 2L16 7"/></svg></span>
+          <span class="case-tag">Stalled platform</span>
+        </div>
+        <h3>The platform launched. Usage plateaued.</h3>
+        <ul class="case-facts">
+          <li>Log-ins get counted; the work stays unchanged</li>
+          <li>Three to five workflows redesigned end to end</li>
+          <li>Measured on feature depth per workflow</li>
+        </ul>
+        <div class="case-viz" aria-hidden="true">
+          <div class="cv-row"><span>log-ins</span><div class="cv-bar"><i style="width:72%"></i></div><b>72%</b></div>
+          <div class="cv-row"><span>in-workflow</span><div class="cv-bar"><i class="cv-warn" style="width:19%"></i></div><b>19%</b></div>
+          <div class="cv-cap">the gap the Review closes</div>
+        </div>
+        <div class="case-chips" aria-label="Delivered into your existing stack"><span>Microsoft 365</span><span>Google Workspace</span><span>Salesforce</span><span>Slack</span></div>
+        <span class="case-cta">This is us &rarr;</span>
       </article>
-      <article class="case case-flag">
-        <div class="case-top"><span class="case-tag">Frontier-lab seats</span><span class="case-flagpill">Flagship</span></div>
-        <h3>Everyone got a seat. Now every role has to change.</h3>
-        <p>Enterprise seats from the frontier labs (Anthropic Claude, OpenAI ChatGPT, Microsoft Copilot, Google Gemini) put a general-purpose capability in every role at once. Log-ins arrive on day one; the actual deployment is redrawing who does what. Every task in a role gets sorted by four plain questions into three lanes: <b>human-led</b>, <b>shared</b> with AI, or <b>handed to AI</b>, and the freed capacity gets pointed at named work.</p>
-        <p class="case-note">This is the engagement the practice is built around: AI work redesign, role by role, with the sorting logic applied live in the working sessions. The intervention library below carries the change side.</p>
+
+      <article class="case case-flag" role="button" tabindex="0" data-sit="seats" aria-pressed="false">
+        <div class="case-top">
+          <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.6L18 9.4l-4.2 1.8L12 16l-1.8-4.8L6 9.4l4.2-1.8L12 3z"/><path d="M19 14l.9 2.3L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.7L19 14z"/></svg></span>
+          <span class="case-tag">Frontier-lab seats</span><span class="case-flagpill">Flagship</span>
+        </div>
+        <h3>Everyone got a seat. Every role changes.</h3>
+        <ul class="case-facts">
+          <li>Claude &middot; ChatGPT &middot; Copilot &middot; Gemini</li>
+          <li>Every task sorted by four plain questions</li>
+          <li>Freed capacity pointed at named work</li>
+        </ul>
+        <div class="case-viz" aria-hidden="true">
+          <div class="cv-lanes">
+            <span class="cvl" style="border-color:#2C4B76;color:#2C4B76">Human-led</span>
+            <span class="cvl" style="border-color:#8A6302;color:#8A6302">Shared</span>
+            <span class="cvl" style="border-color:#0E7569;color:#0E7569">Handed to AI</span>
+          </div>
+          <div class="cv-cap">the three lanes every task lands in</div>
+        </div>
+        <button type="button" class="case-sort" data-sorter>Sort one of your tasks &rarr;</button>
+        <span class="case-cta">This is us &rarr;</span>
       </article>
-      <article class="case">
-        <div class="case-top"><span class="case-tag">The forty pilots</span></div>
-        <h3>Forty pilots are live, and every platform now sells agents.</h3>
-        <p>The agentic push left a pilot landscape nobody governs, and it is compounding: every incumbent platform in your stack is asking for credits to test its new agents. That is the real arbitrage on the table. The Review maps every pilot and every vendor-agent offer against explicit criteria (value evidence, workflow embed, named sponsor, cost to serve) and delivers a decision on each line: <b>scale, institutionalize, or stop</b>.</p>
-        <p class="case-note">Written to survive the sponsor conversation and the renewal negotiation.</p>
+
+      <article class="case" role="button" tabindex="0" data-sit="pilots" aria-pressed="false">
+        <div class="case-top">
+          <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 18l9 5 9-5" opacity="0.45"/></svg></span>
+          <span class="case-tag">The forty pilots</span>
+        </div>
+        <h3>Forty pilots. Every platform now sells agents.</h3>
+        <ul class="case-facts">
+          <li>Vendor credit asks are the real arbitrage</li>
+          <li>Explicit criteria: value, embed, sponsor, cost</li>
+          <li>A decision on every line, in writing</li>
+        </ul>
+        <div class="case-viz" aria-hidden="true">
+          <div class="cv-triage"><span class="vc scale">SCALE &middot; 6</span><span class="vc repair">INSTITUTIONALIZE &middot; 9</span><span class="vc stop">STOP &middot; 25</span></div>
+          <div class="cv-cap">a governed portfolio, sample split</div>
+        </div>
+        <span class="case-cta">This is us &rarr;</span>
       </article>
-      <article class="case">
-        <div class="case-top"><span class="case-tag">Starting 0 &rarr; 1</span></div>
-        <h3>A handful of people use AI. Some of them are hiding it.</h3>
-        <p>Leadership has barely touched the tools, no platform is chosen, no use policy exists, and the only number anyone can report is log-ins (log-ins as the headline metric are the tell). The 0&rarr;1 arc runs on cadence: leadership aligns first and writes the charter and use policy, teams activate on real work in builder events, and the new way gets embedded in policy, criteria, and rituals.</p>
-        <p class="case-note">The first signals decide the path: a third of employees read AI as replacement, 62% as augmentation, and trust in leadership's intent moves that belief more than any training program (BetterUp).</p>
+
+      <article class="case" role="button" tabindex="0" data-sit="zero" aria-pressed="false">
+        <div class="case-top">
+          <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16"/><path d="M12 16a5 5 0 0 0 5-5H7a5 5 0 0 0 5 5z"/><path d="M12 3v3M6.3 5.6l1.8 1.8M17.7 5.6l-1.8 1.8"/></svg></span>
+          <span class="case-tag">Starting 0 &rarr; 1</span>
+        </div>
+        <h3>A handful use AI. Some are hiding it.</h3>
+        <ul class="case-facts">
+          <li>Leadership aligns first: charter, use policy</li>
+          <li>Builder events on real work, monthly</li>
+          <li>Tracked past log-ins from day one</li>
+        </ul>
+        <div class="case-viz" aria-hidden="true">
+          <div class="cv-row"><span>read it as replacement</span><div class="cv-bar"><i class="cv-warn" style="width:33%"></i></div><b>33%</b></div>
+          <div class="cv-row"><span>read it as augmentation</span><div class="cv-bar"><i style="width:62%"></i></div><b>62%</b></div>
+          <div class="cv-cap">the belief the first signals decide &middot; BetterUp</div>
+        </div>
+        <span class="case-cta">This is us &rarr;</span>
       </article>
+
     </div>
+    <p class="case-note-row" id="case-note-row">Selecting a situation highlights its 90-day outcome below and tells Tom where you are starting from.</p>
   </div>
 </section>
 
@@ -1035,11 +1252,39 @@
       <h2>The intervention library. The order decides the outcome.</h2>
       <p>Your roadmap is drawn from a library of research-backed intervention plays, sequenced by the Transformation Dynamics Simulation&trade;. Hover any play to see what it depends on; select it and the full model detail opens over the page.</p>
     </div>
-    <div class="wheel-card">
-      <div class="wlegend"><span class="wlg"><i style="background:#10233F"></i>Opportunity</span><span class="wlg"><i style="background:#C99A05"></i>Motivation</span><span class="wlg"><i style="background:#0E7569"></i>Capability</span><span class="wlg"><i style="background:#4E5BA6"></i>Sustainment</span></div>
-      <svg viewBox="0 0 860 700" id="wheel" aria-label="The thirteen intervention plays by category"><path class="seg" data-play="sponsor" d="M229.1 208.1 A246.0 246.0 0 0 1 305.8 137.7 L354.3 220.5 A150.0 150.0 0 0 0 307.5 263.5 Z" fill="#10233F" fill-opacity="0.09" stroke="#10233F" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Sponsorship"/><g class="segicon" data-play="sponsor" transform="translate(279.3 187.3) scale(1.4)" fill="none" stroke="#10233F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><circle cx="12" cy="9" r="5"/><path d="M9 13l-2 7 5-3 5 3-2-7"/></g><text class="outlab" data-play="sponsor" x="248.8" y="162.0" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Sponsorship</text><path class="seg" data-play="manager" d="M311.7 134.3 A246.0 246.0 0 0 1 411.6 104.7 L418.8 200.4 A150.0 150.0 0 0 0 357.9 218.5 Z" fill="#10233F" fill-opacity="0.09" stroke="#10233F" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Manager Channel"/><g class="segicon" data-play="manager" transform="translate(356.9 143.4) scale(1.4)" fill="none" stroke="#10233F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-6 4V6z"/></g><text class="outlab" data-play="manager" x="351.5" y="103.8" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Manager Channel</text><path class="seg" data-play="whole" d="M418.4 104.3 A246.0 246.0 0 0 1 521.1 121.5 L485.5 210.7 A150.0 150.0 0 0 0 422.9 200.2 Z" fill="#10233F" fill-opacity="0.09" stroke="#10233F" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Whole Product"/><g class="segicon" data-play="whole" transform="translate(445.9 137.9) scale(1.4)" fill="none" stroke="#10233F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></g><text class="outlab" data-play="whole" x="473.3" y="85.6" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Whole Product</text><path class="seg" data-play="friction" d="M527.4 124.1 A246.0 246.0 0 0 1 612.1 184.6 L541.1 249.2 A150.0 150.0 0 0 0 489.4 212.3 Z" fill="#10233F" fill-opacity="0.09" stroke="#10233F" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Workflow Redesign"/><g class="segicon" data-play="friction" transform="translate(528.3 172.1) scale(1.4)" fill="none" stroke="#10233F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="18" r="2.2"/><path d="M7 6h7a4 4 0 0 1 4 4v5.8"/></g><text class="outlab" data-play="friction" x="586.3" y="141.8" text-anchor="start" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Workflow Redesign</text><path d="M224.2 204.6 A252.0 252.0 0 0 1 616.6 180.6" fill="none" stroke="#10233F" stroke-width="2.5" stroke-opacity="0.7"/><path class="seg" data-play="proof" d="M630.9 208.1 A246.0 246.0 0 0 1 671.6 303.9 L577.3 321.9 A150.0 150.0 0 0 0 552.5 263.5 Z" fill="#C99A05" fill-opacity="0.09" stroke="#C99A05" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Proof Seeding"/><g class="segicon" data-play="proof" transform="translate(595.4 255.8) scale(1.4)" fill="none" stroke="#C99A05" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M12 21v-7"/><path d="M12 14c0-4 3-6 7-6 0 4-3 6-7 6z"/><path d="M12 14c0-4-3-6-7-6 0 4 3 6 7 6z"/></g><text class="outlab" data-play="proof" x="675.1" y="252.5" text-anchor="start" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Proof Seeding</text><path class="seg" data-play="peer" d="M672.8 310.6 A246.0 246.0 0 0 1 667.4 414.6 L574.7 389.4 A150.0 150.0 0 0 0 578.1 326.0 Z" fill="#C99A05" fill-opacity="0.09" stroke="#C99A05" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Peer Proof"/><g class="segicon" data-play="peer" transform="translate(610.9 343.6) scale(1.4)" fill="none" stroke="#C99A05" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M7 8h4v4c0 2.2-1.2 3.8-3.5 4.6"/><path d="M14 8h4v4c0 2.2-1.2 3.8-3.5 4.6"/></g><text class="outlab" data-play="peer" x="695.6" y="368.7" text-anchor="start" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Peer Proof</text><path class="seg" data-play="inaction" d="M665.5 421.2 A246.0 246.0 0 0 1 614.9 512.2 L542.8 448.9 A150.0 150.0 0 0 0 573.6 393.4 Z" fill="#C99A05" fill-opacity="0.09" stroke="#C99A05" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Inaction Cost"/><g class="segicon" data-play="inaction" transform="translate(586.3 429.3) scale(1.4)" fill="none" stroke="#C99A05" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M7 3h10M7 21h10"/><path d="M8 3v3c0 2.5 4 3.5 4 6s-4 3.5-4 6v3"/><path d="M16 3v3c0 2.5-4 3.5-4 6s4 3.5 4 6v3"/></g><text class="outlab" data-play="inaction" x="663.1" y="482.2" text-anchor="start" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Inaction Cost</text><path class="seg" data-play="quiet" d="M610.3 517.3 A246.0 246.0 0 0 1 525.0 576.9 L487.9 488.4 A150.0 150.0 0 0 0 540.0 452.0 Z" fill="#C99A05" fill-opacity="0.09" stroke="#C99A05" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Quiet Path"/><g class="segicon" data-play="quiet" transform="translate(526.6 495.5) scale(1.4)" fill="none" stroke="#C99A05" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M5 20c6 0 2-7 8-7 5 0 2-6 6-6" stroke-dasharray="3 3.5"/></g><text class="outlab" data-play="quiet" x="584.0" y="569.8" text-anchor="start" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Quiet Path</text><path d="M635.8 204.6 A252.0 252.0 0 0 1 527.3 582.5" fill="none" stroke="#C99A05" stroke-width="2.5" stroke-opacity="0.7"/><path class="seg" data-play="build" d="M496.6 586.8 A246.0 246.0 0 0 1 392.7 593.2 L407.3 498.3 A150.0 150.0 0 0 0 470.6 494.4 Z" fill="#0E7569" fill-opacity="0.09" stroke="#0E7569" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Capability Build"/><g class="segicon" data-play="build" transform="translate(425.3 530.8) scale(1.4)" fill="none" stroke="#0E7569" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M12 4L2 9l10 5 10-5-10-5z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/></g><text class="outlab" data-play="build" x="446.0" y="627.5" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Capability Build</text><path class="seg" data-play="whenthen" d="M385.9 592.0 A246.0 246.0 0 0 1 289.8 552.1 L344.5 473.3 A150.0 150.0 0 0 0 403.1 497.6 Z" fill="#0E7569" fill-opacity="0.09" stroke="#0E7569" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for When-Then"/><g class="segicon" data-play="whenthen" transform="translate(337.3 516.1) scale(1.4)" fill="none" stroke="#0E7569" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></g><text class="outlab" data-play="whenthen" x="325.6" y="597.0" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">When-Then</text><path d="M498.3 592.6 A252.0 252.0 0 0 1 286.4 557.1" fill="none" stroke="#0E7569" stroke-width="2.5" stroke-opacity="0.7"/><path class="seg" data-play="policy" d="M266.2 533.5 A246.0 246.0 0 0 1 205.0 449.4 L292.8 410.6 A150.0 150.0 0 0 0 330.1 461.9 Z" fill="#4E5BA6" fill-opacity="0.09" stroke="#4E5BA6" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Policy"/><g class="segicon" data-play="policy" transform="translate(253.1 449.7) scale(1.4)" fill="none" stroke="#4E5BA6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h6M10 15.5h6"/></g><text class="outlab" data-play="policy" x="214.1" y="509.1" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Policy</text><path class="seg" data-play="criteria" d="M202.3 443.0 A246.0 246.0 0 0 1 184.2 340.5 L280.1 344.2 A150.0 150.0 0 0 0 291.1 406.7 Z" fill="#4E5BA6" fill-opacity="0.09" stroke="#4E5BA6" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Criteria"/><g class="segicon" data-play="criteria" transform="translate(218.2 367.6) scale(1.4)" fill="none" stroke="#4E5BA6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><rect x="6" y="5" width="12" height="16" rx="2"/><path d="M9 4h6v3H9z"/><path d="M9.5 13.5l2 2 3.5-4"/></g><text class="outlab" data-play="criteria" x="168.0" y="400.5" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Criteria</text><path class="seg" data-play="ritual" d="M184.5 333.7 A246.0 246.0 0 0 1 213.3 233.6 L297.9 279.0 A150.0 150.0 0 0 0 280.3 340.0 Z" fill="#4E5BA6" fill-opacity="0.09" stroke="#4E5BA6" stroke-opacity="0.3" stroke-width="1.2" tabindex="0" role="button" aria-label="Show detail for Ritual & Cadence"/><g class="segicon" data-play="ritual" transform="translate(222.9 278.5) scale(1.4)" fill="none" stroke="#4E5BA6" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V9h-5.5"/></g><text class="outlab" data-play="ritual" x="174.2" y="282.7" text-anchor="end" font-size="13.5" font-weight="600" fill="#1B1A16" font-family="Archivo, sans-serif">Ritual & Cadence</text><path d="M262.2 538.0 A252.0 252.0 0 0 1 208.0 230.8" fill="none" stroke="#4E5BA6" stroke-width="2.5" stroke-opacity="0.7"/><circle cx="430.0" cy="350.0" r="142" fill="#FFFFFF" stroke="#E6E3D7"/><foreignObject x="298" y="218" width="264" height="264"><div xmlns="http://www.w3.org/1999/xhtml" class="hubfo" id="wheel-hub"><h3>Thirteen plays</h3><div class="meta">Four categories, one library.<br/>Click any segment for the play&#x27;s model detail.</div></div></foreignObject></svg>
+    <div class="board-card">
+      <div class="board-banner">Sponsorship sets the ceiling: won directly, or earned by a demonstrated bottom-up win.</div>
+      <div class="board" id="board">
+        <svg class="board-links" id="board-links" aria-hidden="true"></svg>
+        <div class="bcol" data-g="O">
+          <div class="bcol-head" style="--bc:#10233F"><b>Opportunity</b><span>structural &amp; social permission</span></div>
+          <button type="button" class="btile" data-play="sponsor" style="--bc:#10233F"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="M9 13l-2 7 5-3 5 3-2-7"/></svg></span><span class="bt-tx"><b>Executive Sponsorship</b><span>visible, funded, protected</span></span><span class="bt-wk">2 wks</span></button>
+          <button type="button" class="btile" data-play="manager" style="--bc:#10233F"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-6 4V6z"/></svg></span><span class="bt-tx"><b>Manager-as-Channel</b><span>managers equipped to localize</span></span><span class="bt-wk">3 wks</span></button>
+          <button type="button" class="btile" data-play="whole" style="--bc:#10233F"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg></span><span class="bt-tx"><b>Whole-Product Kit</b><span>the complete kit shipped</span></span><span class="bt-wk">4 wks</span></button>
+          <button type="button" class="btile" data-play="friction" style="--bc:#10233F"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="18" r="2.2"/><path d="M7 6h7a4 4 0 0 1 4 4v5.8"/></svg></span><span class="bt-tx"><b>Workflow Redesign</b><span>rebuild the task, retire the old path</span></span><span class="bt-wk">3 wks</span></button>
+        </div>
+        <div class="bcol" data-g="M">
+          <div class="bcol-head" style="--bc:#C99A05"><b>Motivation</b><span>belief &amp; desire</span></div>
+          <button type="button" class="btile" data-play="proof" style="--bc:#C99A05"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-7"/><path d="M12 14c0-4 3-6 7-6 0 4-3 6-7 6z"/><path d="M12 14c0-4-3-6-7-6 0 4 3 6 7 6z"/></svg></span><span class="bt-tx"><b>Proof Seeding</b><span>first wins made visible</span></span><span class="bt-wk">3 wks</span></button>
+          <button type="button" class="btile" data-play="peer" style="--bc:#C99A05"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h4v4c0 2.2-1.2 3.8-3.5 4.6"/><path d="M14 8h4v4c0 2.2-1.2 3.8-3.5 4.6"/></svg></span><span class="bt-tx"><b>Peer Proof Relay</b><span>same-function references</span></span><span class="bt-wk">2 wks</span></button>
+          <button type="button" class="btile" data-play="inaction" style="--bc:#C99A05"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10M7 21h10"/><path d="M8 3v3c0 2.5 4 3.5 4 6s-4 3.5-4 6v3"/><path d="M16 3v3c0 2.5-4 3.5-4 6s4 3.5 4 6v3"/></svg></span><span class="bt-tx"><b>Inaction-Cost Reframe</b><span>waiting becomes the risk</span></span><span class="bt-wk">2 wks</span></button>
+          <button type="button" class="btile" data-play="quiet" style="--bc:#C99A05"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20c6 0 2-7 8-7 5 0 2-6 6-6" stroke-dasharray="3 3.5"/></svg></span><span class="bt-tx"><b>Quiet Path for Laggards</b><span>laggards moved one to one</span></span><span class="bt-wk">4 wks</span></button>
+        </div>
+        <div class="bcol" data-g="C">
+          <div class="bcol-head" style="--bc:#0E7569"><b>Capability</b><span>can they do it well</span></div>
+          <button type="button" class="btile" data-play="build" style="--bc:#0E7569"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4L2 9l10 5 10-5-10-5z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/></svg></span><span class="bt-tx"><b>Capability Build</b><span>role-based skill and judgment</span></span><span class="bt-wk">6 wks</span></button>
+          <button type="button" class="btile" data-play="whenthen" style="--bc:#0E7569"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span><span class="bt-tx"><b>When-Then Prompts</b><span>triggers on the calendar</span></span><span class="bt-wk">1 wk</span></button>
+        </div>
+        <div class="bcol" data-g="S">
+          <div class="bcol-head" style="--bc:#4E5BA6"><b>Sustainment</b><span>make it stick</span></div>
+          <button type="button" class="btile" data-play="policy" style="--bc:#4E5BA6"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h6M10 15.5h6"/></svg></span><span class="bt-tx"><b>Policy &amp; Standards</b><span>the new way, codified</span></span><span class="bt-wk">3 wks</span></button>
+          <button type="button" class="btile" data-play="criteria" style="--bc:#4E5BA6"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="12" height="16" rx="2"/><path d="M9 4h6v3H9z"/><path d="M9.5 13.5l2 2 3.5-4"/></svg></span><span class="bt-tx"><b>Performance Criteria</b><span>reviews measure the new work</span></span><span class="bt-wk">3 wks</span></button>
+          <button type="button" class="btile" data-play="ritual" style="--bc:#4E5BA6"><span class="bt-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V9h-5.5"/></svg></span><span class="bt-tx"><b>Ritual &amp; Cadence</b><span>carried by the calendar</span></span><span class="bt-wk">2 wks</span></button>
+        </div>
+      </div>
+      <p class="graph-hint">Proof gates the social plays, workflow redesign precedes capability, and sustainment locks in late. Hover a play: its dependencies draw on the board, and the model detail opens.</p>
     </div>
-    <p class="graph-hint">Sponsorship sets the ceiling: won directly, or earned by a demonstrated bottom-up win. Proof gates the social plays, workflow redesign precedes capability, and sustainment locks in after the threshold. The lines inside the wheel are those dependencies.</p>
+
     <div class="filters" role="group" aria-label="Filter plays by group">
       <button aria-pressed="true" data-f="all">All 13 plays</button>
       <button aria-pressed="false" data-f="O">Opportunity</button>
@@ -1056,34 +1301,24 @@
         <div class="pdetail on" id="pdetail"></div>
       </div>
     </div>
-    <div class="model-card">
+    <div class="model-card model-wide">
       <div>
-        <h3>The model, live: what one missing leg costs.</h3>
-        <p class="mc-sub">Every role changes in this wave, so the model does not settle at a plateau. Run the full sequence and the rollout crosses the 70% self-sustaining threshold around week 8 and keeps climbing. Drop one leg and the curve shows where it lands instead.</p>
-        <div class="pathbtns" role="group" aria-label="Choose a scenario">
-          <button aria-pressed="true" data-path="full">Full sequence</button>
-          <button aria-pressed="false" data-path="nomgr">Managers left out</button>
-          <button aria-pressed="false" data-path="noproof">No seeded proof</button>
-          <button aria-pressed="false" data-path="early">Early adopters only</button>
-          <button aria-pressed="false" data-path="access">Access, then silence</button>
-        </div>
-        <p class="model-readout" id="model-readout">Sequenced with every leg in place: past the <b>70%</b> threshold around <b>week 8</b>, still climbing at week 24.</p>
-        <p class="model-link">This is the engine behind the Review. Explore it yourself in the <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">AI Adoption Simulator</a>.</p>
+        <h3>The model, live: where rollouts actually land.</h3>
+        <p class="mc-sub">Scored by the practice's own simulator: run the full sequence and all thirteen plays land cleanly, the rollout crosses the <b>55%</b> self-sustaining threshold at <b>week 11</b>, and reaches <b>80%</b> by week 24. That line is the modeled ceiling. Every other line is where rollouts land when one leg is missing.</p>
       </div>
-      <div class="model-chart">
-      <svg viewBox="0 0 460 270" aria-hidden="true">
-        <line x1="44.0" y1="20" x2="44.0" y2="240.0" stroke="#E6E3D7" stroke-width="1"/>
-        <line x1="44.0" y1="240.0" x2="444.0" y2="240.0" stroke="#E6E3D7" stroke-width="1"/>
-        <line x1="44.0" y1="185.0" x2="444.0" y2="185.0" stroke="#F1EFE6" stroke-width="1"/><line x1="44.0" y1="130.0" x2="444.0" y2="130.0" stroke="#F1EFE6" stroke-width="1"/><line x1="44.0" y1="75.0" x2="444.0" y2="75.0" stroke="#F1EFE6" stroke-width="1"/><text x="36.0" y="244.0" text-anchor="end" font-size="11" fill="#7A776C" font-family="Archivo, sans-serif">0%</text><text x="36.0" y="189.0" text-anchor="end" font-size="11" fill="#7A776C" font-family="Archivo, sans-serif">25%</text><text x="36.0" y="134.0" text-anchor="end" font-size="11" fill="#7A776C" font-family="Archivo, sans-serif">50%</text><text x="36.0" y="79.0" text-anchor="end" font-size="11" fill="#7A776C" font-family="Archivo, sans-serif">75%</text>
-        <text x="44.0" y="260" font-size="11" fill="#7A776C" font-family="Archivo, sans-serif">Week 0</text>
-        <text x="444.0" y="260" text-anchor="end" font-size="11" fill="#7A776C" font-family="Archivo, sans-serif">Week 24</text>
-        <line x1="44.0" y1="86.0" x2="444.0" y2="86.0" stroke="#E8B003" stroke-width="1.5" stroke-dasharray="5 4"/>
-        <text x="52.0" y="79.0" font-size="11" font-weight="600" fill="#8A6302" font-family="Archivo, sans-serif">self-sustaining threshold &middot; 70%</text>
-        <polyline id="mc-full" points="" fill="none" stroke="#10233F" stroke-width="2.8"/>
-        <polyline id="mc-alt" points="" fill="none" stroke="#B42318" stroke-width="2.6" style="display:none"/>
-      </svg>
+      <div class="pathbtns" role="group" aria-label="Emphasize a scenario">
+        <button aria-pressed="true" data-path="full">Full sequence &middot; modeled</button>
+        <button aria-pressed="false" data-path="nomgr">Managers left out</button>
+        <button aria-pressed="false" data-path="noproof">No seeded proof</button>
+        <button aria-pressed="false" data-path="early">Early adopters only</button>
+        <button aria-pressed="false" data-path="access">Access, then silence</button>
+        <button aria-pressed="false" data-path="base">No intervention</button>
       </div>
+      <div class="model-chart"><svg id="mchart" viewBox="0 0 680 330" role="img" aria-label="Adoption over 24 weeks under six scenarios; the full sequence crosses the 55 percent self-sustaining threshold at week 11 and reaches 80 percent by week 24"></svg></div>
+      <p class="model-readout" id="model-readout">The modeled ceiling: every play lands cleanly, in order, and the change carries itself from week 11.</p>
+      <p class="model-link">Build and score your own sequence in the <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">AI Adoption Simulator</a>: it is the same engine the Review runs on your data.</p>
     </div>
+
   </div>
 </section>
 
@@ -1095,28 +1330,23 @@
       <h2>You leave with working documents, and the loop that keeps them honest.</h2>
       <p>This is the delivery engine, and the reason ten days is enough. Your context carries the same weight as the production system: the playbooks are written from it, pointed back at it, and wired to the dashboard that reads their effect. Select any document to see it up close.</p>
     </div>
-    <div class="engine">
-      <div class="eng-col">
-        <div class="eng-head"><i>1</i>Your context</div>
-        <div class="eng-card"><b>Interviews</b>Your leaders, your managers, and the teams living with the rollout.</div>
-        <div class="eng-card"><b>Usage &amp; workflow data</b>What the dashboards say, read against how the work actually runs.</div>
-        <div class="eng-card"><b>The 12-question diagnostic</b>Your deployment mapped onto the four archetypes above.</div>
-      </div>
-      <div class="eng-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-      <div class="eng-col">
-        <div class="eng-head"><i>2</i>AI-native production</div>
-        <div class="eng-core">
-          <b>The practice's own instruments</b>
-          <p>Diagnostic pattern-matching, the Transformation Dynamics Simulation&trade;, and drafting run over your context in every pass. This is how ten days of engagement replaces a months-long change program.</p>
-          <div class="eng-tags"><span>diagnostic pattern-match</span><span>sequence simulation</span><span>playbook drafting</span></div>
-        </div>
-      </div>
-      <div class="eng-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-      <div class="eng-col eng-out">
-        <div class="eng-head"><i>3</i>Custom playbooks, pointed at your rollout</div>
-        <div class="shelf">
-          <button type="button" class="shelf-doc" data-blurb="Built with your team during the ten days: the recovery decision on every deployment line, the binding constraint named, the success metric owned, and the 90-day sequence on a calendar.">
-  <div class="paper portrait">
+    <div class="flow-strip" aria-label="The delivery engine">
+      <div class="fs-step"><i>1</i><div><b>Your context</b><span>interviews &middot; usage data &middot; the 12-question diagnostic</span></div></div>
+      <span class="fs-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      <div class="fs-step fs-core"><i>2</i><div><b>AI-native production</b><span>diagnostics &middot; Simulation&trade; &middot; drafting, run over your context</span></div></div>
+      <span class="fs-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      <div class="fs-step"><i>3</i><div><b>Custom playbooks</b><span>written for your teams and workflows</span></div></div>
+      <span class="fs-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      <div class="fs-step"><i>4</i><div><b>Your dashboard</b><span>every play wired to its metric</span></div></div>
+      <div class="fs-loop"><svg viewBox="0 0 46 20" aria-hidden="true"><path d="M42 3 H10 a6 6 0 0 0 0 12 h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="4 3"/><path d="M13 10.5l4 4.5-4 4.5" fill="none" stroke="currentColor" stroke-width="1.8" transform="translate(0,-4.5) scale(0.9)"/></svg><span>measured effects feed the next intervention</span></div>
+    </div>
+
+    <div class="carousel" id="doc-carousel">
+      <button type="button" class="car-nav car-prev" aria-label="Previous document"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="car-track" id="car-track">
+        <button type="button" class="car-card shelf-doc" data-blurb="Built with your team during the ten days: the recovery decision on every deployment line, the binding constraint named, the success metric owned, and the 90-day sequence on a calendar.">
+          <span class="cc-head">The Recovery Plan <em class="st eng">Built with you</em></span>
+  <div class="paper compact">
     <div class="phead"><b>TD</b>catalyst <span>Recovery Plan</span></div>
     <div class="pgold"></div>
     <div class="ptitle">Where the rollout restarts</div>
@@ -1136,71 +1366,11 @@
       <span>Wks 8&ndash;12 <b>Criteria &amp; cadence</b></span>
     </div>
     <div class="pfoot">tdcatalyst.com &middot; confidential sample</div>
-  </div><span class="sd-name">The Recovery Plan <em class="st eng">Built with you</em></span></button>
-          <button type="button" class="shelf-doc" data-blurb="Your population, cell by cell: who is where on the adoption curve, which cells are stalled, and the play each stalled cell calls for. Computes as your team types.">
-  <div class="paper tall">
-    <div class="phead"><b>TD</b>catalyst <span>Adoption Matrix &middot; worksheet</span></div>
-    <div class="pgold"></div>
-    <table class="pmatrix">
-      <tr><th></th><th>Precont.</th><th>Contempl.</th><th>Prepar.</th><th>Action</th></tr>
-      <tr><th>Innov.</th><td class="">3%</td><td class="">2%</td><td class="">1%</td><td class="">2%</td></tr><tr><th>Early</th><td class="hot">14%</td><td class="hot">11%</td><td class="">6%</td><td class="">4%</td></tr><tr><th>Late</th><td class="">9%</td><td class="hot">16%</td><td class="">8%</td><td class="">3%</td></tr><tr><th>Laggards</th><td class="">2%</td><td class="">8%</td><td class="">7%</td><td class="">4%</td></tr>
-    </table>
-    <div class="pblock" style="margin-top:4px;"><b>Top stalled cells</b>Early Majority &middot; Contemplation (16%) &rarr; Peer Proof Relay</div>
-    <div class="pfoot">enter your percentages &middot; computes as you type</div>
-  </div><span class="sd-name">Adoption Matrix worksheet <em class="st lib">In the library</em></span></button>
-          <button type="button" class="shelf-doc" data-blurb="Twelve questions your team asks before a vendor's forward deployed engineers arrive: inventory, access, decision rights, ownership, and the output measure that shows the work landed.">
-  <div class="paper small tall">
-    <div class="phead"><b>TD</b>catalyst <span>Vendor FDE governance &middot; 12 questions</span></div>
-    <div class="pgold"></div>
-    <ol class="pqs">
-      <li>Where is the running inventory of everything you build here, and who on our side can read it?</li>
-      <li>Which of our systems and data will you touch, and who approves each new connection?</li>
-      <li>What are you allowed to decide alone, and where is that line written down?</li>
-      <li>Who owns the code, the prompts, and the integrations if we part ways?</li>
-      <li>What measure of our output, not your activity, will show this worked?</li>
-    </ol>
-    <div class="pfoot">&hellip;7 more &middot; before the engineers arrive</div>
-  </div><span class="sd-name">Vendor FDE governance <em class="st lib">In the library</em></span></button>
-          <button type="button" class="shelf-doc" data-blurb="One page a manager reads before the first team conversation: the five beats in their own words, and the four commitments to secure with each person, one to one.">
-  <div class="paper tall">
-    <div class="phead"><b>TD</b>catalyst <span>Manager talking track</span></div>
-    <div class="pgold"></div>
-    <div class="pblock"><b>The five beats, in your own words</b><i class="l w90"></i><i class="l w75"></i><i class="l w85"></i></div>
-    <div class="pblock"><b>Secure with each person, 1:1</b></div>
-    <div class="pcheck">
-      <span>Names their own <span class="wt">when&hellip;then</span> trigger: the calendar moment the tool enters</span>
-      <span>Commits to one workflow, run the new way, this week</span>
-      <span>Agrees what output counts as the win, and who sees it</span>
-      <span>Books the follow-up before leaving the room</span>
-    </div>
-    <div class="pfoot">one page &middot; read before the first team conversation</div>
-  </div><span class="sd-name">Manager talking track <em class="st lib">In the library</em></span></button>
-          <button type="button" class="shelf-doc" data-blurb="The 0-to-1 format: one day, real work, leaders in the room, and three things shipped by 16:30. Repeats monthly so the proof compounds.">
-  <div class="paper tall">
-    <div class="phead"><b>TD</b>catalyst <span>Builder event &middot; day agenda</span></div>
-    <div class="pgold"></div>
-    <div class="pagenda">
-      <div><span>09:00</span>Vision frame &middot; why this, why us</div>
-      <div><span>09:40</span>Problem market &middot; teams pitch real work</div>
-      <div><span>10:30</span>Build sprints &middot; pairs, real data</div>
-      <div><span>15:30</span>Demos &middot; leaders in the room</div>
-    </div>
-    <div class="pblock" style="margin-top:2px;"><b>Ships by 16:30</b></div>
-    <div class="pships">
-      <div class="pship"><b>Working prototype</b>on real data, demoed live</div>
-      <div class="pship"><b>Owner + Monday</b>named owner, first cadence set</div>
-      <div class="pship"><b>Demo recording</b>proof that seeds the next team</div>
-    </div>
-    <div class="pfoot">0&rarr;1 format &middot; repeats monthly</div>
-  </div><span class="sd-name">Builder-event playbook <em class="st eng">Built with you</em></span></button>
-        </div>
-      </div>
-    </div>
-    <div class="eng-loop">
-      <div class="eng-dash">
-        <div class="eng-head"><i>4</i>Your tracking dashboard</div>
-        <button type="button" class="shelf-doc" data-blurb="Every intervention wired to the metric that will show it working, week by week. Reviewed in your Monday ops: the dip at the redesign is expected, and so is the climb.">
-  <div class="paper dashboard tall">
+  </div>
+        </button>
+        <button type="button" class="car-card shelf-doc" data-blurb="Every intervention wired to the metric that will show it working, week by week. Reviewed in your Monday ops: the dip at the redesign is expected, and so is the climb.">
+          <span class="cc-head">Adoption tracking system <em class="st eng">Built with you</em></span>
+  <div class="paper dashboard compact">
     <div class="phead dark"><b>TD</b>catalyst <span>Adoption tracking &middot; week 9</span></div>
     <div class="kpis">
       <div><b>47%</b>weekly active <em class="up">+6</em></div>
@@ -1221,18 +1391,80 @@
     </div>
     <div class="pgantt-head"><span></span><div class="mk"><span>wk 1</span><span>wk 6</span><span>wk 12</span></div></div>
     <div class="pfoot light">dip at the redesign, then the climb &middot; reviewed in Monday ops</div>
-  </div><span class="sd-name">Adoption tracking system <em class="st eng">Built with you</em></span></button>
-      </div>
-      <div class="eng-return">
-        <svg viewBox="0 0 60 120" aria-hidden="true" class="eng-return-arrow"><path d="M30 6 v90" stroke="#8A6302" stroke-width="2" stroke-dasharray="6 5" fill="none"/><path d="M24 88 l6 9 6-9" fill="none" stroke="#8A6302" stroke-width="2"/></svg>
-        <p><b>Measured effects feed the next intervention.</b> The dashboard reads the result of every play, the roadmap adjusts to what the data says, and the loop keeps running after delivery.</p>
-      </div>
+  </div>
+        </button>
+        <button type="button" class="car-card shelf-doc" data-blurb="Your population, cell by cell: who is where on the adoption curve, which cells are stalled, and the play each stalled cell calls for. Computes as your team types.">
+          <span class="cc-head">Adoption Matrix worksheet <em class="st lib">In the library</em></span>
+  <div class="paper compact">
+    <div class="phead"><b>TD</b>catalyst <span>Adoption Matrix &middot; worksheet</span></div>
+    <div class="pgold"></div>
+    <table class="pmatrix">
+      <tr><th></th><th>Precont.</th><th>Contempl.</th><th>Prepar.</th><th>Action</th></tr>
+      <tr><th>Innov.</th><td class="">3%</td><td class="">2%</td><td class="">1%</td><td class="">2%</td></tr><tr><th>Early</th><td class="hot">14%</td><td class="hot">11%</td><td class="">6%</td><td class="">4%</td></tr><tr><th>Late</th><td class="">9%</td><td class="hot">16%</td><td class="">8%</td><td class="">3%</td></tr><tr><th>Laggards</th><td class="">2%</td><td class="">8%</td><td class="">7%</td><td class="">4%</td></tr>
+    </table>
+    <div class="pblock" style="margin-top:4px;"><b>Top stalled cells</b>Early Majority &middot; Contemplation (16%) &rarr; Peer Proof Relay</div>
+    <div class="pblock"><b>The move each cell calls for</b><i class="l w90"></i><i class="l w80"></i><i class="l w70"></i></div>
+    <div class="pfoot">enter your percentages &middot; computes as you type</div>
+  </div>
+        </button>
+        <button type="button" class="car-card shelf-doc" data-blurb="Twelve questions your team asks before a vendor's forward deployed engineers arrive: inventory, access, decision rights, ownership, and the output measure that shows the work landed.">
+          <span class="cc-head">Vendor FDE governance <em class="st lib">In the library</em></span>
+  <div class="paper compact">
+    <div class="phead"><b>TD</b>catalyst <span>Vendor FDE governance &middot; 12 questions</span></div>
+    <div class="pgold"></div>
+    <ol class="pqs">
+      <li>Where is the running inventory of everything you build here, and who on our side can read it?</li>
+      <li>Which of our systems and data will you touch, and who approves each new connection?</li>
+      <li>What are you allowed to decide alone, and where is that line written down?</li>
+      <li>Who owns the code, the prompts, and the integrations if we part ways?</li>
+      <li>What measure of our output, not your activity, will show this worked?</li>
+      <li>Which of our people pair with you, so the capability stays when you leave?</li>
+    </ol>
+    <div class="pfoot">&hellip;6 more &middot; before the engineers arrive</div>
+  </div>
+        </button>
+        <button type="button" class="car-card shelf-doc" data-blurb="One page a manager reads before the first team conversation: the five beats in their own words, and the four commitments to secure with each person, one to one.">
+          <span class="cc-head">Manager talking track <em class="st lib">In the library</em></span>
+  <div class="paper compact">
+    <div class="phead"><b>TD</b>catalyst <span>Manager talking track</span></div>
+    <div class="pgold"></div>
+    <div class="pblock"><b>The five beats, in your own words</b><i class="l w90"></i><i class="l w75"></i><i class="l w85"></i><i class="l w70"></i></div>
+    <div class="pblock"><b>Secure with each person, 1:1</b></div>
+    <div class="pcheck">
+      <span>Names their own <span class="wt">when&hellip;then</span> trigger: the calendar moment the tool enters</span>
+      <span>Commits to one workflow, run the new way, this week</span>
+      <span>Agrees what output counts as the win, and who sees it</span>
+      <span>Books the follow-up before leaving the room</span>
     </div>
-    <div class="loop-points">
-      <div class="lpoint"><b>Written from your data</b><p>Every playbook comes out of your interviews, your usage data, and your diagnostic profile: a full adoption and change system for your teams and workflows.</p></div>
-      <div class="lpoint"><b>Record time, AI-native</b><p>Diagnostics, simulation, and drafting run on the practice's own instruments, which is how ten days of engagement replaces a months-long change program.</p></div>
-      <div class="lpoint"><b>Wired up, then measured</b><p>Deliverables land inside your tracking dashboard, so the effect of each intervention is visible week by week.</p></div>
+    <div class="pblock"><b>If the belief gap opens</b><i class="l w85"></i><i class="l w65"></i></div>
+    <div class="pfoot">one page &middot; read before the first team conversation</div>
+  </div>
+        </button>
+        <button type="button" class="car-card shelf-doc" data-blurb="The 0-to-1 format: one day, real work, leaders in the room, and three things shipped by 16:30. Repeats monthly so the proof compounds.">
+          <span class="cc-head">Builder-event playbook <em class="st eng">Built with you</em></span>
+  <div class="paper compact">
+    <div class="phead"><b>TD</b>catalyst <span>Builder event &middot; day agenda</span></div>
+    <div class="pgold"></div>
+    <div class="pagenda">
+      <div><span>09:00</span>Vision frame &middot; why this, why us</div>
+      <div><span>09:40</span>Problem market &middot; teams pitch real work</div>
+      <div><span>10:30</span>Build sprints &middot; pairs, real data</div>
+      <div><span>15:30</span>Demos &middot; leaders in the room</div>
     </div>
+    <div class="pblock" style="margin-top:2px;"><b>Ships by 16:30</b></div>
+    <div class="pships">
+      <div class="pship"><b>Working prototype</b>on real data, demoed live</div>
+      <div class="pship"><b>Owner + Monday</b>named owner, first cadence set</div>
+      <div class="pship"><b>Demo recording</b>proof that seeds the next team</div>
+    </div>
+    <div class="pblock"><b>Between events</b>owners report at the Monday cadence; the recording recruits the next teams</div>
+    <div class="pfoot">0&rarr;1 format &middot; repeats monthly</div>
+  </div>
+        </button>
+      </div>
+      <button type="button" class="car-nav car-next" aria-label="Next document"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="car-dots" id="car-dots" role="tablist" aria-label="Documents"></div>
   </div>
 </section>
 
@@ -1242,17 +1474,18 @@
     <div class="sec-head">
       <span class="kicker">Where it leads</span>
       <h2>The Adoption Reset: the roadmap, executed in 90 days.</h2>
-      <p>The Review hands you the plan. The Reset runs it with you: interventions in sequence, tracked on the dashboard, adjusted as the data comes in. For each of the four starting situations, this is what 90 days produces.</p>
+      <p>The Review hands you the plan. The Reset runs it with you: interventions in sequence, tracked on the dashboard, adjusted as the data comes in. For each of the four starting situations, this is what 90 days produces. The lanes overlap by design (the model schedules two workstreams at a time, matching real change capacity), and the fading bars continue past week 12.</p>
     </div>
     <div class="outcome-grid">
-      <article class="outcome">
+      <article class="outcome" data-sit="platform">
         <span class="rtag">Stalled platform</span>
         <h3>Workflow-embedded use, past the plateau.</h3>
         <div class="olanes" aria-hidden="true">
           <div class="olane"><span>Sponsorship reset</span><div class="obar"><i style="grid-column:1/3"></i></div></div>
-          <div class="olane"><span>Workflow redesign</span><div class="obar"><i style="grid-column:2/6" class="og"></i></div></div>
-          <div class="olane"><span>Peer proof</span><div class="obar"><i style="grid-column:5/9"></i></div></div>
-          <div class="olane"><span>Criteria &amp; cadence</span><div class="obar"><i style="grid-column:8/13"></i></div></div>
+          <div class="olane"><span>Proof &amp; peer relay</span><div class="obar"><i style="grid-column:2/7"></i></div></div>
+          <div class="olane"><span>Workflow redesign</span><div class="obar"><i style="grid-column:3/8" class="og"></i></div></div>
+          <div class="olane"><span>Capability build</span><div class="obar"><i style="grid-column:6/13" class="cont"></i></div></div>
+          <div class="olane"><span>Criteria &amp; cadence</span><div class="obar"><i style="grid-column:9/13" class="cont"></i></div></div>
           <div class="olane-axis"><span>wk 1</span><span>wk 6</span><span>wk 12</span></div>
         </div>
         <ul class="owins">
@@ -1261,14 +1494,15 @@
           <li><b>License spend defensible at renewal</b>, on output evidence</li>
         </ul>
       </article>
-      <article class="outcome o-flag">
+      <article class="outcome o-flag" data-sit="seats">
         <span class="rtag">Frontier-lab seats</span><span class="case-flagpill">Flagship</span>
         <h3>Every role redrawn: human-led, shared, handed to AI.</h3>
         <div class="olanes" aria-hidden="true">
           <div class="olane"><span>Role task sort</span><div class="obar"><i style="grid-column:1/4" class="og"></i></div></div>
-          <div class="olane"><span>Workflow redesign</span><div class="obar"><i style="grid-column:2/7" class="og"></i></div></div>
-          <div class="olane"><span>Capability build</span><div class="obar"><i style="grid-column:4/11"></i></div></div>
-          <div class="olane"><span>Criteria &amp; cadence</span><div class="obar"><i style="grid-column:8/13"></i></div></div>
+          <div class="olane"><span>Workflow redesign</span><div class="obar"><i style="grid-column:2/8" class="og"></i></div></div>
+          <div class="olane"><span>Capability build</span><div class="obar"><i style="grid-column:4/13" class="cont"></i></div></div>
+          <div class="olane"><span>Manager coaching cadence</span><div class="obar"><i style="grid-column:5/13"></i></div></div>
+          <div class="olane"><span>Criteria &amp; rituals</span><div class="obar"><i style="grid-column:9/13" class="cont"></i></div></div>
           <div class="olane-axis"><span>wk 1</span><span>wk 6</span><span>wk 12</span></div>
         </div>
         <ul class="owins">
@@ -1277,14 +1511,14 @@
           <li><b>Reviews measure the new work</b>: performance criteria and rituals updated to match</li>
         </ul>
       </article>
-      <article class="outcome">
+      <article class="outcome" data-sit="pilots">
         <span class="rtag">The forty pilots</span>
         <h3>A governed portfolio: every pilot decided.</h3>
         <div class="olanes" aria-hidden="true">
           <div class="olane"><span>Inventory &amp; criteria</span><div class="obar"><i style="grid-column:1/3"></i></div></div>
           <div class="olane"><span>Triage decisions</span><div class="obar"><i style="grid-column:2/5" class="og"></i></div></div>
-          <div class="olane"><span>Institutionalize winners</span><div class="obar"><i style="grid-column:4/11"></i></div></div>
-          <div class="olane"><span>Vendor-agent governance</span><div class="obar"><i style="grid-column:6/13"></i></div></div>
+          <div class="olane"><span>Institutionalize winners</span><div class="obar"><i style="grid-column:4/12"></i></div></div>
+          <div class="olane"><span>Vendor-agent governance</span><div class="obar"><i style="grid-column:5/13" class="cont"></i></div></div>
           <div class="olane-axis"><span>wk 1</span><span>wk 6</span><span>wk 12</span></div>
         </div>
         <ul class="owins">
@@ -1293,14 +1527,14 @@
           <li><b>A standing governance cadence</b> that keeps pace with what vendors ship next quarter</li>
         </ul>
       </article>
-      <article class="outcome">
+      <article class="outcome" data-sit="zero">
         <span class="rtag">Starting 0 &rarr; 1</span>
         <h3>The new way is the normal way by week 12.</h3>
         <div class="olanes" aria-hidden="true">
           <div class="olane"><span>Leadership &amp; charter</span><div class="obar"><i style="grid-column:1/3" class="og"></i></div></div>
-          <div class="olane"><span>Builder events</span><div class="obar"><i style="grid-column:2/7" class="og"></i></div></div>
-          <div class="olane"><span>Capability &amp; rituals</span><div class="obar"><i style="grid-column:4/11"></i></div></div>
-          <div class="olane"><span>Policy &amp; criteria</span><div class="obar"><i style="grid-column:8/13"></i></div></div>
+          <div class="olane"><span>Builder events, monthly</span><div class="obar"><i style="grid-column:3/4" class="og"></i><i style="grid-column:7/8" class="og"></i><i style="grid-column:11/12" class="og"></i></div></div>
+          <div class="olane"><span>Proof &amp; peer stories</span><div class="obar"><i style="grid-column:3/10"></i></div></div>
+          <div class="olane"><span>Policy, criteria &amp; rituals</span><div class="obar"><i style="grid-column:8/13" class="cont"></i></div></div>
           <div class="olane-axis"><span>wk 1</span><span>wk 6</span><span>wk 12</span></div>
         </div>
         <ul class="owins">
@@ -1393,6 +1627,7 @@
           <input type="hidden" name="_captcha" value="true">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_next" value="https://tdcatalyst.com/grow/ai-adoption-recovery?sent=1">
+          <input type="hidden" name="situation" id="f-sit" value="not selected">
           <div class="field">
             <label for="context">Why might we work together?</label>
             <textarea id="context" name="context" required placeholder="A few sentences: what stalled, what is starting, or what you want different in 90 days."></textarea>
@@ -1641,177 +1876,117 @@
     track('recovery-play');
   }
 
-  /* ---- Wheel: runtime build, dependencies drawn as chords ---- */
-  var WHEEL_ORDER = ['sponsor', 'manager', 'whole', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual'];
-  var WDESC = {
-    sponsor: 'visible, funded, protected', manager: 'managers equipped to localize',
-    whole: 'the complete kit shipped', friction: 'rebuild the task, retire the old path',
-    proof: 'first wins made visible', peer: 'same-function references',
-    inaction: 'waiting becomes the risk', quiet: 'laggards moved one to one',
-    build: 'role-based skill and judgment', whenthen: 'triggers on the calendar',
-    policy: 'the new way, codified', criteria: 'reviews measure the new work',
-    ritual: 'carried by the calendar'
-  };
-  var WICON = {
-    sponsor: '<circle cx="12" cy="9" r="5"/><path d="M9 13l-2 7 5-3 5 3-2-7"/>',
-    manager: '<path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-6 4V6z"/>',
-    whole: '<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>',
-    friction: '<circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="18" r="2.2"/><path d="M7 6h7a4 4 0 0 1 4 4v5.8"/>',
-    proof: '<path d="M12 21v-7"/><path d="M12 14c0-4 3-6 7-6 0 4-3 6-7 6z"/><path d="M12 14c0-4-3-6-7-6 0 4 3 6 7 6z"/>',
-    peer: '<path d="M7 8h4v4c0 2.2-1.2 3.8-3.5 4.6"/><path d="M14 8h4v4c0 2.2-1.2 3.8-3.5 4.6"/>',
-    inaction: '<path d="M7 3h10M7 21h10"/><path d="M8 3v3c0 2.5 4 3.5 4 6s-4 3.5-4 6v3"/><path d="M16 3v3c0 2.5-4 3.5-4 6s4 3.5 4 6v3"/>',
-    quiet: '<path d="M5 20c6 0 2-7 8-7 5 0 2-6 6-6" stroke-dasharray="3 3.5"/>',
-    build: '<path d="M12 4L2 9l10 5 10-5-10-5z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/>',
-    whenthen: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
-    policy: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h6M10 15.5h6"/>',
-    criteria: '<rect x="6" y="5" width="12" height="16" rx="2"/><path d="M9 4h6v3H9z"/><path d="M9.5 13.5l2 2 3.5-4"/>',
-    ritual: '<path d="M20 12a8 8 0 1 1-2.4-5.7"/><path d="M20 3.5V9h-5.5"/>'
-  };
-  var GCOLOR = { Opportunity: '#10233F', Motivation: '#C99A05', Capability: '#0E7569', Sustainment: '#4E5BA6' };
-  var wheelSvg = document.getElementById('wheel');
-  var wheelHub = null;
-  var hubSeed = '';
-  var wheelMid = {};
-  var WCX = 530, WCY = 390, WRO = 250, WRI = 178;
-  (function buildWheel() {
-    if (!wheelSvg) return;
-    var NS = 'http://www.w3.org/2000/svg';
-    wheelSvg.setAttribute('viewBox', '0 0 1060 780');
-    while (wheelSvg.firstChild) wheelSvg.removeChild(wheelSvg.firstChild);
-    var n = WHEEL_ORDER.length, gapDeg = 1.8, segAngle = 360 / n, start = -119;
-    function pt(r, adeg) { var a = adeg * Math.PI / 180; return [WCX + r * Math.cos(a), WCY + r * Math.sin(a)]; }
-    WHEEL_ORDER.forEach(function (id, i) {
-      var p = PLAYS[id], col = GCOLOR[p.group];
-      var a0 = start + i * segAngle + gapDeg / 2, a1 = start + (i + 1) * segAngle - gapDeg / 2;
-      var am = (a0 + a1) / 2;
-      wheelMid[id] = am;
-      var o0 = pt(WRO, a0), o1 = pt(WRO, a1), i1 = pt(WRI, a1), i0 = pt(WRI, a0);
-      var d = 'M' + o0[0].toFixed(1) + ' ' + o0[1].toFixed(1) + ' A' + WRO + ' ' + WRO + ' 0 0 1 ' + o1[0].toFixed(1) + ' ' + o1[1].toFixed(1) +
-        ' L' + i1[0].toFixed(1) + ' ' + i1[1].toFixed(1) + ' A' + WRI + ' ' + WRI + ' 0 0 0 ' + i0[0].toFixed(1) + ' ' + i0[1].toFixed(1) + ' Z';
-      var seg = document.createElementNS(NS, 'path');
-      seg.setAttribute('d', d);
-      seg.setAttribute('class', 'seg');
-      seg.dataset.play = id;
-      seg.setAttribute('fill', col);
-      seg.setAttribute('fill-opacity', '0.09');
-      seg.setAttribute('stroke', col);
-      seg.setAttribute('stroke-opacity', '0.3');
-      seg.setAttribute('stroke-width', '1.2');
-      seg.setAttribute('tabindex', '0');
-      seg.setAttribute('role', 'button');
-      seg.setAttribute('aria-label', 'Show detail for ' + p.name);
-      wheelSvg.appendChild(seg);
-      var im = pt((WRO + WRI) / 2, am);
-      var ig = document.createElementNS(NS, 'g');
-      ig.setAttribute('class', 'segicon');
-      ig.dataset.play = id;
-      ig.dataset.c = col;
-      ig.setAttribute('transform', 'translate(' + (im[0] - 15).toFixed(1) + ' ' + (im[1] - 15).toFixed(1) + ') scale(1.25)');
-      ig.setAttribute('fill', 'none');
-      ig.setAttribute('stroke', col);
-      ig.setAttribute('stroke-width', '1.7');
-      ig.setAttribute('stroke-linecap', 'round');
-      ig.setAttribute('stroke-linejoin', 'round');
-      ig.setAttribute('pointer-events', 'none');
-      ig.innerHTML = WICON[id];
-      wheelSvg.appendChild(ig);
-      var lm = pt(266, am);
-      var cosA = Math.cos(am * Math.PI / 180), sinA = Math.sin(am * Math.PI / 180);
-      var anchor = Math.abs(cosA) < 0.3 ? 'middle' : (cosA > 0 ? 'start' : 'end');
-      var ty = lm[1] + (sinA > 0.6 ? 15 : (sinA < -0.6 ? -14 : 0));
-      var t = document.createElementNS(NS, 'text');
-      t.setAttribute('class', 'outlab');
-      t.dataset.play = id;
-      t.setAttribute('x', lm[0].toFixed(1));
-      t.setAttribute('y', ty.toFixed(1));
-      t.setAttribute('text-anchor', anchor);
-      t.setAttribute('font-family', 'Archivo, sans-serif');
-      t.innerHTML = '<tspan font-size="13.5" font-weight="600" fill="#1B1A16">' + p.name + '</tspan>' +
-        '<tspan font-size="11" fill="#7A776C" x="' + lm[0].toFixed(1) + '" dy="14">' + WDESC[id] + '</tspan>';
-      wheelSvg.appendChild(t);
-    });
-    [['Opportunity', 0, 3], ['Motivation', 4, 7], ['Capability', 8, 9], ['Sustainment', 10, 12]].forEach(function (c) {
-      var a0 = start + c[1] * segAngle + gapDeg / 2, a1 = start + (c[2] + 1) * segAngle - gapDeg / 2;
-      var p0 = pt(WRO + 7, a0), p1 = pt(WRO + 7, a1);
-      var large = (a1 - a0) > 180 ? 1 : 0;
-      var arc = document.createElementNS(NS, 'path');
-      arc.setAttribute('d', 'M' + p0[0].toFixed(1) + ' ' + p0[1].toFixed(1) + ' A' + (WRO + 7) + ' ' + (WRO + 7) + ' 0 ' + large + ' 1 ' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1));
-      arc.setAttribute('fill', 'none');
-      arc.setAttribute('stroke', GCOLOR[c[0]]);
-      arc.setAttribute('stroke-width', '2.5');
-      arc.setAttribute('stroke-opacity', '0.7');
-      wheelSvg.appendChild(arc);
-    });
-    var hub = document.createElementNS(NS, 'circle');
-    hub.setAttribute('cx', WCX);
-    hub.setAttribute('cy', WCY);
-    hub.setAttribute('r', '150');
-    hub.setAttribute('fill', '#FFFFFF');
-    hub.setAttribute('stroke', '#E6E3D7');
-    wheelSvg.appendChild(hub);
-    var chords = document.createElementNS(NS, 'g');
-    chords.setAttribute('id', 'wchords');
-    wheelSvg.appendChild(chords);
-    var fo = document.createElementNS(NS, 'foreignObject');
-    fo.setAttribute('x', WCX - 140);
-    fo.setAttribute('y', WCY - 140);
-    fo.setAttribute('width', '280');
-    fo.setAttribute('height', '280');
-    fo.innerHTML = '<div xmlns="http://www.w3.org/1999/xhtml" class="hubfo" id="wheel-hub"><h3>The intervention library</h3><div class="meta">Four categories, one library.<br/>Hover a play for its dependencies;<br/>select it for the model detail.</div></div>';
-    wheelSvg.appendChild(fo);
-    wheelHub = document.getElementById('wheel-hub');
-    hubSeed = wheelHub ? wheelHub.innerHTML : '';
-  })();
-  function drawChords(id) {
-    var g = document.getElementById('wchords');
-    if (!g) return;
-    g.innerHTML = '';
+  /* ---- Sequence board: dependencies as routed connectors ---- */
+  var board = document.getElementById('board');
+  var linksSvg = document.getElementById('board-links');
+  function tileOf(id) { return board ? board.querySelector('.btile[data-play="' + id + '"]') : null; }
+  function drawLinks(id) {
+    if (!linksSvg || !board) return;
+    linksSvg.innerHTML = '';
     if (!id) return;
     var NS = 'http://www.w3.org/2000/svg';
-    function ipt(am) { var a = am * Math.PI / 180; return [WCX + WRI * Math.cos(a), WCY + WRI * Math.sin(a)]; }
+    var br = board.getBoundingClientRect();
+    linksSvg.setAttribute('viewBox', '0 0 ' + Math.round(br.width) + ' ' + Math.round(br.height));
     EDGES.forEach(function (e) {
       if (e.f !== id && e.t !== id) return;
-      var m1 = wheelMid[e.f], m2 = wheelMid[e.t];
-      if (m1 == null || m2 == null) return;
-      var p1 = ipt(m1), p2 = ipt(m2);
-      var mang = ((m1 + m2) / 2) * Math.PI / 180;
-      var c = [WCX + 60 * Math.cos(mang), WCY + 60 * Math.sin(mang)];
+      var a = tileOf(e.f), b = tileOf(e.t);
+      if (!a || !b) return;
+      var ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+      var isPre = (e.t === id);
+      var sy = ra.top - br.top + ra.height / 2;
+      var ty = rb.top - br.top + rb.height / 2;
+      var sx, tx, mx, d, dir;
+      if (rb.left >= ra.right - 4) {
+        sx = ra.right - br.left; tx = rb.left - br.left;
+        mx = (sx + tx) / 2;
+        d = 'M' + sx.toFixed(1) + ' ' + sy.toFixed(1) + ' H' + mx.toFixed(1) + ' V' + ty.toFixed(1) + ' H' + tx.toFixed(1);
+        dir = -1;
+      } else if (ra.left >= rb.right - 4) {
+        sx = ra.left - br.left; tx = rb.right - br.left;
+        mx = (sx + tx) / 2;
+        d = 'M' + sx.toFixed(1) + ' ' + sy.toFixed(1) + ' H' + mx.toFixed(1) + ' V' + ty.toFixed(1) + ' H' + tx.toFixed(1);
+        dir = 1;
+      } else {
+        sx = ra.left - br.left; tx = rb.left - br.left;
+        var gx = Math.max(2, Math.min(sx, tx) - 13);
+        d = 'M' + sx.toFixed(1) + ' ' + sy.toFixed(1) + ' H' + gx.toFixed(1) + ' V' + ty.toFixed(1) + ' H' + tx.toFixed(1);
+        dir = -1;
+      }
       var path = document.createElementNS(NS, 'path');
-      path.setAttribute('d', 'M' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1) + ' Q ' + c[0].toFixed(1) + ' ' + c[1].toFixed(1) + ' ' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1));
+      path.setAttribute('d', d);
       path.setAttribute('fill', 'none');
-      path.setAttribute('stroke', e.t === id ? '#10233F' : '#C99A05');
-      path.setAttribute('stroke-width', '2.2');
-      path.setAttribute('stroke-opacity', '0.55');
-      if (e.f === id) path.setAttribute('stroke-dasharray', '5 4');
-      g.appendChild(path);
+      path.setAttribute('stroke', isPre ? '#10233F' : '#C99A05');
+      path.setAttribute('stroke-width', '2');
+      path.setAttribute('stroke-opacity', '0.8');
+      if (!isPre) path.setAttribute('stroke-dasharray', '5 4');
+      linksSvg.appendChild(path);
+      var ah = document.createElementNS(NS, 'path');
+      ah.setAttribute('d', 'M' + tx.toFixed(1) + ' ' + ty.toFixed(1) + ' l' + (dir * 6) + ' -4 M' + tx.toFixed(1) + ' ' + ty.toFixed(1) + ' l' + (dir * 6) + ' 4');
+      ah.setAttribute('stroke', isPre ? '#10233F' : '#C99A05');
+      ah.setAttribute('stroke-width', '2');
+      ah.setAttribute('fill', 'none');
+      linksSvg.appendChild(ah);
     });
   }
   function syncWheel(id) {
-    document.querySelectorAll('.seg').forEach(function (sgm) { sgm.classList.toggle('sel', sgm.dataset.play === id); });
-    document.querySelectorAll('.segicon').forEach(function (gg) {
-      gg.setAttribute('stroke', gg.dataset.play === id ? '#FFFFFF' : gg.dataset.c);
+    if (!board) return;
+    board.querySelectorAll('.btile').forEach(function (t) {
+      t.classList.toggle('sel', t.dataset.play === id);
+      t.classList.remove('dep');
+      t.classList.remove('dim');
     });
-    document.querySelectorAll('.outlab').forEach(function (t) {
-      t.setAttribute('opacity', (!id || t.dataset.play === id) ? '1' : '0.45');
-      t.setAttribute('font-weight', t.dataset.play === id ? '800' : '600');
-    });
-    drawChords(id);
-    if (!wheelHub) return;
-    if (!id) { wheelHub.innerHTML = hubSeed; return; }
-    var p = PLAYS[id];
-    var reasons = depsFor(id);
-    wheelHub.innerHTML = '<h3>' + p.name + '</h3><div class="meta">' + p.group + ' \xb7 ' + p.weeks + ' wks \xb7 ' + p.framework + '</div>' +
-      '<div class="meta" style="margin-top:4px">' + (reasons.length ? 'Solid lines: what it runs after. Dashed: what it unlocks.' : 'A first move: it gates what follows.') + '</div>' +
-      '<div class="hint">select for the full model detail</div>';
+    drawLinks(id);
+    if (id) {
+      var related = {};
+      related[id] = true;
+      EDGES.forEach(function (e) {
+        if (e.f === id) related[e.t] = true;
+        if (e.t === id) related[e.f] = true;
+      });
+      board.querySelectorAll('.btile').forEach(function (t) {
+        if (t.dataset.play !== id && related[t.dataset.play]) t.classList.add('dep');
+        t.classList.toggle('dim', !related[t.dataset.play]);
+      });
+    }
   }
-  if (wheelSvg) {
-    wheelSvg.addEventListener('mouseover', function (ev) { var s = ev.target.closest('.seg'); if (s) syncWheel(s.dataset.play); });
-    wheelSvg.addEventListener('mouseout', function (ev) { var s = ev.target.closest('.seg'); if (s && pmodal && pmodal.hidden) syncWheel(null); });
-    wheelSvg.addEventListener('focusin', function (ev) { var s = ev.target.closest('.seg'); if (s) syncWheel(s.dataset.play); });
-    wheelSvg.addEventListener('click', function (ev) { var s = ev.target.closest('.seg'); if (s) selectPlay(s.dataset.play); });
-    wheelSvg.addEventListener('keydown', function (ev) {
-      var s = ev.target.closest('.seg');
-      if (s && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); selectPlay(s.dataset.play); }
+  function selectPlay(id) {
+    document.querySelectorAll('.play').forEach(function (x) { x.setAttribute('aria-expanded', x.dataset.play === id ? 'true' : 'false'); });
+    syncWheel(id);
+    openModal(detailHTML(id));
+    track('recovery-play');
+  }
+  var hoverTimer = null;
+  if (board) {
+    board.addEventListener('mouseover', function (ev) {
+      var t = ev.target.closest('.btile');
+      if (!t) return;
+      syncWheel(t.dataset.play);
+      clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(function () { if (pmodal && pmodal.hidden) selectPlay(t.dataset.play); }, 550);
+    });
+    board.addEventListener('mouseout', function (ev) {
+      var t = ev.target.closest('.btile');
+      if (!t) return;
+      clearTimeout(hoverTimer);
+      if (pmodal && pmodal.hidden) syncWheel(null);
+    });
+    board.addEventListener('click', function (ev) {
+      var t = ev.target.closest('.btile');
+      if (!t) return;
+      clearTimeout(hoverTimer);
+      selectPlay(t.dataset.play);
+    });
+    board.addEventListener('focusin', function (ev) {
+      var t = ev.target.closest('.btile');
+      if (t) syncWheel(t.dataset.play);
+    });
+    board.addEventListener('keydown', function (ev) {
+      var t = ev.target.closest('.btile');
+      if (t && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); selectPlay(t.dataset.play); }
+    });
+    window.addEventListener('resize', function () {
+      var sel = board.querySelector('.btile.sel');
+      if (sel) drawLinks(sel.dataset.play);
     });
   }
   document.querySelectorAll('.play').forEach(function (c) {
@@ -1832,7 +2007,7 @@
   document.querySelectorAll('.shelf-doc').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var paper = btn.querySelector('.paper');
-      var nameEl = btn.querySelector('.sd-name');
+      var nameEl = btn.querySelector('.sd-name') || btn.querySelector('.cc-head');
       var nm = nameEl && nameEl.childNodes[0] ? nameEl.childNodes[0].textContent.trim() : '';
       openModal('<div class="ov-doc">' + (paper ? paper.outerHTML : '') +
         '<p class="ov-blurb"><b>' + nm + '.</b> ' + (btn.dataset.blurb || '') + '</p></div>');
@@ -1840,48 +2015,84 @@
     });
   });
 
-  /* ---- Live model: five scenarios ---- */
-  var mcFull = document.getElementById('mc-full');
-  var mcAlt = document.getElementById('mc-alt');
+  /* ---- Live model: six scenarios, one chart (calibrated to the simulator) ---- */
+  var mchart = document.getElementById('mchart');
   var mReadout = document.getElementById('model-readout');
-  function logistic(w, max, mid, k) { return max / (1 + Math.exp(-(w - mid) / k)); }
-  function riseFall(w, peak, wpeak, floor, rate) {
-    var atPeak = peak * (1 - Math.exp(-3));
-    if (w <= wpeak) return peak * (1 - Math.exp(-3 * w / wpeak));
+  function mlog(w, base, span, mid, k) { return base + span / (1 + Math.exp(-(w - mid) / k)); }
+  function mrf(w, base, peak, wpeak, floor, rate) {
+    var atPeak = base + (peak - base) * (1 - Math.exp(-3));
+    if (w <= wpeak) return base + (peak - base) * (1 - Math.exp(-3 * w / wpeak));
     return floor + (atPeak - floor) * Math.exp(-rate * (w - wpeak));
   }
-  function curvePts(f) {
-    var pts = [];
-    for (var w = 0; w <= 24; w++) {
-      var x = 44 + 400 * w / 24;
-      var y = 240 - f(w) * 2.2;
-      pts.push(x.toFixed(1) + ',' + y.toFixed(1));
-    }
-    return pts.join(' ');
-  }
+  var SCEN_ORDER = ['full', 'nomgr', 'noproof', 'early', 'access', 'base'];
   var SCEN = {
-    full: { alt: false, f: function (w) { return logistic(w, 90, 5.5, 1.9); },
-      read: 'Sequenced with every leg in place: past the <b>70%</b> threshold around <b>week 8</b>, still climbing at week 24.' },
-    nomgr: { alt: true, f: function (w) { return riseFall(w, 37, 8, 28, 0.1); },
-      read: 'Awareness and training land, but managers never get authority over workflow redesign or the new performance expectations: the rollout stalls near <b>35%</b> and drifts.' },
-    noproof: { alt: true, f: function (w) { return riseFall(w, 42, 6, 24, 0.14); },
-      read: 'Without seeded proof, the social plays fire on thin air: an early spike, then decay toward <b>~25%</b> as the skeptics call the bluff.' },
-    early: { alt: true, f: function (w) { return logistic(w, 19, 3, 1.4); },
-      read: 'Only the enthusiasts are addressed: the innovator 16% adopt fast, the early and late majority never enter, and the curve flatlines under <b>20%</b>.' },
-    access: { alt: true, f: function (w) { return riseFall(w, 25, 5, 12, 0.12); },
-      read: 'Access, licenses, and a resources page, with barely any follow-up communication or engagement: usage peaks by <b>week 5</b> and fades toward <b>~12%</b>.' }
+    full: { color: '#10233F', label: 'Full sequence', f: function (w) { return mlog(w, 18, 64, 10.2, 2.4); },
+      read: 'The modeled ceiling: all thirteen plays land cleanly, the threshold is crossed at week 11, and adoption reaches 80% by week 24. It is the ceiling the sequence earns, never the default.' },
+    nomgr: { color: '#B42318', label: 'Managers left out', f: function (w) { return mrf(w, 18, 37, 9, 30, 0.09); },
+      read: 'Awareness and training land, but managers never get authority over workflow redesign or the new performance expectations: the rollout stalls in the mid-30s and drifts.' },
+    noproof: { color: '#C99A05', label: 'No seeded proof', f: function (w) { return mrf(w, 18, 41, 7, 26, 0.12); },
+      read: 'Without seeded proof, the social plays fire on thin air: an early spike, then decay toward the mid-20s as the skeptics call the bluff.' },
+    early: { color: '#0E7569', label: 'Early adopters only', f: function (w) { return mlog(w, 18, 7, 3.5, 1.6); },
+      read: 'Only the enthusiasts are addressed: the innovator 16% move fast, the early and late majority never enter, and the curve flatlines near 25%.' },
+    access: { color: '#4E5BA6', label: 'Access, then silence', f: function (w) { return mrf(w, 18, 24, 5, 13, 0.1); },
+      read: 'Access, licenses, and a resources page, with barely any follow-up communication or engagement: usage peaks by week 5 and fades back toward the do-nothing line.' },
+    base: { color: '#98A2B3', label: 'No intervention', dash: '6 5', f: function (w) { return 18 - 6 * (1 - Math.exp(-w / 8)); },
+      read: 'The do-nothing trajectory from the simulator: early enthusiasm decays to 12% by week 24.' }
   };
+  var MX0 = 52, MX1 = 500, MY0 = 272, MY1 = 24;
+  function mx(w) { return MX0 + (MX1 - MX0) * w / 24; }
+  function my(p) { return MY0 - (MY0 - MY1) * p / 100; }
+  (function buildMChart() {
+    if (!mchart) return;
+    var NS = 'http://www.w3.org/2000/svg';
+    function el(tag, attrs, txt) {
+      var n = document.createElementNS(NS, tag);
+      for (var k in attrs) n.setAttribute(k, attrs[k]);
+      if (txt) n.textContent = txt;
+      mchart.appendChild(n);
+      return n;
+    }
+    el('line', { x1: MX0, y1: MY1 - 4, x2: MX0, y2: MY0, stroke: '#E6E3D7' });
+    el('line', { x1: MX0, y1: MY0, x2: MX1, y2: MY0, stroke: '#E6E3D7' });
+    [25, 50, 75, 100].forEach(function (p) {
+      el('line', { x1: MX0, y1: my(p), x2: MX1, y2: my(p), stroke: '#F1EFE6' });
+      el('text', { x: MX0 - 8, y: my(p) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#7A776C' }, p + '%');
+    });
+    el('text', { x: MX0 - 8, y: MY0 + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#7A776C' }, '0%');
+    [0, 6, 12, 18, 24].forEach(function (w) {
+      el('text', { x: mx(w), y: MY0 + 20, 'text-anchor': w === 0 ? 'start' : (w === 24 ? 'end' : 'middle'), 'font-size': 11, fill: '#7A776C' }, 'wk ' + w);
+    });
+    el('line', { x1: MX0, y1: my(55), x2: MX1, y2: my(55), stroke: '#E8B003', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' });
+    el('text', { x: MX0 + 6, y: my(55) - 6, 'font-size': 11, 'font-weight': 600, fill: '#8A6302' }, 'self-sustaining threshold - 55%');
+    var wk11 = el('line', { x1: mx(11), y1: my(55), x2: mx(11), y2: MY0, stroke: '#E8B003', 'stroke-width': 1, 'stroke-dasharray': '2 3', 'stroke-opacity': 0.7 });
+    el('text', { x: mx(11), y: MY0 - 6, 'text-anchor': 'middle', 'font-size': 10, fill: '#8A6302' }, 'wk 11');
+    var ends = [];
+    SCEN_ORDER.forEach(function (k) {
+      var s = SCEN[k];
+      var pts = [];
+      for (var w = 0; w <= 24; w++) pts.push(mx(w).toFixed(1) + ',' + my(s.f(w)).toFixed(1));
+      var pl = el('polyline', { points: pts.join(' '), fill: 'none', stroke: s.color, 'stroke-width': 2, id: 'ml-' + k });
+      if (s.dash) pl.setAttribute('stroke-dasharray', s.dash);
+      ends.push({ k: k, y: my(s.f(24)) });
+    });
+    ends.sort(function (a, b) { return a.y - b.y; });
+    for (var i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 16) ends[i].y = ends[i - 1].y + 16;
+    ends.forEach(function (e) {
+      var s = SCEN[e.k];
+      el('line', { x1: MX1 + 2, y1: my(s.f(24)), x2: MX1 + 12, y2: e.y - 4, stroke: s.color, 'stroke-width': 1, 'stroke-opacity': 0.6 });
+      el('text', { x: MX1 + 16, y: e.y, 'font-size': 11.5, 'font-weight': 600, fill: '#1B1A16', id: 'mlab-' + e.k }, s.label);
+    });
+  })();
   function setScenario(k) {
     var s = SCEN[k];
-    if (!s) return;
-    if (mcFull) {
-      mcFull.setAttribute('points', curvePts(SCEN.full.f));
-      mcFull.setAttribute('stroke-opacity', k === 'full' ? '1' : '0.25');
-    }
-    if (mcAlt) {
-      if (s.alt) { mcAlt.style.display = ''; mcAlt.setAttribute('points', curvePts(s.f)); }
-      else { mcAlt.style.display = 'none'; }
-    }
+    if (!s || !mchart) return;
+    SCEN_ORDER.forEach(function (id) {
+      var pl = document.getElementById('ml-' + id);
+      var lb = document.getElementById('mlab-' + id);
+      var on = (id === k);
+      if (pl) { pl.setAttribute('stroke-width', on ? 3 : 2); pl.setAttribute('stroke-opacity', on ? 1 : 0.3); }
+      if (lb) { lb.setAttribute('font-weight', on ? 800 : 600); lb.setAttribute('fill', on ? '#1B1A16' : '#7A776C'); }
+    });
     if (mReadout) mReadout.innerHTML = s.read;
   }
   document.querySelectorAll('.pathbtns button').forEach(function (b) {
@@ -1893,6 +2104,131 @@
     });
   });
   setScenario('full');
+
+  /* ---- Deliverables carousel ---- */
+  var carTrack = document.getElementById('car-track');
+  var carDots = document.getElementById('car-dots');
+  if (carTrack) {
+    var carCards = Array.prototype.slice.call(carTrack.querySelectorAll('.car-card'));
+    function cardStep() { return carCards.length > 1 ? carCards[1].offsetLeft - carCards[0].offsetLeft : carCards[0].offsetWidth; }
+    function carIdx() { return Math.min(carCards.length - 1, Math.round(carTrack.scrollLeft / cardStep())); }
+    function carGo(i) { carTrack.scrollTo({ left: i * cardStep(), behavior: reduceMotion ? 'auto' : 'smooth' }); }
+    if (carDots) {
+      carCards.forEach(function (c, i) {
+        var d = document.createElement('button');
+        d.type = 'button';
+        d.setAttribute('role', 'tab');
+        d.setAttribute('aria-label', 'Document ' + (i + 1));
+        d.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+        d.addEventListener('click', function () { carGo(i); });
+        carDots.appendChild(d);
+      });
+    }
+    function syncDots() {
+      if (!carDots) return;
+      var i = carIdx();
+      Array.prototype.forEach.call(carDots.children, function (d, j) { d.setAttribute('aria-selected', j === i ? 'true' : 'false'); });
+    }
+    carTrack.addEventListener('scroll', function () { window.requestAnimationFrame(syncDots); });
+    var prevB = document.querySelector('.car-prev'), nextB = document.querySelector('.car-next');
+    if (prevB) prevB.addEventListener('click', function () { carGo(Math.max(0, carIdx() - 1)); });
+    if (nextB) nextB.addEventListener('click', function () { carGo(Math.min(carCards.length - 1, carIdx() + 1)); });
+    var carTimer = null, carPaused = false;
+    function carTick() { if (!carPaused && pmodal && pmodal.hidden) carGo((carIdx() + 1) % carCards.length); }
+    if (!reduceMotion) carTimer = setInterval(carTick, 4200);
+    ['pointerenter', 'focusin', 'touchstart'].forEach(function (evn) {
+      carTrack.addEventListener(evn, function () { carPaused = true; }, { passive: true });
+    });
+    ['pointerleave', 'focusout'].forEach(function (evn) {
+      carTrack.addEventListener(evn, function () { carPaused = false; }, { passive: true });
+    });
+  }
+
+  /* ---- Situation picker ---- */
+  var SITLABEL = { platform: 'Stalled department platform', seats: 'Frontier-lab seats', pilots: 'Agentic pilot portfolio', zero: 'Starting 0 to 1' };
+  document.querySelectorAll('.case[data-sit]').forEach(function (c) {
+    function choose() {
+      var sit = c.dataset.sit;
+      document.querySelectorAll('.case[data-sit]').forEach(function (x) { x.setAttribute('aria-pressed', x === c ? 'true' : 'false'); });
+      document.querySelectorAll('.outcome[data-sit]').forEach(function (o) { o.classList.toggle('sel', o.dataset.sit === sit); });
+      var f = document.getElementById('f-sit');
+      if (f) f.value = SITLABEL[sit];
+      var note = document.getElementById('case-note-row');
+      if (note) note.innerHTML = 'Selected: <b>' + SITLABEL[sit] + '</b>. Its 90-day outcome is highlighted below, and your note to Tom will carry it.';
+      track('recovery-situation');
+    }
+    c.addEventListener('click', function (ev) { if (ev.target.closest('[data-sorter]')) return; choose(); });
+    c.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); choose(); } });
+  });
+
+  /* ---- Task sorter (frontier-seats flagship) ---- */
+  var LANES = {
+    HL: { name: 'Human-led', color: '#2C4B76', desc: 'people keep it' },
+    SH: { name: 'Shared', color: '#8A6302', desc: 'people and AI together' },
+    AB: { name: 'Handed to AI', color: '#0E7569', desc: 'AI does it, someone owns it' }
+  };
+  var sorterState = {};
+  function sorterHTML() {
+    function seg(id, opts) {
+      return '<div class="seg" data-sq="' + id + '">' + opts.map(function (o) {
+        return '<button type="button" data-v="' + o[0] + '" aria-pressed="false">' + o[1] + '</button>';
+      }).join('') + '</div>';
+    }
+    return '<div class="sorter"><h3>Sort one of your tasks</h3>' +
+      '<p class="pd-meta">The same four questions the flagship engagement asks of every task in a role, in order. The first decisive answer settles the lane.</p>' +
+      '<div class="st-q"><b>1. Can AI do the task well?</b>' + seg('q1', [['no', 'Not really'], ['some', 'Sometimes'], ['yes', 'Yes']]) + '</div>' +
+      '<div class="st-q"><b>2. How high are the stakes?</b>' + seg('q2', [['low', 'Low'], ['some', 'Some'], ['help', 'High - AI can help'], ['own', 'High - a person owns it']]) + '</div>' +
+      '<div class="st-q"><b>3. Can a person truly catch a mistake?</b>' + seg('q3', [['yes', 'Yes, genuinely'], ['no', 'Not really']]) + '</div>' +
+      '<div class="st-q"><b>4. Is AI clearly better than a person?</b>' + seg('q4', [['yes', 'Clearly better'], ['little', 'Only a little']]) + '</div>' +
+      '<div class="st-res" id="st-res">Answer question 1 to start.</div>' +
+      '<p class="st-note">In the flagship engagement this runs live, role by role, with your teams: every task lands in a lane, owners are named where work changes hands, and the freed capacity is pointed at named work.</p></div>';
+  }
+  function sorterVerdict() {
+    var a = sorterState;
+    if (!a.q1) return { ask: 1 };
+    if (a.q1 === 'no') return { lane: 'HL', why: 'AI cannot yet do this reliably; it stays with people.' };
+    if (a.q1 === 'some') return { lane: 'SH', why: 'AI is useful yet inconsistent here: it assists, a person finishes and owns it.' };
+    if (!a.q2) return { ask: 2 };
+    if (a.q2 === 'own') return { lane: 'HL', why: 'The stakes demand a named person behind the result; stakes outrank capability.' };
+    if (a.q2 === 'some') return { lane: 'SH', why: 'AI does the heavy lifting; a person decides and signs.' };
+    if (a.q2 === 'help') {
+      if (!a.q3) return { ask: 3 };
+      if (a.q3 === 'yes') return { lane: 'SH', why: 'High stakes with a real check: AI helps, a person genuinely reviews and can step in.' };
+      return { lane: 'HL', why: 'A check nobody can really perform is a rubber stamp; the task goes back to people.' };
+    }
+    if (!a.q4) return { ask: 4 };
+    if (a.q4 === 'yes') return { lane: 'AB', why: 'Low stakes and clearly better: hand it over, name who owns the output.' };
+    return { lane: 'SH', why: 'Only a little better: the checking cost and the skill people lose outweigh the handover.' };
+  }
+  function sorterRender() {
+    var res = document.getElementById('st-res');
+    if (!res) return;
+    var v = sorterVerdict();
+    if (v.ask) { res.innerHTML = 'Answer question ' + v.ask + ' to settle it.'; return; }
+    var L = LANES[v.lane];
+    res.innerHTML = '<b style="background:' + L.color + '">' + L.name + '</b> ' + L.desc + '. ' + v.why;
+  }
+  function wireSorter() {
+    pdetail.querySelectorAll('.seg').forEach(function (sg) {
+      sg.addEventListener('click', function (ev) {
+        var b = ev.target.closest('button');
+        if (!b) return;
+        sg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+        b.setAttribute('aria-pressed', 'true');
+        sorterState[sg.dataset.sq] = b.dataset.v;
+        sorterRender();
+      });
+    });
+  }
+  document.querySelectorAll('[data-sorter]').forEach(function (btn) {
+    btn.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      sorterState = {};
+      openModal(sorterHTML());
+      wireSorter();
+      track('recovery-sorter');
+    });
+  });
 
   /* ---- FAQ ---- */
   document.querySelectorAll('.faq-q').forEach(function (btn) {
