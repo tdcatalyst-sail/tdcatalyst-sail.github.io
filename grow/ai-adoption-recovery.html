@@ -977,6 +977,43 @@
   .lp .car-dots button[aria-selected="true"] { background: var(--lp-accent-ink); }
   @media (max-width: 700px) { .lp .car-nav { display: none; } .lp .car-card { flex-basis: 82vw; } }
 
+  /* ---- v4: vendor logo chips ---- */
+  .lp .cv-vendors { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; }
+  .lp .cvv {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.78rem; font-weight: 650; color: var(--lp-ink);
+    background: #FFFFFF; border: 1px solid var(--lp-line); border-radius: 999px; padding: 0.28rem 0.7rem 0.28rem 0.5rem;
+  }
+  .lp .cvv svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  /* ---- v4: library category rows ---- */
+  .lp .lib-rows { display: grid; gap: 1.4rem; min-width: 0; }
+  .lp .lib-rows > div, .lp .lib-row { min-width: 0; max-width: 100%; }
+  .lp #lib-cat-rows { display: grid; gap: 1.4rem; }
+  .lp .lib-track { min-width: 0; max-width: 100%; }
+  .lp .lib-row-head { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.5rem; }
+  .lp .lib-row-head b { font-size: 0.95rem; font-weight: 700; color: var(--lp-ink); }
+  .lp .lib-row-head span { font-size: 0.76rem; color: var(--lp-faint); }
+  .lp .lib-track {
+    display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x proximity;
+    padding: 0.3rem 0.2rem 0.7rem; scrollbar-width: thin;
+  }
+  .lp .lib-track .car-card { scroll-snap-align: start; }
+
+  /* ---- v4: reset selector ---- */
+  .lp .reset-tabs { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.2rem; }
+  .lp .reset-tabs button {
+    font-family: var(--lp-font); font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    border: 1px solid var(--lp-line); background: var(--lp-card); color: var(--lp-body);
+    border-radius: 999px; padding: 0.45rem 1rem;
+  }
+  .lp .reset-tabs button[aria-pressed="true"] { background: var(--lp-ink); border-color: var(--lp-ink); color: #FFFFFF; }
+  .lp .reset-tabs .rt-all { border-style: dashed; }
+  .lp .outcome-grid.solo .outcome { display: none; }
+  .lp .outcome-grid.solo .outcome.sel { display: block; grid-column: 1 / -1; }
+  .lp .outcome-grid.solo .outcome.sel .olane, .lp .outcome-grid.solo .outcome.sel .olane-axis { grid-template-columns: 180px repeat(3, 1fr); }
+  .lp .outcome-grid.solo .outcome.sel .olane { grid-template-columns: 180px 1fr; }
+
   /* ---- v2: outcome lane continuation ---- */
   .lp .olane .obar i.cont { background: linear-gradient(90deg, #3D5A7C 55%, rgba(61, 90, 124, 0.25)); }
   .lp .olane .obar i.og.cont { background: linear-gradient(90deg, var(--lp-accent) 55%, rgba(232, 176, 3, 0.25)); }
@@ -1207,8 +1244,13 @@
           <span class="case-tag">Frontier-lab seats</span><span class="case-flagpill">Flagship</span>
         </div>
         <h3>Everyone got a seat. Every role changes.</h3>
+        <div class="cv-vendors" aria-label="Anthropic Claude, OpenAI ChatGPT, Microsoft Copilot, Google Gemini">
+          <span class="cvv"><svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#D97757" stroke-width="2.1" stroke-linecap="round" fill="none"><path d="M12 3.2v4M12 16.8v4M3.2 12h4M16.8 12h4M5.8 5.8l2.8 2.8M15.4 15.4l2.8 2.8M18.2 5.8l-2.8 2.8M8.6 15.4l-2.8 2.8"/></g></svg>Claude</span>
+          <span class="cvv"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#1B1A16" stroke-width="1.8"><rect x="8.8" y="2.6" width="6.4" height="18.8" rx="3.2"/><rect x="8.8" y="2.6" width="6.4" height="18.8" rx="3.2" transform="rotate(60 12 12)"/><rect x="8.8" y="2.6" width="6.4" height="18.8" rx="3.2" transform="rotate(120 12 12)"/></g></svg>ChatGPT</span>
+          <span class="cvv"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8.6" height="8.6" fill="#F25022"/><rect x="12.4" y="3" width="8.6" height="8.6" fill="#7FBA00"/><rect x="3" y="12.4" width="8.6" height="8.6" fill="#00A4EF"/><rect x="12.4" y="12.4" width="8.6" height="8.6" fill="#FFB900"/></svg>Copilot</span>
+          <span class="cvv"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c.8 5.5 4.5 9.2 10 10-5.5.8-9.2 4.5-10 10-.8-5.5-4.5-9.2-10-10 5.5-.8 9.2-4.5 10-10z" fill="#4E86F7"/></svg>Gemini</span>
+        </div>
         <ul class="case-facts">
-          <li>Claude &middot; ChatGPT &middot; Copilot &middot; Gemini</li>
           <li>Every task sorted by four plain questions</li>
           <li>Freed capacity pointed at named work</li>
         </ul>
@@ -1480,9 +1522,10 @@
       </div>
     </div>
 
-    <div class="carousel" id="doc-carousel">
-      <button type="button" class="car-nav car-prev" aria-label="Previous document"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="car-track" id="car-track">
+    <div class="lib-rows">
+      <div class="lib-row">
+        <div class="lib-row-head"><b>Engagement documents</b><span>built with you, or applied from the library, during the ten days</span></div>
+        <div class="lib-track" id="car-track">
         <button type="button" class="car-card shelf-doc" data-blurb="Built with your team during the ten days: the recovery decision on every deployment line, the binding constraint named, the success metric owned, and the 90-day sequence on a calendar.">
           <span class="cc-head">The Recovery Plan <em class="st eng">Built with you</em></span>
   <div class="paper compact">
@@ -1600,10 +1643,10 @@
     <div class="pfoot">0&rarr;1 format &middot; repeats monthly</div>
   </div>
         </button>
+        </div>
       </div>
-      <button type="button" class="car-nav car-next" aria-label="Next document"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+      <div id="lib-cat-rows"></div>
     </div>
-    <div class="car-dots" id="car-dots" role="tablist" aria-label="Documents"></div>
     <p class="car-cap">The six engagement documents ship with every Review. The thirteen playbooks are the plays the model scores today, selected from a much larger intervention library; the Review draws on the full shelf.</p>
   </div>
 </section>
@@ -1614,9 +1657,16 @@
     <div class="sec-head">
       <span class="kicker">Where it leads</span>
       <h2>The Adoption Reset: the roadmap, executed in 90 days.</h2>
-      <p>The Review hands you the plan. The Reset runs it with you: interventions in sequence, tracked on the dashboard, adjusted as the data comes in. For each of the four starting situations, this is what 90 days produces. The lanes overlap by design (the model schedules two workstreams at a time, matching real change capacity), and the fading bars continue past week 12.</p>
+      <p>The Review hands you the plan. The Reset runs it with you: interventions in sequence, tracked on the dashboard, adjusted as the data comes in. Pick your situation to see what 90 days produces. The lanes overlap by design (the model schedules two workstreams at a time, matching real change capacity), and the fading bars continue past week 12.</p>
     </div>
-    <div class="outcome-grid">
+    <div class="reset-tabs" role="group" aria-label="Pick your situation">
+      <button type="button" data-rsit="platform" aria-pressed="false">Stalled platform</button>
+      <button type="button" data-rsit="seats" aria-pressed="false">Frontier-lab seats</button>
+      <button type="button" data-rsit="pilots" aria-pressed="false">The forty pilots</button>
+      <button type="button" data-rsit="zero" aria-pressed="false">Starting 0 &rarr; 1</button>
+      <button type="button" data-rsit="all" aria-pressed="true" class="rt-all">All four</button>
+    </div>
+    <div class="outcome-grid" id="outcome-grid">
       <article class="outcome" data-sit="platform">
         <span class="rtag">Stalled platform</span>
         <h3>Workflow-embedded use, past the plateau.</h3>
@@ -1688,55 +1738,6 @@
   </div>
 </section>
 
-<!-- FAQ -->
-<section id="faq" style="background: var(--lp-bg-alt); border-block: 1px solid var(--lp-line);">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="kicker">Common questions</span>
-      <h2>Before you ask.</h2>
-      <p>If you have read this far, you are looking for the catch. Here is where people usually look for it.</p>
-    </div>
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">
-          Our vendor already runs an adoption program.
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">Good: keep it. Vendor adoption teams are measured on your usage of their product; this review is measured on whether your work changed. Only an independent assessment reads the rollout against your outcomes rather than the vendor's dashboard, and the two run fine side by side.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">
-          Could we run this internally?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">Yes, and many organizations are: the working group is on month four and version eleven of the deck. The structural problem is that every initiative already has an internal owner, so the review rarely ends in a decision. Independence and the instrument stack are most of what you are buying.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">
-          Is this a report, or does something change?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">The deliverable is a recovery plan on a 90-day calendar, wired into a tracking dashboard your team keeps. The playbooks are built to be run and measured; filing them would take deliberate effort. If the larger execution engagement is warranted, the full fee is credited against it.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">
-          Nothing is stalled yet. We have barely started.
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">Then you are in the 0&rarr;1 situation above, which is the cheapest moment to get the sequence right: the charter, the use policy, and the first builder events cost a fraction of a recovery. The same Review scopes the starting arc instead of a recovery plan.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false">
-          We are not ready for a large engagement.
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">This is the entry point, sized to fit inside an existing program budget, and it stands alone. $12,500, ten days, one decision. The large engagement only exists if the plan proves it should.</div>
-      </div>
-    </div>
-    <p class="faq-nudge">Still reading? The next 30 minutes of research is the call itself: <a href="https://cal.com/tdcatalyst" target="_blank" rel="noopener">book it</a>.</p>
-  </div>
-</section>
-
 <!-- FINAL CTA -->
 <section class="final" id="begin">
   <div class="wrap two-col">
@@ -1787,6 +1788,55 @@
         </form>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background: var(--lp-bg-alt); border-block: 1px solid var(--lp-line);">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Common questions</span>
+      <h2>Before you ask.</h2>
+      <p>If you have read this far, you are looking for the catch. Here is where people usually look for it.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          Our vendor already runs an adoption program.
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Good: keep it. Vendor adoption teams are measured on your usage of their product; this review is measured on whether your work changed. Only an independent assessment reads the rollout against your outcomes rather than the vendor's dashboard, and the two run fine side by side.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          Could we run this internally?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Yes, and many organizations are: the working group is on month four and version eleven of the deck. The structural problem is that every initiative already has an internal owner, so the review rarely ends in a decision. Independence and the instrument stack are most of what you are buying.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          Is this a report, or does something change?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">The deliverable is a recovery plan on a 90-day calendar, wired into a tracking dashboard your team keeps. The playbooks are built to be run and measured; filing them would take deliberate effort. If the larger execution engagement is warranted, the full fee is credited against it.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          Nothing is stalled yet. We have barely started.
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Then you are in the 0&rarr;1 situation above, which is the cheapest moment to get the sequence right: the charter, the use policy, and the first builder events cost a fraction of a recovery. The same Review scopes the starting arc instead of a recovery plan.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          We are not ready for a large engagement.
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">This is the entry point, sized to fit inside an existing program budget, and it stands alone. $12,500, ten days, one decision. The large engagement only exists if the plan proves it should.</div>
+      </div>
+    </div>
+    <p class="faq-nudge">Still reading? The next 30 minutes of research is the call itself: <a href="https://cal.com/tdcatalyst" target="_blank" rel="noopener">book it</a>.</p>
   </div>
 </section>
 
@@ -2290,85 +2340,81 @@
     });
   });
 
-  /* ---- Intervention playbook minis: all 13, generated from the library ---- */
-  (function buildMinis() {
-    var tr = document.getElementById('car-track');
-    if (!tr) return;
-    var ORDER13 = ['sponsor', 'manager', 'whole', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual'];
-    ORDER13.forEach(function (id) {
-      var p = PLAYS[id];
-      if (!p) return;
-      var el = document.createElement('button');
-      el.type = 'button';
-      el.className = 'car-card car-mini';
-      el.dataset.play = id;
-      el.innerHTML = '<span class="cc-head">' + p.name + ' <em class="st lib">Playbook</em></span>' +
-        '<div class="paper compact half">' +
-        '<div class="phead"><b>TD</b>catalyst <span>Intervention playbook</span></div><div class="pgold"></div>' +
-        '<div class="ptitle">' + p.name + '</div>' +
-        '<div class="psub">' + p.group + ' \u00b7 ' + p.framework + ' \u00b7 ' + p.weeks + ' wks</div>' +
-        '<div class="pblock"><b>Do</b>' + p.do + '</div>' +
-        '<div class="pblock"><b>Don\u2019t</b>' + p.dont + '</div>' +
-        '<div class="pfoot">' + (p.segMode === 'protects' ? 'protects gains against decay' : 'moves the curve: full detail on click') + '</div></div>';
-      el.addEventListener('click', function () { openModal(detailHTML(id)); track('recovery-play'); });
-      tr.appendChild(el);
+  /* ---- Intervention playbook rows: all 13, one row per category ---- */
+  (function buildLibraryRows() {
+    var host = document.getElementById('lib-cat-rows');
+    if (!host) return;
+    var CATS = [
+      ['Opportunity', 'structural & social permission', ['sponsor', 'manager', 'whole', 'friction']],
+      ['Motivation', 'belief & desire', ['proof', 'peer', 'inaction', 'quiet']],
+      ['Capability', 'can they do it well', ['build', 'whenthen']],
+      ['Sustainment', 'make it stick', ['policy', 'criteria', 'ritual']]
+    ];
+    CATS.forEach(function (cat) {
+      var row = document.createElement('div');
+      row.className = 'lib-row';
+      row.innerHTML = '<div class="lib-row-head"><b>' + cat[0] + ' playbooks</b><span>' + cat[1] + '</span></div><div class="lib-track"></div>';
+      var tr = row.querySelector('.lib-track');
+      cat[2].forEach(function (id) {
+        var p = PLAYS[id];
+        if (!p) return;
+        var el = document.createElement('button');
+        el.type = 'button';
+        el.className = 'car-card car-mini';
+        el.dataset.play = id;
+        el.innerHTML = '<span class="cc-head">' + p.name + ' <em class="st lib">Playbook</em></span>' +
+          '<div class="paper compact half">' +
+          '<div class="phead"><b>TD</b>catalyst <span>Intervention playbook</span></div><div class="pgold"></div>' +
+          '<div class="ptitle">' + p.name + '</div>' +
+          '<div class="psub">' + p.group + ' \u00b7 ' + p.framework + ' \u00b7 ' + p.weeks + ' wks</div>' +
+          '<div class="pblock"><b>Do</b>' + p.do + '</div>' +
+          '<div class="pblock"><b>Don\u2019t</b>' + p.dont + '</div>' +
+          '<div class="pfoot">' + (p.segMode === 'protects' ? 'protects gains against decay' : 'moves the curve: full detail on click') + '</div></div>';
+        el.addEventListener('click', function () { openModal(detailHTML(id)); track('recovery-play'); });
+        tr.appendChild(el);
+      });
+      host.appendChild(row);
     });
   })();
 
-  /* ---- Deliverables carousel ---- */
-  var carTrack = document.getElementById('car-track');
-  var carDots = document.getElementById('car-dots');
-  if (carTrack) {
-    var carCards = Array.prototype.slice.call(carTrack.querySelectorAll('.car-card'));
-    function cardStep() { return carCards.length > 1 ? carCards[1].offsetLeft - carCards[0].offsetLeft : carCards[0].offsetWidth; }
-    function carIdx() { return Math.min(carCards.length - 1, Math.round(carTrack.scrollLeft / cardStep())); }
-    function carGo(i) { carTrack.scrollTo({ left: i * cardStep(), behavior: reduceMotion ? 'auto' : 'smooth' }); }
-    if (carDots) {
-      carCards.forEach(function (c, i) {
-        var d = document.createElement('button');
-        d.type = 'button';
-        d.setAttribute('role', 'tab');
-        d.setAttribute('aria-label', 'Document ' + (i + 1));
-        d.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
-        d.addEventListener('click', function () { carGo(i); });
-        carDots.appendChild(d);
-      });
-    }
-    function syncDots() {
-      if (!carDots) return;
-      var i = carIdx();
-      Array.prototype.forEach.call(carDots.children, function (d, j) { d.setAttribute('aria-selected', j === i ? 'true' : 'false'); });
-    }
-    carTrack.addEventListener('scroll', function () { window.requestAnimationFrame(syncDots); });
-    var prevB = document.querySelector('.car-prev'), nextB = document.querySelector('.car-next');
-    if (prevB) prevB.addEventListener('click', function () { carGo(Math.max(0, carIdx() - 1)); });
-    if (nextB) nextB.addEventListener('click', function () { carGo(Math.min(carCards.length - 1, carIdx() + 1)); });
-    var carTimer = null, carPaused = false;
-    function carTick() { if (!carPaused && pmodal && pmodal.hidden) carGo((carIdx() + 1) % carCards.length); }
-    if (!reduceMotion) carTimer = setInterval(carTick, 4200);
-    ['pointerenter', 'focusin', 'touchstart'].forEach(function (evn) {
-      carTrack.addEventListener(evn, function () { carPaused = true; }, { passive: true });
-    });
-    ['pointerleave', 'focusout'].forEach(function (evn) {
-      carTrack.addEventListener(evn, function () { carPaused = false; }, { passive: true });
-    });
-  }
-
-  /* ---- Situation picker ---- */
+  /* ---- Situation selector: cases picker + Where-it-leads tabs, synced ---- */
   var SITLABEL = { platform: 'Stalled department platform', seats: 'Frontier-lab seats', pilots: 'Agentic pilot portfolio', zero: 'Starting 0 to 1' };
-  document.querySelectorAll('.case[data-sit]').forEach(function (c) {
-    function choose() {
-      var sit = c.dataset.sit;
-      document.querySelectorAll('.case[data-sit]').forEach(function (x) { x.setAttribute('aria-pressed', x === c ? 'true' : 'false'); });
-      document.querySelectorAll('.outcome[data-sit]').forEach(function (o) { o.classList.toggle('sel', o.dataset.sit === sit); });
-      var f = document.getElementById('f-sit');
-      if (f) f.value = SITLABEL[sit];
-      var note = document.getElementById('case-note-row');
-      if (note) note.innerHTML = 'Selected: <b>' + SITLABEL[sit] + '</b>. Its 90-day outcome is highlighted below, and your note to Tom will carry it.';
-      track('recovery-situation');
+  function selectSituation(sit) {
+    document.querySelectorAll('.case[data-sit]').forEach(function (x) {
+      x.setAttribute('aria-pressed', x.dataset.sit === sit ? 'true' : 'false');
+    });
+    document.querySelectorAll('.outcome[data-sit]').forEach(function (o) {
+      o.classList.toggle('sel', o.dataset.sit === sit);
+    });
+    var grid = document.getElementById('outcome-grid');
+    if (grid) grid.classList.toggle('solo', !!sit);
+    document.querySelectorAll('.reset-tabs button').forEach(function (b) {
+      var on = sit ? b.dataset.rsit === sit : b.dataset.rsit === 'all';
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    var f = document.getElementById('f-sit');
+    if (f) f.value = sit ? SITLABEL[sit] : 'not selected';
+    var note = document.getElementById('case-note-row');
+    if (note) {
+      note.innerHTML = sit
+        ? 'Selected: <b>' + SITLABEL[sit] + '</b>. Its 90-day outcome is shown below, and your note to Tom will carry it.'
+        : 'Selecting a situation highlights its 90-day outcome below and tells Tom where you are starting from.';
     }
-    c.addEventListener('click', function (ev) { if (ev.target.closest('[data-sorter], a, .cvq')) return; choose(); });
-    c.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); choose(); } });
+    track('recovery-situation');
+  }
+  document.querySelectorAll('.case[data-sit]').forEach(function (c) {
+    c.addEventListener('click', function (ev) {
+      if (ev.target.closest('[data-sorter], a, .cvq')) return;
+      selectSituation(c.dataset.sit);
+    });
+    c.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); selectSituation(c.dataset.sit); }
+    });
+  });
+  document.querySelectorAll('.reset-tabs button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      selectSituation(b.dataset.rsit === 'all' ? null : b.dataset.rsit);
+    });
   });
 
   /* ---- Task sorter (frontier-seats flagship) ---- */
