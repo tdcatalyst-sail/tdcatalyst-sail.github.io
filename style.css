@@ -2975,3 +2975,108 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
 .advise-apart .prac-card { margin: 0; }
 .advise-note p { color: var(--midgray); }
 .advise-note p:last-child { margin-bottom: 0; }
+
+/* ============================================================
+   SELECTOR  (.sel-*)
+   The diagnostic's archetype panel generalised. A short list of choices on
+   the left, one panel on the right that morphs to the chosen item. It reads
+   as one thing at a time instead of a wall of parallel cards, and it turns a
+   scroll into a click. Accent comes from --sel-ac, which defaults to the
+   practice brand, so the same component wears each practice's logo colour.
+   ============================================================ */
+.sel {
+  display: grid; grid-template-columns: minmax(0, 290px) minmax(0, 1fr);
+  gap: 1.1rem; align-items: start;
+}
+@media (max-width: 900px) { .sel { grid-template-columns: 1fr; } }
+
+.sel-tabs { display: grid; gap: 0.55rem; }
+@media (max-width: 900px) { .sel-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 620px) { .sel-tabs { grid-template-columns: 1fr; } }
+
+.sel-tab {
+  --sel-ac: var(--brand);
+  display: flex; align-items: center; gap: 0.75rem; width: 100%; min-width: 0;
+  text-align: left; cursor: pointer; font-family: inherit;
+  background: #fff; border: 1px solid var(--reg-line); border-left: 3px solid transparent;
+  border-radius: var(--reg-radius); padding: 0.85rem 0.95rem;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
+}
+.sel-tab:hover { box-shadow: var(--elev-2); transform: translateY(-1px); }
+.sel-tab[aria-pressed="true"] { border-left-color: var(--sel-ac); box-shadow: var(--elev-2); }
+.sel-tab .tdc-icon {
+  background: color-mix(in srgb, var(--sel-ac) 12%, #fff);
+  border-color: color-mix(in srgb, var(--sel-ac) 32%, #fff);
+}
+.sel-tab .tdc-icon svg { stroke: var(--sel-ac); }
+.sel-tab .sel-tx { min-width: 0; }
+.sel-tab .sel-over {
+  display: block; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--sel-ac); margin-bottom: 0.12rem;
+}
+.sel-tab .sel-tx b {
+  display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 0.95rem; color: var(--navy); line-height: 1.25;
+}
+
+.sel-panel {
+  --sel-ac: var(--brand);
+  display: grid; align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 290px);
+  grid-template-areas: "head facts" "body facts";
+  gap: 1.2rem 1.6rem;
+  background: #fff; border: 1px solid var(--reg-line); border-radius: var(--reg-radius-lg);
+  box-shadow: var(--elev-2); padding: 1.6rem 1.7rem;
+}
+/* Title, then the facts, then the detail — the order Tom asked for on the
+   diagnostic panel, kept here so the cadence matches. */
+@media (max-width: 760px) {
+  .sel-panel {
+    grid-template-columns: 1fr; grid-template-areas: "head" "facts" "body";
+    gap: 1.1rem; padding: 1.3rem 1.2rem;
+  }
+}
+.sel-head { grid-area: head; min-width: 0; }
+.sel-facts { grid-area: facts; min-width: 0; }
+.sel-body { grid-area: body; min-width: 0; }
+
+.sel-name {
+  font-family: 'Fraunces', 'Besley', Georgia, serif; font-weight: 400;
+  font-size: 1.4rem; color: var(--navy); line-height: 1.2; margin: 0 0 0.5rem;
+}
+.sel-lede { font-size: 0.98rem; color: var(--charcoal); line-height: 1.6; margin: 0; }
+.sel-body p { font-size: 0.94rem; color: var(--midgray); line-height: 1.62; margin: 0 0 0.8rem; }
+.sel-body p:last-child { margin-bottom: 0; }
+.sel-body ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.sel-body li {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: start;
+  font-size: 0.92rem; line-height: 1.55; color: var(--charcoal);
+}
+.sel-body li::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%; margin-top: 0.52rem;
+  background: var(--sel-ac);
+}
+.sel-body li strong { color: var(--navy); }
+
+/* The facts rail: what a buyer scans for before reading a word of prose. */
+.sel-fact {
+  border-top: 1px solid var(--reg-line); padding: 0.7rem 0 0; margin-top: 0.7rem;
+}
+.sel-fact:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.sel-fact .k {
+  display: block; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--midgray); margin-bottom: 0.22rem;
+}
+.sel-fact .v {
+  font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.12rem;
+  color: var(--navy); line-height: 1.25; font-variant-numeric: tabular-nums;
+}
+.sel-fact .v.small { font-size: 0.95rem; font-weight: 500; }
+.sel-note {
+  margin-top: 0.9rem; padding: 0.6rem 0.75rem;
+  background: color-mix(in srgb, var(--sel-ac) 7%, #fff);
+  border-left: 2px solid var(--sel-ac); border-radius: 0 8px 8px 0;
+  font-size: 0.84rem; line-height: 1.5; color: var(--charcoal);
+}
+.sel-note a { color: var(--brand-ink); }
