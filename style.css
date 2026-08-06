@@ -2846,3 +2846,75 @@ body.reg .tdc-dont { border-radius: var(--reg-radius); }
 .inst-go .arr { transition: transform var(--dur) var(--ease); display: inline-block; }
 .inst-card:hover .inst-go .arr { transform: translateX(4px); }
 
+/* ============================================================
+   SIMULATOR / PLANNER ON THE REGISTER
+   Scoped to body.reg: the planner's surfaces take the campaign's radii,
+   warm hairline and elevation so the instrument reads as the same product
+   as the pages that sell it.
+   ============================================================ */
+body.reg .matrix-grid,
+body.reg .groundwork,
+body.reg .plan-panel,
+body.reg .sim-demo-note,
+body.reg .teaser-callout,
+body.reg .phase-track {
+  border-radius: var(--reg-radius);
+}
+body.reg .matrix-grid,
+body.reg .groundwork,
+body.reg .sim-demo-note,
+body.reg .teaser-callout,
+body.reg .phase-track {
+  border-color: var(--reg-line);
+}
+body.reg .matrix-grid,
+body.reg .groundwork { box-shadow: var(--elev-1); }
+
+body.reg .cell { border-radius: 8px; border-color: var(--reg-line); }
+
+/* Play cards: the campaign's product-card treatment, including the lift. */
+body.reg .play-card {
+  border-radius: var(--reg-radius);
+  border-color: var(--reg-line);
+  border-left-width: 3px;
+  box-shadow: var(--elev-1);
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+body.reg .play-card:hover { box-shadow: var(--elev-2); transform: translateY(-2px); }
+body.reg .play-card.added:hover { transform: none; box-shadow: var(--elev-1); }
+
+/* Plan panel is the campaign's dark register; its rows follow. */
+body.reg .plan-panel { box-shadow: var(--elev-2); }
+body.reg .plan-item { border-radius: 8px; }
+body.reg .ptl-bar, body.reg .ptl-track { border-radius: 4px; }
+
+/* The chart sat directly on the page ground; it is an instrument, so it gets
+   a sheet of its own. */
+body.reg .chart-box {
+  background: #fff;
+  border: 1px solid var(--reg-line);
+  border-radius: var(--reg-radius-lg);
+  box-shadow: var(--elev-2);
+  padding: 1.4rem 1.5rem 1.1rem;
+}
+@media (max-width: 640px) { body.reg .chart-box { padding: 1rem 0.9rem 0.8rem; } }
+body.reg .sim-legend { margin-top: 0.6rem; }
+
+body.reg .readout-item { border-radius: var(--reg-radius); }
+
+/* Inputs on the register: warm hairline, campaign radius, brand focus ring. */
+body.reg .form-grid input,
+body.reg .form-grid textarea,
+body.reg .form-grid select {
+  border-radius: 8px;
+  border-color: var(--reg-line);
+}
+body.reg .form-grid input:focus,
+body.reg .form-grid textarea:focus,
+body.reg .form-grid select:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 18%, transparent);
+}
+body.reg .mx-size-input { border-radius: 6px; border-color: var(--reg-line); }
+
