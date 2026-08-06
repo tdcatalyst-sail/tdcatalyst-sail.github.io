@@ -3488,3 +3488,124 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 }
 .sail-wash > * { position: relative; }
 .sail-wash > canvas.terrain { position: absolute; }
+
+/* ============================================================
+   GROW: CAMPAIGN SYSTEMS AT SITE SCALE
+   The situation picker, the price ribbon and the library shelf, ported from
+   the campaign pages so the funnel reads as one product.
+   ============================================================ */
+
+/* --- Situation minis: the campaign's four cases, compacted --- */
+.sit-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; }
+@media (max-width: 780px) { .sit-grid { grid-template-columns: 1fr; } }
+a.sit {
+  display: block; min-width: 0; text-decoration: none; position: relative;
+  background: #fff; border: 1px solid var(--reg-line); border-radius: var(--reg-radius);
+  padding: 1.15rem 1.25rem; box-shadow: var(--elev-1);
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+a.sit:hover { box-shadow: var(--elev-2); transform: translateY(-3px); border-color: color-mix(in srgb, var(--logo-gold) 55%, var(--reg-line)); }
+.sit-head { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.45rem; flex-wrap: wrap; }
+.sit .tdc-icon { width: 38px; height: 38px; border-radius: 10px; }
+.sit .tdc-icon svg { width: 20px; height: 20px; }
+.sit-head b {
+  font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.02rem;
+  color: var(--navy); line-height: 1.25;
+}
+.sit-pill {
+  font-family: var(--mono); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--terracotta);
+  border: 1px solid color-mix(in srgb, var(--logo-gold) 55%, #fff); border-radius: 999px;
+  padding: 0.16rem 0.55rem; white-space: nowrap;
+}
+.sit-pill--flag { background: var(--logo-gold); color: #10233F; border-color: var(--logo-gold); }
+.sit p { font-size: 0.88rem; color: var(--midgray); line-height: 1.55; margin: 0; }
+.sit .sit-go {
+  display: inline-block; margin-top: 0.6rem; font-size: 0.85rem; font-weight: 600;
+  color: var(--terracotta);
+}
+
+/* --- The price ribbon: the campaign band, site-side --- */
+a.price-band {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem 2rem; align-items: center;
+  text-decoration: none; position: relative; overflow: hidden;
+  background:
+    radial-gradient(38rem 20rem at 106% -30%, rgba(232, 176, 3, 0.2), transparent 58%),
+    linear-gradient(168deg, var(--navy-deep), #0F1F33);
+  border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--reg-radius-lg);
+  box-shadow: var(--elev-3); padding: 1.5rem 1.8rem; margin: 1.6rem 0 2rem;
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+a.price-band:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(22,40,63,0.12), 0 30px 64px rgba(22,40,63,0.2); }
+@media (max-width: 720px) { a.price-band { grid-template-columns: 1fr; } }
+.pb-copy .pb-kick {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--logo-gold); margin-bottom: 0.4rem;
+}
+.pb-copy .pb-kick::before { content: ""; width: 1.6rem; height: 2px; background: var(--logo-gold); }
+.pb-copy b {
+  display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 1.18rem; color: #fff; line-height: 1.3; margin-bottom: 0.3rem;
+}
+.pb-copy span { display: block; font-size: 0.88rem; color: #C7D3CE; line-height: 1.55; }
+.pb-copy .pb-fine { font-size: 0.74rem; color: rgba(199, 211, 206, 0.75); margin-top: 0.45rem; }
+.pb-price { text-align: right; }
+@media (max-width: 720px) { .pb-price { text-align: left; } }
+.pb-price .was {
+  display: block; font-family: 'Besley', Georgia, serif; font-size: 1rem;
+  color: rgba(199, 211, 206, 0.7); text-decoration: line-through; text-decoration-color: var(--logo-red);
+}
+.pb-price .now {
+  display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 2.1rem; color: var(--logo-gold); line-height: 1.05; letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.pb-price .unit {
+  display: block; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.11em;
+  text-transform: uppercase; color: rgba(199, 211, 206, 0.8); margin-top: 0.25rem;
+}
+.pb-price .go { display: inline-block; margin-top: 0.55rem; font-size: 0.88rem; font-weight: 600; color: #fff; }
+
+/* --- The instrument shelf: campaign artifacts at miniature scale --- */
+.shelf { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; margin-top: 1.6rem; }
+@media (max-width: 980px) { .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .shelf { grid-template-columns: 1fr; } }
+.shelf-doc {
+  min-width: 0; background: #fff; border: 1px solid var(--reg-line); border-radius: 10px;
+  box-shadow: var(--elev-1); overflow: hidden;
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.shelf-doc:hover { box-shadow: var(--elev-2); transform: translateY(-2px); }
+.shelf-doc .sd-head {
+  padding: 0.55rem 0.8rem; border-bottom: 2px solid var(--logo-gold);
+  font-family: var(--mono); font-size: 0.58rem; font-weight: 600; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--navy);
+}
+.shelf-doc .sd-body { padding: 0.7rem 0.8rem 0.85rem; }
+.sd-check { display: grid; gap: 0.32rem; }
+.sd-check i {
+  position: relative; display: block; font-style: normal; font-size: 0.7rem;
+  color: var(--midgray); line-height: 1.35; padding-left: 1.05rem;
+}
+.sd-check i::before {
+  content: ""; position: absolute; left: 0; top: 0.28em; width: 7px; height: 4px;
+  border-left: 1.6px solid var(--value-green); border-bottom: 1.6px solid var(--value-green);
+  transform: rotate(-45deg);
+}
+.sd-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.sd-chips em {
+  font-style: normal; font-family: var(--mono); font-size: 0.56rem; font-weight: 600;
+  letter-spacing: 0.06em; border-radius: 5px; padding: 0.16rem 0.4rem;
+}
+.sd-chips .c-ret { background: #FCF1F0; color: #A93226; border: 1px solid #F0D2CE; }
+.sd-chips .c-aug { background: #FBF4DC; color: #8A6302; border: 1px solid #EFDFA9; }
+.sd-chips .c-new { background: #F0F6F1; color: #1F5B2D; border: 1px solid #CBE0CF; }
+.sd-meter { position: relative; height: 10px; background: var(--reg-bg-alt); border-radius: 999px; margin: 0.5rem 0 0.4rem; }
+.sd-meter i { position: absolute; left: 0; top: 0; bottom: 0; width: 46%; border-radius: 999px; background: linear-gradient(90deg, var(--logo-gold), var(--terracotta)); }
+.sd-meter em { position: absolute; top: -3px; bottom: -3px; left: 55%; width: 2px; background: var(--navy); }
+.sd-note { font-size: 0.66rem; color: var(--midgray); line-height: 1.4; }
+.sd-cal { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; }
+.sd-cal i { height: 16px; border-radius: 3px; background: var(--reg-bg-alt); }
+.sd-cal i.on { background: color-mix(in srgb, var(--logo-gold) 55%, #fff); border: 1px solid var(--logo-gold); }
+.shelf-cap { margin-top: 1rem; font-size: 0.88rem; color: var(--midgray); }
