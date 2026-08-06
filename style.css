@@ -3098,7 +3098,10 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
   font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.12rem;
   color: var(--navy); line-height: 1.25; font-variant-numeric: tabular-nums;
 }
-.sel-fact:first-child .v { color: var(--sel-ink, var(--sel-ac)); }
+/* The lead fact takes the true accent, not the text-safe ink: Tom wants the
+   reset fee in the diffusion yellow (#E8B003), matching the hero dots. The
+   over-label keeps the ink, where small type needs the contrast. */
+.sel-fact:first-child .v { color: var(--sel-ac); }
 .sel-facts { border-top-color: color-mix(in srgb, var(--sel-ac) 26%, var(--reg-line)); }
 .sel-fact .v.small { font-size: 0.95rem; font-weight: 500; }
 .sel-note {
@@ -3486,8 +3489,10 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
     radial-gradient(58rem 30rem at 12% -12%, rgba(3, 72, 202, 0.14), transparent 62%),
     radial-gradient(40rem 22rem at 96% 108%, rgba(3, 72, 202, 0.07), transparent 60%);
 }
-.sail-wash > * { position: relative; }
-.sail-wash > canvas.terrain { position: absolute; }
+/* Lift only the copy above the wash. A bare child selector here once
+   overrode the peaks overlay's absolute positioning and collapsed the hero
+   walk (Conviction / Radical honesty / Inspiration) out of view. */
+.sail-wash > .wrap { position: relative; }
 
 /* ============================================================
    GROW: CAMPAIGN SYSTEMS AT SITE SCALE
@@ -3567,4 +3572,70 @@ a.price-band:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(22
 }
 .pb-price .go { display: inline-block; margin-top: 0.55rem; font-size: 0.88rem; font-weight: 600; color: #fff; }
 
+/* ---- Field-notes diagnostic strip: the campaign's, in Sail blue ---- */
+.fn-diagstrip { border-bottom: 1px solid var(--reg-line); background: color-mix(in srgb, var(--logo-blue) 4%, #fff); }
+.fn-diagstrip .wrap { padding-top: 0.85rem; padding-bottom: 0.85rem; font-size: 0.92rem; color: var(--midgray); }
+.fn-diagstrip a { color: var(--logo-blue); font-weight: 650; }
 
+/* ---- Sail price band: the campaign band with the blue light ---- */
+a.price-band--sail {
+  background:
+    radial-gradient(38rem 20rem at 106% -30%, rgba(3, 72, 202, 0.28), transparent 58%),
+    linear-gradient(168deg, var(--navy-deep), #0F1F33);
+}
+a.price-band--sail .pb-kick { color: #7FA6F2; }
+a.price-band--sail .pb-kick::before { background: var(--logo-blue); }
+a.price-band--sail .pb-price .now { color: #9DBCF7; }
+
+/* ---- Pathway tiers carry their own accent ---- */
+.pathway a.pw { border-top-color: var(--pw-ac, var(--brand)); }
+.pathway a.pw:hover { border-color: color-mix(in srgb, var(--pw-ac, var(--brand)) 40%, var(--reg-line)); border-top-color: var(--pw-ac, var(--brand)); }
+.pathway a.pw .pw-unit { color: var(--pw-ink, var(--midgray)); }
+
+/* ---- Redacted previews: the written diagnostic, structure visible ---- */
+.sheet-entry[role="button"] { cursor: pointer; transition: background var(--dur-fast) var(--ease); }
+.sheet-entry[role="button"]:hover { background: color-mix(in srgb, var(--logo-blue) 4%, #fff); }
+.sheet-entry .se-more {
+  display: inline-block; margin-top: 0.5rem; font-family: var(--mono); font-size: 0.58rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--logo-blue);
+}
+.sov { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.sov-back { position: absolute; inset: 0; background: rgba(16, 26, 40, 0.55); backdrop-filter: blur(2px); }
+.sov-card {
+  position: relative; width: min(480px, 94vw); max-height: 88vh; overflow: auto;
+  background: #fff; border-radius: var(--reg-radius-lg); box-shadow: var(--elev-3);
+  padding: 1.6rem 1.7rem;
+}
+.sov-x {
+  position: absolute; top: 0.7rem; right: 0.8rem; width: 30px; height: 30px;
+  border: none; border-radius: 50%; background: var(--reg-bg-alt); color: var(--navy);
+  font-size: 1rem; cursor: pointer;
+}
+.sov-doc { border: 1px solid var(--reg-line); border-radius: 10px; overflow: hidden; }
+.sov-doc .sd-h {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 0.7rem 1rem; border-bottom: 2px solid var(--logo-blue);
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--navy);
+}
+.sov-doc .sd-b { padding: 1rem; }
+.sov-doc h4 { font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.05rem; color: var(--navy); margin: 0 0 0.7rem; }
+.sov-doc .rl { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--logo-blue); margin: 0.8rem 0 0.3rem; }
+.sov-doc .rb { height: 9px; border-radius: 4px; margin-bottom: 5px;
+  background: linear-gradient(90deg, #E4E8EE, #F1F3F7); }
+.sov-doc .rb.w2 { width: 86%; } .sov-doc .rb.w3 { width: 64%; }
+.sov-note { font-size: 0.82rem; color: var(--midgray); margin: 0.9rem 0 0; }
+.sov-note a { color: var(--logo-blue); font-weight: 600; }
+
+/* ---- Signs sampler ---- */
+.signs2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; }
+@media (max-width: 720px) { .signs2 { grid-template-columns: 1fr; } }
+.sign-card {
+  min-width: 0; background: #fff; border: 1px solid var(--reg-line);
+  border-left: 3px solid var(--logo-blue); border-radius: var(--reg-radius);
+  padding: 1.15rem 1.3rem; box-shadow: var(--elev-1);
+}
+.sign-card .sg-name { font-family: 'Fraunces', 'Besley', Georgia, serif; font-size: 1.15rem; color: var(--navy); margin-bottom: 0.3rem; }
+.sign-card .sg-anchor { font-size: 0.84rem; color: var(--midgray); line-height: 1.5; margin-bottom: 0.6rem; }
+.sign-card .sg-q { font-size: 0.95rem; font-weight: 600; color: var(--navy); line-height: 1.5; }
+.signs2-cap { margin-top: 1rem; font-size: 0.88rem; color: var(--midgray); }
+.signs2-cap a { font-weight: 600; }
