@@ -3567,45 +3567,4 @@ a.price-band:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(22
 }
 .pb-price .go { display: inline-block; margin-top: 0.55rem; font-size: 0.88rem; font-weight: 600; color: #fff; }
 
-/* --- The instrument shelf: campaign artifacts at miniature scale --- */
-.shelf { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; margin-top: 1.6rem; }
-@media (max-width: 980px) { .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 520px) { .shelf { grid-template-columns: 1fr; } }
-.shelf-doc {
-  min-width: 0; background: #fff; border: 1px solid var(--reg-line); border-radius: 10px;
-  box-shadow: var(--elev-1); overflow: hidden;
-  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
-}
-.shelf-doc:hover { box-shadow: var(--elev-2); transform: translateY(-2px); }
-.shelf-doc .sd-head {
-  padding: 0.55rem 0.8rem; border-bottom: 2px solid var(--logo-gold);
-  font-family: var(--mono); font-size: 0.58rem; font-weight: 600; letter-spacing: 0.09em;
-  text-transform: uppercase; color: var(--navy);
-}
-.shelf-doc .sd-body { padding: 0.7rem 0.8rem 0.85rem; }
-.sd-check { display: grid; gap: 0.32rem; }
-.sd-check i {
-  position: relative; display: block; font-style: normal; font-size: 0.7rem;
-  color: var(--midgray); line-height: 1.35; padding-left: 1.05rem;
-}
-.sd-check i::before {
-  content: ""; position: absolute; left: 0; top: 0.28em; width: 7px; height: 4px;
-  border-left: 1.6px solid var(--value-green); border-bottom: 1.6px solid var(--value-green);
-  transform: rotate(-45deg);
-}
-.sd-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
-.sd-chips em {
-  font-style: normal; font-family: var(--mono); font-size: 0.56rem; font-weight: 600;
-  letter-spacing: 0.06em; border-radius: 5px; padding: 0.16rem 0.4rem;
-}
-.sd-chips .c-ret { background: #FCF1F0; color: #A93226; border: 1px solid #F0D2CE; }
-.sd-chips .c-aug { background: #FBF4DC; color: #8A6302; border: 1px solid #EFDFA9; }
-.sd-chips .c-new { background: #F0F6F1; color: #1F5B2D; border: 1px solid #CBE0CF; }
-.sd-meter { position: relative; height: 10px; background: var(--reg-bg-alt); border-radius: 999px; margin: 0.5rem 0 0.4rem; }
-.sd-meter i { position: absolute; left: 0; top: 0; bottom: 0; width: 46%; border-radius: 999px; background: linear-gradient(90deg, var(--logo-gold), var(--terracotta)); }
-.sd-meter em { position: absolute; top: -3px; bottom: -3px; left: 55%; width: 2px; background: var(--navy); }
-.sd-note { font-size: 0.66rem; color: var(--midgray); line-height: 1.4; }
-.sd-cal { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; }
-.sd-cal i { height: 16px; border-radius: 3px; background: var(--reg-bg-alt); }
-.sd-cal i.on { background: color-mix(in srgb, var(--logo-gold) 55%, #fff); border: 1px solid var(--logo-gold); }
-.shelf-cap { margin-top: 1rem; font-size: 0.88rem; color: var(--midgray); }
+
