@@ -3026,8 +3026,8 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
    a 786px void beside it. */
 .sel-panel {
   --sel-ac: var(--brand);
-  display: flex; flex-direction: column;
-  min-height: 24rem;
+  display: block;
+  min-height: 22rem;
   background: #fff; border: 1px solid var(--reg-line); border-radius: var(--reg-radius-lg);
   box-shadow: var(--elev-2); padding: 1.6rem 1.7rem;
 }
@@ -3041,11 +3041,9 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
 .sel-lede { font-size: 0.98rem; color: var(--charcoal); line-height: 1.6; margin: 0; }
 .sel-body p { font-size: 0.94rem; color: var(--midgray); line-height: 1.62; margin: 0 0 0.8rem; }
 .sel-body p:last-child { margin-bottom: 0; }
-.sel-body ul {
-  list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem 1.6rem;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-@media (max-width: 760px) { .sel-body ul { grid-template-columns: 1fr; } }
+/* One column. Two grid columns row-aligned five variable-height items and
+   opened ragged voids; a single column reads as the list it is. */
+.sel-body ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
 /* A plain block with a padded-left dot. NOT a grid: grid turns every inline
    child, anonymous text included, into its own cell, which is exactly the
    mangled two-column li Tom screenshotted. */
@@ -3079,7 +3077,7 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
 }
 .sel-fact .v.small { font-size: 0.95rem; font-weight: 500; }
 .sel-note {
-  margin-top: auto; padding: 0.6rem 0.75rem;
+  margin-top: 1.1rem; padding: 0.6rem 0.75rem;
   background: color-mix(in srgb, var(--sel-ac) 7%, #fff);
   border-left: 2px solid var(--sel-ac); border-radius: 0 8px 8px 0;
   font-size: 0.84rem; line-height: 1.5; color: var(--charcoal);
@@ -3442,3 +3440,9 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 .trail-panel p { font-size: 0.94rem; color: var(--charcoal); line-height: 1.65; margin: 0 0 0.8rem; }
 .trail-panel p:last-of-type { margin-bottom: 0; }
 .trail-panel .tp-link { display: inline-block; margin-top: 0.9rem; font-size: 0.9rem; }
+
+/* Diffusion at card scale: same placement as the terrain strip it replaces. */
+.prac-card > canvas.card-diffusion {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 130px; width: 100%; pointer-events: none;
+}

@@ -1269,6 +1269,16 @@ function tdTerrainNoise(seed) {
       for (i2 = 0; i2 < cols; i2++) {
         var x = i2 * pitch + (j2 % 2 ? pitch / 2 : 0);
         var y = j2 * rowH;
+        // A perfect lattice of identical dots reads as wallpaper. Jitter every
+        // node off the grid with the same noise the front uses, so the
+        // population reads as a population.
+        // Per-node hash jitter, not fbm: the smoothed noise moved neighbours
+        // together (and only positive), so the lattice still read as a grid.
+        // A sin-hash gives each node an independent, deterministic offset.
+        var hx = Math.sin((i2 + seed) * 127.1 + j2 * 311.7) * 43758.5453;
+        var hy = Math.sin(i2 * 269.5 + (j2 + seed) * 183.3) * 27183.7351;
+        x += (hx - Math.floor(hx) - 0.5) * pitch * 0.66;
+        y += (hy - Math.floor(hy) - 0.5) * rowH * 0.66;
         var near = 1e9;
         for (var q = 0; q < seeds.length; q++) {
           var dx = x - seeds[q][0], dy = y - seeds[q][1];
@@ -1308,7 +1318,9 @@ function tdTerrainNoise(seed) {
     for (j2 = 0; j2 < rows; j2++) {
       for (i2 = 0; i2 < cols; i2++) {
         var n = nodes[j2][i2];
-        var r = 1.1 + n.a * 2.6;
+        // size varies per node as well as per adoption level
+        var sz = 0.75 + (fbm(n.x / 37, n.y / 41) * 0.5 + 0.5) * 0.6;
+        var r = (1.1 + n.a * 2.6) * sz;
         ctx.beginPath();
         ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
         ctx.fillStyle = n.a > 0.55

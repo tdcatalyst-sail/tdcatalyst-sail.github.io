@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=8286e083">
+  <link rel="stylesheet" href="/style.css?v=023e7c85">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -251,12 +251,15 @@
       return '<div class="sel-fact"><span class="k">' + f.k + '</span>' +
              '<span class="v' + (f.c ? ' ' + f.c : '') + '">' + f.v + '</span></div>';
     }).join('');
+    // Order: head, the ruled facts strip, the body, then the note as the
+    // panel's closing line. The note used to render inside the facts strip,
+    // which is what mangled the retainer card.
     panel.innerHTML =
       '<div class="sel-head"><h3 class="sel-name">' + o.name + '</h3>' +
       '<p class="sel-lede">' + o.lede + '</p></div>' +
-      '<div class="sel-facts">' + facts +
-      (o.note ? '<div class="sel-note">' + o.note + '</div>' : '') + '</div>' +
-      '<div class="sel-body">' + o.body + '</div>';
+      '<div class="sel-facts">' + facts + '</div>' +
+      '<div class="sel-body">' + o.body +
+      (o.note ? '<div class="sel-note">' + o.note + '</div>' : '') + '</div>';
     tabs.forEach(function (t) { t.setAttribute('aria-pressed', String(t.dataset.offer === key)); });
   }
   tabs.forEach(function (t) { t.addEventListener('click', function () { render(t.dataset.offer); }); });
@@ -466,7 +469,7 @@
   </div>
 </footer>
 
-<script src="/script.js?v=a5203520"></script>
+<script src="/script.js?v=7075f11a"></script>
 <script data-goatcounter="https://tdcatalyst.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
