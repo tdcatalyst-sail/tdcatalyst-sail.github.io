@@ -662,13 +662,27 @@
       font-size: 0.95rem; color: var(--navy); line-height: 1.25;
     }
 
+    /* Desktop keeps the title and the questions beside the chart; mobile reads
+       title, chart, questions. Named areas carry both without duplicating
+       markup or reordering the DOM. */
     .ap-panel {
-      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 1.6rem;
+      display: grid; align-items: start;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+      grid-template-areas: "head viz" "qs viz";
+      gap: 1.2rem 1.6rem;
       background: #fff; border: 1px solid #E6E3D7; border-radius: 18px;
       box-shadow: var(--elev-2); padding: 1.6rem 1.7rem;
     }
-    /* Text before chart at narrow widths, per Tom. */
-    @media (max-width: 700px) { .ap-panel { grid-template-columns: 1fr; gap: 1.2rem; padding: 1.3rem 1.2rem; } }
+    .ap-head { grid-area: head; min-width: 0; }
+    .ap-viz { grid-area: viz; }
+    .ap-qwrap { grid-area: qs; min-width: 0; }
+    @media (max-width: 700px) {
+      .ap-panel {
+        grid-template-columns: 1fr;
+        grid-template-areas: "head" "viz" "qs";
+        gap: 1.1rem; padding: 1.3rem 1.2rem;
+      }
+    }
     .ap-name {
       font-family: 'Fraunces', 'Besley', Georgia, serif; font-weight: 400;
       font-size: 1.4rem; color: var(--navy); line-height: 1.2; margin-bottom: 0.5rem;
@@ -688,20 +702,45 @@
     .ap-deficit b { font-weight: 650; color: var(--ac); }
     .ap-moves-head {
       font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.13em;
-      text-transform: uppercase; color: var(--terracotta); margin: 1.3rem 0 0.6rem;
+      text-transform: uppercase; color: var(--terracotta); margin: 0 0 0.6rem;
     }
-    .ap-moves { display: grid; gap: 0.5rem; }
-    .ap-move {
-      display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; align-items: start;
+    /* A real question from the instrument, the answer that points at this
+       archetype, and the finding that answer rests on. Reading the panel is
+       reading the test. */
+    .ap-qs { display: grid; gap: 0.6rem; }
+    .ap-q {
+      display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.75rem; align-items: start;
       background: #FCFBF7; border: 1px solid #E6E3D7; border-radius: 10px;
-      padding: 0.65rem 0.8rem; font-size: 0.88rem; line-height: 1.5; color: var(--charcoal);
+      padding: 0.8rem 0.9rem;
     }
-    .ap-move em {
-      font-style: normal; font-family: var(--mono); font-size: 0.68rem; font-weight: 600;
+    .ap-q-n {
+      font-family: var(--mono); font-size: 0.64rem; font-weight: 600; letter-spacing: 0.06em;
       color: var(--ac); padding-top: 0.15rem;
     }
+    .ap-q-main { min-width: 0; }
+    .ap-q-t {
+      font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 0.92rem;
+      color: var(--navy); line-height: 1.4; margin: 0 0 0.45rem;
+    }
+    /* The answer reads as a chosen option, so the mechanic is obvious before
+       the first click: a filled check and the option's own wording. */
+    .ap-q-a {
+      position: relative; padding-left: 1.5rem;
+      font-size: 0.87rem; line-height: 1.5; color: var(--charcoal);
+    }
+    .ap-q-a::before {
+      content: ""; position: absolute; left: 0; top: 0.18rem;
+      width: 15px; height: 15px; border-radius: 4px;
+      background: var(--ac); border: 1px solid var(--ac);
+    }
+    .ap-q-a::after {
+      content: ""; position: absolute; left: 4.5px; top: 6px;
+      width: 6px; height: 3px; border-left: 1.7px solid #fff; border-bottom: 1.7px solid #fff;
+      transform: rotate(-45deg);
+    }
+    .ap-q .diag-opt-data { margin-top: 0.55rem; font-size: 0.79rem; }
+    .ap-qs-note { font-size: 0.79rem; color: var(--midgray); line-height: 1.5; margin: 0.75rem 0 0; }
     .ap-viz { min-width: 0; }
-    @media (max-width: 700px) { .ap-viz { order: 2; } .ap-body { order: 1; } }
     .ap-viz svg { display: block; width: 100%; height: auto; }
     .ap-cap { font-size: 0.76rem; color: var(--midgray); line-height: 1.5; margin: 0.5rem 0 0; }
 
@@ -1498,6 +1537,38 @@ function radarTile(key) {
   return `<svg viewBox="0 0 300 210" role="img" aria-label="${esc(ARCHETYPES[key].name)}: weakest on ${esc(P.deficit)}">${out}</svg>`;
 }
 
+// The questions that carry an archetype, chosen by the weight its options
+// score rather than by hand, so the sample can never drift from the
+// instrument. For each question, the option that signals this archetype most
+// strongly is the one shown, with the research finding it rests on.
+function archQuestions(key, n) {
+  const sourced = (o) => (o && o.d && SOURCE_RE.test(String(o.d).trim()) ? 1 : 0);
+  const hits = [];
+  QUESTIONS.forEach((q, qi) => {
+    let best = null;
+    q.opts.forEach((o) => {
+      const w = (o.s && o.s[key]) || 0;
+      if (w <= 0) return;
+      // On equal weight, prefer the option that carries an attributed source:
+      // the panel's job is to show the ground each question stands on.
+      if (!best || w > best.w || (w === best.w && sourced(o) > sourced(best.o))) best = { w: w, o: o };
+    });
+    if (best) hits.push({ qi: qi, q: q.q, w: best.w, opt: best.o, src: sourced(best.o) });
+  });
+  hits.sort((a, b) => (b.w - a.w) || (b.src - a.src) || (a.qi - b.qi));
+  const want = n || 2;
+  const picked = [];
+  // Spread the sample across sections so two questions do not probe the same
+  // ground; fall back to plain rank if a section cannot be avoided.
+  hits.forEach((h) => {
+    if (picked.length >= want) return;
+    if (picked.some((x) => sectionFor(x.qi).name === sectionFor(h.qi).name)) return;
+    picked.push(h);
+  });
+  hits.forEach((h) => { if (picked.length < want && picked.indexOf(h) === -1) picked.push(h); });
+  return picked.slice(0, want);
+}
+
 // One archetype, opened in the panel: its profile, the reading behind it, and
 // the three moves it resolves to. Everything the page used to say about the
 // four archetypes across three sections now lives here, one at a time.
@@ -1505,17 +1576,27 @@ const ARCH_DOMAIN = { Seam: 'People', UP: 'Passage', OM: 'Operating model', Sens
 function archPanel(key) {
   const A = ARCHETYPES[key], P = RADAR_PROFILE[key];
   if (!A || !P) return '';
-  const moves = A.moves.map((m, i) =>
-    `<div class="ap-move"><em>${pad2(i + 1)}</em><span>${esc(m)}</span></div>`).join('');
+  const qs = archQuestions(key, 2).map((h) => `
+    <div class="ap-q">
+      <div class="ap-q-n">Q${pad2(h.qi + 1)}</div>
+      <div class="ap-q-main">
+        <p class="ap-q-t">${esc(h.q)}</p>
+        <div class="ap-q-a">${esc(h.opt.t)}</div>
+        ${h.opt.d ? renderEvidence(h.opt.d) : ''}
+      </div>
+    </div>`).join('');
   return `
-    <div class="ap-body">
+    <div class="ap-head">
       <div class="ap-name">${esc(A.name)}</div>
       <p class="ap-read">${esc(P.read)}</p>
       <div class="ap-deficit"><i></i><span>Gives way on <b>${esc(P.deficit)}</b></span></div>
-      <div class="ap-moves-head">The three moves it resolves to</div>
-      <div class="ap-moves">${moves}</div>
     </div>
-    <div class="ap-viz">${radarTile(key)}<p class="ap-cap">Read on the same six criteria as every other organization. The dashed ring marks the axis this archetype gives way on.</p></div>`;
+    <div class="ap-viz">${radarTile(key)}<p class="ap-cap">Read on the same six criteria as every other organization. The dashed ring marks the axis this archetype gives way on.</p></div>
+    <div class="ap-qwrap">
+      <div class="ap-moves-head">Questions that surface it</div>
+      <div class="ap-qs">${qs}</div>
+      <p class="ap-qs-note">Two of the twelve, shown with the answer that points here. Every question in the diagnostic carries the research finding it rests on, so by the time you start you have already read the ground it stands on.</p>
+    </div>`;
 }
 
 function selectArchIntro(key) {
