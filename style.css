@@ -3682,16 +3682,61 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 .stn h2 { margin-bottom: 0.4rem; }
 .stn .stn-sub { color: var(--midgray); max-width: 62ch; margin: 0; }
 
-/* ---- The mosaic: Tom's own ground behind why-the-method-exists ---- */
-.mosaic-sec { position: relative; overflow: hidden; }
+/* ---- The mosaic: many small pictures, clearly visible. The copy sits on
+   its own card, so readability never depends on washing the photos out. ---- */
+.mosaic-sec { position: relative; overflow: hidden; padding: 4.5rem 0; }
 .mosaic-sec .mosaic {
   position: absolute; inset: 0; z-index: 0; display: grid;
-  grid-template-columns: repeat(4, 1fr); grid-auto-rows: 1fr; gap: 4px;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  grid-auto-rows: 110px; gap: 3px;
 }
 .mosaic-sec .mosaic img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .mosaic-sec::before {
   content: ""; position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(rgba(255, 255, 255, 0.93), rgba(255, 255, 255, 0.88));
+  background: rgba(252, 251, 247, 0.28);
 }
 .mosaic-sec > .wrap { position: relative; z-index: 2; }
-@media (max-width: 700px) { .mosaic-sec .mosaic { grid-template-columns: repeat(2, 1fr); } }
+.mosaic-card {
+  max-width: 680px; background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--reg-line); border-radius: var(--reg-radius-lg);
+  box-shadow: var(--elev-3); padding: 2rem 2.4rem;
+}
+@media (max-width: 700px) {
+  .mosaic-sec { padding: 3rem 0; }
+  .mosaic-sec .mosaic { grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); grid-auto-rows: 84px; }
+  .mosaic-card { padding: 1.4rem 1.3rem; }
+}
+
+/* The hero walk on small screens: the same three deliveries the desktop
+   trail plants, as a static hand-drawn path under the copy. Hidden where
+   the real peaks device runs. */
+.hero-walk-m { display: none; }
+@media (max-width: 999px) {
+  .hero-walk-m { display: block; max-width: 375px; margin: 1.4rem 0 0.4rem; }
+  .hero-walk-m svg { width: 100%; height: auto; display: block; }
+}
+
+/* Framework at-a-glance chips on the method page. */
+.fw-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.6rem 0 1rem; }
+.fw-chips span {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--navy);
+  background: color-mix(in srgb, var(--logo-blue) 7%, #fff);
+  border: 1px solid color-mix(in srgb, var(--logo-blue) 30%, #fff);
+  border-radius: 999px; padding: 0.22rem 0.6rem;
+}
+.fw-chips span b { color: var(--logo-blue); margin-right: 0.3rem; }
+
+/* Campaign-style nav: section pills in the site bar itself. Pages that adopt
+   it drop the separate subnav band; the scroll-spy feeds .now here too. */
+.nav-links.nav-pills { gap: 0.3rem; }
+.nav-links.nav-pills a:not(.nav-cta) {
+  font-family: var(--mono); font-size: 0.64rem; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  border: 1px solid transparent; border-radius: 999px; padding: 0.34rem 0.75rem;
+  color: var(--midgray);
+  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease),
+              background var(--dur-fast) var(--ease);
+}
+.nav-links.nav-pills a:not(.nav-cta):hover { color: var(--brand-ink); background: #fff; border-color: var(--reg-line); }
+.nav-links.nav-pills a.now { color: var(--brand-ink); border-color: var(--brand); background: #fff; }

@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=9628f589">
+  <link rel="stylesheet" href="/style.css?v=262b04da">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -167,13 +167,12 @@
       </div>
     </div>
     <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false" onclick="var o=document.getElementById('nav').classList.toggle('open');this.setAttribute('aria-expanded',o)"><span></span><span></span><span></span></button>
-    <ul class="nav-links">
-      <li><a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">Adoption Simulator<span class="tool-tag" aria-hidden="true">&#8599;</span></a></li>
+    <ul class="nav-links nav-pills">
+      <li><a href="#situations">Situations</a></li>
       <li><a href="#services">Engagements</a></li>
+      <li><a href="#library">Method &amp; library</a></li>
       <li><a href="#proof">Proof</a></li>
-      <li><a href="#approach">How to start</a></li>
-      <li><a href="about">About</a></li>
-      <li><a href="#begin" class="nav-cta">Begin</a></li>
+      <li><a href="#begin" class="nav-cta">Start</a></li>
     </ul>
   </div>
 </nav>
@@ -203,16 +202,6 @@
   </div>
 </section>
 
-<!-- IN-PAGE VALUE NAV -->
-<div class="subnav" aria-label="On this page">
-  <div class="wrap subnav-inner">
-    <a href="#situations">Which situation is yours</a>
-    <a href="#services">The engagements</a>
-    <a href="#library">The method &amp; library</a>
-    <a href="#proof">Proof</a>
-    <a href="#begin">Start</a>
-  </div>
-</div>
 
 <!-- ENGAGEMENTS -->
 
@@ -1758,7 +1747,7 @@
       <h3>The instrument library</h3>
       <p>The engagement documents and the intervention playbooks, applied to your rollout. Hover any line to preview it; select it to read up close.</p>
     </div>
-    <div id="libsrc" hidden aria-hidden="true">
+    <div id="libsrc">
     <div class="carousel" id="doc-carousel">
       <button type="button" class="car-nav car-prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
       <div class="car-track car-2row" id="car-track">
@@ -2232,13 +2221,9 @@
     var host = document.getElementById('liblist');
     var srcCards = document.querySelectorAll('#libsrc .car-card:not(.car-mini)');
     if (!host) return;
-    // Resilience: if anything below throws, or an extension kills this
-    // script's effects, the carousel un-hides so the library is never a
-    // heading over nothing.
-    window.addEventListener('load', function () {
-      var src = document.getElementById('libsrc');
-      if (src && (!host.children.length)) src.hidden = false;
-    });
+    // Inverted resilience: the carousel is the visible default in the HTML,
+    // and only a fully successful build swaps in the list. No execution path
+    // can leave the library as a heading over nothing.
     try {
     var pop = document.createElement('div');
     pop.className = 'libpop';
@@ -2303,9 +2288,14 @@
         track('grow-play');
       });
     });
+    var built = document.querySelectorAll('#liblist .libitem').length;
+    if (built >= 19) {
+      var src = document.getElementById('libsrc');
+      if (src) src.hidden = true;
+    } else {
+      host.hidden = true;
+    }
     } catch (err) {
-      var src2 = document.getElementById('libsrc');
-      if (src2) src2.hidden = false;
       host.hidden = true;
     }
   })();

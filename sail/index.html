@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=9628f589">
+  <link rel="stylesheet" href="/style.css?v=262b04da">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -116,12 +116,11 @@
       </div>
     </div>
     <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false" onclick="var o=document.getElementById('nav').classList.toggle('open');this.setAttribute('aria-expanded',o)"><span></span><span></span><span></span></button>
-    <ul class="nav-links">
-      <li><a href="/preliminary-diagnostic" target="_blank" rel="noopener">Diagnostic<span class="tool-tag" aria-hidden="true">&#8599;</span></a></li>
-      <li><a href="method">Method</a></li>
-      <li><a href="sessions">Sessions</a></li>
-      <li><a href="field-notes">Field Notes</a></li>
-      <li><a href="about">About</a></li>
+    <ul class="nav-links nav-pills">
+      <li><a href="#signs">The signs</a></li>
+      <li><a href="#method">The frameworks</a></li>
+      <li><a href="#diagnostic">In writing</a></li>
+      <li><a href="#pathway">Tiers &amp; fees</a></li>
       <li><a href="begin" class="nav-cta">Begin</a></li>
     </ul>
   </div>
@@ -140,13 +139,30 @@
     <div class="hero-grid--single">
       <div class="reg-kicker">An advisory practice by Thomas Delaporte</div>
       <h1>Adaptability is the leadership capability the AI revolution demands.</h1>
-      <p class="hero-sub">The pace of a coastal walk changes what leaders notice and what they are willing to say out loud. Distance from the conference room is where complex organizational questions finally come clear. TDcatalyst advises senior executives on AI workforce transformation through a five-framework method, delivered in two specific landscapes on the Pacific coast and the Skyline ridge.</p>
+      <p class="hero-sub">The pace of a coastal walk changes what leaders notice and what they are willing to say out loud. Distance from the conference room is where complex organizational questions finally come clear. TDcatalyst advises senior executives on AI workforce transformation through a five-framework method, delivered on a four-station route from the Pacific coast to the Skyline ridge.</p>
       <div class="stat-strip">
         <span><b>5</b>frameworks, one sequence</span>
-        <span><b>2</b>landscapes: coast and ridge</span>
+        <span><b>4</b>stations, coast to ridge</span>
         <span><b>4</b>areas in the written diagnostic</span>
-        <span><b>5K</b>USD, where the tiers start</span>
+        <span><b>7&ndash;10</b>days to the written read</span>
       </div>
+  <div class="hero-walk-m" aria-label="What the walk delivers: inspiration, radical honesty, conviction">
+    <svg viewBox="0 0 340 150" role="img">
+      <path d="M8 132 C 70 120, 96 96, 132 84 S 220 52, 268 34" fill="none"
+            stroke="#0348CA" stroke-width="2" stroke-dasharray="5 5" opacity="0.55"/>
+      <g font-family="Archivo, sans-serif">
+        <circle cx="40" cy="119" r="5" fill="#fff" stroke="#0348CA" stroke-width="2.5"/>
+        <text x="52" y="112" font-size="13" font-weight="700" fill="#1F3A5F">Inspiration</text>
+        <text x="52" y="126" font-size="10" fill="#6B6B6B">from open senses, a quieted mind</text>
+        <circle cx="152" cy="76" r="5" fill="#fff" stroke="#0348CA" stroke-width="2.5"/>
+        <text x="164" y="69" font-size="13" font-weight="700" fill="#1F3A5F">Radical honesty</text>
+        <text x="164" y="83" font-size="10" fill="#6B6B6B">the noise tunes out</text>
+        <circle cx="268" cy="34" r="5" fill="#fff" stroke="#0348CA" stroke-width="2.5"/>
+        <text x="150" y="24" font-size="13" font-weight="700" fill="#1F3A5F">Conviction</text>
+        <text x="104" y="38" font-size="10" fill="#6B6B6B">the clarity to act</text>
+      </g>
+    </svg>
+  </div>
       <div class="btn-row">
         <a href="/preliminary-diagnostic" class="btn btn-primary">Diagnose your AI transformation</a>
         <a href="begin" class="btn btn-ghost">Book a Fit Call</a>
@@ -169,15 +185,6 @@
   </script>
 </section>
 
-<!-- IN-PAGE VALUE NAV -->
-<div class="subnav" aria-label="On this page">
-  <div class="wrap subnav-inner">
-    <a href="#signs">Mori Point &middot; the signs</a>
-    <a href="#method">Sweeney Ridge &middot; the frameworks</a>
-    <a href="#diagnostic">Milagra Ridge &middot; in writing</a>
-    <a href="#pathway">The grove &middot; tiers &amp; fees</a>
-  </div>
-</div>
 
 
 
@@ -295,7 +302,7 @@
 
 // Scroll-spy for the in-page nav.
 (function () {
-  var links = document.querySelectorAll('.subnav a');
+  var links = document.querySelectorAll('.subnav a, .nav-pills a[href^="#"]');
   if (!links.length || !('IntersectionObserver' in window)) return;
   var map = {};
   links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
@@ -320,9 +327,9 @@
 <section class="alt" id="diagnostic">
   <div class="wrap">
     <div class="section-head stn">
-      <div class="stn-venue"><i></i>Station 3 &middot; Milagra Ridge</div>
+      <div class="stn-venue"><i></i>Station 3 &middot; San Pedro Valley Park</div>
       <h2>You leave with it in writing.</h2>
-      <p class="stn-sub">Four areas, delivered in 7&ndash;10 days. Click any area to preview its shape.</p>
+      <p class="stn-sub">Off the ridge, under the trees, the read settles into writing. Four areas, 7&ndash;10 days. Click any area to preview its shape.</p>
     </div>
     <div class="sheet-doc">
       <div class="sheet-doc-head"><b>The Trail Diagnostic</b><span>Written read &middot; four areas &middot; specific to your organization</span></div>
@@ -350,12 +357,12 @@
     <a class="price-band price-band--sail reveal" href="sessions" data-gc="sail-price-band">
       <span class="pb-copy">
         <span class="pb-kick">Every tier, in writing</span>
-        <b>Whichever tier you walk, it ends in your hands: the written diagnostic, in 7&ndash;10 days.</b>
+        <b>Whichever tier you walk, it ends in your hands: the written diagnostic.</b>
         <span>Named adaptive challenge, landscape analysis, leverage inventory, 90-day roadmap. The four areas never vary; depth grows with the tier. Fixed fees, delivered personally.</span>
       </span>
       <span class="pb-price">
-        <span class="now">from 5K</span>
-        <span class="unit">USD &middot; fixed fees &middot; all tiers</span>
+        <span class="now">7&ndash;10</span>
+        <span class="unit">days to the written diagnostic</span>
         <span class="go">See the tiers &rarr;</span>
       </span>
     </a>

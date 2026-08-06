@@ -20,7 +20,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=9628f589">
+  <link rel="stylesheet" href="/style.css?v=262b04da">
   <style>
     /* ============================================================
        Diagnostic page — page-specific styles only.
@@ -149,7 +149,7 @@
       background: #fff;
       border: 1px solid var(--hairline);
       border-radius: var(--radius-sm);
-      padding: 1.15rem 1.25rem;
+      padding: 0.75rem 0.95rem;
       cursor: pointer;
       font-family: 'Inter', sans-serif;
       text-align: left;
@@ -737,6 +737,40 @@
     .diag-close { text-align: center; max-width: 54ch; margin: 0 auto; }
     .diag-close h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 0.6rem; }
     .diag-close p { color: var(--midgray); margin-bottom: 1.4rem; }
+
+    /* One screen per question: the research line opens only on the selected
+       option, confirming the choice instead of stretching the card with
+       twelve always-open citations. */
+    .diag-opt .diag-opt-data { display: none; }
+    .diag-opt.selected .diag-opt-data { display: block; }
+    .diag-card { padding: 1.7rem 1.8rem; }
+    .diag-title { font-size: clamp(1.05rem, 2.2vw, 1.4rem); margin-bottom: 0.45rem; }
+    .diag-opts { gap: 0.45rem; }
+    .diag-opt-body { font-size: 0.92rem; line-height: 1.45; }
+    .diag-section { margin-bottom: 0.2rem; }
+    .diag-num { display: none; }
+    .diag-hint { margin-bottom: 0.6rem; }
+    @media (max-width: 680px) {
+      .diag-card { padding: 1rem 0.85rem; }
+      .diag-opt { padding: 0.6rem 0.75rem; }
+      .diag-opt-body { font-size: 0.86rem; line-height: 1.4; }
+      .diag-steps-label { font-size: 0.6rem; }
+      section { padding: 1.6rem 0; }
+    }
+
+    /* On a phone the longest questions outrun the viewport; the nav row pins
+       to the bottom of the screen so Continue never needs hunting. */
+    @media (max-width: 680px) {
+      /* sticky needs a scrollable ancestor chain: the card's decorative
+         overflow clip would kill the pinning */
+      .diag-card { overflow: visible; }
+      .diag-nav-row {
+        position: sticky; bottom: 0; z-index: 5;
+        background: rgba(255, 255, 255, 0.96);
+        margin: 0.6rem -0.85rem -1rem; padding: 0.6rem 0.85rem 0.8rem;
+        border-top: 1px solid var(--hairline);
+      }
+    }
   </style>
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
@@ -1303,7 +1337,7 @@ function renderQuestion() {
           <div class="diag-hint">${isSingleSelect ? 'Select one' : 'Select all that apply'}</div>
           <div>${optsHtml}</div>
           ${freetextHtml}
-          <div class="diag-nav">
+          <div class="diag-nav-row diag-nav">
             <button class="diag-back" id="diag-back" style="visibility:${state.currentQ === 0 ? 'hidden' : 'visible'};">← Back</button>
             <span class="diag-counter">${pad2(state.currentQ + 1)} / ${pad2(QUESTIONS.length)}</span>
             <button class="btn btn-primary" id="diag-next" ${canContinue ? '' : 'disabled'}>${isLast ? 'See diagnosis' : 'Continue'}</button>
@@ -1318,6 +1352,9 @@ function renderQuestion() {
       const i = parseInt(el.dataset.opt, 10);
       if (isSingleSelect) {
         state.selected = [i];
+        // one answer is the whole input here: advance after a beat, no
+        // Continue click needed
+        setTimeout(() => { const n = document.getElementById('diag-next'); if (n && !n.disabled) n.click(); }, 350);
       } else {
         if (state.selected.includes(i)) state.selected = state.selected.filter((x) => x !== i);
         else state.selected = [...state.selected, i];
@@ -1698,10 +1735,10 @@ function renderResult() {
 
     <section class="cta-panel">
       <div class="wrap">
-        <p class="cta-sentence">From a named challenge to a mapped terrain.</p>
-        <p class="diag-cta-body">This diagnostic names the challenge. The Catalyst Field Session maps it: a full-day engagement across two landscapes, with up to three participants, that produces a written capability inventory, surfaces the belief gap between leadership intent and team-level reading, and names the specific organizational moves required across each seam.</p>
+        <p class="cta-sentence">From a named archetype to a fixed 90-day plan.</p>
+        <p class="diag-cta-body">This diagnostic names the stall. The Adoption Recovery Review resolves it: ten business days at a fixed $12,500, ending in the recovery decision on every deployment line and the 90-day sequence on a calendar, credited in full against an Adoption Reset started within 30 days.</p>
         <div class="btn-row" style="justify-content:center;">
-          <a class="btn btn-primary" href="begin">Book a Fit Call</a>
+          <a class="btn btn-primary" href="/grow/ai-adoption-recovery#begin">Get started on the recovery &rarr;</a>
           <button class="btn btn-ghost" id="diag-restart">Retake the diagnostic</button>
         </div>
       </div>
