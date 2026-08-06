@@ -3042,19 +3042,24 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
 .sel-body p { font-size: 0.94rem; color: var(--midgray); line-height: 1.62; margin: 0 0 0.8rem; }
 .sel-body p:last-child { margin-bottom: 0; }
 .sel-body ul {
-  list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem 1.6rem;
+  list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem 1.6rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 @media (max-width: 760px) { .sel-body ul { grid-template-columns: 1fr; } }
+/* A plain block with a padded-left dot. NOT a grid: grid turns every inline
+   child, anonymous text included, into its own cell, which is exactly the
+   mangled two-column li Tom screenshotted. */
 .sel-body li {
-  display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: start;
-  font-size: 0.92rem; line-height: 1.55; color: var(--charcoal);
+  position: relative; padding-left: 1.05rem; min-width: 0;
+  font-size: 0.92rem; line-height: 1.55; color: var(--midgray);
 }
 .sel-body li::before {
-  content: ""; width: 6px; height: 6px; border-radius: 50%; margin-top: 0.52rem;
-  background: var(--sel-ac);
+  content: ""; position: absolute; left: 0; top: 0.5rem;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--sel-ac);
 }
-.sel-body li strong { color: var(--navy); }
+.sel-body li b, .sel-body li strong {
+  display: block; color: var(--navy); font-weight: 600; margin-bottom: 0.1rem;
+}
 
 /* The facts strip: what a buyer scans before reading a word of prose. Ruled
    above and below so it reads as an instrument panel, not a caption. */
