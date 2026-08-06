@@ -2931,3 +2931,32 @@ body.reg.brand-grow .outcomes-grid .outcome-item,
 body.reg.brand-advise .outcomes-grid .outcome-item {
   border-radius: var(--reg-radius-lg);
 }
+
+/* ============================================================
+   HUB ORDERING
+   Grow and Sail share a row; Advise sits apart because it sells to founders,
+   not to organizations deploying AI, and pretending otherwise made the hub
+   ask visitors to self-select across two unrelated axes at once.
+   ============================================================ */
+.cards--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 780px) { .cards--pair { grid-template-columns: 1fr; } }
+
+/* "Start here" on the practice most visitors arrive needing.
+   Selector matches .prac-card > :not(.card-terrain), which sets position:
+   relative at (0,2,0) and would otherwise stretch the flag to card width. */
+.prac-card { position: relative; }
+.prac-card > .prac-flag {
+  position: absolute; top: 0; right: 1.3rem; z-index: 2;
+  display: inline-flex; width: auto; align-items: center;
+  font-family: var(--mono); font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.11em; text-transform: uppercase;
+  color: #10233F; background: var(--logo-gold);
+  padding: 0.28rem 0.7rem; border-radius: 0 0 7px 7px;
+  box-shadow: var(--elev-1);
+}
+
+.advise-apart { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(1.4rem, 4vw, 3rem); align-items: center; }
+@media (max-width: 860px) { .advise-apart { grid-template-columns: 1fr; } }
+.advise-apart .prac-card { margin: 0; }
+.advise-note p { color: var(--midgray); }
+.advise-note p:last-child { margin-bottom: 0; }
