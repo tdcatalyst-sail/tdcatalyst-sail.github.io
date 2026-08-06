@@ -2232,6 +2232,14 @@
     var host = document.getElementById('liblist');
     var srcCards = document.querySelectorAll('#libsrc .car-card:not(.car-mini)');
     if (!host) return;
+    // Resilience: if anything below throws, or an extension kills this
+    // script's effects, the carousel un-hides so the library is never a
+    // heading over nothing.
+    window.addEventListener('load', function () {
+      var src = document.getElementById('libsrc');
+      if (src && (!host.children.length)) src.hidden = false;
+    });
+    try {
     var pop = document.createElement('div');
     pop.className = 'libpop';
     pop.hidden = true;
@@ -2295,6 +2303,11 @@
         track('grow-play');
       });
     });
+    } catch (err) {
+      var src2 = document.getElementById('libsrc');
+      if (src2) src2.hidden = false;
+      host.hidden = true;
+    }
   })();
 })();
 </script>
