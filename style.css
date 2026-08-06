@@ -3288,7 +3288,7 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
   display: block; width: 11px; height: 11px; border-radius: 50%;
   background: #fff; border: 2.5px solid var(--brand);
 }
-.founding .fx-tick a {
+.founding .fx-tick a, .founding .fx-tick .fx-lab {
   position: absolute; left: 50%; transform: translateX(-50%);
   display: block; text-align: center; text-decoration: none; white-space: nowrap;
 }
@@ -3301,11 +3301,11 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 }
 .founding .fx-tick.up::before { bottom: 0.55rem; }
 .founding .fx-tick.down::before { top: 0.55rem; }
-.founding .fx-tick a b {
+.founding .fx-tick a b, .founding .fx-tick .fx-lab b {
   display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
   font-size: 0.92rem; color: var(--navy); line-height: 1.2;
 }
-.founding .fx-tick a span {
+.founding .fx-tick a span, .founding .fx-tick .fx-lab span {
   display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em;
   color: var(--midgray); margin-top: 0.1rem;
 }
@@ -3320,10 +3320,10 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
   .founding .fx-axis { height: auto; background: none; border-left: 2px solid var(--reg-line); padding-left: 1.2rem; display: grid; gap: 0.9rem; }
   .founding .fx-tick { position: static; transform: none; }
   .founding .fx-tick i { position: absolute; margin-left: -1.65rem; margin-top: 0.35rem; }
-  .founding .fx-tick a { position: static; transform: none; text-align: left; white-space: normal; }
+  .founding .fx-tick a, .founding .fx-tick .fx-lab { position: static; transform: none; text-align: left; white-space: normal; }
   .founding .fx-tick::before { display: none; }
-  .founding .fx-tick a b { display: inline; margin-right: 0.5rem; }
-  .founding .fx-tick a span { display: inline; }
+  .founding .fx-tick a b, .founding .fx-tick .fx-lab b { display: inline; margin-right: 0.5rem; }
+  .founding .fx-tick a span, .founding .fx-tick .fx-lab span { display: inline; }
   .founding .fx-span { position: static; margin-top: 1.2rem; text-align: left; }
 }
 
@@ -3596,6 +3596,10 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
   display: inline-block; margin-top: 0.5rem; font-family: var(--mono); font-size: 0.58rem;
   letter-spacing: 0.1em; text-transform: uppercase; color: var(--logo-blue);
 }
+/* The hidden attribute maps to UA display:none at lower precedence than a
+   class display rule, so without this line the overlay renders OPEN AND
+   EMPTY on page load. The campaign's own overlay carries the same guard. */
+.sov[hidden] { display: none; }
 .sov { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; padding: 1rem; }
 .sov-back { position: absolute; inset: 0; background: rgba(16, 26, 40, 0.55); backdrop-filter: blur(2px); }
 .sov-card {
