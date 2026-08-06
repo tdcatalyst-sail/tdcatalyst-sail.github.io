@@ -70,9 +70,9 @@
      ground, alt band, hairline and kicker are set per practice below, because
      the practices have to stay told apart. Defaults here are the neutral hub
      values. */
-  --reg-bg: #FAFAF9;
-  --reg-bg-alt: #F0F0EC;
-  --reg-line: #E3E1D9;
+  --reg-bg: #FFFFFF;
+  --reg-bg-alt: #F7F7F5;
+  --reg-line: #E4E2DC;
   --reg-rule: var(--logo-gold);
   --reg-radius: 12px;
   --reg-radius-lg: 18px;
@@ -1714,27 +1714,13 @@ body.brand-sail   { --brand: var(--logo-blue);  --brand-ink: #0A2F7A; }
 body.brand-grow   { --brand: var(--terracotta); --brand-ink: #6B4D02; }
 body.brand-advise { --brand: var(--logo-red);   --brand-ink: #9C1009; }
 
-/* Each practice's paper. Same shape everywhere, different temperature: Sail
-   reads coastal and cool, Grow keeps the campaign's warm ivory because gold is
-   Grow's colour, Advise sits warm-neutral against its red. */
-body.brand-sail {
-  --reg-bg: #F6F9FA; --reg-bg-alt: #E9F0F3; --reg-line: #D9E3E8;
-  --reg-rule: var(--logo-blue);
-}
-body.brand-grow {
-  --reg-bg: #FCFBF7; --reg-bg-alt: #F4F2E9; --reg-line: #E6E3D7;
-  --reg-rule: var(--logo-gold);
-}
-body.brand-advise {
-  --reg-bg: #FCF9F8; --reg-bg-alt: #F5EDEB; --reg-line: #E8DCD8;
-  --reg-rule: var(--logo-red);
-}
-/* The diagnostic is the free rung of the Grow campaign and Tom asked for it to
-   read like those pages, but it carries no practice wordmark. */
-body.reg--grow-paper {
-  --reg-bg: #FCFBF7; --reg-bg-alt: #F4F2E9; --reg-line: #E6E3D7;
-  --reg-rule: var(--logo-gold);
-}
+/* The ground is clear on every page. What tells the practices apart is the
+   logo palette in the accents, which is what making body.brand-* a real
+   variable was for; tinting the paper per practice just made the whole site
+   feel washed. */
+body.brand-sail   { --reg-rule: var(--logo-blue); }
+body.brand-grow   { --reg-rule: var(--logo-gold); }
+body.brand-advise { --reg-rule: var(--logo-red); }
 
 body.brand-sail .nav-logo .mark-practice { color: var(--logo-blue); }
 body.brand-grow .nav-logo .mark-practice { color: var(--terracotta); }
