@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=3225d25a">
+  <link rel="stylesheet" href="/style.css?v=ef92a0a8">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -214,19 +214,19 @@
     </div>
     <div class="sel reveal">
       <div class="sel-tabs" role="group" aria-label="Choose an engagement">
-        <button type="button" class="sel-tab" data-offer="review" aria-pressed="true" aria-controls="offerPanel">
+        <button type="button" class="sel-tab" data-offer="review" style="--sel-ac: var(--logo-red); --sel-ink: var(--logo-red);" aria-pressed="false" aria-controls="offerPanel">
           <span class="tdc-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h11l5 5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19z"/><path d="M15 5v5h5"/><path d="M8 13h7M8 16.5h5"/></svg></span>
           <span class="sel-tx"><span class="sel-over">01 · 30 days</span><b>AI Portfolio Review</b></span>
         </button>
-        <button type="button" class="sel-tab" data-offer="reset" aria-pressed="false" aria-controls="offerPanel">
+        <button type="button" class="sel-tab" data-offer="reset" style="--sel-ac: var(--logo-gold); --sel-ink: var(--terracotta);" aria-pressed="true" aria-controls="offerPanel">
           <span class="tdc-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v4.5h-4.5"/><path d="M12 8.5V12l2.5 2"/></svg></span>
           <span class="sel-tx"><span class="sel-over">02 · 60&ndash;90 days</span><b>Adoption Reset</b></span>
         </button>
-        <button type="button" class="sel-tab" data-offer="blueprint" aria-pressed="false" aria-controls="offerPanel">
+        <button type="button" class="sel-tab" data-offer="blueprint" style="--sel-ac: var(--logo-blue); --sel-ink: var(--logo-blue);" aria-pressed="false" aria-controls="offerPanel">
           <span class="tdc-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="6" rx="1.4"/><rect x="14" y="14" width="7" height="6" rx="1.4"/><path d="M10 7h5.5v7"/><path d="M6.5 10v5.5H14"/></svg></span>
           <span class="sel-tx"><span class="sel-over">03 · 6&ndash;10 weeks</span><b>Reorganization Blueprint</b></span>
         </button>
-        <button type="button" class="sel-tab" data-offer="retainer" aria-pressed="false" aria-controls="offerPanel">
+        <button type="button" class="sel-tab" data-offer="retainer" style="--sel-ac: var(--value-green); --sel-ink: var(--value-green);" aria-pressed="false" aria-controls="offerPanel">
           <span class="tdc-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l7 3.5v5c0 4.2-2.9 7.9-7 9.5-4.1-1.6-7-5.3-7-9.5v-5z"/><path d="M9 12l2 2 4-4"/></svg></span>
           <span class="sel-tx"><span class="sel-over">Ongoing</span><b>Retained Advisory</b></span>
         </button>
@@ -244,9 +244,18 @@
   var panel = document.getElementById('offerPanel');
   var tabs = document.querySelectorAll('.sel-tab');
   if (!panel || !tabs.length) return;
+  var ACCENT = {
+    review: ['var(--logo-red)', 'var(--logo-red)'],
+    reset: ['var(--logo-gold)', 'var(--terracotta)'],
+    blueprint: ['var(--logo-blue)', 'var(--logo-blue)'],
+    retainer: ['var(--value-green)', 'var(--value-green)']
+  };
   function render(key) {
     var o = OFFERS[key];
     if (!o) return;
+    var ac = ACCENT[key] || [];
+    if (ac[0]) panel.style.setProperty('--sel-ac', ac[0]);
+    if (ac[1]) panel.style.setProperty('--sel-ink', ac[1]);
     var facts = o.facts.map(function (f) {
       return '<div class="sel-fact"><span class="k">' + f.k + '</span>' +
              '<span class="v' + (f.c ? ' ' + f.c : '') + '">' + f.v + '</span></div>';
@@ -263,7 +272,7 @@
     tabs.forEach(function (t) { t.setAttribute('aria-pressed', String(t.dataset.offer === key)); });
   }
   tabs.forEach(function (t) { t.addEventListener('click', function () { render(t.dataset.offer); }); });
-  render('review');
+  render('reset');
 })();
 </script>
 

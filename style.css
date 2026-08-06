@@ -3013,7 +3013,7 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
 .sel-tab .sel-tx { min-width: 0; }
 .sel-tab .sel-over {
   display: block; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--sel-ac); margin-bottom: 0.12rem;
+  text-transform: uppercase; color: var(--sel-ink, var(--sel-ac)); margin-bottom: 0.12rem;
 }
 .sel-tab .sel-tx b {
   display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
