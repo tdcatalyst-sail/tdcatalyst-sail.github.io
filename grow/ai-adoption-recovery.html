@@ -1259,6 +1259,114 @@
   .lp .cyc-detail b { color: var(--lp-ink); }
   .lp .cyc-detail ul { margin: 0.4rem 0 0; padding-left: 1.1rem; display: grid; gap: 0.3rem; }
 
+  /* ---- v10: sequence ladder ---- */
+  .lp .seq-picks { display: flex; flex-wrap: wrap; gap: 1.4rem 2.4rem; margin: 0.9rem 0 0.4rem; }
+  .lp .seq-picklabel {
+    display: block; font-size: 0.64rem; font-weight: 750; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--lp-faint); margin-bottom: 0.45rem;
+  }
+  .lp .seq-scen { margin: 0; }
+  .lp .seq-ladder { display: grid; gap: 3px; margin-top: 0.3rem; }
+  .lp .seq-row {
+    display: grid; grid-template-columns: 132px 1fr 44px; gap: 0.7rem; align-items: center;
+    font-family: var(--lp-font); text-align: left; cursor: pointer;
+    background: none; border: none; padding: 0.1rem 0; opacity: 0.34;
+    transition: opacity 0.3s ease;
+  }
+  .lp .seq-row .sr-name { font-size: 0.76rem; font-weight: 650; color: var(--lp-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lp .seq-row .sr-track { position: relative; height: 13px; border-radius: 7px; background: var(--lp-bg-alt); overflow: hidden; }
+  .lp .seq-row .sr-track i {
+    position: absolute; top: 0; bottom: 0; border-radius: 7px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--bc) 78%, #FFFFFF), var(--bc));
+    transition: opacity 0.3s ease;
+  }
+  .lp .seq-row .sr-wk { font-size: 0.66rem; font-weight: 650; color: var(--lp-faint); font-variant-numeric: tabular-nums; text-align: right; }
+  .lp .seq-row.on { opacity: 1; }
+  .lp .seq-row.live .sr-track i { box-shadow: 0 0 0 2px color-mix(in srgb, var(--bc) 30%, transparent); }
+  .lp .seq-row.sel .sr-name { color: var(--lp-accent-ink); }
+  .lp .seq-row.miss { opacity: 0.9; }
+  .lp .seq-row.miss .sr-name { color: #A93226; text-decoration: line-through; text-decoration-thickness: 1.5px; }
+  .lp .seq-row.miss .sr-track i { background: repeating-linear-gradient(45deg, #F6DEDA 0 5px, #FBEDEB 5px 10px); }
+  .lp .seq-row.weak { opacity: 0.95; }
+  .lp .seq-row.weak .sr-name { color: #8A6302; }
+  .lp .seq-row.weak .sr-track i { background: repeating-linear-gradient(45deg, #F7E6BC 0 5px, #FCF4E0 5px 10px); }
+  .lp .seq-row.unused { opacity: 0.18; }
+  .lp .seq-row.unused .sr-name { text-decoration: none; }
+  .lp .seq-row:focus-visible { outline: 2px solid var(--lp-accent-ink); outline-offset: 2px; border-radius: 6px; }
+  .lp .seq-caption .cap-good { color: var(--lp-good); }
+  .lp .seq-caption .cap-bad { color: #A93226; }
+  @media (max-width: 700px) {
+    .lp .seq-row { grid-template-columns: 94px 1fr; }
+    .lp .seq-row .sr-wk { display: none; }
+  }
+
+  /* ---- v10: flywheel ---- */
+  .lp .fly-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.4rem, 4vw, 3rem); align-items: center; margin-bottom: 1.8rem; }
+  .lp .flywheel { display: block; width: 100%; max-width: 440px; height: auto; margin: 0 auto; }
+  .lp .fly-seg { cursor: pointer; }
+  .lp .fly-seg path { transition: fill-opacity 0.2s ease; }
+  .lp .fly-seg:hover path, .lp .fly-seg.on path { fill-opacity: 0.2; }
+  .lp .fly-seg:focus-visible { outline: none; }
+  .lp .fly-seg:focus-visible path { fill-opacity: 0.24; stroke-opacity: 0.85; }
+  .lp .fly-detail {
+    background: var(--lp-card); border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
+    padding: 1.5rem 1.6rem; min-height: 260px;
+    box-shadow: 0 1px 2px rgba(27, 26, 22, 0.04), 0 18px 44px rgba(27, 26, 22, 0.07);
+  }
+  .lp .fd-eyebrow {
+    display: block; font-size: 0.64rem; font-weight: 750; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--lp-accent-ink); margin-bottom: 0.5rem;
+  }
+  .lp .fly-detail b { display: block; font-size: 1.18rem; font-weight: 700; color: var(--lp-ink); letter-spacing: -0.015em; }
+  .lp .fly-detail p { font-size: 0.9rem; margin-top: 0.45rem; }
+  .lp .fly-detail ul { margin: 0.9rem 0 0; padding-left: 1.05rem; display: grid; gap: 0.5rem; font-size: 0.88rem; }
+  .lp .fly-detail li::marker { color: var(--lp-accent); }
+  @media (max-width: 860px) { .lp .fly-wrap { grid-template-columns: 1fr; } .lp .fly-detail { min-height: 0; } }
+
+  /* ---- v10: library head + outcome numbers ---- */
+  .lp .lib-head { max-width: 720px; margin-bottom: 1.2rem; }
+  .lp .lib-head h3 { font-size: clamp(1.3rem, 2.4vw, 1.7rem); margin-top: 0.7rem; letter-spacing: -0.02em; }
+  .lp .lib-head p { margin-top: 0.5rem; font-size: 0.92rem; }
+  .lp .onum { display: grid; gap: 0.45rem; margin: 0.9rem 0 0; padding-top: 0.85rem; border-top: 1px solid var(--lp-line); }
+  .lp .onum span { display: flex; gap: 0.6rem; align-items: baseline; font-size: 0.84rem; color: var(--lp-body); }
+  .lp .onum b {
+    flex-shrink: 0; min-width: 4.6rem; font-size: 1.02rem; font-weight: 750; color: var(--lp-ink);
+    letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+  }
+  .lp .reset-sourcing { margin-top: 1.4rem; font-size: 0.82rem; color: var(--lp-faint); max-width: 780px; }
+  .lp .reset-sourcing b { color: var(--lp-body); }
+
+  /* ---- v10: refinement pass ---- */
+  .lp { font-size: 16.5px; letter-spacing: -0.003em; }
+  .lp h1 { letter-spacing: -0.032em; }
+  .lp h2 { letter-spacing: -0.026em; }
+  .lp h3, .lp h4 { letter-spacing: -0.018em; }
+  .lp .kicker { letter-spacing: 0.16em; font-size: 0.68rem; }
+  .lp .kicker::before { width: 1.8rem; }
+  .lp section { padding: clamp(3.8rem, 7.5vw, 6.2rem) 0; }
+  .lp .sec-head { margin-bottom: clamp(2rem, 4.5vw, 3rem); }
+  .lp .btn-primary {
+    background: linear-gradient(180deg, #24221C, #14130F);
+    box-shadow: 0 1px 2px rgba(27, 26, 22, 0.18), 0 8px 20px rgba(27, 26, 22, 0.16);
+  }
+  .lp .btn-primary:hover { background: linear-gradient(180deg, #33312B, #1D1B16); box-shadow: 0 2px 4px rgba(27, 26, 22, 0.2), 0 12px 26px rgba(27, 26, 22, 0.2); }
+  .lp .btn-gold { box-shadow: 0 1px 2px rgba(138, 99, 2, 0.22), 0 8px 20px rgba(232, 176, 3, 0.28); }
+  .lp .btn { transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease; }
+  .lp .btn-primary:hover, .lp .btn-gold:hover { transform: translateY(-1px); }
+  .lp .case, .lp .outcome, .lp .price-card, .lp .founder-card, .lp .radar-card, .lp .seq-card, .lp .fly-detail, .lp .flow-strip {
+    box-shadow: 0 1px 2px rgba(27, 26, 22, 0.04), 0 20px 46px rgba(27, 26, 22, 0.07);
+  }
+  .lp .case { transition: border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s ease; }
+  .lp .case:hover { box-shadow: 0 2px 6px rgba(27, 26, 22, 0.06), 0 26px 56px rgba(27, 26, 22, 0.1); }
+  .lp .final { background: radial-gradient(52rem 30rem at 108% -18%, rgba(232, 176, 3, 0.18), transparent 58%), linear-gradient(170deg, #16283F, #0C1B31); }
+  .lp .stat .n, .lp .prob .big, .lp .price-card .amount { letter-spacing: -0.03em; }
+  .lp .reveal { opacity: 0; transform: translateY(14px); }
+  .lp .reveal.in { opacity: 1; transform: none; transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+  @media (prefers-reduced-motion: reduce) {
+    .lp .reveal { opacity: 1; transform: none; }
+    .lp .btn-primary:hover, .lp .btn-gold:hover { transform: none; }
+  }
+
   /* ---- v2: task sorter (overlay content) ---- */
   .lp .sorter h3 { font-size: 1.15rem; }
   .lp .sorter .st-q { margin-top: 1rem; }
@@ -1533,31 +1641,41 @@
   <div class="wrap">
     <div class="sec-head">
       <span class="kicker">Step 2 &middot; Sequence</span>
-      <h2>The intervention library. The order decides the outcome.</h2>
-      <p>Thirteen research-backed plays, additive by design: each one moves the curve, and the sequence is what makes them compound. Watch the modeled 24 weeks run, then click any play for its full model detail.</p>
+      <h2>The plays are additive. The sequence is what compounds them.</h2>
+      <p>Thirteen research-backed interventions, each one modeled. No single order is correct, and no plan needs all thirteen: what matters is that a play lands only once what it depends on is already there. Run a path below and watch the modeled 24 weeks.</p>
     </div>
     <div class="seq-card">
       <div class="seq-head">
         <div>
-          <b>Run the sequence</b>
-          <span>Thirteen additive plays; the order is what makes them compound. Press play and watch them land.</span>
+          <b>Run a sequence</b>
+          <span>There is no single correct order, and not every play is needed. Two paths reach self-sustaining; the ways it breaks are below.</span>
         </div>
         <button type="button" class="seq-btn" id="seq-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="sb-play" d="M8 5l12 7-12 7V5z"/><g class="sb-pause" style="display:none"><rect x="7" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></g></svg><em id="seq-btn-label">Play</em></button>
       </div>
-      <svg id="seq-chart" viewBox="0 0 980 280" role="img" aria-label="The modeled 24 weeks: each play lands in order and the adoption curve compounds, crossing the 55 percent self-sustaining threshold at week 11 and reaching 80 percent by week 24."></svg>
-      <div class="seq-caption" id="seq-caption"><b>The modeled 24 weeks.</b> Press play, or click any play below for its full model detail.</div>
-      <div class="seq-lanes" id="seq-lanes" aria-label="The thirteen plays on the modeled schedule"></div>
-      <div class="seq-scen-head">Now break it: the typical negative cases, modeled on the same sequence.</div>
-      <div class="pathbtns seq-scen" role="group" aria-label="Scenarios on the same sequence">
-        <button aria-pressed="true" data-path="full">Full sequence &middot; modeled</button>
-        <button aria-pressed="false" data-path="stall5">Stopped after five plays</button>
-        <button aria-pressed="false" data-path="nomgr">Managers left out</button>
-        <button aria-pressed="false" data-path="noproof">No seeded proof</button>
-        <button aria-pressed="false" data-path="early">Early adopters only</button>
-        <button aria-pressed="false" data-path="access">Access, then silence</button>
-        <button aria-pressed="false" data-path="base">No intervention</button>
+      <div class="seq-picks">
+        <div class="seq-pickset">
+          <span class="seq-picklabel">Paths that reach self-sustaining</span>
+          <div class="pathbtns seq-scen" role="group" aria-label="Paths that work">
+            <button aria-pressed="true" data-path="full">All thirteen &middot; 80%</button>
+            <button aria-pressed="false" data-path="selective">Selective seven &middot; 62%</button>
+          </div>
+        </div>
+        <div class="seq-pickset">
+          <span class="seq-picklabel">Ways it breaks</span>
+          <div class="pathbtns seq-scen" role="group" aria-label="Negative cases">
+            <button aria-pressed="false" data-path="stall5">Stopped early</button>
+            <button aria-pressed="false" data-path="nomgr">Managers left out</button>
+            <button aria-pressed="false" data-path="noproof">No seeded proof</button>
+            <button aria-pressed="false" data-path="early">Enthusiasts only</button>
+            <button aria-pressed="false" data-path="access">Access, then silence</button>
+            <button aria-pressed="false" data-path="base">No intervention</button>
+          </div>
+        </div>
       </div>
-      <p class="graph-hint">The schedule is the simulator's own: two workstreams at a time, proof before the social plays, capability on the redesigned workflow, sustainment late. Click any play for the full model detail, or build and score your own sequence in the <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">AI Adoption Simulator</a>.</p>
+      <svg id="seq-chart" viewBox="0 0 980 250" role="img" aria-label="Modeled adoption over 24 weeks: all thirteen plays cross the 55 percent self-sustaining threshold at week 11 and reach 80 percent; a selective seven-play path crosses at week 14 and reaches 62 percent."></svg>
+      <div class="seq-caption" id="seq-caption"><b>The modeled 24 weeks.</b> Press play, or select any play for its full model detail.</div>
+      <div class="seq-ladder" id="seq-lanes" aria-label="The plays on the modeled schedule"></div>
+      <p class="graph-hint">One modeled schedule, not the only one: the simulator packs two workstreams at a time, gates proof before the social plays, builds capability on the redesigned workflow, and holds sustainment late. Score your own order in the <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">AI Adoption Simulator</a>.</p>
     </div>
 
     <div class="filters" role="group" aria-label="Filter plays by group">
@@ -1587,32 +1705,32 @@
       <h2>You leave with working documents, and the loop that keeps them honest.</h2>
       <p>This is the delivery engine, and the reason ten days is enough. Your context carries the same weight as the production system: the playbooks are written from it, pointed back at it, and wired to the dashboard that reads their effect. Select any document to see it up close.</p>
     </div>
-    <div class="cycle-wrap">
-      <svg class="cycle" viewBox="0 0 960 400" role="img" aria-label="The delivery loop: your context feeds AI-native production, which writes custom playbooks, which land on your dashboard, whose measured effects feed the next intervention.">
-        <defs><marker id="cycarr" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8A6302"/></marker></defs>
-        <path d="M330 76 H620" fill="none" stroke="#8A6302" stroke-width="2" marker-end="url(#cycarr)"/>
-        <path d="M790 130 V262" fill="none" stroke="#8A6302" stroke-width="2" marker-end="url(#cycarr)"/>
-        <path d="M630 322 H340" fill="none" stroke="#8A6302" stroke-width="2" marker-end="url(#cycarr)"/>
-        <path d="M170 268 V136" fill="none" stroke="#8A6302" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#cycarr)"/>
-        <text x="480" y="185" text-anchor="middle" font-family="Archivo, sans-serif" font-size="15" font-weight="700" fill="#1B1A16">The delivery loop</text>
-        <text x="480" y="207" text-anchor="middle" font-family="Archivo, sans-serif" font-size="12.5" fill="#54524A">measured effects feed the next intervention;</text>
-        <text x="480" y="224" text-anchor="middle" font-family="Archivo, sans-serif" font-size="12.5" fill="#54524A">the loop keeps running after delivery</text>
-        <text x="153" y="207" text-anchor="middle" font-family="Archivo, sans-serif" font-size="10.5" font-weight="650" fill="#8A6302" transform="rotate(-90 153 207)">what the data says</text>
-        <foreignObject x="40" y="30" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step" data-step="1" tabindex="0"><i>1</i><div><b>Your context</b><span>interviews &middot; usage data &middot; the 12-question diagnostic</span></div></div></foreignObject>
-        <foreignObject x="630" y="30" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step cyc-core" data-step="2" tabindex="0"><i>2</i><div><b>AI-native production</b><span>diagnostics &middot; Simulation&trade; &middot; drafting, run over your context</span></div></div></foreignObject>
-        <foreignObject x="630" y="272" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step" data-step="3" tabindex="0"><i>3</i><div><b>Custom playbooks</b><span>written for your teams and workflows</span></div></div></foreignObject>
-        <foreignObject x="40" y="272" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step" data-step="4" tabindex="0"><i>4</i><div><b>Your dashboard</b><span>every play wired to its metric, read weekly</span></div></div></foreignObject>
-      </svg>
-      <div class="cyc-list" aria-hidden="true">
-        <div class="cyc-step" data-step="1" tabindex="0"><i>1</i><div><b>Your context</b><span>interviews &middot; usage data &middot; the 12-question diagnostic</span></div></div>
-        <div class="cyc-step cyc-core" data-step="2" tabindex="0"><i>2</i><div><b>AI-native production</b><span>diagnostics &middot; Simulation&trade; &middot; drafting, run over your context</span></div></div>
-        <div class="cyc-step" data-step="3" tabindex="0"><i>3</i><div><b>Custom playbooks</b><span>written for your teams and workflows</span></div></div>
-        <div class="cyc-step" data-step="4" tabindex="0"><i>4</i><div><b>Your dashboard</b><span>every play wired to its metric, read weekly</span></div></div>
-        <p class="cyc-loopnote">measured effects feed the next intervention: the loop keeps running after delivery</p>
+    <div class="fly-wrap">
+      <div class="fly-chart">
+        <svg viewBox="0 0 460 460" class="flywheel" id="flywheel" role="img" aria-label="The delivery flywheel: your context feeds AI-native production, which writes custom playbooks, which land on your dashboard, whose measured effects feed the next intervention.">
+          <defs>
+            <marker id="flyarr" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0 1 L7 4.5 L0 8 Z" fill="#8A6302"/></marker>
+          </defs>
+          <circle cx="230" cy="230" r="196" fill="none" stroke="#EFECE0" stroke-width="1"/>
+          <g id="fly-segs"></g>
+          <circle cx="230" cy="230" r="86" fill="#FFFFFF" stroke="#E6E3D7"/>
+          <text x="230" y="215" text-anchor="middle" font-family="Archivo, sans-serif" font-size="15" font-weight="750" fill="#1B1A16">The delivery</text>
+          <text x="230" y="236" text-anchor="middle" font-family="Archivo, sans-serif" font-size="15" font-weight="750" fill="#1B1A16">flywheel</text>
+          <text x="230" y="258" text-anchor="middle" font-family="Archivo, sans-serif" font-size="10.5" fill="#7A776C">each turn compounds</text>
+        </svg>
       </div>
-      <div class="cyc-detail" id="cyc-detail"><b>Hover a step</b> to see what it needs and what it produces.</div>
+      <div class="fly-detail" id="fly-detail">
+        <span class="fd-eyebrow">The loop</span>
+        <b>Four turns, then it keeps turning.</b>
+        <p>Your context feeds the production system, the playbooks come back written for your teams, the dashboard reads what they did, and the next intervention is chosen on that evidence. Select a quarter of the wheel for what it needs and what it produces.</p>
+      </div>
     </div>
 
+    <div class="lib-head">
+      <span class="kicker">Library</span>
+      <h3>The instrument library</h3>
+      <p>Six engagement documents and thirteen intervention playbooks, applied to your rollout. Select any one to read it up close.</p>
+    </div>
     <div class="carousel" id="doc-carousel">
       <button type="button" class="car-nav car-prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
       <div class="car-track car-2row" id="car-track">
@@ -1773,6 +1891,7 @@
           <li><b>Three to five workflows redesigned end to end</b>: augmented steps, new steps, capability built, held in the team cadence</li>
           <li><b>License spend defensible at renewal</b>, on output evidence</li>
         </ul>
+        <div class="onum"><span><b>45&ndash;60%</b>weekly in-workflow use, from a 15&ndash;30% plateau</span><span><b>3&ndash;5</b>workflows redesigned end to end</span><span><b>2&ndash;4x</b>depth of feature use per redesigned workflow</span></div>
       </article>
       <article class="outcome o-flag" data-sit="seats">
         <span class="rtag">Frontier-lab seats</span><span class="case-flagpill">Flagship</span>
@@ -1790,6 +1909,7 @@
           <li><b>Freed capacity pointed at named work</b>, visible on the dashboard</li>
           <li><b>Reviews measure the new work</b>: performance criteria and rituals updated to match</li>
         </ul>
+        <div class="onum"><span><b>60&ndash;80%</b>of tasks in target roles sorted into lanes</span><span><b>4&ndash;8 hrs</b>per person per week freed and repointed</span><span><b>100%</b>of affected roles with updated review criteria</span></div>
       </article>
       <article class="outcome" data-sit="pilots">
         <span class="rtag">The forty pilots</span>
@@ -1806,6 +1926,7 @@
           <li><b>Winners institutionalized</b>: policy, SOPs, named sponsors, budgets that survive review</li>
           <li><b>A standing governance cadence</b> that keeps pace with what vendors ship next quarter</li>
         </ul>
+        <div class="onum"><span><b>100%</b>of pilots and vendor asks decided in writing</span><span><b>15&ndash;25%</b>scale &middot; <b>20&ndash;30%</b> institutionalize &middot; the rest stop</span><span><b>1</b>standing governance cadence, owned internally</span></div>
       </article>
       <article class="outcome" data-sit="zero">
         <span class="rtag">Starting 0 &rarr; 1</span>
@@ -1822,8 +1943,10 @@
           <li><b>Monthly builder events shipping working prototypes</b> with named owners and a Monday cadence</li>
           <li><b>A tracking cadence past log-ins</b>: workflow use, value cases, manager rhythm</li>
         </ul>
+        <div class="onum"><span><b>80%+</b>of the leadership team using AI weekly, visibly</span><span><b>3</b>builder events, <b>6&ndash;10</b> working prototypes on real data</span><span><b>1</b>charter, use policy and tracked cadence, live</span></div>
       </article>
     </div>
+    <p class="reset-sourcing"><b>About these numbers.</b> Indicative 90-day targets for programs of this shape, drawn from adoption work of this kind and from anonymized enterprise delivery experience. They are the targets set against your own week-one baseline during the Review, never a promise made before it.</p>
     <p class="reset-note"><b>The Review fee is the down payment.</b> Start a Reset within 30 days of delivery and 100% of the $12,500 is credited against it. The full <a href="/grow/#services" target="_blank" rel="noopener">Adoption Reset engagement ($40K&ndash;$75K, fixed fee)</a> is on the Grow page; the entry point for every situation is the same 30-minute call.</p>
   </div>
 </section>
@@ -2164,7 +2287,7 @@
     track('recovery-play');
   }
 
-  /* ---- Sequence player: the modeled 24 weeks, with failure cascades ---- */
+  /* ---- Sequence player: modeled paths, failure cascades, one row per play ---- */
   var SCHEDULE = [
     ['sponsor', 1, 2], ['proof', 2, 4], ['manager', 3, 5], ['peer', 5, 6],
     ['friction', 6, 8], ['whole', 7, 10], ['whenthen', 9, 9], ['inaction', 10, 11],
@@ -2185,13 +2308,13 @@
     criteria: 'People can hit the new bar, so reviews start measuring the new work.',
     quiet: 'Last, one to one: laggards get a pre-built path once the new way is everywhere else.'
   };
-  var SEQROW = { Opportunity: 0, Motivation: 1, Capability: 2, Sustainment: 3 };
   var SEQSHORT = {
     sponsor: 'Exec Sponsorship', manager: 'Manager Channel', whole: 'Whole-Product Kit',
     friction: 'Workflow Redesign', proof: 'Proof Seeding', peer: 'Peer Proof',
     inaction: 'Inaction-Cost', quiet: 'Quiet Path', build: 'Capability Build',
     whenthen: 'When-Then', policy: 'Policy & SOPs', criteria: 'Perf. Criteria', ritual: 'Ritual & Cadence'
   };
+  var GCOL = { Opportunity: '#10233F', Motivation: '#C99A05', Capability: '#0E7569', Sustainment: '#4E5BA6' };
   function mlog(w, b2, span, mid, k) { return b2 + span / (1 + Math.exp(-(w - mid) / k)); }
   function mrf(w, b2, peak, wpeak, floor, rate) {
     var atPeak = b2 + (peak - b2) * (1 - Math.exp(-3));
@@ -2200,50 +2323,58 @@
   }
   function seqF(w) { return 18 + 64 / (1 + Math.exp(-(w - 10.2) / 2.4)); }
   var SCEN = {
-    full: { label: 'Full sequence', color: '#10233F', f: seqF,
-      read: 'The modeled ceiling: all thirteen plays land cleanly, the threshold is crossed at week 11, and adoption reaches 80% by week 24. The ceiling the sequence earns, never the default.' },
-    stall5: { label: 'Stopped after five plays', color: '#10233F',
+    full: { label: 'All thirteen', color: '#10233F', kind: 'good', f: seqF, cross: 11, end: 80,
+      read: 'Every play lands in order: past the threshold at week 11, 80% by week 24, and all five transformation phases complete. The ceiling the sequence earns.' },
+    selective: { label: 'Selective seven', color: '#0E7569', kind: 'good', cross: 14, end: 62,
+      only: ['sponsor', 'proof', 'manager', 'peer', 'friction', 'inaction', 'build'],
+      f: function (w) { var V = [18, 18.6, 20.2, 22.4, 25.5, 29.5, 35.5, 33.5, 41.5, 47, 49, 52, 54.5, 56.5, 59, 60.5, 61.3, 61.7, 61.9, 62, 62, 62, 62, 62, 62]; return V[Math.min(24, Math.round(w))]; },
+      read: 'Seven plays, chosen for reach: past the threshold at week 14 and holding at 62%. Adoption carries itself, and the deeper phases (workflow redesigned, work identity, outcome) are the ones the other six plays complete.' },
+    stall5: { label: 'Stopped early', color: '#B42318', kind: 'bad',
       f: function (w) { var V = [18, 18.5, 19.5, 21, 23, 26, 30, 33, 31, 34, 39, 43, 45.5, 46.5, 47, 47, 47, 47, 46.9, 46.8, 46.8, 46.7, 46.7, 46.6, 46.6]; return V[Math.min(24, Math.round(w))]; },
       seed: ['whole', 'whenthen', 'inaction', 'build', 'ritual', 'policy', 'criteria', 'quiet'],
       fail: 'The effort stops at week 8: nothing after Workflow Redesign ever lands.',
-      read: 'The first five plays land, then the effort stops: the curve climbs to 47% and flatlines below the threshold. Gains hold only while pushed, and stay reversible.' },
-    nomgr: { label: 'Managers left out', color: '#B42318',
+      read: 'Five plays land, then the push stops: 47% and flatlining below the line. Gains hold only while pushed, and stay reversible.' },
+    nomgr: { label: 'Managers left out', color: '#B42318', kind: 'bad',
       f: function (w) { return mrf(w, 18, 37, 9, 30, 0.09); },
       seed: ['manager'],
       fail: 'Manager-as-Channel never lands: managers get talking points, never authority.',
-      read: 'One missing play breaks seven others: without managers, the redesign, the laggard one-to-ones, capability, and the new review criteria all misfire. The rollout stalls in the mid-30s.' },
-    noproof: { label: 'No seeded proof', color: '#C99A05',
+      read: 'One missing play breaks seven others: the redesign, capability, the laggard path and the new criteria all misfire. Mid-30s, drifting.' },
+    noproof: { label: 'No seeded proof', color: '#B42318', kind: 'bad',
       f: function (w) { return mrf(w, 18, 41, 7, 26, 0.12); },
       seed: ['proof'],
       fail: 'Proof Seeding never lands: no first win exists for anyone to point at.',
-      read: 'Kill the proof and the whole social chain fires on thin air: peer relay, the norm reframe, the kit stories, all of it misfires. An early spike, then decay toward the mid-20s.' },
-    early: { label: 'Early adopters only', color: '#0E7569',
+      read: 'Kill the proof and the whole social chain fires on thin air. An early spike, then decay toward the mid-20s.' },
+    early: { label: 'Enthusiasts only', color: '#B42318', kind: 'bad',
       f: function (w) { return mlog(w, 18, 7, 3.5, 1.6); },
       seed: ['peer', 'inaction', 'quiet'],
       fail: 'The majority plays are skipped: only the enthusiasts are ever addressed.',
-      read: 'The innovator 16% move fast and nobody follows: the early and late majority never enter, and the curve flatlines near 25%.' },
-    access: { label: 'Access, then silence', color: '#4E5BA6',
+      read: 'The innovator 16% move fast and nobody follows: the early and late majority never enter. Flat near 25%.' },
+    access: { label: 'Access, then silence', color: '#B42318', kind: 'bad',
       f: function (w) { return mrf(w, 18, 24, 5, 13, 0.1); },
       seed: ['sponsor', 'manager', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual'],
-      fail: 'Only the kit ships. Nothing else ever lands, and the kit itself misfires without proof inside it.',
-      read: 'Access, licenses, and a resources page, with barely any follow-up communication or engagement: usage peaks by week 5 and fades back to the do-nothing line.' },
-    base: { label: 'No intervention', color: '#98A2B3',
+      fail: 'Only the kit ships. Nothing else lands, and the kit misfires without proof inside it.',
+      read: 'Licenses and a resources page, with barely any follow-up: usage peaks by week 5 and fades back to the do-nothing line.' },
+    base: { label: 'No intervention', color: '#98A2B3', kind: 'bad',
       f: function (w) { return 18 - 6 * (1 - Math.exp(-w / 8)); },
       seed: ['sponsor', 'manager', 'whole', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual'],
       fail: 'Nothing lands at all.',
       read: 'The do-nothing trajectory from the simulator: early enthusiasm decays to 12% by week 24.' }
   };
-  function seqCascade(seed) {
-    var miss = {};
-    seed.forEach(function (id) { miss[id] = true; });
-    var weak = {}, changed = true;
+  function seqCascade(sc) {
+    var miss = {}, weak = {}, unused = {};
+    if (sc.only) {
+      SCHEDULE.forEach(function (s) { if (sc.only.indexOf(s[0]) === -1) unused[s[0]] = true; });
+      return { miss: miss, weak: weak, unused: unused };
+    }
+    (sc.seed || []).forEach(function (id) { miss[id] = true; });
+    var changed = true;
     while (changed) {
       changed = false;
       EDGES.forEach(function (e) {
         if ((miss[e.f] || weak[e.f]) && !miss[e.t] && !weak[e.t]) { weak[e.t] = true; changed = true; }
       });
     }
-    return { miss: miss, weak: weak };
+    return { miss: miss, weak: weak, unused: unused };
   }
   function seqWeakReason(id, miss, weak) {
     var names = [];
@@ -2256,11 +2387,11 @@
   var seqLanes = document.getElementById('seq-lanes');
   var seqCap = document.getElementById('seq-caption');
   var seqBtn = document.getElementById('seq-btn');
-  var SX0 = 56, SX1 = 950, SY0 = 232, SY1 = 22;
+  var SX0 = 56, SX1 = 950, SY0 = 206, SY1 = 26;
   function sqx(w) { return SX0 + (SX1 - SX0) * w / 24; }
   function sqy(p) { return SY0 - (SY0 - SY1) * p / 100; }
-  var seqEls = null;
-  var seqScenario = 'full', seqMiss = {}, seqWeak = {};
+  var seqEls = null, seqRows = {};
+  var seqScenario = 'full', seqMiss = {}, seqWeak = {}, seqUnused = {};
   (function buildSeq() {
     if (!seqChart || !seqLanes) return;
     var NS = 'http://www.w3.org/2000/svg';
@@ -2271,53 +2402,54 @@
       parent.appendChild(n);
       return n;
     }
-    el(seqChart, 'line', { x1: SX0, y1: SY1 - 2, x2: SX0, y2: SY0, stroke: '#E6E3D7' });
+    el(seqChart, 'line', { x1: SX0, y1: SY1 - 4, x2: SX0, y2: SY0, stroke: '#E6E3D7' });
     el(seqChart, 'line', { x1: SX0, y1: SY0, x2: SX1, y2: SY0, stroke: '#E6E3D7' });
     [25, 50, 75].forEach(function (p) {
-      el(seqChart, 'line', { x1: SX0, y1: sqy(p), x2: SX1, y2: sqy(p), stroke: '#F1EFE6' });
-      el(seqChart, 'text', { x: SX0 - 8, y: sqy(p) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#7A776C', 'font-family': 'Archivo, sans-serif' }, p + '%');
+      el(seqChart, 'line', { x1: SX0, y1: sqy(p), x2: SX1, y2: sqy(p), stroke: '#F4F2E9' });
+      el(seqChart, 'text', { x: SX0 - 10, y: sqy(p) + 4, 'text-anchor': 'end', 'font-size': 10.5, fill: '#9A968A', 'font-family': 'Archivo, sans-serif', 'letter-spacing': '0.03em' }, p + '%');
     });
     [0, 6, 12, 18, 24].forEach(function (w) {
-      el(seqChart, 'text', { x: sqx(w), y: SY0 + 18, 'text-anchor': w === 0 ? 'start' : (w === 24 ? 'end' : 'middle'), 'font-size': 11, fill: '#7A776C', 'font-family': 'Archivo, sans-serif' }, 'wk ' + w);
+      el(seqChart, 'text', { x: sqx(w), y: SY0 + 19, 'text-anchor': w === 0 ? 'start' : (w === 24 ? 'end' : 'middle'), 'font-size': 10.5, fill: '#9A968A', 'font-family': 'Archivo, sans-serif', 'letter-spacing': '0.04em' }, 'wk ' + w);
     });
-    el(seqChart, 'line', { x1: SX0, y1: sqy(55), x2: SX1, y2: sqy(55), stroke: '#E8B003', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' });
-    el(seqChart, 'text', { x: SX0 + 6, y: sqy(55) - 7, 'font-size': 11, 'font-weight': 600, fill: '#8A6302', 'font-family': 'Archivo, sans-serif' }, 'self-sustaining - 55%');
+    el(seqChart, 'line', { x1: SX0, y1: sqy(55), x2: SX1, y2: sqy(55), stroke: '#E8B003', 'stroke-width': 1.4, 'stroke-dasharray': '6 5' });
+    el(seqChart, 'text', { x: SX0 + 7, y: sqy(55) - 8, 'font-size': 10.5, 'font-weight': 700, fill: '#8A6302', 'font-family': 'Archivo, sans-serif', 'letter-spacing': '0.06em' }, 'SELF-SUSTAINING - 55%');
     var ghostPts = [];
     for (var gw = 0; gw <= 24; gw += 0.25) ghostPts.push(sqx(gw).toFixed(1) + ',' + sqy(seqF(gw)).toFixed(1));
-    var ghost = el(seqChart, 'polyline', { fill: 'none', stroke: '#10233F', 'stroke-width': 2, 'stroke-dasharray': '2 5', opacity: 0, points: ghostPts.join(' ') });
-    var ghostLab = el(seqChart, 'text', { x: SX1 - 4, y: sqy(80) - 8, 'text-anchor': 'end', 'font-size': 10.5, fill: '#7A776C', 'font-family': 'Archivo, sans-serif', opacity: 0 }, 'full sequence, for reference');
-    var crossFlag = el(seqChart, 'text', { x: sqx(11), y: 38, 'text-anchor': 'middle', 'font-size': 12.5, 'font-weight': 750, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, 'week 11: the change starts carrying itself');
-    var crossTick = el(seqChart, 'line', { x1: sqx(11), y1: 44, x2: sqx(11), y2: sqy(55), stroke: '#E8B003', 'stroke-width': 1.2, 'stroke-dasharray': '3 3', opacity: 0 });
-    var endFlag = el(seqChart, 'text', { x: SX1 - 4, y: 48, 'text-anchor': 'end', 'font-size': 12.5, 'font-weight': 700, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, '80% by week 24');
-    var curve = el(seqChart, 'polyline', { fill: 'none', stroke: '#10233F', 'stroke-width': 3, points: '' });
-    var head = el(seqChart, 'line', { x1: sqx(0), y1: SY1, x2: sqx(0), y2: SY0, stroke: '#8A6302', 'stroke-width': 1.5, 'stroke-dasharray': '3 3', opacity: 0 });
+    var ghost = el(seqChart, 'polyline', { fill: 'none', stroke: '#10233F', 'stroke-width': 1.8, 'stroke-dasharray': '2 5', opacity: 0, points: ghostPts.join(' ') });
+    var ghostLab = el(seqChart, 'text', { x: SX1 - 4, y: sqy(80) - 9, 'text-anchor': 'end', 'font-size': 10, fill: '#9A968A', 'font-family': 'Archivo, sans-serif', opacity: 0 }, 'all thirteen, for reference');
+    var crossFlag = el(seqChart, 'text', { x: sqx(11), y: 17, 'text-anchor': 'middle', 'font-size': 12, 'font-weight': 750, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, '');
+    var crossTick = el(seqChart, 'line', { x1: sqx(11), y1: 23, x2: sqx(11), y2: sqy(55), stroke: '#E8B003', 'stroke-width': 1.1, 'stroke-dasharray': '3 3', opacity: 0 });
+    var endFlag = el(seqChart, 'text', { x: SX1 - 4, y: 46, 'text-anchor': 'end', 'font-size': 12, 'font-weight': 700, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, '');
+    var curve = el(seqChart, 'polyline', { fill: 'none', stroke: '#10233F', 'stroke-width': 2.8, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', points: '' });
+    var head = el(seqChart, 'line', { x1: sqx(0), y1: SY1, x2: sqx(0), y2: SY0, stroke: '#C9A227', 'stroke-width': 1.2, 'stroke-dasharray': '3 3', opacity: 0 });
     var markers = {};
     SCHEDULE.forEach(function (s) {
-      markers[s[0]] = el(seqChart, 'circle', { cx: sqx(s[1]), cy: sqy(seqF(s[1])), r: 4.5, fill: '#E8B003', stroke: '#10233F', 'stroke-width': 1.4, opacity: 0 });
+      markers[s[0]] = el(seqChart, 'circle', { cx: sqx(s[1]), cy: sqy(seqF(s[1])), r: 4, fill: '#E8B003', stroke: '#FFFFFF', 'stroke-width': 1.6, opacity: 0 });
     });
-    var GC = { Opportunity: '#10233F', Motivation: '#C99A05', Capability: '#0E7569', Sustainment: '#4E5BA6' };
     SCHEDULE.forEach(function (s) {
       var p = PLAYS[s[0]];
-      var bar = document.createElement('button');
-      bar.type = 'button';
-      bar.className = 'seq-bar';
-      bar.dataset.play = s[0];
-      bar.style.setProperty('--bc', GC[p.group]);
-      bar.style.top = (SEQROW[p.group] * 36) + 'px';
-      bar.style.left = ((s[1] - 1) / 24 * 100) + '%';
-      bar.style.width = (Math.max(1, s[2] - s[1] + 1) / 24 * 100) + '%';
-      bar.title = p.name + ' - weeks ' + s[1] + (s[2] > s[1] ? '-' + s[2] : '');
-      bar.innerHTML = '<span>' + SEQSHORT[s[0]] + '</span>';
-      bar.addEventListener('click', function () { seqPause(); selectPlay(s[0]); });
-      seqLanes.appendChild(bar);
+      var row = document.createElement('button');
+      row.type = 'button';
+      row.className = 'seq-row';
+      row.dataset.play = s[0];
+      row.style.setProperty('--bc', GCOL[p.group]);
+      row.title = p.name + ' - weeks ' + s[1] + (s[2] > s[1] ? ' to ' + s[2] : '');
+      row.innerHTML = '<span class="sr-name">' + SEQSHORT[s[0]] + '</span>' +
+        '<span class="sr-track"><i style="left:' + ((s[1] - 1) / 24 * 100) + '%;width:' + (Math.max(1, s[2] - s[1] + 1) / 24 * 100) + '%"></i></span>' +
+        '<span class="sr-wk">' + s[1] + (s[2] > s[1] ? '-' + s[2] : '') + '</span>';
+      row.addEventListener('click', function () { seqPause(); selectPlay(s[0]); });
+      seqLanes.appendChild(row);
+      seqRows[s[0]] = row;
     });
     seqEls = { curve: curve, head: head, markers: markers, crossFlag: crossFlag, crossTick: crossTick, endFlag: endFlag, ghost: ghost, ghostLab: ghostLab };
   })();
   var seqW = 0, seqRunning = false, seqRaf = null, seqLast = null;
-  var SEQ_SPEED = 1.9;
+  var SEQ_SPEED = 2.1;
   function seqActive(w) {
     var best = null;
-    SCHEDULE.forEach(function (s) { if (w >= s[1] && (!best || s[1] > best[1])) best = s; });
+    SCHEDULE.forEach(function (s) {
+      if (w >= s[1] && !seqUnused[s[0]] && (!best || s[1] > best[1])) best = s;
+    });
     return best;
   }
   function seqRender(w) {
@@ -2335,43 +2467,52 @@
     var hx = sqx(Math.min(w, 24)).toFixed(1);
     seqEls.head.setAttribute('x1', hx);
     seqEls.head.setAttribute('x2', hx);
-    seqEls.head.setAttribute('opacity', (w > 0.1 && w < 23.9) ? 0.8 : 0);
-    seqEls.ghost.setAttribute('opacity', isFull ? 0 : 0.4);
+    seqEls.head.setAttribute('opacity', (w > 0.1 && w < 23.9) ? 0.9 : 0);
+    seqEls.ghost.setAttribute('opacity', isFull ? 0 : 0.35);
     seqEls.ghostLab.setAttribute('opacity', isFull ? 0 : 1);
     SCHEDULE.forEach(function (s) {
       var m = seqEls.markers[s[0]];
-      if (m) {
-        var lands = w >= s[1] && !seqMiss[s[0]];
-        m.setAttribute('opacity', lands ? 1 : 0);
-        m.setAttribute('cy', sqy(sc.f(s[1])).toFixed(1));
-        m.setAttribute('fill', seqWeak[s[0]] ? '#FFFFFF' : '#E8B003');
-      }
+      if (!m) return;
+      var lands = w >= s[1] && !seqMiss[s[0]] && !seqUnused[s[0]];
+      m.setAttribute('opacity', lands ? 1 : 0);
+      m.setAttribute('cy', sqy(sc.f(s[1])).toFixed(1));
+      m.setAttribute('fill', seqWeak[s[0]] ? '#FFFFFF' : '#E8B003');
+      m.setAttribute('stroke', seqWeak[s[0]] ? '#C99A05' : '#FFFFFF');
     });
-    document.querySelectorAll('.seq-bar').forEach(function (b) {
-      var s = null;
-      SCHEDULE.forEach(function (x2) { if (x2[0] === b.dataset.play) s = x2; });
-      if (!s) return;
+    SCHEDULE.forEach(function (s) {
+      var row = seqRows[s[0]];
+      if (!row) return;
       var started = w >= s[1];
-      b.classList.toggle('on', started && !seqMiss[s[0]]);
-      b.classList.toggle('live', started && w <= s[2] + 0.999 && !seqMiss[s[0]]);
-      b.classList.toggle('miss', started && !!seqMiss[s[0]]);
-      b.classList.toggle('weak', started && !!seqWeak[s[0]]);
+      row.classList.toggle('on', started && !seqMiss[s[0]] && !seqUnused[s[0]]);
+      row.classList.toggle('live', started && w <= s[2] + 0.999 && !seqMiss[s[0]] && !seqUnused[s[0]]);
+      row.classList.toggle('miss', started && !!seqMiss[s[0]]);
+      row.classList.toggle('weak', started && !!seqWeak[s[0]]);
+      row.classList.toggle('unused', !!seqUnused[s[0]]);
     });
-    seqEls.crossFlag.setAttribute('opacity', (isFull && w >= 11) ? 1 : 0);
-    seqEls.crossTick.setAttribute('opacity', (isFull && w >= 11) ? 0.8 : 0);
+    if (sc.cross && w >= sc.cross) {
+      seqEls.crossFlag.textContent = 'week ' + sc.cross + ': the change starts carrying itself';
+      seqEls.crossFlag.setAttribute('x', sqx(sc.cross));
+      seqEls.crossFlag.setAttribute('opacity', 1);
+      seqEls.crossTick.setAttribute('x1', sqx(sc.cross));
+      seqEls.crossTick.setAttribute('x2', sqx(sc.cross));
+      seqEls.crossTick.setAttribute('opacity', 0.85);
+    } else {
+      seqEls.crossFlag.setAttribute('opacity', 0);
+      seqEls.crossTick.setAttribute('opacity', 0);
+    }
     if (w >= 23.5) {
       var endV = Math.round(sc.f(24));
-      seqEls.endFlag.textContent = isFull ? '80% by week 24' : endV + '% - ' + (endV >= 55 ? 'held' : 'below threshold, reversible');
-      seqEls.endFlag.setAttribute('fill', isFull ? '#10233F' : '#A93226');
+      seqEls.endFlag.textContent = sc.kind === 'good' ? endV + '% - self-sustaining, held' : endV + '% - below the line, reversible';
+      seqEls.endFlag.setAttribute('fill', sc.kind === 'good' ? '#10233F' : '#A93226');
       seqEls.endFlag.setAttribute('opacity', 1);
     } else {
       seqEls.endFlag.setAttribute('opacity', 0);
     }
     if (seqCap) {
       if (w <= 0.05) {
-        seqCap.innerHTML = '<b>The modeled 24 weeks.</b> Press play, or click any play below for its full model detail.';
+        seqCap.innerHTML = '<b>The modeled 24 weeks.</b> Press play, or select any play for its full model detail.';
       } else if (w >= 23.9) {
-        seqCap.innerHTML = (isFull ? '<b>Full sequence.</b> ' : '<i>Negative case</i> <b>' + sc.label + '.</b> ') + sc.read;
+        seqCap.innerHTML = (sc.kind === 'good' ? '<i class="cap-good">Reaches self-sustaining</i> ' : '<i class="cap-bad">Never gets there</i> ') + '<b>' + sc.label + '.</b> ' + sc.read;
       } else {
         var a = seqActive(w);
         if (a) {
@@ -2433,9 +2574,10 @@
     var sc = SCEN[k];
     if (!sc) return;
     seqScenario = k;
-    var cas = seqCascade(sc.seed || []);
+    var cas = seqCascade(sc);
     seqMiss = cas.miss;
     seqWeak = cas.weak;
+    seqUnused = cas.unused;
     document.querySelectorAll('.seq-scen button').forEach(function (b) {
       b.setAttribute('aria-pressed', b.dataset.path === k ? 'true' : 'false');
     });
@@ -2464,14 +2606,14 @@
       entries.forEach(function (e2) {
         if (e2.isIntersecting && !seqSeen) { seqSeen = true; seqPlay(); seqIo.disconnect(); }
       });
-    }, { threshold: 0.45 });
+    }, { threshold: 0.4 });
     seqIo.observe(seqChart);
     seqRender(0);
   } else {
     seqRender(0);
   }
   function syncWheel(id) {
-    document.querySelectorAll('.seq-bar').forEach(function (b) { b.classList.toggle('sel', b.dataset.play === id); });
+    document.querySelectorAll('.seq-row').forEach(function (b) { b.classList.toggle('sel', b.dataset.play === id); });
   }
   function selectPlay(id) {
     document.querySelectorAll('.play').forEach(function (x) { x.setAttribute('aria-expanded', x.dataset.play === id ? 'true' : 'false'); });
@@ -2795,40 +2937,103 @@
     });
   });
 
-  /* ---- Delivery-loop step details ---- */
-  var CYCDETAIL = {
-    '1': ['Your context - what we need from you', [
-      "3-5 hours a day of your team's time across the ten days: interviews, working sessions, reviews",
-      'Access that supports delivery: usage and adoption data, the deployment inventory, policies, prior comms and training material',
-      'The people in the room: the sponsor, managers of the affected teams, and a data owner for read-only extracts'
-    ]],
-    '2': ['AI-native production - how ten days is enough', [
-      'Coding agents accelerate delivery: instruments, integrations, and the dashboard are built during the engagement, not after it',
-      'Diagnostics and a conditions survey run over your population; the Simulation scores your sequence before it runs',
-      'Interview-to-deliverable loops: what your people say in the morning becomes playbook drafts the same day'
-    ]],
-    '3': ['Custom playbooks - yours, not ours', [
-      'Everything flows into white-labeled templates that follow your branding',
-      'Written for your teams, workflows, and vocabulary, and handed over editable',
-      'Your team owns and maintains them after delivery'
-    ]],
-    '4': ['Your dashboard - wired to real data', [
-      'Built with adoption-data integrations where your stack allows: platform usage, in-workflow signals',
-      'Every intervention wired to the metric that will show it working',
-      'Reviewed in your existing weekly cadence; the roadmap adjusts to what the data says'
-    ]]
-  };
-  var cycDetail = document.getElementById('cyc-detail');
-  function cycShow(step) {
-    var d = CYCDETAIL[step];
-    if (!d || !cycDetail) return;
-    cycDetail.innerHTML = '<b>' + d[0] + '</b><ul>' + d[1].map(function (it) { return '<li>' + it + '</li>'; }).join('') + '</ul>';
-  }
-  document.querySelectorAll('.cyc-step[data-step]').forEach(function (st) {
-    ['mouseenter', 'focus', 'click'].forEach(function (evn) {
-      st.addEventListener(evn, function () { cycShow(st.dataset.step); });
+  /* ---- Delivery flywheel ---- */
+  var FLY = [
+    { n: '1', key: 'context', title: 'Your context', color: '#10233F',
+      lead: 'What we need from you across the ten days.',
+      items: [
+        '3 to 5 hours a day of your team: interviews, working sessions, reviews',
+        'Access that supports delivery: usage and adoption data, the deployment inventory, policies, prior comms and training material',
+        'The people in the room: the sponsor, managers of the affected teams, a data owner for read-only extracts'
+      ] },
+    { n: '2', key: 'production', title: 'AI-native production', color: '#0E7569',
+      lead: 'How ten days replaces a months-long change program.',
+      items: [
+        'Coding agents accelerate delivery: instruments, integrations and the dashboard are built during the engagement, not after it',
+        'Diagnostics and a conditions survey run over your population',
+        'The Transformation Dynamics Simulation scores your sequence before anyone runs it',
+        'Interview-to-deliverable loops: the morning session becomes playbook drafts the same day'
+      ] },
+    { n: '3', key: 'playbooks', title: 'Custom playbooks', color: '#C99A05',
+      lead: 'Yours, in your name, not ours.',
+      items: [
+        'Everything flows into white-labeled templates that follow your branding',
+        'Written for your teams, workflows and vocabulary, and handed over editable',
+        'Your team owns and maintains them after delivery'
+      ] },
+    { n: '4', key: 'dashboard', title: 'Your dashboard', color: '#4E5BA6',
+      lead: 'Wired to real adoption data, read weekly.',
+      items: [
+        'Built with adoption-data integrations where your stack allows: platform usage, in-workflow signals',
+        'Every intervention wired to the metric that will show it working',
+        'Reviewed in the cadence you already run; the roadmap adjusts to what the data says'
+      ] }
+  ];
+  (function buildFly() {
+    var svg = document.getElementById('flywheel');
+    var host = document.getElementById('fly-segs');
+    var detail = document.getElementById('fly-detail');
+    if (!svg || !host) return;
+    var NS = 'http://www.w3.org/2000/svg';
+    var CX = 230, CY = 230, RO = 188, RI = 96;
+    function pt(r, a) { var t = (a - 90) * Math.PI / 180; return [CX + r * Math.cos(t), CY + r * Math.sin(t)]; }
+    function arcPath(a0, a1) {
+      var o0 = pt(RO, a0), o1 = pt(RO, a1), i1 = pt(RI, a1), i0 = pt(RI, a0);
+      return 'M' + o0[0].toFixed(1) + ' ' + o0[1].toFixed(1) +
+        ' A' + RO + ' ' + RO + ' 0 0 1 ' + o1[0].toFixed(1) + ' ' + o1[1].toFixed(1) +
+        ' L' + i1[0].toFixed(1) + ' ' + i1[1].toFixed(1) +
+        ' A' + RI + ' ' + RI + ' 0 0 0 ' + i0[0].toFixed(1) + ' ' + i0[1].toFixed(1) + ' Z';
+    }
+    function el(tag, attrs, txt, parent) {
+      var n = document.createElementNS(NS, tag);
+      for (var k in attrs) n.setAttribute(k, attrs[k]);
+      if (txt) n.textContent = txt;
+      (parent || host).appendChild(n);
+      return n;
+    }
+    function show(i) {
+      var f = FLY[i];
+      if (!detail) return;
+      detail.innerHTML = '<span class="fd-eyebrow" style="color:' + f.color + '">Turn ' + f.n + '</span>' +
+        '<b>' + f.title + '</b><p>' + f.lead + '</p><ul>' +
+        f.items.map(function (it) { return '<li>' + it + '</li>'; }).join('') + '</ul>';
+      host.querySelectorAll('.fly-seg').forEach(function (s2, j) { s2.classList.toggle('on', j === i); });
+    }
+    FLY.forEach(function (f, i) {
+      var a0 = i * 90 + 4, a1 = (i + 1) * 90 - 4;
+      var g = el('g', { class: 'fly-seg', tabindex: '0', role: 'button', 'aria-label': 'Turn ' + f.n + ': ' + f.title });
+      el('path', { d: arcPath(a0, a1), fill: f.color, 'fill-opacity': 0.08, stroke: f.color, 'stroke-opacity': 0.3, 'stroke-width': 1.2 }, null, g);
+      var mid = (a0 + a1) / 2;
+      var lp = pt((RO + RI) / 2, mid);
+      el('circle', { cx: lp[0].toFixed(1), cy: (lp[1] - 22).toFixed(1), r: 13, fill: f.color }, null, g);
+      el('text', { x: lp[0].toFixed(1), y: (lp[1] - 17.5).toFixed(1), 'text-anchor': 'middle', 'font-size': 12, 'font-weight': 800, fill: '#FFFFFF', 'font-family': 'Archivo, sans-serif' }, f.n, g);
+      var words = f.title.split(' ');
+      words.forEach(function (wd, k) {
+        el('text', { x: lp[0].toFixed(1), y: (lp[1] + 6 + k * 15).toFixed(1), 'text-anchor': 'middle', 'font-size': 13, 'font-weight': 700, fill: '#1B1A16', 'font-family': 'Archivo, sans-serif' }, wd, g);
+      });
+      // rotation arrow between segments
+      var ap0 = pt(RO + 12, a1 - 16), ap1 = pt(RO + 12, a1 + 6);
+      el('path', {
+        d: 'M' + ap0[0].toFixed(1) + ' ' + ap0[1].toFixed(1) + ' A' + (RO + 12) + ' ' + (RO + 12) + ' 0 0 1 ' + ap1[0].toFixed(1) + ' ' + ap1[1].toFixed(1),
+        fill: 'none', stroke: '#8A6302', 'stroke-width': 1.6, 'marker-end': 'url(#flyarr)', opacity: 0.75
+      });
+      g.addEventListener('mouseenter', function () { show(i); });
+      g.addEventListener('focus', function () { show(i); });
+      g.addEventListener('click', function () { show(i); });
+      host.appendChild(g);
     });
-  });
+  })();
+
+  /* ---- Scroll reveal ---- */
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    var revealTargets = document.querySelectorAll('.sec-head, .case, .outcome, .price-card, .seq-card, .fly-wrap, .lib-head, .founder-card, .radar-card, .faq-list, .form-card');
+    var revIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); revIo.unobserve(en.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealTargets.forEach(function (t) { t.classList.add('reveal'); revIo.observe(t); });
+  }
 
   /* ---- FAQ ---- */
   document.querySelectorAll('.faq-q').forEach(function (btn) {
