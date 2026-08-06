@@ -2691,3 +2691,82 @@ input[type="checkbox"].doc-check:focus-visible { outline: 2px solid var(--logo-b
 .mx-controls { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin: 1rem 0 0; }
 .mx-controls .btn { padding: 0.45rem 1rem; font-size: 0.82rem; }
 @media print { .mx-controls, .doc-screen-hint { display: none; } }
+
+/* ============================================================
+   SHARED CAMPAIGN COMPONENTS  (added 2026-08)
+   The /grow/ai-adoption-* campaign pages developed a visual vocabulary that
+   converts: dark gold-lit panels, evidence chips, do/don't pairs, stat blocks
+   and a stroked icon set. These are the site-wide versions, so the campaign and
+   the site read as one system. Practice colour still comes from --brand, so a
+   component picks up Sail blue, Grow gold or Advise red by context.
+   Prefix: tdc-  ·  Type stays Besley/Fraunces + Inter, per the site.
+   ============================================================ */
+
+/* Dark panel: the campaign's closing register, reusable for any moment that
+   should feel like a finding rather than a page section. */
+.tdc-panel {
+  position: relative;
+  background:
+    radial-gradient(38rem 22rem at 108% -30%, rgba(232, 176, 3, 0.16), transparent 58%),
+    linear-gradient(168deg, var(--navy-deep), #0F1F33);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elev-3);
+  color: #C7D3CE;
+  padding: 2.2rem;
+}
+.tdc-panel h2, .tdc-panel h3, .tdc-panel h4, .tdc-panel strong, .tdc-panel b { color: #fff; }
+
+/* Eyebrow, gold rule prefix. Matches the campaign kicker. */
+.tdc-kicker {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--terracotta);
+}
+.tdc-kicker::before { content: ""; width: 1.6rem; height: 2px; background: var(--logo-gold); }
+.tdc-panel .tdc-kicker { color: var(--logo-gold); }
+
+/* Evidence chip */
+.tdc-chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--navy);
+  background: var(--seamist); border: 1px solid transparent;
+  border-radius: var(--radius-pill); padding: 0.22rem 0.62rem;
+}
+.tdc-chip--brand { background: transparent; border-color: var(--brand); color: var(--brand); }
+
+/* Do / don't pair, from the campaign's play detail. */
+.tdc-do, .tdc-dont {
+  border-radius: var(--radius-sm); padding: 0.75rem 0.95rem;
+  font-size: 0.92rem; line-height: 1.5;
+}
+.tdc-do { background: #F0F6F1; border: 1px solid #CBE0CF; }
+.tdc-dont { background: #FCF1F0; border: 1px solid #F0D2CE; }
+.tdc-do .lbl, .tdc-dont .lbl {
+  display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;
+}
+.tdc-do .lbl { color: var(--value-green); }
+.tdc-dont .lbl { color: #A93226; }
+
+/* Stat block */
+.tdc-stat .n {
+  font-family: 'Besley', Georgia, serif; font-size: 1.9rem; font-weight: 600;
+  color: var(--navy); letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.tdc-stat .l { font-size: 0.86rem; color: var(--midgray); margin-top: 0.3rem; }
+.tdc-panel .tdc-stat .n { color: #fff; }
+.tdc-panel .tdc-stat .l { color: rgba(255, 255, 255, 0.7); }
+
+/* Stroked icon, the campaign set's drawing style. */
+.tdc-icon {
+  width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--brand) 12%, #fff);
+  border: 1px solid color-mix(in srgb, var(--brand) 30%, #fff);
+}
+.tdc-icon svg { width: 22px; height: 22px; fill: none; stroke: var(--brand); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tdc-panel .tdc-icon { background: rgba(232, 176, 3, 0.14); border-color: rgba(232, 176, 3, 0.4); }
+.tdc-panel .tdc-icon svg { stroke: var(--logo-gold); }
