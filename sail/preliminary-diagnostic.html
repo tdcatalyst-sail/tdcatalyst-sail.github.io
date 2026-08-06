@@ -37,6 +37,20 @@
       transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       width: 0;
     }
+    /* Segmented progress: the length of the commitment, visible up front. */
+    .diag-steps {
+      display: flex; gap: 4px; margin-bottom: 1.6rem;
+    }
+    .diag-steps i {
+      flex: 1; height: 3px; border-radius: 2px; background: var(--hairline);
+      transition: background var(--dur) var(--ease);
+    }
+    .diag-steps i.done { background: var(--navy); }
+    .diag-steps i.now { background: var(--logo-gold); }
+    .diag-steps-label {
+      font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--midgray); margin-bottom: 0.5rem;
+    }
 
     .diag-hero-lines {
       display: flex; flex-direction: column; gap: 6px;
@@ -69,10 +83,11 @@
     .diag-card {
       background: #fff;
       border: 1px solid var(--hairline);
-      border-radius: 2px;
+      border-radius: var(--radius-sm);
       padding: 2.5rem;
       position: relative;
       overflow: hidden;
+      box-shadow: var(--elev-2);
     }
     .diag-card::before {
       content: "";
@@ -133,8 +148,8 @@
       width: 100%;
       background: #fff;
       border: 1px solid var(--hairline);
-      border-radius: 2px;
-      padding: 1.1rem 1.2rem;
+      border-radius: var(--radius-sm);
+      padding: 1.15rem 1.25rem;
       cursor: pointer;
       font-family: 'Inter', sans-serif;
       text-align: left;
@@ -142,9 +157,17 @@
       gap: 0.9rem;
       align-items: flex-start;
       margin-bottom: 0.6rem;
-      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+      transition: border-color var(--dur-fast) var(--ease),
+                  box-shadow var(--dur-fast) var(--ease),
+                  background var(--dur-fast) var(--ease),
+                  transform var(--dur-fast) var(--ease);
     }
-    .diag-opt:hover { border-color: var(--navy); }
+    .diag-opt:hover {
+      border-color: var(--navy);
+      box-shadow: var(--elev-1);
+      transform: translateY(-1px);
+    }
+    .diag-opt:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 2px; }
     .diag-opt.selected {
       border-color: var(--navy);
       box-shadow: inset 3px 0 0 var(--navy);
@@ -176,18 +199,24 @@
     }
     .diag-opt-body { flex: 1; min-width: 0; }
     .diag-opt-label {
-      font-size: 1rem;
+      font-size: 1.03rem;
       line-height: 1.55;
       color: var(--charcoal);
     }
+    /* Research citation: a source chip rather than italic small print. It is
+       what makes the instrument read as authored rather than generated. */
     .diag-opt-data {
-      font-size: 0.85rem;
-      line-height: 1.55;
-      color: var(--midgray);
-      margin-top: 0.55rem;
-      font-style: italic;
-      border-top: 1px solid var(--hairline);
-      padding-top: 0.55rem;
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      line-height: 1.5;
+      letter-spacing: 0.03em;
+      color: var(--navy);
+      background: var(--seamist);
+      margin-top: 0.6rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: var(--radius-pill);
+      font-style: normal;
     }
 
     .diag-nav {
@@ -247,6 +276,39 @@
     .diag-result-body p:first-child {
       margin-top: 0;
     }
+
+    /* Archetype radar, the same instrument the campaign pages render. */
+    .diag-radar-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+      gap: 2rem;
+      align-items: center;
+      background: #fff;
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--elev-2);
+      padding: 1.8rem;
+      margin-top: 2rem;
+    }
+    .diag-radar-wrap svg { display: block; width: 100%; height: auto; }
+    .diag-radar-head {
+      font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--midgray); margin-bottom: 0.6rem;
+    }
+    .diag-deficit {
+      display: flex; gap: 0.6rem; align-items: flex-start;
+      margin-top: 0.9rem; padding: 0.85rem 1rem;
+      border-radius: var(--radius-sm);
+      background: rgba(31, 58, 95, 0.04);
+      border: 1px solid var(--hairline);
+      font-size: 0.92rem; color: var(--charcoal);
+    }
+    .diag-deficit i {
+      flex-shrink: 0; width: 11px; height: 11px; margin-top: 0.32rem;
+      border: 2px dashed var(--ac, var(--navy)); border-radius: 50%;
+    }
+    .diag-deficit b { font-weight: 600; }
+    @media (max-width: 760px) { .diag-radar-wrap { grid-template-columns: 1fr; } }
 
     .diag-signal {
       font-family: 'Fraunces', serif;
@@ -955,10 +1017,16 @@ function renderQuestion() {
     </div>
   ` : '';
 
+  const stepsHtml = `
+    <div class="diag-steps-label">Question ${state.currentQ + 1} of ${QUESTIONS.length}</div>
+    <div class="diag-steps" aria-hidden="true">${QUESTIONS.map((_, i) =>
+      `<i class="${i < state.currentQ ? 'done' : (i === state.currentQ ? 'now' : '')}"></i>`).join('')}</div>`;
+
   app.innerHTML = `
     <section>
       <div class="wrap narrow">
         <div class="diag-card accent-${accent} diag-anim">
+            ${stepsHtml}
           <div class="diag-section accent-${accent}">${esc(sect.name)}</div>
           <div class="diag-num accent-${accent}">${pad2(state.currentQ + 1)}</div>
           <h2 class="diag-title">${esc(q.q)}</h2>
@@ -1085,6 +1153,67 @@ function detectIncoherencies() {
   return issues;
 }
 
+
+// ---- Archetype radar: the same six-criteria profile the campaign pages draw.
+// Values and deficit axis mirror grow/ai-adoption-*.html so the free rung and
+// the paid page describe an organization the same way.
+const RADAR_AXES = ['Sensing', 'Speed to act', 'Op-model redesign', 'Ownership', 'People voice', 'Lived adoption'];
+const RADAR_PROFILE = {
+  Seam:    { v: [0.55, 0.60, 0.40, 0.70, 0.15, 0.30], crater: 4, color: '#C99A05', deficit: 'People voice',
+             read: 'Leadership and the people function did not make the conditions to change the way people work.' },
+  UP:      { v: [0.50, 0.45, 0.45, 0.20, 0.45, 0.40], crater: 3, color: '#4E5BA6', deficit: 'Ownership',
+             read: 'Activity everywhere, but no named owner of the transition itself.' },
+  OM:      { v: [0.50, 0.55, 0.12, 0.55, 0.45, 0.30], crater: 2, color: '#0E7569', deficit: 'Op-model redesign',
+             read: 'Tools deployed on schedule while workflows never moved, and nothing was institutionalized.' },
+  Sensing: { v: [0.12, 0.25, 0.45, 0.50, 0.45, 0.45], crater: 0, color: '#2C4B76', deficit: 'Sensing',
+             read: 'The board asks market-shaped questions; nothing inside is built to detect or answer them.' }
+};
+
+function radarSvg(key) {
+  const P = RADAR_PROFILE[key];
+  if (!P) return '';
+  const CX = 175, CY = 165, R = 100, N = 6;
+  const pt = (i, v) => {
+    const a = -Math.PI / 2 + i * 2 * Math.PI / N;
+    return [CX + Math.cos(a) * R * v, CY + Math.sin(a) * R * v];
+  };
+  let out = '';
+  [0.33, 0.66, 1].forEach((ring) => {
+    const pts = [];
+    for (let i = 0; i < N; i++) { const q = pt(i, ring); pts.push(q[0].toFixed(1) + ',' + q[1].toFixed(1)); }
+    out += `<polygon points="${pts.join(' ')}" fill="none" stroke="#E6E3D7"/>`;
+  });
+  for (let i = 0; i < N; i++) {
+    const q = pt(i, 1);
+    out += `<line x1="${CX}" y1="${CY}" x2="${q[0].toFixed(1)}" y2="${q[1].toFixed(1)}" stroke="#EFEDE2"/>`;
+  }
+  const shape = [];
+  for (let i = 0; i < N; i++) { const q = pt(i, P.v[i]); shape.push(q[0].toFixed(1) + ',' + q[1].toFixed(1)); }
+  out += `<polygon points="${shape.join(' ')}" fill="${P.color}" fill-opacity="0.2" stroke="${P.color}" stroke-width="2"/>`;
+  const d = pt(P.crater, Math.max(P.v[P.crater], 0.13));
+  out += `<circle cx="${d[0].toFixed(1)}" cy="${d[1].toFixed(1)}" r="7" fill="none" stroke="${P.color}" stroke-width="2" stroke-dasharray="3 3"/>`;
+  RADAR_AXES.forEach((label, i) => {
+    const l = pt(i, 1.26);
+    const anchor = Math.abs(l[0] - CX) < 14 ? 'middle' : (l[0] > CX ? 'start' : 'end');
+    const isDef = i === P.crater;
+    out += `<text x="${l[0].toFixed(1)}" y="${(l[1] + 4).toFixed(1)}" text-anchor="${anchor}" font-family="Inter, sans-serif" font-size="11" font-weight="${isDef ? 700 : 500}" fill="${isDef ? P.color : '#6B6B6B'}">${label}</text>`;
+  });
+  return `<svg viewBox="0 0 350 330" role="img" aria-label="Characteristic profile for ${esc(ARCHETYPES[key].name)}, weakest on ${P.deficit}">${out}</svg>`;
+}
+
+function radarBlock(key) {
+  const P = RADAR_PROFILE[key];
+  if (!P) return '';
+  return `
+    <div class="diag-radar-wrap" style="--ac:${P.color}">
+      <div>${radarSvg(key)}</div>
+      <div>
+        <div class="diag-radar-head">Characteristic profile</div>
+        <div class="diag-deficit"><i></i><span><b>Deficit: ${esc(P.deficit)}.</b> ${esc(P.read)}</span></div>
+      </div>
+    </div>`;
+}
+
 function renderResult() {
   const a = state.result;
   const bodyHtml = a.body.map((p) => `<p>${esc(p)}</p>`).join('');
@@ -1123,6 +1252,7 @@ function renderResult() {
       <div class="wrap narrow diag-result-body">
         ${bodyHtml}
         <p class="diag-signal">${esc(a.signal)}</p>
+        ${radarBlock(state.resultKey || '')}
         ${state.secondaryKey && state.resultScores ? `
         <div style="margin-top: 2.5rem; padding: 1.5rem; border-left: 3px solid var(--hairline); background: rgba(31, 58, 95, 0.02);">
           <p style="font-size: 0.95rem; color: var(--midgray); margin-top: 0;"><strong>Secondary pattern:</strong> Your responses also show strong signals of <strong>${ARCHETYPES[state.secondaryKey].name}</strong>. Many organizations experience overlapping challenges. This secondary dimension may amplify or complicate the primary challenge above.</p>
