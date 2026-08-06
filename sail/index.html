@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=2f2cb158">
+  <link rel="stylesheet" href="/style.css?v=8286e083">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -169,6 +169,16 @@
   </script>
 </section>
 
+<!-- IN-PAGE VALUE NAV -->
+<div class="subnav" aria-label="On this page">
+  <div class="wrap subnav-inner">
+    <a href="#method">Walk the five frameworks</a>
+    <a href="#diagnostic">What you leave with</a>
+    <a href="#pathway">Pathway &amp; fees</a>
+    <a href="#proof">A century of proof</a>
+  </div>
+</div>
+
 
 
 <!-- THESIS -->
@@ -184,7 +194,7 @@
 
 
 <!-- THE METHOD, AS A ROUTE -->
-<section>
+<section id="method">
   <div class="wrap">
     <div class="section-head">
       <div class="reg-kicker">The Catalyst Method</div>
@@ -192,18 +202,96 @@
       <p>A specific landscape activates a specific cognitive posture. Four strategy frameworks then turn that posture into diagnosis, commitment, infrastructure, and a reflection of the long horizon. The sequence matters: running the frameworks out of order produces weaker output.</p>
     </div>
     <div class="trail">
-      <div class="trail-stop"><span class="ts-dot">1</span><b>Signs Framework&trade;</b><p>Activates live reading of the landscape rather than model application: the posture the rest of the sequence runs on.</p></div>
-      <div class="trail-stop"><span class="ts-dot">2</span><b>Dynamic Capabilities</b><p>Moves each observed sign from observation to commitment, with rigor leadership will recognize.</p></div>
-      <div class="trail-stop"><span class="ts-dot">3</span><b>Organizational Ambidexterity</b><p>Holds running today&rsquo;s business and building tomorrow&rsquo;s capability in one design.</p></div>
-      <div class="trail-stop"><span class="ts-dot">4</span><b>Sensing &amp; Responding Loop</b><p>Turns a single executive&rsquo;s insight into an organizational capability.</p></div>
-      <div class="trail-stop"><span class="ts-dot">5</span><b>The Methuselah Principle</b><p>At the base of the redwood, every decision of the day is reframed against an epochal time scale.</p></div>
+      <div class="trail-stop" role="button" tabindex="0" data-fw="signs" aria-pressed="false"><span class="ts-dot">1</span><b>Signs Framework&trade;</b><p>Activates live reading of the landscape rather than model application: the posture the rest of the sequence runs on.</p><span class="ts-more">Open the framework &darr;</span></div>
+      <div class="trail-stop" role="button" tabindex="0" data-fw="dc" aria-pressed="false"><span class="ts-dot">2</span><b>Dynamic Capabilities</b><p>Moves each observed sign from observation to commitment, with rigor leadership will recognize.</p><span class="ts-more">Open the framework &darr;</span></div>
+      <div class="trail-stop" role="button" tabindex="0" data-fw="ambi" aria-pressed="false"><span class="ts-dot">3</span><b>Organizational Ambidexterity</b><p>Holds running today&rsquo;s business and building tomorrow&rsquo;s capability in one design.</p><span class="ts-more">Open the framework &darr;</span></div>
+      <div class="trail-stop" role="button" tabindex="0" data-fw="loop" aria-pressed="false"><span class="ts-dot">4</span><b>Sensing &amp; Responding Loop</b><p>Turns a single executive&rsquo;s insight into an organizational capability.</p><span class="ts-more">Open the framework &darr;</span></div>
+      <div class="trail-stop" role="button" tabindex="0" data-fw="meth" aria-pressed="false"><span class="ts-dot">5</span><b>The Methuselah Principle</b><p>At the base of the redwood, every decision of the day is reframed against an epochal time scale.</p><span class="ts-more">Open the framework &darr;</span></div>
     </div>
+    <div class="trail-panel" id="trailPanel" hidden></div>
     <p style="margin-top:1.4rem; font-size:0.92rem;"><a href="method">The full method, framework by framework &rarr;</a></p>
+
+<script>
+// The trail is an instrument: a station opens its framework beneath the route.
+// Copy is method.html's own, so the two pages cannot drift.
+(function () {
+  var FW = {
+    signs: {
+      origin: "Origin: TDcatalyst, anchored in Aramai Ohlone cosmology and the historical ecology of the Pacifica coast and the Skyline ridge",
+      name: "Signs Framework\u2122",
+      body: "<p>The Signs Framework is a phenomenological tool. It directs executive attention to ten specific living features of two landscapes that have been read continuously for thousands of years. Each sign is anchored in Aramai cosmology or land history. Each carries a direct business adaptability question.</p><p>The framework does not predict what the executive will see on the day of the walk. That is the point. It activates a posture of live reading rather than model application, which is the cognitive capacity AI workforce transformation requires.</p>"
+    },
+    dc: {
+      origin: "Origin: David Teece, dynamic capabilities",
+      name: "Dynamic Capabilities",
+      body: "<p>Inside the Catalyst Method, every sign observed during a field engagement receives a Teece cycle. The framework moves the executive from observation to commitment, with rigor leadership will recognize.</p>"
+    },
+    ambi: {
+      origin: "Origin: Charles O\u2019Reilly (Stanford) and Michael Tushman (Harvard)",
+      name: "Organizational Ambidexterity",
+      body: "<p>Exploitation-dominant organizations execute the current business model with discipline. They are efficient, predictable, and often blind to paradigm shifts. Exploration-dominant organizations read signals well and experiment constantly, but struggle to turn exploration into reliable revenue. Ambidextrous organizations do both.</p><p>In an engagement, the executive places their current organization on the matrix. The placement is rarely flattering, and the gap between that placement and the Ambidextrous quadrant the AI transition demands becomes the strategic agenda.</p>"
+    },
+    loop: {
+      origin: "Origin: integrated from organizational resilience research by Kevin Burnard and Ran Bhamra",
+      name: "Sensing and Responding Loop",
+      body: "<p>Four phases. Detection routes signals about the operating environment into the organization through deliberate channels. Activation triggers a response process: decision rights and escalation paths. Response is the action taken. Learning evaluates the response and updates practice: with it, the organization compounds adaptive capacity over time.</p><p>The first three frameworks produce a single executive\u2019s insight. The loop produces an organizational capability.</p>"
+    },
+    meth: {
+      origin: "Origin: TDcatalyst, at the Methuselah grove on the Skyline ridge",
+      name: "The Methuselah Principle",
+      body: "<p>This framework comes at the end of every full-day or Immersive engagement. Standing at the base of the tree, every decision made during the day is reframed against an epochal time scale. The other frameworks move fast. The redwood slows everything down to the time scale that AI transformation actually operates on.</p>"
+    }
+  };
+  var panel = document.getElementById('trailPanel');
+  var stops = document.querySelectorAll('.trail-stop');
+  function open(key) {
+    var f = FW[key];
+    if (!f) return;
+    var already = panel.dataset.fw === key && !panel.hidden;
+    if (already) { panel.hidden = true; panel.dataset.fw = ''; }
+    else {
+      panel.dataset.fw = key;
+      panel.innerHTML = '<div class="tp-origin">' + f.origin + '</div><h3>' + f.name + '</h3>' + f.body +
+        '<a class="tp-link" href="method">The full framework, with its instruments &rarr;</a>';
+      panel.hidden = false;
+    }
+    stops.forEach(function (st) {
+      st.setAttribute('aria-pressed', String(!panel.hidden && st.dataset.fw === key));
+    });
+  }
+  stops.forEach(function (st) {
+    st.addEventListener('click', function () { open(st.dataset.fw); });
+    st.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(st.dataset.fw); }
+    });
+  });
+})();
+
+// Scroll-spy for the in-page nav.
+(function () {
+  var links = document.querySelectorAll('.subnav a');
+  if (!links.length || !('IntersectionObserver' in window)) return;
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      links.forEach(function (a) { a.classList.remove('now'); });
+      var a = map[en.target.id];
+      if (a) a.classList.add('now');
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  Object.keys(map).forEach(function (id) {
+    var sec = document.getElementById(id);
+    if (sec) io.observe(sec);
+  });
+})();
+</script>
   </div>
 </section>
 
 <!-- WHAT THE ENGAGEMENT PRODUCES -->
-<section class="alt">
+<section class="alt" id="diagnostic">
   <div class="wrap">
     <div class="section-head">
       <div class="reg-kicker">What every engagement produces</div>
@@ -226,7 +314,7 @@
 
 
 <!-- THE PATHWAY -->
-<section>
+<section id="pathway">
   <div class="wrap">
     <div class="section-head">
       <div class="reg-kicker">Sessions and pathway</div>
@@ -243,7 +331,7 @@
 </section>
 
 <!-- PROOF POINTS -->
-<section class="alt">
+<section class="alt" id="proof">
   <div class="wrap">
     <div class="section-head">
       <div class="reg-kicker">Case studies</div>

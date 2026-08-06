@@ -3389,3 +3389,56 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
    the practice colours converging to a single navy line. */
 .seam-braid { position: relative; height: 46px; margin: 0.4rem 0; }
 .seam-braid svg { display: block; width: 100%; height: 100%; }
+
+/* ============================================================
+   IN-PAGE VALUE NAV  (.subnav)
+   The campaign's segmented section nav, generalised: labels are value
+   statements, the current section reads in the practice colour. Sticky
+   under the site bar.
+   ============================================================ */
+.subnav {
+  position: sticky; top: 58px; z-index: 40;
+  background: color-mix(in srgb, var(--reg-bg) 88%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--reg-line);
+}
+.subnav-inner {
+  display: flex; gap: 0.35rem; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; padding: 0.55rem 0;
+}
+.subnav-inner::-webkit-scrollbar { display: none; }
+.subnav a {
+  flex: 0 0 auto; text-decoration: none; white-space: nowrap;
+  font-family: var(--mono); font-size: 0.66rem; font-weight: 500;
+  letter-spacing: 0.09em; text-transform: uppercase; color: var(--midgray);
+  border: 1px solid transparent; border-radius: 999px; padding: 0.34rem 0.8rem;
+  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease),
+              background var(--dur-fast) var(--ease);
+}
+.subnav a:hover { color: var(--brand-ink); background: #fff; border-color: var(--reg-line); }
+.subnav a.now { color: var(--brand-ink); border-color: var(--brand); background: #fff; }
+
+/* --- Trail stations become an instrument: pressed state + detail panel --- */
+.trail-stop { cursor: pointer; border-left: 3px solid transparent; }
+.trail-stop[aria-pressed="true"] { border-left-color: var(--brand); box-shadow: var(--elev-2); }
+.trail-stop .ts-more {
+  display: inline-block; margin-top: 0.5rem;
+  font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--brand);
+}
+.trail-panel {
+  margin-top: 1rem; background: #fff; border: 1px solid var(--reg-line);
+  border-left: 3px solid var(--brand); border-radius: var(--reg-radius-lg);
+  box-shadow: var(--elev-2); padding: 1.5rem 1.7rem;
+}
+.trail-panel .tp-origin {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--midgray); margin-bottom: 0.5rem;
+}
+.trail-panel h3 {
+  font-family: 'Fraunces', 'Besley', Georgia, serif; font-weight: 400;
+  font-size: 1.3rem; color: var(--navy); margin: 0 0 0.7rem;
+}
+.trail-panel p { font-size: 0.94rem; color: var(--charcoal); line-height: 1.65; margin: 0 0 0.8rem; }
+.trail-panel p:last-of-type { margin-bottom: 0; }
+.trail-panel .tp-link { display: inline-block; margin-top: 0.9rem; font-size: 0.9rem; }

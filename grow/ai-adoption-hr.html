@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=2f2cb158">
+  <link rel="stylesheet" href="/style.css?v=8286e083">
   <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -158,8 +158,10 @@
     max-width: 1140px; margin: 0 auto; padding: 0.7rem clamp(1.1rem, 4vw, 2rem);
     display: flex; align-items: center; justify-content: space-between; gap: 1rem;
   }
-  .lp .lp-logo { font-size: 1.05rem; font-weight: 700; color: var(--lp-ink); text-decoration: none; letter-spacing: -0.01em; }
-  .lp .lp-logo span { color: var(--lp-accent-ink); font-weight: 600; }
+  .lp .lp-logo { font-size: 1.05rem; font-weight: 700; color: var(--lp-ink); text-decoration: none; letter-spacing: -0.01em; display: inline-block; line-height: 1.15; }
+  /* The practice suffix wraps as one piece onto a second line when the bar
+     is narrow; it must never break at its own hyphens mid-token. */
+  .lp .lp-logo span { color: var(--lp-accent-ink); font-weight: 600; display: inline-block; white-space: nowrap; }
   .lp .lp-nav .btn { padding: 0.55rem 1.2rem; font-size: 0.88rem; }
   .lp .lp-nav .btn-primary:hover { transform: none; }
   .lp .lp-nav { border-bottom-color: rgba(230, 227, 215, 0.9); box-shadow: 0 1px 0 rgba(27, 26, 22, 0.02); }
