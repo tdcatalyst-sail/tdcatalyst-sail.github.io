@@ -1083,7 +1083,10 @@
   .lp .olane .obar i.og.cont { background: linear-gradient(90deg, var(--lp-accent) 55%, rgba(232, 176, 3, 0.25)); }
   .lp .outcome { transition: border-color 0.2s, box-shadow 0.2s; }
   .lp .outcome.sel { border-color: var(--lp-accent); box-shadow: 0 12px 34px rgba(27, 26, 22, 0.12); }
-  .lp .outcome.sel .rtag::after { content: " \00b7 your situation"; color: var(--lp-ink); }
+  /* The rtag and the situation pill share the top line of a reset card; let
+     them wrap rather than crowd the headline underneath. */
+  .lp .outcome > .rtag { margin-right: 0.4rem; }
+  .lp .outcome > .rtag + .case-pill, .lp .outcome > .rtag + .case-flagpill { vertical-align: middle; }
 
   /* ---- v3: case visuals ---- */
   .lp .cv-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
@@ -1907,7 +1910,7 @@
     </div>
     <div class="outcome-grid" id="outcome-grid">
       <article class="outcome" data-sit="platform">
-        <span class="rtag">Stalled platform</span>
+        <span class="rtag">Stalled platform</span><span class="case-pill">20+ programs delivered</span>
         <h3>Workflow-embedded use, past the plateau.</h3>
         <div class="olanes" aria-hidden="true">
           <div class="olane"><span>Sponsorship reset</span><div class="obar"><i style="grid-column:1/3"></i></div></div>
@@ -1943,7 +1946,7 @@
         <div class="onum"><span><b>60&ndash;80%</b>of tasks in target roles sorted into lanes</span><span><b>4&ndash;8 hrs</b>per person per week freed and repointed</span><span><b>100%</b>of affected roles with updated review criteria</span></div>
       </article>
       <article class="outcome" data-sit="pilots">
-        <span class="rtag">The forty pilots</span>
+        <span class="rtag">The forty pilots</span><span class="case-pill">Emerging challenge</span>
         <h3>A governed portfolio: every pilot decided.</h3>
         <div class="olanes" aria-hidden="true">
           <div class="olane"><span>Inventory &amp; criteria</span><div class="obar"><i style="grid-column:1/3"></i></div></div>
@@ -1960,7 +1963,7 @@
         <div class="onum"><span><b>100%</b>of pilots and vendor asks decided in writing</span><span><b>15&ndash;25%</b>scale &middot; <b>20&ndash;30%</b> institutionalize &middot; the rest stop</span><span><b>1</b>standing governance cadence, owned internally</span></div>
       </article>
       <article class="outcome" data-sit="zero">
-        <span class="rtag">Starting 0 &rarr; 1</span>
+        <span class="rtag">Starting 0 &rarr; 1</span><span class="case-pill">Your one chance to start right</span>
         <h3>The new way is the normal way by week 12.</h3>
         <div class="olanes" aria-hidden="true">
           <div class="olane"><span>Leadership &amp; charter</span><div class="obar"><i style="grid-column:1/3" class="og"></i></div></div>
