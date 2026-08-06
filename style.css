@@ -3003,8 +3003,22 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
   transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
               transform var(--dur) var(--ease);
 }
-.sel-tab:hover { box-shadow: var(--elev-2); transform: translateY(-1px); }
-.sel-tab[aria-pressed="true"] { border-left-color: var(--sel-ac); box-shadow: var(--elev-2); }
+.sel-tab:hover {
+  box-shadow: var(--elev-2); transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--sel-ac) 32%, var(--reg-line));
+}
+/* Pressed, the accent carries the whole tab: tinted ground, full accent
+   frame, the left bar as the strongest note. A stripe alone read as a
+   sticker on a white card. */
+.sel-tab[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--sel-ac) 45%, #fff);
+  border-left-color: var(--sel-ac);
+  background:
+    radial-gradient(16rem 7rem at 100% 0%, color-mix(in srgb, var(--sel-ac) 13%, transparent), transparent 70%),
+    color-mix(in srgb, var(--sel-ac) 5%, #fff);
+  box-shadow: var(--elev-2);
+}
+.sel-tab[aria-pressed="true"] .sel-tx b { color: color-mix(in srgb, var(--sel-ink) 55%, var(--navy)); }
 .sel-tab .tdc-icon {
   background: color-mix(in srgb, var(--sel-ac) 12%, #fff);
   border-color: color-mix(in srgb, var(--sel-ac) 32%, #fff);
@@ -3026,11 +3040,20 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
    a 786px void beside it. */
 .sel-panel {
   --sel-ac: var(--brand);
-  display: block;
+  display: block; position: relative; overflow: hidden;
   min-height: 22rem;
-  background: #fff; border: 1px solid var(--reg-line); border-radius: var(--reg-radius-lg);
+  background: #fff; border: 1px solid var(--reg-line);
+  border-top: 3px solid var(--sel-ac);
+  border-radius: var(--reg-radius-lg);
   box-shadow: var(--elev-2); padding: 1.6rem 1.7rem;
+  transition: border-color var(--dur) var(--ease);
 }
+/* the campaign's signature light, in the selected offer's colour */
+.sel-panel::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(34rem 16rem at 104% -22%, color-mix(in srgb, var(--sel-ac) 11%, transparent), transparent 62%);
+}
+.sel-panel > * { position: relative; }
 @media (max-width: 760px) { .sel-panel { padding: 1.3rem 1.2rem; min-height: 0; } }
 .sel-head, .sel-facts, .sel-body { min-width: 0; }
 
@@ -3075,6 +3098,8 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
   font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.12rem;
   color: var(--navy); line-height: 1.25; font-variant-numeric: tabular-nums;
 }
+.sel-fact:first-child .v { color: var(--sel-ink, var(--sel-ac)); }
+.sel-facts { border-top-color: color-mix(in srgb, var(--sel-ac) 26%, var(--reg-line)); }
 .sel-fact .v.small { font-size: 0.95rem; font-weight: 500; }
 .sel-note {
   margin-top: 1.1rem; padding: 0.6rem 0.75rem;
