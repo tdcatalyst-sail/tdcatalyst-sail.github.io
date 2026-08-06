@@ -284,24 +284,47 @@
     }
 
     /* Archetype radar, the same instrument the campaign pages render. */
-    /* Profile panel, in the campaign pages' register: dark ground, gold accent,
-       the instrument sitting on it rather than on paper. */
+    /* Profile panel, matching the campaign pages' diagnose section: a light
+       card, the archetype colour carried by the accent rather than the ground. */
     .diag-radar-wrap {
       display: grid;
       grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
       gap: 2.2rem;
       align-items: center;
-      background:
-        radial-gradient(38rem 22rem at 108% -30%, rgba(232, 176, 3, 0.16), transparent 58%),
-        linear-gradient(168deg, var(--navy-deep), #0F1F33);
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      border-radius: var(--radius-md);
-      box-shadow: var(--elev-3);
-      padding: 2.2rem;
+      background: #fff;
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--elev-2);
+      padding: 2rem;
       margin-top: 2.5rem;
-      color: #C7D3CE;
     }
     .diag-radar-wrap svg { display: block; width: 100%; height: auto; }
+    .diag-arch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    @media (max-width: 700px) { .diag-arch-grid { grid-template-columns: 1fr; } }
+    .diag-arch-card {
+      display: grid; grid-template-columns: 42px 1fr; gap: 0.9rem; align-items: start;
+      background: #fff; border: 1px solid var(--hairline); border-left: 3px solid var(--ac);
+      border-radius: var(--radius-sm); padding: 1.1rem 1.2rem; box-shadow: var(--elev-1);
+      transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+    }
+    .diag-arch-card:hover { box-shadow: var(--elev-2); transform: translateY(-2px); }
+    .diag-arch-card .tdc-icon {
+      background: color-mix(in srgb, var(--ac) 12%, #fff);
+      border-color: color-mix(in srgb, var(--ac) 30%, #fff);
+    }
+    .diag-arch-card .tdc-icon svg { stroke: var(--ac); }
+    .diag-arch-card b { display: block; font-family: 'Fraunces','Besley',serif; font-size: 1.02rem; font-weight: 400; color: var(--navy); }
+    .diag-arch-card span { display: block; font-size: 0.88rem; color: var(--midgray); margin-top: 0.2rem; }
+    .diag-meta-strip {
+      display: flex; flex-wrap: wrap; gap: 0.5rem 1.6rem; margin: 0 0 1.8rem;
+      padding: 0.9rem 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline);
+      font-size: 0.86rem; color: var(--midgray);
+    }
+    .diag-meta-strip b {
+      font-family: 'Besley', Georgia, serif; font-size: 1.15rem; color: var(--navy);
+      font-weight: 600; margin-right: 0.3rem;
+    }
+
     .diag-result-id { display: flex; align-items: center; gap: 1rem; }
     .diag-result-id h1 { margin: 0; }
     @media (max-width: 560px) { .diag-result-id { gap: 0.7rem; } .diag-result-id .tdc-icon { width: 34px; height: 34px; } }
@@ -312,7 +335,7 @@
     }
     .diag-radar-title {
       font-family: 'Fraunces', 'Besley', Georgia, serif;
-      font-size: 1.25rem; font-weight: 400; color: #fff; margin: 0 0 0.9rem;
+      font-size: 1.2rem; font-weight: 400; color: var(--navy); margin: 0 0 0.9rem;
       line-height: 1.25;
     }
     /* Six criteria read as passes and gaps, straight off the model profile. */
@@ -320,27 +343,27 @@
     .diag-read {
       display: grid; grid-template-columns: 18px 1fr auto; gap: 0.6rem;
       align-items: center; font-size: 0.88rem;
-      padding: 0.4rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.42rem 0; border-bottom: 1px solid var(--hairline);
     }
     .diag-read:last-child { border-bottom: none; }
     .diag-read .mk { font-size: 0.95rem; line-height: 1; }
-    .diag-read.pass .mk { color: #7ACB8F; }
-    .diag-read.gap .mk { color: #FF8A7E; }
-    .diag-read .nm { color: #E8EDEA; }
-    .diag-read.gap .nm { color: #fff; font-weight: 600; }
+    .diag-read.pass .mk { color: var(--value-green); }
+    .diag-read.gap .mk { color: #A93226; }
+    .diag-read .nm { color: var(--charcoal); }
+    .diag-read.gap .nm { color: var(--navy); font-weight: 600; }
     .diag-read .vb {
       font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em;
-      text-transform: uppercase; color: rgba(255, 255, 255, 0.55);
+      text-transform: uppercase; color: var(--midgray);
     }
     .diag-deficit {
       display: flex; gap: 0.65rem; align-items: flex-start;
       margin-top: 1.1rem; padding: 0.9rem 1.05rem;
       border-radius: var(--radius-sm);
-      background: rgba(232, 176, 3, 0.10);
-      border: 1px solid rgba(232, 176, 3, 0.34);
-      font-size: 0.92rem; color: #F0F4F2;
+      background: color-mix(in srgb, var(--ac, var(--navy)) 9%, #fff);
+      border: 1px solid color-mix(in srgb, var(--ac, var(--navy)) 30%, #fff);
+      font-size: 0.92rem; color: var(--charcoal);
     }
-    .diag-deficit b { color: #fff; }
+    .diag-deficit b { color: var(--navy); }
     .diag-deficit i {
       flex-shrink: 0; width: 11px; height: 11px; margin-top: 0.32rem;
       border: 2px dashed var(--ac, var(--navy)); border-radius: 50%;
@@ -942,6 +965,12 @@ function renderIntro() {
         <div class="eyebrow">A Preliminary Diagnostic</div>
         <h1>Where is AI transformation stalling in your organization.</h1>
         <p class="hero-sub" style="margin-bottom: 2rem;">Twelve questions, four minutes, one named diagnosis: the archetype of your organization's current AI transformation state, and three organizational moves to begin addressing it.</p>
+        <div class="diag-meta-strip">
+          <span><b>12</b> questions</span>
+          <span><b>4</b> minutes</span>
+          <span><b>1</b> named archetype</span>
+          <span><b>3</b> organizational moves</span>
+        </div>
         <div class="btn-row" style="margin-top: 0;">
           <button class="btn btn-primary" id="diag-begin" data-gc="cta-sail-diagnostic">Begin the diagnostic</button>
         </div>
@@ -951,22 +980,22 @@ function renderIntro() {
     <section class="alt">
       <div class="wrap narrow">
         <div class="eyebrow" style="color: var(--terracotta); margin-bottom: 1.5rem;">AI Transformation Stall Archetypes</div>
-        <div class="diag-archetypes-box">
-          <div class="diag-archetype-row">
-            <span class="diag-archetype-icon" style="color: var(--logo-red);">🔗</span>
-            <span><strong>The Seam Organization</strong> — AI sits in one function that invariably lacks the necessary perspective the others bring.</span>
+        <div class="diag-arch-grid">
+          <div class="diag-arch-card" style="--ac: var(--logo-red);">
+            <span class="tdc-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><circle cx="17.5" cy="9.5" r="2.4"/><path d="M15.4 18.6c.5-2.2 2-3.4 4.1-3.4"/></svg></span>
+            <div><b>The Seam Organization</b><span>AI sits in one function that invariably lacks the necessary perspective the others bring.</span></div>
           </div>
-          <div class="diag-archetype-row">
-            <span class="diag-archetype-icon" style="color: var(--logo-gold);">🚪</span>
-            <span><strong>The Unmarked Passage</strong> — The new identity hasn't been framed. The entire workforce at every level is performing a transition it hasn't yet entered.</span>
+          <div class="diag-arch-card" style="--ac: var(--logo-gold);">
+            <span class="tdc-icon"><svg viewBox="0 0 24 24"><path d="M6 21V4"/><path d="M6 4h11l-2.5 3.5L17 11H6"/></svg></span>
+            <div><b>The Unmarked Passage</b><span>The new identity hasn't been framed. The entire workforce at every level is performing a transition it hasn't yet entered.</span></div>
           </div>
-          <div class="diag-archetype-row">
-            <span class="diag-archetype-icon" style="color: var(--logo-blue);">⚙️</span>
-            <span><strong>The Operating Model Lag</strong> — The tools arrived. The work didn't change.</span>
+          <div class="diag-arch-card" style="--ac: var(--logo-blue);">
+            <span class="tdc-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="13" width="7" height="7" rx="1.5"/><path d="M10 7.5h5.5v5.5"/><path d="M14 16.5H8.5V11"/></svg></span>
+            <div><b>The Operating Model Lag</b><span>The tools arrived. The work didn't change.</span></div>
           </div>
-          <div class="diag-archetype-row">
-            <span class="diag-archetype-icon" style="color: var(--navy);">📡</span>
-            <span><strong>The Sensing Challenge</strong> — The board is asking questions the team can't answer yet.</span>
+          <div class="diag-arch-card" style="--ac: var(--navy);">
+            <span class="tdc-icon"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M7.5 12a4.5 4.5 0 0 1 9 0"/><circle cx="12" cy="12" r="1.4"/><path d="M12 12l6 6"/></svg></span>
+            <div><b>The Sensing Challenge</b><span>The board is asking questions the team can't answer yet.</span></div>
           </div>
         </div>
         <p style="font-size: 0.85rem; color: var(--midgray); font-style: italic; margin-top: 1.5rem; margin-bottom: 0;">TDcatalyst</p>
@@ -1236,22 +1265,22 @@ function radarSvg(key) {
   [0.33, 0.66, 1].forEach((ring) => {
     const pts = [];
     for (let i = 0; i < N; i++) { const q = pt(i, ring); pts.push(q[0].toFixed(1) + ',' + q[1].toFixed(1)); }
-    out += `<polygon points="${pts.join(' ')}" fill="none" stroke="rgba(255,255,255,0.16)"/>`;
+    out += `<polygon points="${pts.join(' ')}" fill="none" stroke="#E6E3D7"/>`;
   });
   for (let i = 0; i < N; i++) {
     const q = pt(i, 1);
-    out += `<line x1="${CX}" y1="${CY}" x2="${q[0].toFixed(1)}" y2="${q[1].toFixed(1)}" stroke="rgba(255,255,255,0.10)"/>`;
+    out += `<line x1="${CX}" y1="${CY}" x2="${q[0].toFixed(1)}" y2="${q[1].toFixed(1)}" stroke="#EFEDE2"/>`;
   }
   const shape = [];
   for (let i = 0; i < N; i++) { const q = pt(i, P.v[i]); shape.push(q[0].toFixed(1) + ',' + q[1].toFixed(1)); }
-  out += `<polygon points="${shape.join(' ')}" fill="#E8B003" fill-opacity="0.22" stroke="#E8B003" stroke-width="2"/>`;
+  out += `<polygon points="${shape.join(' ')}" fill="${P.color}" fill-opacity="0.2" stroke="${P.color}" stroke-width="2"/>`;
   const d = pt(P.crater, Math.max(P.v[P.crater], 0.13));
-  out += `<circle cx="${d[0].toFixed(1)}" cy="${d[1].toFixed(1)}" r="7" fill="none" stroke="#FF8A7E" stroke-width="2" stroke-dasharray="3 3"/>`;
+  out += `<circle cx="${d[0].toFixed(1)}" cy="${d[1].toFixed(1)}" r="7" fill="none" stroke="${P.color}" stroke-width="2" stroke-dasharray="3 3"/>`;
   RADAR_AXES.forEach((label, i) => {
     const l = pt(i, 1.26);
     const anchor = Math.abs(l[0] - CX) < 14 ? 'middle' : (l[0] > CX ? 'start' : 'end');
     const isDef = i === P.crater;
-    out += `<text x="${l[0].toFixed(1)}" y="${(l[1] + 4).toFixed(1)}" text-anchor="${anchor}" font-family="Inter, sans-serif" font-size="11" font-weight="${isDef ? 700 : 500}" fill="${isDef ? '#E8B003' : 'rgba(232,237,234,0.75)'}">${label}</text>`;
+    out += `<text x="${l[0].toFixed(1)}" y="${(l[1] + 4).toFixed(1)}" text-anchor="${anchor}" font-family="Inter, sans-serif" font-size="11" font-weight="${isDef ? 700 : 500}" fill="${isDef ? P.color : '#6B6B6B'}">${label}</text>`;
   });
   return `<svg viewBox="0 0 350 330" role="img" aria-label="Characteristic profile for ${esc(ARCHETYPES[key].name)}, weakest on ${P.deficit}">${out}</svg>`;
 }

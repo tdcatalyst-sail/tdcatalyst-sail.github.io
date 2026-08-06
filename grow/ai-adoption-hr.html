@@ -723,7 +723,7 @@
     padding: 1.5rem 1.5rem 1.4rem;
   }
   .lp .case-flag { border-color: rgba(232, 176, 3, 0.65); box-shadow: 0 10px 30px rgba(27, 26, 22, 0.07); }
-  .lp .case-top { display: flex; align-items: center; gap: 0.6rem; }
+  .lp .case-top { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.7rem; }
   .lp .case-tag { font-size: 0.66rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lp-accent-ink); }
   .lp .case-pill {
     font-size: 0.62rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
@@ -896,7 +896,7 @@
     background: rgba(232, 176, 3, 0.13); border: 1px solid rgba(232, 176, 3, 0.35); color: var(--lp-accent-ink);
   }
   .lp .case-ic svg { width: 22px; height: 22px; }
-  .lp .case h3.case-title { font-size: clamp(1.35rem, 2.2vw, 1.62rem); font-weight: 700; letter-spacing: -0.022em; margin-top: 0.75rem; color: var(--lp-ink); }
+  .lp .case h3.case-title { font-size: clamp(1.35rem, 2.2vw, 1.62rem); font-weight: 700; letter-spacing: -0.022em; margin-top: 0; color: var(--lp-ink); }
   .lp .case p.case-tagline { font-size: 1.02rem; font-weight: 600; color: var(--lp-accent-ink); margin-top: 0.3rem; }
   .lp .case-top { min-height: 40px; }
   .lp .case-facts { margin: 0.7rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.4rem; }
@@ -1100,6 +1100,19 @@
   .lp .cvf.s2 { border-color: rgba(16, 35, 63, 0.4); }
   .lp .cvf.s3 { border-color: rgba(14, 117, 105, 0.5); }
   .lp .cvf.s4 { border-color: rgba(78, 91, 166, 0.5); }
+  .lp .cv-chain { display: grid; gap: 0.4rem; }
+  .lp .cvc {
+    display: grid; grid-template-columns: 20px 1fr; gap: 0.5rem 0.6rem; align-items: baseline;
+    font-size: 0.8rem; font-weight: 650; color: var(--lp-ink);
+    padding-bottom: 0.4rem; border-bottom: 1px dashed var(--lp-line);
+  }
+  .lp .cvc:last-child { border-bottom: none; padding-bottom: 0; }
+  .lp .cvc em {
+    font-style: normal; font-size: 0.62rem; font-weight: 750; color: #FFFFFF;
+    background: var(--lp-accent-ink); border-radius: 50%;
+    width: 17px; height: 17px; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .lp .cvc i { grid-column: 2; font-style: normal; font-size: 0.74rem; font-weight: 500; color: var(--lp-faint); }
   .lp .cv-hero { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.55rem; }
   .lp .cv-hero b { font-size: 1.7rem; font-weight: 750; color: var(--lp-ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
   .lp .cv-hero span { font-size: 0.76rem; color: var(--lp-body); line-height: 1.4; }
@@ -1476,31 +1489,31 @@
     <div class="case-grid">
 
       <article class="case" role="button" tabindex="0" data-sit="platform" aria-pressed="false">
+        <h3 class="case-title">Stalled platform</h3>
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 12l3-3 2.5 2L16 7"/></svg></span>
           <span class="case-pill">20+ programs delivered</span>
         </div>
-        <h3 class="case-title">Stalled platform</h3>
         <p class="case-tagline">The platform launched. Usage plateaued.</p>
-        <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>Licensed, launched, and stuck at 15&ndash;30% adoption, most of it performative. People run the tool beside the old way, usage decays each quarter, and renewal approaches with log-ins as the only evidence.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Re-sequence the rollout around the workflows the platform was bought for: redesign three to five of them end to end, build the capability, and hold it in the team cadence, measured on feature depth per workflow.</p></div></div>
+        <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>A department-level AI platform (talent, service, finance, operations): licensed, launched, and stuck at 15&ndash;30% adoption, most of it performative. People run the tool beside the old way, usage decays each quarter, and renewal approaches with log-ins as the only evidence.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Re-sequence the rollout around the workflows the platform was bought for: redesign three to five of them end to end, build the capability, and hold it in the team cadence, measured on feature depth per workflow.</p></div></div>
         <div class="case-viz" aria-hidden="true">
-          <div class="cv-flow">
-            <span class="cvf-old">the task, as run today</span>
-            <span class="cvf-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
-            <span class="cvf s1">augmented steps</span><span class="cvf s2">new steps</span><span class="cvf s3">capability</span><span class="cvf s4">held in cadence</span>
+          <div class="cv-chain">
+            <span class="cvc"><em>1</em>Outcomes<i>what the platform was bought to move</i></span>
+            <span class="cvc"><em>2</em>Tasks<i>the work each outcome actually runs on</i></span>
+            <span class="cvc"><em>3</em>Augmented &amp; new steps<i>what AI changes, what it adds</i></span>
+            <span class="cvc"><em>4</em>Capability<i>built role by role, held in cadence</i></span>
           </div>
-          <div class="cv-cap">the redesign every stalled workflow gets: the old path retired, the new one owned</div>
+          <div class="cv-cap">Traced across your full adoption matrix, segment by segment</div>
         </div>
-        <div class="case-chips" aria-label="Delivered into your existing stack"><span>Microsoft 365</span><span>Google Workspace</span><span>Salesforce</span><span>Slack</span></div>
         <span class="case-cta">This is us &rarr;</span>
       </article>
 
       <article class="case case-flag" role="button" tabindex="0" data-sit="seats" aria-pressed="false">
+        <h3 class="case-title">Frontier-lab seats</h3>
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.6L18 9.4l-4.2 1.8L12 16l-1.8-4.8L6 9.4l4.2-1.8L12 3z"/><path d="M19 14l.9 2.3L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.7L19 14z"/></svg></span>
           <span class="case-flagpill">Flagship</span>
         </div>
-        <h3 class="case-title">Frontier-lab seats</h3>
         <p class="case-tagline">Everyone got a seat. Every role changes.</p>
         <div class="cv-vendors" aria-label="Anthropic Claude, OpenAI ChatGPT, Microsoft Copilot, Google Gemini">
           <span class="cvv"><svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#D97757" stroke-width="2.1" stroke-linecap="round" fill="none"><path d="M12 3.2v4M12 16.8v4M3.2 12h4M16.8 12h4M5.8 5.8l2.8 2.8M15.4 15.4l2.8 2.8M18.2 5.8l-2.8 2.8M8.6 15.4l-2.8 2.8"/></g></svg>Claude</span>
@@ -1527,11 +1540,11 @@
       </article>
 
       <article class="case" role="button" tabindex="0" data-sit="pilots" aria-pressed="false">
+        <h3 class="case-title">The forty pilots</h3>
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 18l9 5 9-5" opacity="0.45"/></svg></span>
           <span class="case-pill">Emerging challenge</span>
         </div>
-        <h3 class="case-title">The forty pilots</h3>
         <p class="case-tagline">Forty pilots. Every platform now sells agents.</p>
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>The agentic push left a pilot landscape nobody governs, while every platform in the stack asks for credits to test its new agents. Enthusiasm in pockets, no institutionalization, spend rising.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>A governed portfolio: every pilot and vendor ask scored on five criteria and decided in writing (scale, institutionalize, or stop), with a standing cadence that keeps pace with what vendors ship next.</p></div></div>
         <div class="case-viz cv-score">
@@ -1547,11 +1560,11 @@
       </article>
 
       <article class="case" role="button" tabindex="0" data-sit="zero" aria-pressed="false">
+        <h3 class="case-title">Starting 0 &rarr; 1</h3>
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16"/><path d="M12 16a5 5 0 0 0 5-5H7a5 5 0 0 0 5 5z"/><path d="M12 3v3M6.3 5.6l1.8 1.8M17.7 5.6l-1.8 1.8"/></svg></span>
           <span class="case-pill">Your one chance to start right</span>
         </div>
-        <h3 class="case-title">Starting 0 &rarr; 1</h3>
         <p class="case-tagline">A handful use AI. Some are hiding it.</p>
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>Leadership has barely touched the tools, no platform is chosen, no use policy exists, and the only reportable number is log-ins. A third of employees quietly read AI as replacement.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Vision and culture first: leadership writes the charter and goes first, managers coach the new work and repurpose the freed time visibly, and monthly builder events make augmentation something people can see.</p></div></div>
         <div class="case-viz" aria-hidden="true">
