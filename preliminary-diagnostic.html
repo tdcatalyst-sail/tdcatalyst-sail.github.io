@@ -20,7 +20,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=7a78e690">
+  <link rel="stylesheet" href="/style.css?v=570b6948">
   <style>
     /* ============================================================
        Diagnostic page — page-specific styles only.
@@ -560,25 +560,14 @@
        only tracking tightens to match. Appended last: these override the
        page's earlier cool-ground rules by order, not by specificity.
        ------------------------------------------------------------------ */
-    body { background: #FCFBF7; font-size: 16.5px; line-height: 1.62; letter-spacing: -0.003em; }
-    section.alt { background: #F4F2E9; }
+    /* Ground, rhythm and heading tracking now come from body.reg in style.css. */
     #diag-app section { padding: clamp(3.2rem, 6vw, 5rem) 0; }
-    #diag-app h1 { letter-spacing: -0.028em; }
-    #diag-app h2 { letter-spacing: -0.022em; }
-    #diag-app h3, #diag-app h4 { letter-spacing: -0.016em; }
     .diag-card, .diag-arch-card, .diag-intervention, .diag-radar-wrap, .diag-move,
-    .diag-opt, .sources-collapsible { border-color: #E6E3D7; }
+    .diag-opt, .sources-collapsible { border-color: var(--reg-line); }
     .diag-card, .diag-radar-wrap { border-radius: 18px; }
     .diag-arch-card, .diag-intervention, .diag-move, .diag-opt { border-radius: 12px; }
 
     /* Section head: gold rule + kicker, exactly the campaign's. */
-    .diag-kicker {
-      display: inline-flex; align-items: center; gap: 0.6rem;
-      font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
-      letter-spacing: 0.16em; text-transform: uppercase; color: var(--terracotta);
-      margin-bottom: 0.9rem;
-    }
-    .diag-kicker::before { content: ""; width: 1.8rem; height: 2px; background: var(--logo-gold); }
 
     /* ---- Hero: copy-led ---- */
     .diag-hero-copy { max-width: 62ch; }
@@ -602,7 +591,7 @@
     @media (max-width: 780px) { .diag-chain { grid-template-columns: 1fr; } }
     .diag-chain-step {
       position: relative; min-width: 0;
-      background: #fff; border: 1px solid #E6E3D7; border-radius: 12px;
+      background: #fff; border: 1px solid var(--reg-line); border-radius: 12px;
       padding: 1.1rem 1.2rem; box-shadow: var(--elev-1);
     }
     .diag-chain-step em {
@@ -641,7 +630,7 @@
     .ap-tab {
       display: flex; align-items: center; gap: 0.7rem; width: 100%; min-width: 0;
       text-align: left; cursor: pointer; font-family: inherit;
-      background: #fff; border: 1px solid #E6E3D7; border-left: 3px solid transparent;
+      background: #fff; border: 1px solid var(--reg-line); border-left: 3px solid transparent;
       border-radius: 12px; padding: 0.85rem 0.95rem;
       transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
     }
@@ -670,7 +659,7 @@
       grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
       grid-template-areas: "head viz" "qs viz";
       gap: 1.2rem 1.6rem;
-      background: #fff; border: 1px solid #E6E3D7; border-radius: 18px;
+      background: #fff; border: 1px solid var(--reg-line); border-radius: 18px;
       box-shadow: var(--elev-2); padding: 1.6rem 1.7rem;
     }
     .ap-head { grid-area: head; min-width: 0; }
@@ -710,7 +699,7 @@
     .ap-qs { display: grid; gap: 0.6rem; }
     .ap-q {
       display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.75rem; align-items: start;
-      background: #FCFBF7; border: 1px solid #E6E3D7; border-radius: 10px;
+      background: #FCFBF7; border: 1px solid var(--reg-line); border-radius: 10px;
       padding: 0.8rem 0.9rem;
     }
     .ap-q-n {
@@ -837,7 +826,7 @@
 }
   </script>
 </head>
-<body>
+<body class="reg">
 <a href="#main-content" class="skip-link">Skip to content</a>
 <nav>
   <div class="nav-inner" id="nav">
@@ -910,6 +899,7 @@
     <div>
       <h4>Engage</h4>
       <a href="/begin">Begin</a>
+      <a href="/preliminary-diagnostic">Diagnostic<span class="tool-tag" aria-hidden="true">&#8599;</span></a>
       <a href="/sail/field-notes">Field Notes</a>
       <a href="/about">About</a>
     </div>
@@ -980,7 +970,7 @@ const QUESTIONS = [
     { t: "Tools are deployed. Sustained usage hasn't followed.", d: "Workforce access grew 50% in one year — yet fewer than 60% of workers with access use AI in their daily workflow, unchanged from the prior year. Deloitte, 3,235 leaders, 2026", s: { Seam: 2 } },
     { t: "Pilots are live. Production deployment is not.", d: "Only 25% of organizations have moved 40% or more of their AI experiments into production. Deloitte 2026", s: { Seam: 2, OM: 1 } },
     { t: "Usage exists. But the actual work and operating rhythm haven't changed.", d: "84% of organizations have not redesigned a single job around AI capabilities — the tools arrived, the work didn't change. Deloitte 2026", s: { OM: 3 } },
-    { t: "The board is asking questions the organization can't yet answer.", d: "97% of executives report benefiting from AI. Only 29% see significant organizational ROI. MIT GenAI Divide, 2025", s: { Sensing: 3 } },
+    { t: "Leadership is asking questions the organization can't yet answer.", d: "97% of executives report benefiting from AI. Only 29% see significant organizational ROI. MIT GenAI Divide, 2025", s: { Sensing: 3 } },
     { t: "A single enterprise tool was mandated — but it doesn't map to how most people actually work.", d: "Single-vendor rollouts (Microsoft Copilot, Google Workspace AI) frequently produce tool-fit resistance distinct from general adoption lag. Access exists. The workflow case doesn't.", s: { Seam: 2, OM: 1, Sensing: 1 } }
   ]},
   { q: "Which tier most accurately describes how your organization is currently using AI? (Select your primary position, or all that apply if you span multiple tiers)", opts: [
@@ -1097,14 +1087,14 @@ const ARCHETYPES = {
   },
   Sensing: {
     name: "The Sensing Challenge",
-    subtitle: "The board is asking questions the team can't answer yet.",
+    subtitle: "Leadership is asking questions the team can't answer yet.",
     body: [
-      "The harder problem is organizational sensing. Your environment is changing faster than your internal radar is calibrated to read it. Weak signals are arriving: competitor moves, workforce behavior shifts, board-level questions that don't yet have clean answers inside the organization. The sensing infrastructure (who reads the environment, what gets escalated, what gets acted on) was built for a slower tempo and a different kind of change.",
+      "The harder problem is organizational sensing. Your environment is changing faster than your internal radar is calibrated to read it. Weak signals are arriving: competitor moves, workforce behavior shifts, leadership questions that don't yet have clean answers inside the organization. The sensing infrastructure (who reads the environment, what gets escalated, what gets acted on) was built for a slower tempo and a different kind of change.",
       "What the organization needs now is a better loop: detection, activation, response, organizational learning. Without the loop, a strategy becomes a defended artifact, accurate at the moment of writing and increasingly wrong as the environment continues to move. Sensing, seizing, and transforming are simultaneous capabilities. If sensing is weak, the other two degrade."
     ],
     moves: [
       "Design the sensing infrastructure explicitly. Who reads what signals, at what cadence, with what authority to escalate and commit to action? Make the loop visible before trying to improve it.",
-      "Map the gap between what the board is asking and what the organization can currently answer. That gap is the diagnostic agenda, and it is structural.",
+      "Map the gap between what leadership is being asked and what the organization can currently answer. That gap is the diagnostic agenda, and it is structural.",
       "The 90-day work is building the detection–activation–response loop and institutionalizing it, ahead of another pass on a strategy plan the current sensing capacity cannot keep updated."
     ],
     signal: "Your challenge is sensing infrastructure."
@@ -1153,7 +1143,7 @@ function renderIntro() {
     <section class="hero hero-with-logo">
       <div class="wrap diag-fade">
         <div class="diag-hero-copy">
-          <div class="diag-kicker">A preliminary diagnostic</div>
+          <div class="reg-kicker">A preliminary diagnostic</div>
           <h1>Where is AI transformation stalling in your organization.</h1>
           <p class="hero-sub">Twelve questions, four minutes, one named diagnosis: the archetype your organization&rsquo;s stall actually takes, and three organizational moves to begin addressing it.</p>
           <div class="diag-meta-strip">
@@ -1171,7 +1161,7 @@ function renderIntro() {
 
     <section class="alt">
       <div class="wrap">
-        <div class="diag-kicker">How the four minutes are spent</div>
+        <div class="reg-kicker">How the four minutes are spent</div>
         <div class="diag-chain">
           <div class="diag-chain-step"><em>1</em><b>Answer twelve questions</b><i>Each one carries the research finding it rests on, cited in place.</i></div>
           <div class="diag-chain-step"><em>2</em><b>Get a named archetype</b><i>Your profile across six criteria, and the one axis it gives way on.</i></div>
@@ -1182,7 +1172,7 @@ function renderIntro() {
 
     <section>
       <div class="wrap">
-        <div class="diag-kicker">The four stall archetypes</div>
+        <div class="reg-kicker">The four stall archetypes</div>
         <div class="diag-arch-sel">
           <div class="ap-tabs" role="group" aria-label="Choose a stall archetype">
             <button type="button" class="ap-tab" data-arch="Seam" style="--ac: ${RADAR_PROFILE.Seam.color};" aria-pressed="true" aria-controls="archPanel">
@@ -1446,7 +1436,7 @@ const RADAR_PROFILE = {
   OM:      { v: [0.50, 0.55, 0.12, 0.55, 0.45, 0.30], crater: 2, color: '#0E7569', deficit: 'Op-model redesign',
              read: 'Tools deployed on schedule while workflows never moved, and nothing was institutionalized.' },
   Sensing: { v: [0.12, 0.25, 0.45, 0.50, 0.45, 0.45], crater: 0, color: '#2C4B76', deficit: 'Sensing',
-             read: 'The board asks market-shaped questions; nothing inside is built to detect or answer them.' }
+             read: 'Leadership is asked market-shaped questions; nothing inside is built to detect or answer them.' }
 };
 
 function radarSvg(key) {
@@ -1461,7 +1451,7 @@ function radarSvg(key) {
   [0.33, 0.66, 1].forEach((ring) => {
     const pts = [];
     for (let i = 0; i < N; i++) { const q = pt(i, ring); pts.push(q[0].toFixed(1) + ',' + q[1].toFixed(1)); }
-    out += `<polygon points="${pts.join(' ')}" fill="none" stroke="#E6E3D7"/>`;
+    out += `<polygon points="${pts.join(' ')}" fill="none" stroke="var(--reg-line)"/>`;
   });
   for (let i = 0; i < N; i++) {
     const q = pt(i, 1);
@@ -1513,7 +1503,7 @@ function radarTile(key) {
   [0.33, 0.66, 1].forEach((ring) => {
     const pts = [];
     for (let i = 0; i < N; i++) { const q = pt(i, ring); pts.push(q[0].toFixed(1) + ',' + q[1].toFixed(1)); }
-    out += `<polygon points="${pts.join(' ')}" fill="none" stroke="#E6E3D7" stroke-width="1"/>`;
+    out += `<polygon points="${pts.join(' ')}" fill="none" stroke="var(--reg-line)" stroke-width="1"/>`;
   });
   for (let i = 0; i < N; i++) {
     const q = pt(i, 1);

@@ -61,6 +61,16 @@
   --dur-fast: 0.16s;
   --dur: 0.28s;
 
+  /* ---- Campaign register (added 2026-08) --------------------------------
+     The /grow/ai-adoption-* pages settled a surface that converts: warm ivory
+     paper, a warm hairline, larger radii, and a slightly tighter type rhythm.
+     Pages opt in with body class="reg" as they are converted. */
+  --reg-bg: #FCFBF7;
+  --reg-bg-alt: #F4F2E9;
+  --reg-line: #E6E3D7;
+  --reg-radius: 12px;
+  --reg-radius-lg: 18px;
+
   /* Practice accent, set per body.brand-* below. Neutral navy on the hub. */
   --brand: var(--navy);
   --brand-ink: var(--navy-deep);
@@ -2770,3 +2780,69 @@ input[type="checkbox"].doc-check:focus-visible { outline: 2px solid var(--logo-b
 .tdc-icon svg { width: 22px; height: 22px; fill: none; stroke: var(--brand); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .tdc-panel .tdc-icon { background: rgba(232, 176, 3, 0.14); border-color: rgba(232, 176, 3, 0.4); }
 .tdc-panel .tdc-icon svg { stroke: var(--logo-gold); }
+
+/* ============================================================
+   CAMPAIGN REGISTER  (body.reg)
+   Opt-in surface shared with the campaign pages, so the funnel reads as one
+   system: warm ivory ground, warm hairline, 12/18px radii, 16.5px body on
+   1.62, and a gold-ruled kicker on section heads. Typography stays the site's
+   Besley/Fraunces; only tracking tightens to match.
+   ============================================================ */
+body.reg { background: var(--reg-bg); font-size: 16.5px; line-height: 1.62; letter-spacing: -0.003em; }
+body.reg section.alt { background: var(--reg-bg-alt); }
+body.reg h1 { letter-spacing: -0.028em; }
+body.reg h2 { letter-spacing: -0.022em; }
+body.reg h3, body.reg h4 { letter-spacing: -0.016em; }
+
+/* Shared surfaces take the campaign's shape and warmth. */
+body.reg .card,
+body.reg .outcome-item,
+body.reg .tdc-panel { border-radius: var(--reg-radius-lg); border-color: var(--reg-line); }
+body.reg .tdc-do,
+body.reg .tdc-dont { border-radius: var(--reg-radius); }
+
+/* Section head: gold rule then kicker, exactly the campaign's. */
+.reg-kicker {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--terracotta);
+  margin-bottom: 0.9rem;
+}
+.reg-kicker::before { content: ""; width: 1.8rem; height: 2px; background: var(--logo-gold); }
+.tdc-panel .reg-kicker { color: var(--logo-gold); }
+
+/* ============================================================
+   FREE INSTRUMENTS BAND
+   The diagnostic and the simulator are site-level tools and the top of the
+   funnel, so the hub names them rather than burying them in a practice.
+   ============================================================ */
+.inst-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+@media (max-width: 820px) { .inst-grid { grid-template-columns: 1fr; } }
+.inst-card {
+  display: block; min-width: 0; text-decoration: none;
+  background: #fff; border: 1px solid var(--reg-line); border-radius: var(--reg-radius);
+  border-top: 3px solid var(--ic, var(--navy));
+  padding: 1.5rem 1.6rem; box-shadow: var(--elev-1);
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.inst-card:hover { box-shadow: var(--elev-2); transform: translateY(-3px); }
+.inst-head { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.7rem; }
+.inst-card .tdc-icon {
+  background: color-mix(in srgb, var(--ic) 12%, #fff);
+  border-color: color-mix(in srgb, var(--ic) 32%, #fff);
+}
+.inst-card .tdc-icon svg { stroke: var(--ic); }
+.inst-card h3 {
+  font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.12rem;
+  color: var(--navy); line-height: 1.25; margin: 0;
+}
+.inst-meta {
+  display: flex; flex-wrap: wrap; gap: 0.35rem 0.7rem; margin-bottom: 0.7rem;
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--ic);
+}
+.inst-card p { font-size: 0.92rem; color: var(--midgray); line-height: 1.6; margin: 0 0 1rem; }
+.inst-go { font-size: 0.9rem; font-weight: 600; color: var(--ic); }
+.inst-go .arr { transition: transform var(--dur) var(--ease); display: inline-block; }
+.inst-card:hover .inst-go .arr { transform: translateX(4px); }
+
