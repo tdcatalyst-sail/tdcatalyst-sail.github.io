@@ -61,13 +61,19 @@
   --dur-fast: 0.16s;
   --dur: 0.28s;
 
-  /* ---- Campaign register (added 2026-08) --------------------------------
-     The /grow/ai-adoption-* pages settled a surface that converts: warm ivory
-     paper, a warm hairline, larger radii, and a slightly tighter type rhythm.
-     Pages opt in with body class="reg" as they are converted. */
-  --reg-bg: #FCFBF7;
-  --reg-bg-alt: #F4F2E9;
-  --reg-line: #E6E3D7;
+  /* ---- Register (added 2026-08) -----------------------------------------
+     The /grow/ai-adoption-* pages settled a surface that converts: paper
+     ground, a matching hairline, larger radii and a tighter type rhythm.
+     Pages opt in with body class="reg".
+
+     The SHAPE is shared so the site reads as one system. The COLOUR is not:
+     ground, alt band, hairline and kicker are set per practice below, because
+     the practices have to stay told apart. Defaults here are the neutral hub
+     values. */
+  --reg-bg: #FAFAF9;
+  --reg-bg-alt: #F0F0EC;
+  --reg-line: #E3E1D9;
+  --reg-rule: var(--logo-gold);
   --reg-radius: 12px;
   --reg-radius-lg: 18px;
 
@@ -1708,6 +1714,28 @@ body.brand-sail   { --brand: var(--logo-blue);  --brand-ink: #0A2F7A; }
 body.brand-grow   { --brand: var(--terracotta); --brand-ink: #6B4D02; }
 body.brand-advise { --brand: var(--logo-red);   --brand-ink: #9C1009; }
 
+/* Each practice's paper. Same shape everywhere, different temperature: Sail
+   reads coastal and cool, Grow keeps the campaign's warm ivory because gold is
+   Grow's colour, Advise sits warm-neutral against its red. */
+body.brand-sail {
+  --reg-bg: #F6F9FA; --reg-bg-alt: #E9F0F3; --reg-line: #D9E3E8;
+  --reg-rule: var(--logo-blue);
+}
+body.brand-grow {
+  --reg-bg: #FCFBF7; --reg-bg-alt: #F4F2E9; --reg-line: #E6E3D7;
+  --reg-rule: var(--logo-gold);
+}
+body.brand-advise {
+  --reg-bg: #FCF9F8; --reg-bg-alt: #F5EDEB; --reg-line: #E8DCD8;
+  --reg-rule: var(--logo-red);
+}
+/* The diagnostic is the free rung of the Grow campaign and Tom asked for it to
+   read like those pages, but it carries no practice wordmark. */
+body.reg--grow-paper {
+  --reg-bg: #FCFBF7; --reg-bg-alt: #F4F2E9; --reg-line: #E6E3D7;
+  --reg-rule: var(--logo-gold);
+}
+
 body.brand-sail .nav-logo .mark-practice { color: var(--logo-blue); }
 body.brand-grow .nav-logo .mark-practice { color: var(--terracotta); }
 body.brand-advise .nav-logo .mark-practice { color: var(--logo-red); }
@@ -2805,11 +2833,12 @@ body.reg .tdc-dont { border-radius: var(--reg-radius); }
 .reg-kicker {
   display: inline-flex; align-items: center; gap: 0.6rem;
   font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
-  letter-spacing: 0.16em; text-transform: uppercase; color: var(--terracotta);
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand-ink);
   margin-bottom: 0.9rem;
 }
-.reg-kicker::before { content: ""; width: 1.8rem; height: 2px; background: var(--logo-gold); }
+.reg-kicker::before { content: ""; width: 1.8rem; height: 2px; background: var(--reg-rule); }
 .tdc-panel .reg-kicker { color: var(--logo-gold); }
+.tdc-panel .reg-kicker::before { background: var(--logo-gold); }
 
 /* ============================================================
    FREE INSTRUMENTS BAND
