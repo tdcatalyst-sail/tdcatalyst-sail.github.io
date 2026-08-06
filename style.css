@@ -29,6 +29,41 @@
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
   /* North-east "opens a tool" arrow, drawn crisply as SVG (see .tool-tag) */
   --tool-tag-arrow: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='black'%20stroke-width='2.75'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cline%20x1='7'%20y1='17'%20x2='17'%20y2='7'/%3E%3Cpolyline%20points='7%207%2017%207%2017%2017'/%3E%3C/svg%3E");
+
+  /* ---- Scale tokens (added 2026-08) --------------------------------------
+     The palette above was the only token set; spacing, radius, elevation and
+     type were ad hoc, which is why 13 radii and 27 shadows had accumulated.
+     New work uses these; existing values are snapped to them progressively. */
+  --space-1: 0.4rem;
+  --space-2: 0.8rem;
+  --space-3: 1.4rem;
+  --space-4: 2.2rem;
+  --space-5: 3.4rem;
+  --space-6: 5rem;
+
+  --radius-sm: 3px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* Warm-tinted elevation: the navy ground reads cold under neutral shadow. */
+  --elev-1: 0 1px 2px rgba(22, 40, 63, 0.05);
+  --elev-2: 0 2px 6px rgba(22, 40, 63, 0.06), 0 18px 40px rgba(22, 40, 63, 0.10);
+  --elev-3: 0 4px 10px rgba(22, 40, 63, 0.07), 0 26px 56px rgba(22, 40, 63, 0.13);
+
+  --step-0: 0.95rem;
+  --step-1: 1.05rem;
+  --step-2: 1.25rem;
+  --step-3: 1.5rem;
+  --step-4: 1.9rem;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 0.16s;
+  --dur: 0.28s;
+
+  /* Practice accent, set per body.brand-* below. Neutral navy on the hub. */
+  --brand: var(--navy);
+  --brand-ink: var(--navy-deep);
 }
 
 .skip-link {
@@ -513,13 +548,28 @@ section:has(+ .hero) {
   font-size: 0.95rem;
   font-weight: 500;
   letter-spacing: 0.01em;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   border: none;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease);
 }
-.btn-primary { background: var(--navy); color: var(--offwhite); }
-.btn-primary:hover { background: var(--logo-gold); color: var(--navy-deep); border: none; }
+.btn:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 3px; }
+.btn:active { transform: translateY(1px); }
+.btn-primary {
+  background: var(--navy);
+  color: var(--offwhite);
+  box-shadow: 0 1px 2px rgba(22, 40, 63, 0.18), 0 6px 16px rgba(22, 40, 63, 0.14);
+}
+.btn-primary:hover {
+  background: var(--logo-gold);
+  color: var(--navy-deep);
+  border: none;
+  box-shadow: 0 2px 5px rgba(138, 99, 2, 0.2), 0 10px 24px rgba(232, 176, 3, 0.28);
+}
 .btn-ghost {
   background: transparent;
   color: var(--navy);
@@ -543,7 +593,16 @@ section:has(+ .hero) {
   background: #fff;
   border: 1px solid var(--hairline);
   padding: 1.8rem;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--elev-1);
+  transition: box-shadow var(--dur) var(--ease),
+              transform var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+}
+.card:hover {
+  box-shadow: var(--elev-2);
+  transform: translateY(-3px);
+  border-color: #C9C5B6;
 }
 .card h3 { color: var(--navy); margin-bottom: 0.5rem; }
 .card .num {
@@ -673,7 +732,18 @@ footer .land {
 /* ===== MISC ===== */
 hr.rule { border: none; border-top: 1px solid var(--hairline); margin: 2.5rem 0; }
 .meta-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
-.meta-tag { font-size: 0.78rem; background: var(--seamist); color: var(--navy); padding: 0.3rem 0.7rem; border-radius: 2px; letter-spacing: 0.02em; }
+.meta-tag {
+  font-size: 0.8rem;
+  background: var(--seamist);
+  color: var(--navy);
+  padding: 0.32rem 0.75rem;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+  transition: background var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease);
+}
+.meta-tag:hover { background: #fff; border-color: var(--brand); }
 
 /* ===== DELIVERED-FOR TAG GROUPS (about pages) ===== */
 .tag-groups { margin-top: 0.2rem; }
@@ -878,7 +948,16 @@ hr.sign-rule {
   background: #fff;
   border: 1px solid var(--hairline);
   padding: 2rem;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--elev-1);
+  transition: box-shadow var(--dur) var(--ease),
+              transform var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+}
+.outcome-item:hover {
+  box-shadow: var(--elev-2);
+  transform: translateY(-3px);
+  border-color: #C9C5B6;
 }
 
 .outcome-num {
@@ -894,7 +973,7 @@ hr.sign-rule {
 .outcomes-grid .outcome-item:nth-child(4) .outcome-num { color: var(--logo-red); }
 
 .outcome-item h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
-.outcome-item p { color: var(--midgray); font-size: 0.93rem; margin: 0; }
+.outcome-item p { color: #5E6459; font-size: 0.96rem; margin: 0; }
 
 /* Visible price on Grow engagement cards */
 .engagement-price {
@@ -956,9 +1035,9 @@ hr.sign-rule {
 .brand-advise .outcomes-grid .outcome-item {
   position: relative;
   padding: 2.25rem 2rem 2rem;
-  border-radius: 5px;
-  box-shadow: 0 1px 2px rgba(31, 58, 95, 0.04), 0 14px 34px -18px rgba(31, 58, 95, 0.22);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--elev-1);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
 .brand-grow .outcomes-grid .outcome-item::before,
 .brand-advise .outcomes-grid .outcome-item::before {
@@ -966,7 +1045,7 @@ hr.sign-rule {
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  border-radius: 5px 5px 0 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
   background: var(--logo-blue);
 }
 .brand-grow .outcomes-grid .outcome-item:nth-child(1)::before,
@@ -979,7 +1058,7 @@ hr.sign-rule {
 .brand-grow .outcomes-grid .outcome-item:hover,
 .brand-advise .outcomes-grid .outcome-item:hover {
   transform: translateY(-4px);
-  box-shadow: 0 2px 4px rgba(31, 58, 95, 0.05), 0 22px 44px -20px rgba(31, 58, 95, 0.28);
+  box-shadow: var(--elev-2);
 }
 
 .brand-grow .outcomes-grid .engagement-price {
@@ -1613,6 +1692,12 @@ section.article-section { padding-top: 2rem; }
   font-size: 0.85em;
   margin-left: 0.15em;
 }
+/* Practice accent as a variable, so the colour stops being hand-repeated.
+   The nav wordmark keeps its own rule for backwards compatibility. */
+body.brand-sail   { --brand: var(--logo-blue);  --brand-ink: #0A2F7A; }
+body.brand-grow   { --brand: var(--terracotta); --brand-ink: #6B4D02; }
+body.brand-advise { --brand: var(--logo-red);   --brand-ink: #9C1009; }
+
 body.brand-sail .nav-logo .mark-practice { color: var(--logo-blue); }
 body.brand-grow .nav-logo .mark-practice { color: var(--terracotta); }
 body.brand-advise .nav-logo .mark-practice { color: var(--logo-red); }
@@ -2299,12 +2384,12 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
   border-radius: 3px;
   padding: 1.9rem 1.9rem 1.6rem;
   overflow: hidden;
-  box-shadow: 0 1px 2px rgba(22, 40, 63, 0.05);
-  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  box-shadow: var(--elev-1);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
 .prac-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 10px rgba(22, 40, 63, 0.07), 0 18px 40px rgba(22, 40, 63, 0.13);
+  box-shadow: var(--elev-3);
   border-bottom-color: var(--hairline); /* cards are <a>; keep the link underline off */
 }
 .prac-card.sail:hover { border-color: var(--logo-blue); }
@@ -2314,7 +2399,7 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
    card it links to — same presentation as the card's own hover */
 .prac-card--lit {
   transform: translateY(-5px);
-  box-shadow: 0 4px 10px rgba(22, 40, 63, 0.07), 0 18px 40px rgba(22, 40, 63, 0.13);
+  box-shadow: var(--elev-3);
 }
 .prac-card.sail.prac-card--lit { border-color: var(--logo-blue); }
 .prac-card.grow.prac-card--lit { border-color: var(--logo-gold); }
@@ -2383,6 +2468,8 @@ html.js .cards .reveal:nth-child(2) { transition-delay: 0.1s; }
 html.js .cards .reveal:nth-child(3) { transition-delay: 0.2s; }
 @media (prefers-reduced-motion: reduce) {
   html.js .reveal { opacity: 1; transform: none; transition: none; }
+  .card, .outcome-item, .btn { transition: none; }
+  .card:hover, .outcome-item:hover, .btn:active { transform: none; }
   .prac-card, .prac-rule, .prac-go .arr, .card-terrain { transition: none; }
 }
 
