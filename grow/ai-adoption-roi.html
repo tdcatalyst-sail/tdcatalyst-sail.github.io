@@ -2358,7 +2358,18 @@
     if (w <= wpeak) return b2 + (peak - b2) * (1 - Math.exp(-3 * w / wpeak));
     return floor + (atPeak - floor) * Math.exp(-rate * (w - wpeak));
   }
-  function seqF(w) { return 18 + 64 / (1 + Math.exp(-(w - 10.2) / 2.4)); }
+  /* The full-sequence curve is the simulator's own weekly output for all
+     thirteen plays in the canonical order (crosses 55% at week 11, 80% at
+     week 24), not an analytic fit: the week-7 dip is Workflow Redesign
+     disrupting before it pays, which a smooth logistic erased. Linear
+     interpolation between the weekly points keeps the animation fluid. */
+  var SEQV = [16.1, 16.7, 18.6, 20, 23.1, 27.8, 34.5, 28.3, 33.2, 41.8, 47.7, 55.4, 57.3, 61.8, 64.7, 66.9, 70.8, 72.2, 73, 73.7, 74.2, 77.2, 78.6, 79.5, 80];
+  function seqF(w) {
+    if (w <= 0) return SEQV[0];
+    if (w >= 24) return SEQV[24];
+    var i = Math.floor(w), t = w - i;
+    return SEQV[i] + (SEQV[i + 1] - SEQV[i]) * t;
+  }
   var SCEN = {
     full: { label: 'All thirteen', color: '#10233F', kind: 'good', f: seqF, cross: 11, end: 80,
       read: 'Every play lands in order: past the threshold at week 11, 80% by week 24, and all five transformation phases complete. The ceiling the sequence earns.' },
