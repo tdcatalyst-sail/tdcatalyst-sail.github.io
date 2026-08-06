@@ -3292,8 +3292,8 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
   position: absolute; left: 50%; transform: translateX(-50%);
   display: block; text-align: center; text-decoration: none; white-space: nowrap;
 }
-.founding .fx-tick.up a { bottom: 1.5rem; }
-.founding .fx-tick.down a { top: 1.5rem; }
+.founding .fx-tick.up a, .founding .fx-tick.up .fx-lab { bottom: 1.5rem; }
+.founding .fx-tick.down a, .founding .fx-tick.down .fx-lab { top: 1.5rem; }
 /* stem from dot to label */
 .founding .fx-tick::before {
   content: ""; position: absolute; left: 50%; width: 1px; height: 0.95rem;
