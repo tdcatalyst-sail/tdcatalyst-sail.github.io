@@ -550,6 +550,119 @@
       line-height: 1.6;
       color: var(--charcoal);
     }
+
+    /* ------------------------------------------------------------------
+       CAMPAIGN REGISTER  (added 2026-08)
+       The /grow/ai-adoption-* pages set the house surface: warm ivory paper,
+       a warm hairline, 12/18px radii, 16.5px body on 1.62, and a gold rule on
+       every section head. The diagnostic is the free rung of that same funnel,
+       so it runs on the identical surface. Typography stays the site's serif;
+       only tracking tightens to match. Appended last: these override the
+       page's earlier cool-ground rules by order, not by specificity.
+       ------------------------------------------------------------------ */
+    body { background: #FCFBF7; font-size: 16.5px; line-height: 1.62; letter-spacing: -0.003em; }
+    section.alt { background: #F4F2E9; }
+    #diag-app section { padding: clamp(3.2rem, 6vw, 5rem) 0; }
+    #diag-app h1 { letter-spacing: -0.028em; }
+    #diag-app h2 { letter-spacing: -0.022em; }
+    #diag-app h3, #diag-app h4 { letter-spacing: -0.016em; }
+    .diag-card, .diag-arch-card, .diag-intervention, .diag-radar-wrap, .diag-move,
+    .diag-opt, .sources-collapsible { border-color: #E6E3D7; }
+    .diag-card, .diag-radar-wrap { border-radius: 18px; }
+    .diag-arch-card, .diag-intervention, .diag-move, .diag-opt { border-radius: 12px; }
+
+    /* Section head: gold rule + kicker, exactly the campaign's. */
+    .diag-kicker {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--terracotta);
+      margin-bottom: 0.9rem;
+    }
+    .diag-kicker::before { content: ""; width: 1.8rem; height: 2px; background: var(--logo-gold); }
+
+    /* ---- Hero: copy left, the four stall shapes right ---- */
+    .diag-hero-2 {
+      display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: clamp(2rem, 5vw, 3.6rem); align-items: center;
+    }
+    @media (max-width: 900px) { .diag-hero-2 { grid-template-columns: 1fr; gap: 2.2rem; } }
+
+    /* Four silhouettes: the shape a stall makes. The dent is the deficit, so an
+       archetype is recognizable before it is read. */
+    .diag-shapes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
+    .diag-shape {
+      min-width: 0;
+      background: #fff; border: 1px solid #E6E3D7; border-radius: 12px;
+      padding: 0.8rem 0.85rem 0.7rem; box-shadow: var(--elev-1);
+      transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+    }
+    .diag-shape:hover { box-shadow: var(--elev-2); transform: translateY(-2px); }
+    .diag-shape svg { display: block; width: 100%; height: auto; }
+    .diag-shape b {
+      display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
+      font-size: 0.8rem; color: var(--navy); line-height: 1.25; margin-top: 0.4rem;
+    }
+    .diag-shape i {
+      display: block; font-style: normal; font-family: var(--mono);
+      font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase;
+      color: var(--ac); margin-top: 0.18rem;
+    }
+
+    /* ---- Stat strip: big numerals, the campaign's readout ---- */
+    .diag-meta-strip {
+      display: grid; grid-template-columns: repeat(4, auto); gap: clamp(1rem, 2.6vw, 2.2rem);
+      justify-content: start; align-items: end;
+      margin: 1.5rem 0 1.7rem; padding: 0; border: none; background: none;
+    }
+    .diag-meta-strip span { display: block; font-size: 0.76rem; color: var(--midgray); line-height: 1.3; }
+    .diag-meta-strip b {
+      display: block; font-family: 'Besley', Georgia, serif; font-size: 1.8rem;
+      font-weight: 600; color: var(--navy); line-height: 1; letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums; margin-bottom: 0.2rem;
+    }
+    @media (max-width: 560px) { .diag-meta-strip { grid-template-columns: repeat(2, auto); gap: 1.1rem 1.8rem; } }
+
+    /* ---- Numbered chain: what the four minutes actually do ---- */
+    .diag-chain { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem; }
+    @media (max-width: 780px) { .diag-chain { grid-template-columns: 1fr; } }
+    .diag-chain-step {
+      position: relative; min-width: 0;
+      background: #fff; border: 1px solid #E6E3D7; border-radius: 12px;
+      padding: 1.1rem 1.2rem; box-shadow: var(--elev-1);
+    }
+    .diag-chain-step em {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; border-radius: 50%; font-style: normal;
+      background: var(--logo-gold); color: #10233F;
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+      margin-bottom: 0.55rem;
+    }
+    .diag-chain-step b {
+      display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
+      font-size: 1.02rem; color: var(--navy); line-height: 1.3; margin-bottom: 0.25rem;
+    }
+    .diag-chain-step i { font-style: normal; font-size: 0.86rem; color: var(--midgray); line-height: 1.5; }
+    /* connector between steps, the campaign's proof-chain treatment */
+    .diag-chain-step:not(:last-child)::after {
+      content: ""; position: absolute; right: -0.55rem; top: 50%; z-index: 2;
+      width: 9px; height: 9px; margin-top: -4.5px; background: #F4F2E9;
+      border-right: 1.5px solid var(--logo-gold); border-top: 1.5px solid var(--logo-gold);
+      transform: rotate(45deg);
+    }
+    @media (max-width: 780px) { .diag-chain-step:not(:last-child)::after { display: none; } }
+
+    /* ---- Archetype cards carry their own silhouette and deficit chip ---- */
+    .diag-arch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 720px) { .diag-arch-grid { grid-template-columns: 1fr; } }
+    .diag-arch-card { grid-template-columns: 64px 1fr; align-items: start; }
+    .diag-arch-card .da-mini { width: 64px; }
+    .diag-arch-card .da-mini svg { display: block; width: 100%; height: auto; }
+    .diag-arch-chip {
+      display: inline-flex; align-items: center; margin-top: 0.5rem;
+      font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.09em;
+      text-transform: uppercase; color: var(--ac);
+      border: 1px solid var(--ac); border-radius: 999px; padding: 0.14rem 0.5rem;
+    }
   </style>
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
@@ -595,7 +708,7 @@
       "@type": "WebApplication",
       "@id": "https://tdcatalyst.com/sail/preliminary-diagnostic#app",
       "name": "AI Transformation Stall Diagnostic",
-      "description": "Twelve questions, four minutes, one named diagnosis: the archetype of your organization's current AI transformation state, and three organizational moves to begin addressing it.",
+      "description": "Twelve questions, four minutes, one named diagnosis: the archetype your organization's stall actually takes, and three organizational moves to begin addressing it.",
       "url": "https://tdcatalyst.com/sail/preliminary-diagnostic",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Any modern web browser",
@@ -956,72 +1069,94 @@ function setProgress() {
 function renderIntro() {
   app.innerHTML = `
     <section class="hero hero-with-logo">
-      <div class="wrap narrow diag-fade">
-        <div class="diag-hero-lines" aria-hidden="true">
-          <span class="l-red"></span>
-          <span class="l-gold"></span>
-          <span class="l-blue"></span>
-        </div>
-        <div class="eyebrow">A Preliminary Diagnostic</div>
-        <h1>Where is AI transformation stalling in your organization.</h1>
-        <p class="hero-sub" style="margin-bottom: 2rem;">Twelve questions, four minutes, one named diagnosis: the archetype of your organization's current AI transformation state, and three organizational moves to begin addressing it.</p>
-        <div class="diag-meta-strip">
-          <span><b>12</b> questions</span>
-          <span><b>4</b> minutes</span>
-          <span><b>1</b> named archetype</span>
-          <span><b>3</b> organizational moves</span>
-        </div>
-        <div class="btn-row" style="margin-top: 0;">
-          <button class="btn btn-primary" id="diag-begin" data-gc="cta-sail-diagnostic">Begin the diagnostic</button>
+      <div class="wrap diag-fade">
+        <div class="diag-hero-2">
+          <div>
+            <div class="diag-kicker">A preliminary diagnostic</div>
+            <h1>Where is AI transformation stalling in your organization.</h1>
+            <p class="hero-sub">Twelve questions, four minutes, one named diagnosis: the archetype your organization&rsquo;s stall actually takes, and three organizational moves to begin addressing it.</p>
+            <div class="diag-meta-strip">
+              <span><b>12</b>questions</span>
+              <span><b>4</b>minutes</span>
+              <span><b>1</b>named archetype</span>
+              <span><b>3</b>organizational moves</span>
+            </div>
+            <div class="btn-row" style="margin-top: 0;">
+              <button class="btn btn-primary" id="diag-begin" data-gc="cta-sail-diagnostic">Begin the diagnostic</button>
+            </div>
+          </div>
+          <div class="diag-shapes">
+            <div class="diag-shape" style="--ac: var(--logo-red)">${radarMini('Seam', 96)}<b>The Seam Organization</b><i>${RADAR_PROFILE.Seam.deficit}</i></div>
+            <div class="diag-shape" style="--ac: var(--logo-gold)">${radarMini('UP', 96)}<b>The Unmarked Passage</b><i>${RADAR_PROFILE.UP.deficit}</i></div>
+            <div class="diag-shape" style="--ac: var(--logo-blue)">${radarMini('OM', 96)}<b>The Operating Model Lag</b><i>${RADAR_PROFILE.OM.deficit}</i></div>
+            <div class="diag-shape" style="--ac: var(--navy)">${radarMini('Sensing', 96)}<b>The Sensing Challenge</b><i>${RADAR_PROFILE.Sensing.deficit}</i></div>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="alt">
-      <div class="wrap narrow">
-        <div class="eyebrow" style="color: var(--terracotta); margin-bottom: 1.5rem;">AI Transformation Stall Archetypes</div>
-        <div class="diag-arch-grid">
-          <div class="diag-arch-card" style="--ac: var(--logo-red);">
-            <span class="tdc-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><circle cx="17.5" cy="9.5" r="2.4"/><path d="M15.4 18.6c.5-2.2 2-3.4 4.1-3.4"/></svg></span>
-            <div><b>The Seam Organization</b><span>AI sits in one function that invariably lacks the necessary perspective the others bring.</span></div>
-          </div>
-          <div class="diag-arch-card" style="--ac: var(--logo-gold);">
-            <span class="tdc-icon"><svg viewBox="0 0 24 24"><path d="M6 21V4"/><path d="M6 4h11l-2.5 3.5L17 11H6"/></svg></span>
-            <div><b>The Unmarked Passage</b><span>The new identity hasn't been framed. The entire workforce at every level is performing a transition it hasn't yet entered.</span></div>
-          </div>
-          <div class="diag-arch-card" style="--ac: var(--logo-blue);">
-            <span class="tdc-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="13" width="7" height="7" rx="1.5"/><path d="M10 7.5h5.5v5.5"/><path d="M14 16.5H8.5V11"/></svg></span>
-            <div><b>The Operating Model Lag</b><span>The tools arrived. The work didn't change.</span></div>
-          </div>
-          <div class="diag-arch-card" style="--ac: var(--navy);">
-            <span class="tdc-icon"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M7.5 12a4.5 4.5 0 0 1 9 0"/><circle cx="12" cy="12" r="1.4"/><path d="M12 12l6 6"/></svg></span>
-            <div><b>The Sensing Challenge</b><span>The board is asking questions the team can't answer yet.</span></div>
-          </div>
+      <div class="wrap">
+        <div class="diag-kicker">How the four minutes are spent</div>
+        <div class="diag-chain">
+          <div class="diag-chain-step"><em>1</em><b>Answer twelve questions</b><i>Each one carries the research finding it rests on, cited in place.</i></div>
+          <div class="diag-chain-step"><em>2</em><b>Get a named archetype</b><i>Your profile across six criteria, and the one axis it gives way on.</i></div>
+          <div class="diag-chain-step"><em>3</em><b>Leave with three moves</b><i>What to run in the next ninety days, in order.</i></div>
         </div>
-        <p style="font-size: 0.85rem; color: var(--midgray); font-style: italic; margin-top: 1.5rem; margin-bottom: 0;">TDcatalyst</p>
       </div>
     </section>
 
     <section>
-      <div class="wrap narrow">
-        <div class="eyebrow" style="color: var(--terracotta); margin-bottom: 0.6rem;">What the diagnostic surfaces</div>
-        <p style="font-size: 0.98rem; color: var(--midgray); max-width: 58ch; margin: 0 0 0.4rem;">Each archetype resolves to a specific organizational move. A few of those the diagnostic names:</p>
+      <div class="wrap">
+        <div class="diag-kicker">The four stall archetypes</div>
+        <div class="diag-arch-grid">
+          <div class="diag-arch-card" style="--ac: var(--logo-red);">
+            <span class="da-mini">${radarMini('Seam', 76)}</span>
+            <div><b>The Seam Organization</b><span>AI sits in one function that invariably lacks the perspective the others bring.</span>
+              <span class="diag-arch-chip">Weakest: ${RADAR_PROFILE.Seam.deficit}</span>
+            </div>
+          </div>
+          <div class="diag-arch-card" style="--ac: var(--logo-gold);">
+            <span class="da-mini">${radarMini('UP', 76)}</span>
+            <div><b>The Unmarked Passage</b><span>The new identity has not been framed. The workforce is performing a transition it has not entered.</span>
+              <span class="diag-arch-chip">Weakest: ${RADAR_PROFILE.UP.deficit}</span>
+            </div>
+          </div>
+          <div class="diag-arch-card" style="--ac: var(--logo-blue);">
+            <span class="da-mini">${radarMini('OM', 76)}</span>
+            <div><b>The Operating Model Lag</b><span>The tools arrived. The work did not change.</span>
+              <span class="diag-arch-chip">Weakest: ${RADAR_PROFILE.OM.deficit}</span>
+            </div>
+          </div>
+          <div class="diag-arch-card" style="--ac: var(--navy);">
+            <span class="da-mini">${radarMini('Sensing', 76)}</span>
+            <div><b>The Sensing Challenge</b><span>The board is asking questions the team cannot answer yet.</span>
+              <span class="diag-arch-chip">Weakest: ${RADAR_PROFILE.Sensing.deficit}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="alt">
+      <div class="wrap">
+        <div class="diag-kicker">What the diagnostic surfaces</div>
         <div class="diag-interventions">
           <div class="diag-intervention accent-red">
             <span class="diag-intervention-tag">The Seam Organization</span>
-            <p class="diag-intervention-text">The 90-day work is redesigning the room the transformation is run from; the product, operations, and people disciplines rarely sit at the same table.</p>
+            <p class="diag-intervention-text">Redesign the room the transformation is run from. Product, operations, and people rarely sit at the same table.</p>
           </div>
           <div class="diag-intervention accent-gold">
             <span class="diag-intervention-tag">The Unmarked Passage</span>
-            <p class="diag-intervention-text">Name the transition explicitly at the leadership level, including what the organization is moving away from. The loss has to be acknowledged before the forward frame can hold.</p>
+            <p class="diag-intervention-text">Name the transition at leadership level, including what the organization is moving away from. The loss has to be acknowledged before the forward frame holds.</p>
           </div>
           <div class="diag-intervention accent-blue">
             <span class="diag-intervention-tag">The Operating Model Lag</span>
-            <p class="diag-intervention-text">Redesign the role before retraining the person. The sequence matters: operating model first, capability second. Most organizations have it inverted.</p>
+            <p class="diag-intervention-text">Redesign the role before retraining the person. Operating model first, capability second. Most organizations have it inverted.</p>
           </div>
           <div class="diag-intervention accent-navy">
             <span class="diag-intervention-tag">The Sensing Challenge</span>
-            <p class="diag-intervention-text">Design the sensing infrastructure explicitly: who reads which signals, at what cadence, with what authority to escalate and commit to action. Make the loop visible before improving it.</p>
+            <p class="diag-intervention-text">Design the sensing loop explicitly: who reads which signals, at what cadence, with what authority to commit. Make it visible before improving it.</p>
           </div>
         </div>
       </div>
@@ -1298,6 +1433,32 @@ function archIcon(key) {
   const paths = ARCH_ICON[key];
   if (!paths) return '';
   return `<span class="tdc-icon" aria-hidden="true"><svg viewBox="0 0 24 24">${paths}</svg></span>`;
+}
+
+
+// Label-free silhouette of an archetype's profile. Used as a thumbnail so an
+// archetype is recognizable by shape before it is read by name: the dent is
+// always the deficit axis.
+function radarMini(key, size) {
+  const P = RADAR_PROFILE[key];
+  if (!P) return '';
+  const S = size || 90, C = S / 2, R = S * 0.40, N = 6;
+  const pt = (i, v) => {
+    const a = -Math.PI / 2 + i * 2 * Math.PI / N;
+    return [C + Math.cos(a) * R * v, C + Math.sin(a) * R * v];
+  };
+  let out = '';
+  [0.5, 1].forEach((ring) => {
+    const pts = [];
+    for (let i = 0; i < N; i++) { const q = pt(i, ring); pts.push(q[0].toFixed(1) + ',' + q[1].toFixed(1)); }
+    out += `<polygon points="${pts.join(' ')}" fill="none" stroke="#E6E3D7" stroke-width="1"/>`;
+  });
+  const shape = [];
+  for (let i = 0; i < N; i++) { const q = pt(i, P.v[i]); shape.push(q[0].toFixed(1) + ',' + q[1].toFixed(1)); }
+  out += `<polygon points="${shape.join(' ')}" fill="${P.color}" fill-opacity="0.18" stroke="${P.color}" stroke-width="1.6" stroke-linejoin="round"/>`;
+  const d = pt(P.crater, Math.max(P.v[P.crater], 0.14));
+  out += `<circle cx="${d[0].toFixed(1)}" cy="${d[1].toFixed(1)}" r="4.5" fill="none" stroke="${P.color}" stroke-width="1.4" stroke-dasharray="2.5 2.5"/>`;
+  return `<svg viewBox="0 0 ${S} ${S}" aria-hidden="true">${out}</svg>`;
 }
 
 function radarBlock(key) {
