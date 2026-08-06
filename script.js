@@ -1386,3 +1386,33 @@ function tdTerrainNoise(seed) {
   window.addEventListener('resize', sync, { passive: true });
   sync();
 })();
+
+// ===== The walk spine (Sail) =====
+// The routed portion of a page draws its trail as the reader walks it:
+// --wp on the host sets the solid line's height; stations plant flags via
+// IntersectionObserver. Static under 1000px and reduced motion (CSS side).
+(function () {
+  var host = document.querySelector('.walkhost');
+  if (!host) return;
+  var line = host.querySelector('.walkline');
+  if (line && window.matchMedia('(min-width: 1000px)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    host.classList.add('walk-anim');
+    var onScroll = function () {
+      var r = host.getBoundingClientRect();
+      var vh = window.innerHeight;
+      var p = (vh * 0.7 - r.top) / r.height;
+      host.style.setProperty('--wp', Math.max(0, Math.min(1, p)).toFixed(4));
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    onScroll();
+  }
+  var stns = host.querySelectorAll('.stn');
+  if (stns.length && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('reached'); });
+    }, { rootMargin: '0px 0px -35% 0px' });
+    stns.forEach(function (el) { io.observe(el); });
+  }
+})();
