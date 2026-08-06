@@ -3216,8 +3216,8 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 }
 
 /* --- Pathway: the tiers, priced, on one strip --- */
-.pathway { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; }
-@media (max-width: 1020px) { .pathway { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.pathway { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.9rem; }
+@media (max-width: 900px) { .pathway { grid-template-columns: 1fr; } }
 @media (max-width: 560px) { .pathway { grid-template-columns: 1fr; } }
 .pathway a.pw {
   display: flex; flex-direction: column; min-width: 0; text-decoration: none;
@@ -3395,7 +3395,11 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
    under the site bar.
    ============================================================ */
 .subnav {
+  /* top is kept in sync with the hide-on-scroll nav by script.js: the bar
+     rides at the nav's true height while the nav shows, and at 0 when the nav
+     slides away. 58px is only the pre-script fallback. */
   position: sticky; top: 58px; z-index: 40;
+  transition: top 0.3s ease;
   background: color-mix(in srgb, var(--reg-bg) 88%, transparent);
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--reg-line);
@@ -3446,3 +3450,16 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
   position: absolute; left: 0; right: 0; bottom: 0;
   height: 130px; width: 100%; pointer-events: none;
 }
+
+/* Sail wash: the hero gradient as a reusable ground. Radial from the Sail
+   blue, strongest top-left where the light enters, fading to the clear page.
+   Sits behind terrain canvases, so the contours draw over the light. */
+.sail-wash { position: relative; }
+.sail-wash::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(58rem 30rem at 12% -12%, rgba(3, 72, 202, 0.14), transparent 62%),
+    radial-gradient(40rem 22rem at 96% 108%, rgba(3, 72, 202, 0.07), transparent 60%);
+}
+.sail-wash > * { position: relative; }
+.sail-wash > canvas.terrain { position: absolute; }

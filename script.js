@@ -1369,3 +1369,20 @@ function tdTerrainNoise(seed) {
     requestAnimationFrame(tick);
   }
 })();
+
+// ===== Subnav follows the hide-on-scroll nav =====
+// The in-page value nav sticks below the site bar. The site bar hides on
+// scroll-down, so a fixed offset leaves a bar-height gap above the subnav
+// (Tom's interstice). Mirror the bar: its real height while shown, 0 when
+// hidden, on the same 0.3s ease.
+(function () {
+  var nav = document.querySelector('nav');
+  var sub = document.querySelector('.subnav');
+  if (!nav || !sub) return;
+  function sync() {
+    sub.style.top = nav.classList.contains('nav--hidden') ? '0px' : nav.offsetHeight + 'px';
+  }
+  new MutationObserver(sync).observe(nav, { attributes: true, attributeFilter: ['class'] });
+  window.addEventListener('resize', sync, { passive: true });
+  sync();
+})();
