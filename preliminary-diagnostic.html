@@ -11,7 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/favicon.png">
   <title>AI Transformation Stall Diagnostic — TDcatalyst</title>
-  <meta name="description" content="Twelve questions. Four minutes. One named diagnosis — the archetype of your organization's current AI transformation state, and three organizational moves to begin addressing it." />
+  <meta name="description" content="Twelve questions. Four minutes. One named diagnosis — the archetype of your organization's current AI transformation state, and the three moves that follow." />
   <link rel="canonical" href="https://tdcatalyst.com/preliminary-diagnostic" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://tdcatalyst.com/preliminary-diagnostic" />
@@ -782,7 +782,7 @@
       "@type": "WebApplication",
       "@id": "https://tdcatalyst.com/preliminary-diagnostic#app",
       "name": "AI Transformation Stall Diagnostic",
-      "description": "Twelve questions, four minutes, one named diagnosis: the archetype your organization's stall actually takes, and three organizational moves to begin addressing it.",
+      "description": "Twelve questions, four minutes, one named diagnosis: the archetype your organization's stall actually takes, and the three moves that follow.",
       "url": "https://tdcatalyst.com/preliminary-diagnostic",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Any modern web browser",
@@ -874,7 +874,7 @@
       <div class="wrap narrow">
         <div class="eyebrow">A Preliminary Diagnostic</div>
         <h1>Where is AI transformation stalling in your organization.</h1>
-        <p class="hero-sub">Twelve questions, four minutes, one named diagnosis: the archetype of your organization's current AI transformation state, and three organizational moves to begin addressing it.</p>
+        <p class="hero-sub">Twelve questions, four minutes, one named diagnosis: the archetype of your organization's current AI transformation state, and the three moves that follow.</p>
         <noscript>
           <p class="hero-sub"><strong>The diagnostic needs JavaScript to run.</strong> With it switched off, write to <a href="mailto:tom@tdcatalyst.com">tom@tdcatalyst.com</a> and the same read can be done in conversation.</p>
         </noscript>
@@ -1007,7 +1007,7 @@ const QUESTIONS = [
     { t: "Reimagining how the organization is structured based on new AI-use patterns.", d: "Cited by only 30% of organizations. 53% have considered structural redesign — but only 16% have moved significantly in that direction. Deloitte 2026", s: { UP: 1, Sensing: 2 } }
   ]},
   { q: "How strong is your organization at detecting early signals that AI is reshaping your competitive environment? (Can you read weak signals early?)", opts: [
-    { t: "Weak — we tend to learn late, from external pressure or a competitive wake-up call.", d: "Sensing degrades first in organizations not designed for adaptive environments. Without a systematic sensing loop, seizing and transforming degrade with it. Teece, Dynamic Capabilities", s: { Sensing: 2 } },
+    { t: "Weak — we tend to learn late, from external pressure or a competitive wake-up call.", d: "Sensing degrades first in organizations not designed for adaptive environments. Without a systematic sensing loop, seizing and transforming degrade. Teece, Dynamic Capabilities", s: { Sensing: 2 } },
     { t: "Mixed — some functions read the environment well; others operate on last year's picture.", d: "The most common enterprise pattern. Sensing is leader-dependent and uneven across functions — which means it is not yet an organizational capability.", s: { Sensing: 2, UP: 1 } },
     { t: "Strong — we have systematic ways of detecting and escalating weak signals early.", d: "Enterprises where senior leadership actively shapes AI strategy and governance achieve significantly greater business value. Deloitte 2026", s: { OM: 2, Seam: 1 } }
   ]},
@@ -1018,13 +1018,13 @@ const QUESTIONS = [
   ]},
   { q: "How frequently does your organization redesign its operating model — not just add tools? (Do you actually change work, or layer faster tools on old processes?)", opts: [
     { t: "Rarely — we layer AI onto existing workflows and existing role definitions.", d: "37% of enterprises use AI with little or no change to underlying processes. 'Roles, skills, and career paths should be rebuilt — not simply adjusted.' Deloitte 2026", s: { OM: 3 } },
-    { t: "Selectively — we redesign specific processes when pressure or failure requires it.", d: "30% of enterprises pursue targeted process redesign rather than full reinvention. The reactive pattern: redesign follows failure rather than leads strategy. Deloitte 2026", s: { OM: 1, Seam: 1 } },
+    { t: "Selectively — we redesign specific processes when pressure or failure forces the issue.", d: "30% of enterprises pursue targeted process redesign rather than full reinvention. The reactive pattern: redesign follows failure rather than leads strategy. Deloitte 2026", s: { OM: 1, Seam: 1 } },
     { t: "Systematically — role and operating model redesign are treated as prerequisites for tool deployment, not afterthoughts.", d: "Organizations that redesign work holistically rather than layering AI onto legacy processes. The standard Deloitte identifies as the dividing line between optimization and transformation. Deloitte 2026", s: { Sensing: 2, UP: 1 } }
   ]},
   { q: "Which description most closely matches how the workforce is experiencing AI in your organization right now?", opts: [
     { t: "A small group is actively driving AI use. The majority is watching.", d: "13% of workers are highly enthusiastic and actively seeking to use AI. The rest are open, cautious, or resistant. The activation gap is structural, not motivational. Deloitte 2026", s: { Seam: 2 } },
     { t: "Most people are open to AI but haven't been given a clear reason or workflow to change behavior.", d: "55% of workers are open to exploring AI but not yet activated. The access-to-activation gap 'remains largely unchanged from last year.' Deloitte 2026", s: { OM: 2, UP: 1 } },
-    { t: "A visible portion is complying because required to — not because they believe it.", d: "21% of workers say they would rather not use AI but will if required. Compliance without belief produces adoption theater — the metrics look fine until they don't. Deloitte 2026 / TDcatalyst", s: { UP: 2, Sensing: 1 } },
+    { t: "A visible portion is complying out of requirement rather than belief.", d: "21% of workers say they would rather not use AI but will if required. Compliance without belief produces adoption theater — the metrics look fine until they don't. Deloitte 2026 / TDcatalyst", s: { UP: 2, Sensing: 1 } },
     { t: "Enthusiasm, compliance, and resistance coexist across teams — with no coherent management signal.", d: "Fractured workforce sentiment is most often a product of fractured leadership framing. When leaders speak in different registers, teams read different signals. Deloitte 2026 / TDcatalyst", s: { UP: 2, Sensing: 1 } },
     { t: "The workforce was already using AI on personal devices or free tools before any enterprise rollout existed.", d: "Shadow AI precedes enterprise rollout in many organizations. When the sanctioned tool arrives and is inferior to what people already know and use, adoption resistance is structural — not motivational.", s: { Sensing: 2 } }
   ]},
@@ -1051,7 +1051,7 @@ const ARCHETYPES = {
       "What looks like an adoption problem is more precisely a governance problem — and more specifically, a table problem. The wrong people have been in the room where the decisions happen. The three disciplines AI transformation requires — product, operations, and people — rarely sit together. Each underweights what the others know. The seam between them is where most transformations stall."
     ],
     moves: [
-      "Add workforce-side design to the AI strategy from the start — role redesign, manager enablement, and the change work that turns tool access into actual usage. When it gets added after the technology decisions are already locked, the operating model is shaped without it.",
+      "Add workforce-side design to the AI strategy from the start — role redesign, manager enablement, and the change work that turns tool access into actual usage. When it gets added after the technology decisions are already locked, the operating model is shaped without the workforce side.",
       "Map the seam between product, operations, and people explicitly. Name where handoffs break, where accountability is unclear, where each function pulls in a different direction.",
       "The 90-day work is redesigning the room the transformation is run from, ahead of any further training or rollout campaigning."
     ],
@@ -1076,7 +1076,7 @@ const ARCHETYPES = {
     subtitle: "The tools arrived. The work didn't change.",
     body: [
       "Pilots are live. Usage numbers exist. Login rates look adequate. And yet the actual operating rhythm has not shifted. Work is being done the same way, slightly faster. This is the most common stall pattern in AI transformation, and the hardest to diagnose from inside, because the metrics look fine until the competitive consequence arrives.",
-      "The fix is redesigning the work before or alongside the tool deployment: what tasks change, what roles change, what decisions change, what handoffs change when AI enters the workflow. More training, a better adoption campaign, or a higher mandate will not reach it. Deloitte is direct: 84% of organizations have not redesigned a single job around AI capabilities. A faster broken workflow is still broken. Redesign first."
+      "The fix is redesigning the work before or alongside the tool deployment: what tasks change, what roles change, what decisions change, what handoffs change when AI enters the workflow. More training, a better adoption campaign, or a higher mandate will not reach a structural problem. Deloitte is direct: 84% of organizations have not redesigned a single job around AI capabilities. A faster broken workflow is still broken. Redesign first."
     ],
     moves: [
       "Run a task-level analysis for two or three high-volume roles. Separate what AI absorbs from what requires human judgment, trust, and accountability. The distinction drives the redesign.",
@@ -1089,11 +1089,11 @@ const ARCHETYPES = {
     name: "The Sensing Challenge",
     subtitle: "Leadership is asking questions the team can't answer yet.",
     body: [
-      "The harder problem is organizational sensing. Your environment is changing faster than your internal radar is calibrated to read it. Weak signals are arriving: competitor moves, workforce behavior shifts, leadership questions that don't yet have clean answers inside the organization. The sensing infrastructure (who reads the environment, what gets escalated, what gets acted on) was built for a slower tempo and a different kind of change.",
+      "The harder problem is organizational sensing. Your environment is changing faster than your internal radar can read. Weak signals are arriving: competitor moves, workforce behavior shifts, leadership questions that don't yet have clean answers inside the organization. The sensing infrastructure (who reads the environment, what gets escalated, what gets acted on) was built for a slower tempo and a different kind of change.",
       "What the organization needs now is a better loop: detection, activation, response, organizational learning. Without the loop, a strategy becomes a defended artifact, accurate at the moment of writing and increasingly wrong as the environment continues to move. Sensing, seizing, and transforming are simultaneous capabilities. If sensing is weak, the other two degrade."
     ],
     moves: [
-      "Design the sensing infrastructure explicitly. Who reads what signals, at what cadence, with what authority to escalate and commit to action? Make the loop visible before trying to improve it.",
+      "Design the sensing infrastructure explicitly. Who reads what signals, at what cadence, with what authority to escalate and commit to action? Make the loop visible first.",
       "Map the gap between what leadership is being asked and what the organization can currently answer. That gap is the diagnostic agenda, and it is structural.",
       "The 90-day work is building the detection–activation–response loop and institutionalizing it, ahead of another pass on a strategy plan the current sensing capacity cannot keep updated."
     ],
@@ -1145,7 +1145,7 @@ function renderIntro() {
         <div class="diag-hero-copy">
           <div class="reg-kicker">A preliminary diagnostic</div>
           <h1>Where is AI transformation stalling in your organization.</h1>
-          <p class="hero-sub">Twelve questions, four minutes, one named diagnosis: the archetype your organization&rsquo;s stall actually takes, and three organizational moves to begin addressing it.</p>
+          <p class="hero-sub">Twelve questions, four minutes, one named diagnosis: the archetype your organization&rsquo;s stall actually takes, and the three moves that follow.</p>
           <div class="diag-meta-strip">
             <span><b>12</b>questions</span>
             <span><b>4</b>minutes</span>
@@ -1201,7 +1201,7 @@ function renderIntro() {
       <div class="wrap">
         <div class="diag-close">
           <h2>Which one is yours?</h2>
-          <p>The diagnostic reads your organization on the same six criteria and names the archetype it lands on, with the three moves that follow from it.</p>
+          <p>The diagnostic reads your organization on the same six criteria and names the archetype it lands on, with the three moves that follow.</p>
           <button class="btn btn-primary" id="diag-begin-2" data-gc="cta-sail-diagnostic-2">Begin the diagnostic</button>
         </div>
       </div>
