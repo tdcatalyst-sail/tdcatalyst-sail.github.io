@@ -3383,3 +3383,9 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
    style here once beat the media query and squeezed paragraphs to 155px. */
 .outcomes-grid--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 700px) { .outcomes-grid--pair { grid-template-columns: 1fr; } }
+
+/* The through-line's claim is that three kinds of work meet at one seam.
+   The rule between the heading and the copy now draws it: three strands in
+   the practice colours converging to a single navy line. */
+.seam-braid { position: relative; height: 46px; margin: 0.4rem 0; }
+.seam-braid svg { display: block; width: 100%; height: 100%; }
