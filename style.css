@@ -3303,3 +3303,83 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
   .founding .fx-tick a span { display: inline; }
   .founding .fx-span { position: static; margin-top: 1.2rem; text-align: left; }
 }
+
+/* ============================================================
+   ADVISE DEVICES
+   The gauntlet (the enterprise buying path as gates), the measures checklist,
+   and the credential wall. Accent from --brand: Advise red there.
+   ============================================================ */
+
+/* --- Gauntlet: the deal's path, gate by gate --- */
+.gauntlet { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0.55rem; }
+.gnt-gate {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  background: #fff; border: 1px solid var(--reg-line); border-radius: 999px;
+  padding: 0.45rem 0.95rem; font-size: 0.86rem; font-weight: 600; color: var(--navy);
+  white-space: nowrap;
+}
+.gnt-gate em {
+  font-style: normal; font-family: var(--mono); font-size: 0.62rem;
+  color: var(--brand); font-weight: 600;
+}
+.gnt-arr { align-self: center; color: var(--brand); display: inline-flex; }
+.gnt-arr svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.gnt-q {
+  flex: 1 1 100%; display: flex; gap: 0.7rem; align-items: baseline;
+  background: color-mix(in srgb, var(--brand) 6%, #fff);
+  border: 1px solid color-mix(in srgb, var(--brand) 30%, #fff);
+  border-left: 3px solid var(--brand); border-radius: var(--reg-radius);
+  padding: 0.85rem 1.05rem; margin-top: 0.25rem;
+}
+.gnt-q em {
+  font-style: normal; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--brand-ink); white-space: nowrap;
+}
+.gnt-q b {
+  font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.02rem;
+  color: var(--navy); line-height: 1.4;
+}
+.gnt-out {
+  flex: 1 1 100%; font-size: 0.88rem; color: var(--midgray); padding: 0.2rem 0.2rem 0;
+}
+.gnt-out b { color: var(--value-green); font-weight: 650; }
+
+/* --- Measures: what the engagement is graded on, as check items --- */
+.measures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+@media (max-width: 700px) { .measures { grid-template-columns: 1fr; } }
+.measure {
+  position: relative; padding: 0.75rem 0.9rem 0.75rem 2.3rem;
+  background: #F0F6F1; border: 1px solid #CBE0CF; border-radius: 10px;
+  font-size: 0.9rem; line-height: 1.5; color: var(--charcoal);
+}
+.measure::before {
+  content: ""; position: absolute; left: 0.85rem; top: 0.98rem;
+  width: 9px; height: 5px; border-left: 2px solid var(--value-green);
+  border-bottom: 2px solid var(--value-green); transform: rotate(-45deg);
+}
+.measures-note { font-size: 0.88rem; color: var(--midgray); margin-top: 0.8rem; }
+
+/* --- Credential wall: named accounts in readable type --- */
+.cred-strip { margin-bottom: 1.6rem; }
+.cred-wall { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; }
+@media (max-width: 760px) { .cred-wall { grid-template-columns: 1fr; } }
+.cred-group {
+  min-width: 0; background: #fff; border: 1px solid var(--reg-line);
+  border-top: 3px solid var(--brand); border-radius: var(--reg-radius);
+  padding: 1.05rem 1.2rem; box-shadow: var(--elev-1);
+}
+.cred-group .cg-label {
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--brand-ink); margin-bottom: 0.55rem;
+}
+.cred-group ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.3rem 1.1rem; }
+.cred-group li {
+  font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 0.98rem;
+  color: var(--navy); line-height: 1.5; white-space: nowrap;
+}
+@media (max-width: 480px) { .cred-group li { white-space: normal; } }
+.cred-fine { font-size: 0.85rem; color: var(--midgray); margin-top: 1.1rem; }
+/* Two-up variant of the outcomes grid; collapses like the rest. An inline
+   style here once beat the media query and squeezed paragraphs to 155px. */
+.outcomes-grid--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 700px) { .outcomes-grid--pair { grid-template-columns: 1fr; } }
