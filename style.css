@@ -3098,10 +3098,7 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
   font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.12rem;
   color: var(--navy); line-height: 1.25; font-variant-numeric: tabular-nums;
 }
-/* The lead fact takes the true accent, not the text-safe ink: Tom wants the
-   reset fee in the diffusion yellow (#E8B003), matching the hero dots. The
-   over-label keeps the ink, where small type needs the contrast. */
-.sel-fact:first-child .v { color: var(--sel-ac); }
+/* Fact values all read navy; the accent stays on borders, icons and light. */
 .sel-facts { border-top-color: color-mix(in srgb, var(--sel-ac) 26%, var(--reg-line)); }
 .sel-fact .v.small { font-size: 0.95rem; font-weight: 500; }
 .sel-note {
