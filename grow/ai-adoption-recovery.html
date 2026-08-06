@@ -155,16 +155,26 @@
     border-bottom: 1px solid var(--lp-line);
   }
   .lp .lp-nav-inner {
-    max-width: 1140px; margin: 0 auto; padding: 0.85rem clamp(1.1rem, 4vw, 2rem);
+    max-width: 1140px; margin: 0 auto; padding: 0.7rem clamp(1.1rem, 4vw, 2rem);
     display: flex; align-items: center; justify-content: space-between; gap: 1rem;
   }
   .lp .lp-logo { font-size: 1.05rem; font-weight: 700; color: var(--lp-ink); text-decoration: none; letter-spacing: -0.01em; }
   .lp .lp-logo span { color: var(--lp-accent-ink); font-weight: 600; }
-  .lp .lp-nav .btn { padding: 0.55rem 1.15rem; font-size: 0.88rem; }
-  .lp .lp-links { display: flex; gap: 1.3rem; margin: 0 auto; }
-  .lp .lp-links a { font-size: 0.86rem; font-weight: 600; color: var(--lp-body); text-decoration: none; white-space: nowrap; }
-  .lp .lp-links a:hover { color: var(--lp-ink); }
-  @media (max-width: 900px) { .lp .lp-links { display: none; } }
+  .lp .lp-nav .btn { padding: 0.55rem 1.2rem; font-size: 0.88rem; }
+  .lp .lp-nav .btn-primary:hover { transform: none; }
+  .lp .lp-nav { border-bottom-color: rgba(230, 227, 215, 0.9); box-shadow: 0 1px 0 rgba(27, 26, 22, 0.02); }
+  .lp .lp-links {
+    display: flex; gap: 0.15rem; margin: 0 auto; padding: 0.22rem;
+    background: rgba(244, 242, 233, 0.75); border: 1px solid var(--lp-line); border-radius: 999px;
+  }
+  .lp .lp-links a {
+    font-size: 0.84rem; font-weight: 600; color: var(--lp-body); text-decoration: none; white-space: nowrap;
+    padding: 0.42rem 0.9rem; border-radius: 999px; transition: background 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+  }
+  .lp .lp-links a:hover { background: var(--lp-card); color: var(--lp-ink); box-shadow: 0 1px 2px rgba(27, 26, 22, 0.08); }
+  .lp .lp-links a:focus-visible { outline: 2px solid var(--lp-accent-ink); outline-offset: 1px; }
+  .lp .lp-links a.here { background: var(--lp-card); color: var(--lp-ink); box-shadow: 0 1px 3px rgba(27, 26, 22, 0.1); }
+  @media (max-width: 980px) { .lp .lp-links { display: none; } }
 
   /* Hero */
   .lp .hero { position: relative; overflow: hidden; padding-top: clamp(2.8rem, 6vw, 4.6rem); }
@@ -880,7 +890,9 @@
     background: rgba(232, 176, 3, 0.13); border: 1px solid rgba(232, 176, 3, 0.35); color: var(--lp-accent-ink);
   }
   .lp .case-ic svg { width: 22px; height: 22px; }
-  .lp .case h3 { font-size: 1.14rem; margin-top: 0.65rem; }
+  .lp .case h3.case-title { font-size: clamp(1.35rem, 2.2vw, 1.62rem); font-weight: 700; letter-spacing: -0.022em; margin-top: 0.75rem; color: var(--lp-ink); }
+  .lp .case p.case-tagline { font-size: 1.02rem; font-weight: 600; color: var(--lp-accent-ink); margin-top: 0.3rem; }
+  .lp .case-top { min-height: 40px; }
   .lp .case-facts { margin: 0.7rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.4rem; }
   .lp .case-facts li { font-size: 0.88rem; color: var(--lp-body); display: flex; gap: 0.5rem; align-items: baseline; }
   .lp .case-facts li::before { content: ""; flex-shrink: 0; width: 6px; height: 6px; border-radius: 2px; background: var(--lp-accent); transform: translateY(-1px); }
@@ -1408,7 +1420,7 @@
   <div class="wrap">
     <a class="ribbon-band" href="#begin">
       <span class="pill">US launch campaign</span>
-      <span class="ribbon-txt"><b>Adoption Recovery Review</b> &middot; ten days &middot; one engagement at a time</span>
+      <span class="ribbon-txt"><b>Adoption Recovery Review</b> &middot; ten days &middot; fixed scope, agreed in writing</span>
       <span class="ribbon-price"><s>$25,000</s> <b>$12,500 fixed</b> &middot; 50% off</span>
       <span class="ribbon-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
       <span class="ribbon-cav">assumes a 50&ndash;100 person organization, up to 3 executives leading the transformation &middot; launch cohort builds the case-study base, anonymized</span>
@@ -1460,9 +1472,9 @@
       <article class="case" role="button" tabindex="0" data-sit="platform" aria-pressed="false">
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 12l3-3 2.5 2L16 7"/></svg></span>
-          <span class="case-tag">Stalled platform</span>
-        </div>
-        <h3>The platform launched. Usage plateaued.</h3>
+          </div>
+        <h3 class="case-title">Stalled platform</h3>
+        <p class="case-tagline">The platform launched. Usage plateaued.</p>
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>Licensed, launched, and stuck at 15&ndash;30% adoption, most of it performative. People run the tool beside the old way, usage decays each quarter, and renewal approaches with log-ins as the only evidence.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Re-sequence the rollout around the workflows the platform was bought for: redesign three to five of them end to end, build the capability, and hold it in the team cadence, measured on feature depth per workflow.</p></div></div>
         <div class="case-viz" aria-hidden="true">
           <div class="cv-flow">
@@ -1479,9 +1491,10 @@
       <article class="case case-flag" role="button" tabindex="0" data-sit="seats" aria-pressed="false">
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.6L18 9.4l-4.2 1.8L12 16l-1.8-4.8L6 9.4l4.2-1.8L12 3z"/><path d="M19 14l.9 2.3L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.7L19 14z"/></svg></span>
-          <span class="case-tag">Frontier-lab seats</span><span class="case-flagpill">Flagship</span>
+          <span class="case-flagpill">Flagship</span>
         </div>
-        <h3>Everyone got a seat. Every role changes.</h3>
+        <h3 class="case-title">Frontier-lab seats</h3>
+        <p class="case-tagline">Everyone got a seat. Every role changes.</p>
         <div class="cv-vendors" aria-label="Anthropic Claude, OpenAI ChatGPT, Microsoft Copilot, Google Gemini">
           <span class="cvv"><svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#D97757" stroke-width="2.1" stroke-linecap="round" fill="none"><path d="M12 3.2v4M12 16.8v4M3.2 12h4M16.8 12h4M5.8 5.8l2.8 2.8M15.4 15.4l2.8 2.8M18.2 5.8l-2.8 2.8M8.6 15.4l-2.8 2.8"/></g></svg>Claude</span>
           <span class="cvv"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#1B1A16" stroke-width="1.8"><rect x="8.8" y="2.6" width="6.4" height="18.8" rx="3.2"/><rect x="8.8" y="2.6" width="6.4" height="18.8" rx="3.2" transform="rotate(60 12 12)"/><rect x="8.8" y="2.6" width="6.4" height="18.8" rx="3.2" transform="rotate(120 12 12)"/></g></svg>ChatGPT</span>
@@ -1509,9 +1522,9 @@
       <article class="case" role="button" tabindex="0" data-sit="pilots" aria-pressed="false">
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 18l9 5 9-5" opacity="0.45"/></svg></span>
-          <span class="case-tag">The forty pilots</span>
-        </div>
-        <h3>Forty pilots. Every platform now sells agents.</h3>
+          </div>
+        <h3 class="case-title">The forty pilots</h3>
+        <p class="case-tagline">Forty pilots. Every platform now sells agents.</p>
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>The agentic push left a pilot landscape nobody governs, while every platform in the stack asks for credits to test its new agents. Enthusiasm in pockets, no institutionalization, spend rising.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>A governed portfolio: every pilot and vendor ask scored on five criteria and decided in writing (scale, institutionalize, or stop), with a standing cadence that keeps pace with what vendors ship next.</p></div></div>
         <div class="case-viz cv-score">
           <div class="cv-score-head">Score one pilot on the five criteria:</div>
@@ -1528,9 +1541,9 @@
       <article class="case" role="button" tabindex="0" data-sit="zero" aria-pressed="false">
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16"/><path d="M12 16a5 5 0 0 0 5-5H7a5 5 0 0 0 5 5z"/><path d="M12 3v3M6.3 5.6l1.8 1.8M17.7 5.6l-1.8 1.8"/></svg></span>
-          <span class="case-tag">Starting 0 &rarr; 1</span>
-        </div>
-        <h3>A handful use AI. Some are hiding it.</h3>
+          </div>
+        <h3 class="case-title">Starting 0 &rarr; 1</h3>
+        <p class="case-tagline">A handful use AI. Some are hiding it.</p>
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>Leadership has barely touched the tools, no platform is chosen, no use policy exists, and the only reportable number is log-ins. A third of employees quietly read AI as replacement.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Vision and culture first: leadership writes the charter and goes first, managers coach the new work and repurpose the freed time visibly, and monthly builder events make augmentation something people can see.</p></div></div>
         <div class="case-viz" aria-hidden="true">
           <div class="cv-hero"><b>+46%</b><span>more likely to read AI as augmentation when people trust leadership's intent to invest in them</span></div>
@@ -1584,7 +1597,7 @@
       <div class="credit">100% of the fee is credited toward an Adoption Reset started within 30 days of delivery.</div>
       <div class="credit why-price">Why this price: the launch cohort builds the practice's US case-study base. Every engagement produces an anonymized case study; your name is used only with your written approval.</div>
       <a href="#begin" class="btn btn-primary">Fix your stalled AI deployment this month!</a>
-      <div class="cap">One engagement at a time. 30-minute call, no proposal unless there is a fit.</div>
+      <div class="cap">A 30-minute call. No proposal unless there is a fit.</div>
     </div>
   </div>
 </section>
@@ -1661,8 +1674,9 @@
           </div>
         </div>
         <div class="seq-pickset">
-          <span class="seq-picklabel">Ways it breaks</span>
+          <span class="seq-picklabel">What most organizations run, and where it stops</span>
           <div class="pathbtns seq-scen" role="group" aria-label="Negative cases">
+            <button aria-pressed="false" data-path="defaultcm">The default change program</button>
             <button aria-pressed="false" data-path="stall5">Stopped early</button>
             <button aria-pressed="false" data-path="nomgr">Managers left out</button>
             <button aria-pressed="false" data-path="noproof">No seeded proof</button>
@@ -2329,6 +2343,10 @@
       only: ['sponsor', 'proof', 'manager', 'peer', 'friction', 'inaction', 'build'],
       f: function (w) { var V = [18, 18.6, 20.2, 22.4, 25.5, 29.5, 35.5, 33.5, 41.5, 47, 49, 52, 54.5, 56.5, 59, 60.5, 61.3, 61.7, 61.9, 62, 62, 62, 62, 62, 62]; return V[Math.min(24, Math.round(w))]; },
       read: 'Seven plays, chosen for reach: past the threshold at week 14 and holding at 62%. Adoption carries itself, and the deeper phases (workflow redesigned, work identity, outcome) are the ones the other six plays complete.' },
+    defaultcm: { label: 'The default change program', color: '#B42318', kind: 'bad', cross: null,
+      only: ['sponsor', 'manager', 'build', 'proof'],
+      f: function (w) { var V = [17, 17.5, 19.4, 20.8, 21.8, 21.1, 25.2, 28.3, 33.2, 38.7, 40.3, 41.3, 41.9, 42.3, 42.5, 42.7, 42.8, 42.9, 42.9, 42.9, 43, 43, 43, 43, 43]; return V[Math.min(24, Math.round(w))]; },
+      read: 'What most organizations actually run: announce it from the top, brief the managers, train everyone, seed a win or two. Scored in the simulator it more than triples the do-nothing line, from 12% to 43%, and then stops below self-sustaining. Training landed on a workflow nobody redesigned, and nothing was built to hold the gain.' },
     stall5: { label: 'Stopped early', color: '#B42318', kind: 'bad',
       f: function (w) { var V = [18, 18.5, 19.5, 21, 23, 26, 30, 33, 31, 34, 39, 43, 45.5, 46.5, 47, 47, 47, 47, 46.9, 46.8, 46.8, 46.7, 46.7, 46.6, 46.6]; return V[Math.min(24, Math.round(w))]; },
       seed: ['whole', 'whenthen', 'inaction', 'build', 'ritual', 'policy', 'criteria', 'quiet'],
@@ -2363,7 +2381,15 @@
   function seqCascade(sc) {
     var miss = {}, weak = {}, unused = {};
     if (sc.only) {
-      SCHEDULE.forEach(function (s) { if (sc.only.indexOf(s[0]) === -1) unused[s[0]] = true; });
+      SCHEDULE.forEach(function (s2) { if (sc.only.indexOf(s2[0]) === -1) unused[s2[0]] = true; });
+      var ch = true;
+      while (ch) {
+        ch = false;
+        EDGES.forEach(function (e) {
+          if (unused[e.t] || weak[e.t]) return;
+          if (unused[e.f] || weak[e.f]) { weak[e.t] = true; ch = true; }
+        });
+      }
       return { miss: miss, weak: weak, unused: unused };
     }
     (sc.seed || []).forEach(function (id) { miss[id] = true; });
@@ -2379,7 +2405,7 @@
   function seqWeakReason(id, miss, weak) {
     var names = [];
     EDGES.forEach(function (e) {
-      if (e.t === id && (miss[e.f] || weak[e.f])) names.push(PLAYS[e.f] ? PLAYS[e.f].name : e.f);
+      if (e.t === id && (miss[e.f] || weak[e.f] || seqUnused[e.f])) names.push(PLAYS[e.f] ? PLAYS[e.f].name : e.f);
     });
     return names.length ? names[0] : '';
   }
@@ -2522,7 +2548,7 @@
             seqCap.innerHTML = wk + '<b class="cap-miss">' + p.name + ' never lands.</b> ' + (sc.fail || '');
           } else if (seqWeak[a[0]]) {
             var dep = seqWeakReason(a[0], seqMiss, seqWeak);
-            seqCap.innerHTML = wk + '<b class="cap-weak">' + p.name + ' runs, but misfires:</b> it needed ' + dep + ', and ' + dep + ' is not there.';
+            seqCap.innerHTML = wk + '<b class="cap-weak">' + p.name + ' runs, but misfires:</b> it needed ' + dep + ', which is not in this plan.';
           } else {
             seqCap.innerHTML = wk + '<b>' + p.name + '.</b> ' + (SEQWHY[a[0]] || '');
           }
@@ -3034,6 +3060,25 @@
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     revealTargets.forEach(function (t) { t.classList.add('reveal'); revIo.observe(t); });
   }
+
+  /* ---- Nav: mark the section in view ---- */
+  (function navSpy() {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.lp-links a[href^="#"]'));
+    if (!links.length || !('IntersectionObserver' in window)) return;
+    var map = {};
+    links.forEach(function (a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) map[el.id] = a;
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        links.forEach(function (a) { a.classList.remove('here'); });
+        if (map[en.target.id]) map[en.target.id].classList.add('here');
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
+  })();
 
   /* ---- FAQ ---- */
   document.querySelectorAll('.faq-q').forEach(function (btn) {
