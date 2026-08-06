@@ -1543,14 +1543,14 @@
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 18l9 5 9-5" opacity="0.45"/></svg></span>
           <span class="case-pill">Emerging challenge</span>
         </div>
-        <p class="case-tagline">Forty pilots. Every platform now sells agents.</p>
-        <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>The agentic push left a pilot landscape nobody governs, while every platform in the stack asks for credits to test its new agents. Enthusiasm in pockets, no institutionalization, spend rising.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>A governed portfolio: every pilot and vendor ask scored on five criteria and decided in writing (scale, institutionalize, or stop), with a standing cadence that keeps pace with what vendors ship next.</p></div></div>
+        <p class="case-tagline">Every system you already own now ships agents.</p>
+        <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>The agentic push is arriving through the stack you already bought. Every platform in it now ships AI features and asks for credits to run them, so the spend compounds vendor by vendor while nobody can say which consumption is earning anything inside a workflow.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Decide which platforms matter and which AI features earn their consumption inside a named workflow. Every vendor ask scored on five criteria and decided in writing, with a standing cadence that keeps pace with what those vendors ship next quarter.</p></div></div>
         <div class="case-viz cv-score">
-          <div class="cv-score-head">Score one pilot on the five criteria:</div>
-          <div class="cvq"><span>Value evidence: 2+ cases in production</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
+          <div class="cv-score-head">Score one platform's AI features on the five criteria:</div>
+          <div class="cvq"><span>Value evidence: it moves a named workflow metric</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
           <div class="cvq"><span>Workflow embed: over 30% in-flow use</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
           <div class="cvq"><span>Named sponsor funds and defends it</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
-          <div class="cvq"><span>Cost to serve falls with scale</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
+          <div class="cvq"><span>Consumption cost per unit of work falls with scale</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
           <div class="cvq"><span>Risk cleared: data, security, compliance</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
           <div class="cvq-res" id="pilot-res">Answer all five: the verdict computes.</div>
         </div>
@@ -1947,7 +1947,7 @@
       </article>
       <article class="outcome" data-sit="pilots">
         <span class="rtag">The forty pilots</span><span class="case-pill">Emerging challenge</span>
-        <h3>A governed portfolio: every pilot decided.</h3>
+        <h3>A governed portfolio: every platform ask decided.</h3>
         <div class="olanes" aria-hidden="true">
           <div class="olane"><span>Inventory &amp; criteria</span><div class="obar"><i style="grid-column:1/3"></i></div></div>
           <div class="olane"><span>Triage decisions</span><div class="obar"><i style="grid-column:2/5" class="og"></i></div></div>
@@ -1956,11 +1956,11 @@
           <div class="olane-axis"><span>wk 1</span><span>wk 6</span><span>wk 12</span></div>
         </div>
         <ul class="owins">
-          <li><b>Scale, institutionalize, or stop on every line</b>, the vendor-agent credit asks included</li>
+          <li><b>A decision on every line</b>: scale, institutionalize, hold as experimentation, or stop, the vendor credit asks included</li>
           <li><b>Winners institutionalized</b>: policy, SOPs, named sponsors, budgets that survive review</li>
           <li><b>A standing governance cadence</b> that keeps pace with what vendors ship next quarter</li>
         </ul>
-        <div class="onum"><span><b>100%</b>of pilots and vendor asks decided in writing</span><span><b>15&ndash;25%</b>scale &middot; <b>20&ndash;30%</b> institutionalize &middot; the rest stop</span><span><b>1</b>standing governance cadence, owned internally</span></div>
+        <div class="onum"><span><b>100%</b>of pilots and vendor asks decided in writing</span><span><b>15&ndash;25%</b>scale &middot; <b>20&ndash;30%</b> institutionalize &middot; the rest is treated as experimentation or stops</span><span><b>1</b>standing governance cadence, owned internally</span></div>
       </article>
       <article class="outcome" data-sit="zero">
         <span class="rtag">Starting 0 &rarr; 1</span><span class="case-pill">Your one chance to start right</span>
@@ -2707,9 +2707,9 @@
         if (!res) return;
         if (pilotAns.some(function (v) { return v === null; })) { res.textContent = 'Answer all five: the verdict computes.'; return; }
         var n = pilotAns.reduce(function (x, y) { return x + y; }, 0);
-        var v = n === 5 ? ['SCALE', '#1F5B2D', 'it earns more surface: fund it and write the rollout sequence.']
+        var v = n === 5 ? ['SCALE', '#1F5B2D', 'it earns more surface: fund the consumption and write the rollout sequence.']
           : n >= 3 ? ['INSTITUTIONALIZE', '#8A6302', 'the value is real and contained: codify it where it works, and fix the failing criteria before spend grows.']
-          : ['STOP', '#A93226', 'below the bar on most criteria: stop, and repoint the spend at a pilot that clears it.'];
+          : ['STOP', '#A93226', 'below the bar on most criteria: hold it as experimentation or stop, and repoint the spend at a feature that clears it.'];
         res.innerHTML = '<b style="color:' + v[1] + '">' + v[0] + '</b> \u00b7 ' + n + '/5 criteria met. ' + v[2];
         track('recovery-pilot-score');
       });
