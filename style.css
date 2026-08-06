@@ -3020,26 +3020,19 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
   font-size: 0.95rem; color: var(--navy); line-height: 1.25;
 }
 
+/* Title, then facts, then detail — the diagnostic's order, one column. A side
+   rail was tried first and measured badly: two short facts held a 290px column
+   while the prose ran at 445px inside an 816px panel, and the longest item left
+   a 786px void beside it. */
 .sel-panel {
   --sel-ac: var(--brand);
-  display: grid; align-items: start;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 290px);
-  grid-template-areas: "head facts" "body facts";
-  gap: 1.2rem 1.6rem;
+  display: flex; flex-direction: column;
+  min-height: 24rem;
   background: #fff; border: 1px solid var(--reg-line); border-radius: var(--reg-radius-lg);
   box-shadow: var(--elev-2); padding: 1.6rem 1.7rem;
 }
-/* Title, then the facts, then the detail — the order Tom asked for on the
-   diagnostic panel, kept here so the cadence matches. */
-@media (max-width: 760px) {
-  .sel-panel {
-    grid-template-columns: 1fr; grid-template-areas: "head" "facts" "body";
-    gap: 1.1rem; padding: 1.3rem 1.2rem;
-  }
-}
-.sel-head { grid-area: head; min-width: 0; }
-.sel-facts { grid-area: facts; min-width: 0; }
-.sel-body { grid-area: body; min-width: 0; }
+@media (max-width: 760px) { .sel-panel { padding: 1.3rem 1.2rem; min-height: 0; } }
+.sel-head, .sel-facts, .sel-body { min-width: 0; }
 
 .sel-name {
   font-family: 'Fraunces', 'Besley', Georgia, serif; font-weight: 400;
@@ -3048,7 +3041,11 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
 .sel-lede { font-size: 0.98rem; color: var(--charcoal); line-height: 1.6; margin: 0; }
 .sel-body p { font-size: 0.94rem; color: var(--midgray); line-height: 1.62; margin: 0 0 0.8rem; }
 .sel-body p:last-child { margin-bottom: 0; }
-.sel-body ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.sel-body ul {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem 1.6rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 760px) { .sel-body ul { grid-template-columns: 1fr; } }
 .sel-body li {
   display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: start;
   font-size: 0.92rem; line-height: 1.55; color: var(--charcoal);
@@ -3059,11 +3056,14 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
 }
 .sel-body li strong { color: var(--navy); }
 
-/* The facts rail: what a buyer scans for before reading a word of prose. */
-.sel-fact {
-  border-top: 1px solid var(--reg-line); padding: 0.7rem 0 0; margin-top: 0.7rem;
+/* The facts strip: what a buyer scans before reading a word of prose. Ruled
+   above and below so it reads as an instrument panel, not a caption. */
+.sel-facts {
+  display: flex; flex-wrap: wrap; gap: 0.9rem 2.4rem;
+  border-top: 1px solid var(--reg-line); border-bottom: 1px solid var(--reg-line);
+  padding: 0.9rem 0; margin: 1.1rem 0 1.2rem;
 }
-.sel-fact:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.sel-fact { flex: 0 1 auto; }
 .sel-fact .k {
   display: block; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--midgray); margin-bottom: 0.22rem;
@@ -3074,9 +3074,60 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
 }
 .sel-fact .v.small { font-size: 0.95rem; font-weight: 500; }
 .sel-note {
-  margin-top: 0.9rem; padding: 0.6rem 0.75rem;
+  margin-top: auto; padding: 0.6rem 0.75rem;
   background: color-mix(in srgb, var(--sel-ac) 7%, #fff);
   border-left: 2px solid var(--sel-ac); border-radius: 0 8px 8px 0;
   font-size: 0.84rem; line-height: 1.5; color: var(--charcoal);
 }
 .sel-note a { color: var(--brand-ink); }
+
+/* ============================================================
+   CHAIN  (.chain-*)
+   Numbered steps linked by a practice-coloured arrow. The diagnostic uses this
+   shape for "how the four minutes are spent"; it belongs to any page that has
+   an ordered story to tell, which is most of them. Replaces three prose cards
+   sitting side by side pretending not to be a sequence.
+   ============================================================ */
+.chain { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem; }
+.chain.chain-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 860px) { .chain, .chain.chain-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 620px) { .chain, .chain.chain-4 { grid-template-columns: 1fr; } }
+.chain-step {
+  position: relative; min-width: 0;
+  background: #fff; border: 1px solid var(--reg-line); border-radius: var(--reg-radius);
+  padding: 1.2rem 1.3rem; box-shadow: var(--elev-1);
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.chain-step:hover { box-shadow: var(--elev-2); transform: translateY(-2px); }
+.chain-step em {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%; font-style: normal;
+  background: var(--reg-rule); color: #10233F;
+  font-family: var(--mono); font-size: 0.74rem; font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+.chain-step h3, .chain-step b {
+  display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 1.05rem; color: var(--navy); line-height: 1.3; margin: 0 0 0.35rem;
+}
+.chain-step p { font-size: 0.9rem; color: var(--midgray); line-height: 1.6; margin: 0; }
+.chain-step:not(:last-child)::after {
+  content: ""; position: absolute; right: -0.55rem; top: 50%; z-index: 2;
+  width: 9px; height: 9px; margin-top: -4.5px; background: var(--reg-bg-alt);
+  border-right: 1.5px solid var(--reg-rule); border-top: 1.5px solid var(--reg-rule);
+  transform: rotate(45deg);
+}
+section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg); }
+@media (max-width: 860px) { .chain-step::after { display: none !important; } }
+
+/* Hero stat strip, the campaign's readout on big serif numerals. */
+.stat-strip {
+  display: flex; flex-wrap: wrap; gap: 1rem 2.6rem; align-items: flex-end;
+  margin: 1.6rem 0 1.8rem;
+}
+.stat-strip span { display: block; font-size: 0.78rem; color: var(--midgray); line-height: 1.3; }
+.stat-strip b {
+  display: block; font-family: 'Besley', Georgia, serif; font-size: 1.85rem;
+  font-weight: 600; color: var(--navy); line-height: 1; letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums; margin-bottom: 0.22rem;
+}
