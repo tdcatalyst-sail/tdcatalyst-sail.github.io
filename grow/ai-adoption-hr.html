@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=023e7c85">
+  <link rel="stylesheet" href="/style.css?v=3225d25a">
   <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -2105,7 +2105,7 @@
 </footer>
 </div>
 
-<script src="/script.js?v=7075f11a"></script>
+<script src="/script.js?v=9193ce4c"></script>
 <script>
 
 (function () {
@@ -2368,6 +2368,10 @@
       read: 'Seven plays, chosen for reach: past the threshold at week 14 and holding at 62%. Adoption carries itself, and the deeper phases (workflow redesigned, work identity, outcome) are the ones the other six plays complete.' },
     defaultcm: { label: 'The default change program', color: '#B42318', kind: 'bad', cross: null,
       only: ['sponsor', 'manager', 'build', 'proof'],
+      /* The default program runs its plays EARLY - that is its whole
+         pathology. Training lands weeks 3-8 on a workflow nobody redesigned,
+         instead of at week 11 after the redesign. */
+      sched: { sponsor: [1, 2], manager: [2, 3], build: [3, 8], proof: [4, 6] },
       f: function (w) { var V = [17, 17.5, 19.4, 20.8, 21.8, 21.1, 25.2, 28.3, 33.2, 38.7, 40.3, 41.3, 41.9, 42.3, 42.5, 42.7, 42.8, 42.9, 42.9, 42.9, 43, 43, 43, 43, 43]; return V[Math.min(24, Math.round(w))]; },
       read: 'What most organizations actually run: announce it from the top, brief the managers, train everyone, seed a win or two. Scored in the simulator it more than triples the do-nothing line, from 12% to 43%, and then stops below self-sustaining. Training landed on a workflow nobody redesigned, and nothing was built to hold the gain.' },
     stall5: { label: 'Stopped early', color: '#B42318', kind: 'bad',
@@ -2441,6 +2445,32 @@
   function sqy(p) { return SY0 - (SY0 - SY1) * p / 100; }
   var seqEls = null, seqRows = {};
   var seqScenario = 'full', seqMiss = {}, seqWeak = {}, seqUnused = {};
+  /* Effective schedule for the selected scenario: canonical SCHEDULE slots,
+     overridden per play when the scenario runs a play at a different time. */
+  var seqSched = {};
+  function effSched(id) { return seqSched[id]; }
+  function applySched(sc) {
+    seqSched = {};
+    SCHEDULE.forEach(function (s) {
+      var ov = sc && sc.sched && sc.sched[s[0]];
+      seqSched[s[0]] = ov ? [ov[0], ov[1]] : [s[1], s[2]];
+    });
+    SCHEDULE.forEach(function (s) {
+      var row = seqRows[s[0]];
+      if (!row) return;
+      var e = seqSched[s[0]];
+      var bar = row.querySelector('.sr-track i');
+      if (bar) {
+        bar.style.left = ((e[0] - 1) / 24 * 100) + '%';
+        bar.style.width = (Math.max(1, e[1] - e[0] + 1) / 24 * 100) + '%';
+      }
+      var wk = row.querySelector('.sr-wk');
+      if (wk) wk.textContent = e[0] + (e[1] > e[0] ? '-' + e[1] : '');
+      row.title = PLAYS[s[0]].name + ' - weeks ' + e[0] + (e[1] > e[0] ? ' to ' + e[1] : '');
+      var m = seqEls && seqEls.markers[s[0]];
+      if (m) m.setAttribute('cx', sqx(e[0]));
+    });
+  }
   (function buildSeq() {
     if (!seqChart || !seqLanes) return;
     var NS = 'http://www.w3.org/2000/svg';
@@ -2495,9 +2525,10 @@
   var seqW = 0, seqRunning = false, seqRaf = null, seqLast = null;
   var SEQ_SPEED = 2.1;
   function seqActive(w) {
-    var best = null;
+    var best = null, bestStart = -1;
     SCHEDULE.forEach(function (s) {
-      if (w >= s[1] && !seqUnused[s[0]] && (!best || s[1] > best[1])) best = s;
+      var e = effSched(s[0]) || [s[1], s[2]];
+      if (w >= e[0] && !seqUnused[s[0]] && e[0] > bestStart) { best = s; bestStart = e[0]; }
     });
     return best;
   }
@@ -2522,18 +2553,20 @@
     SCHEDULE.forEach(function (s) {
       var m = seqEls.markers[s[0]];
       if (!m) return;
-      var lands = w >= s[1] && !seqMiss[s[0]] && !seqUnused[s[0]];
+      var e = effSched(s[0]) || [s[1], s[2]];
+      var lands = w >= e[0] && !seqMiss[s[0]] && !seqUnused[s[0]];
       m.setAttribute('opacity', lands ? 1 : 0);
-      m.setAttribute('cy', sqy(sc.f(s[1])).toFixed(1));
+      m.setAttribute('cy', sqy(sc.f(e[0])).toFixed(1));
       m.setAttribute('fill', seqWeak[s[0]] ? '#FFFFFF' : '#E8B003');
       m.setAttribute('stroke', seqWeak[s[0]] ? '#C99A05' : '#FFFFFF');
     });
     SCHEDULE.forEach(function (s) {
       var row = seqRows[s[0]];
       if (!row) return;
-      var started = w >= s[1];
+      var e = effSched(s[0]) || [s[1], s[2]];
+      var started = w >= e[0];
       row.classList.toggle('on', started && !seqMiss[s[0]] && !seqUnused[s[0]]);
-      row.classList.toggle('live', started && w <= s[2] + 0.999 && !seqMiss[s[0]] && !seqUnused[s[0]]);
+      row.classList.toggle('live', started && w <= e[1] + 0.999 && !seqMiss[s[0]] && !seqUnused[s[0]]);
       row.classList.toggle('miss', started && !!seqMiss[s[0]]);
       row.classList.toggle('weak', started && !!seqWeak[s[0]]);
       row.classList.toggle('unused', !!seqUnused[s[0]]);
@@ -2627,6 +2660,7 @@
     seqMiss = cas.miss;
     seqWeak = cas.weak;
     seqUnused = cas.unused;
+    applySched(sc);
     document.querySelectorAll('.seq-scen button').forEach(function (b) {
       b.setAttribute('aria-pressed', b.dataset.path === k ? 'true' : 'false');
     });
@@ -2642,6 +2676,7 @@
     }
     track('recovery-model-toggle');
   }
+  applySched(SCEN.full);
   document.querySelectorAll('.seq-scen button').forEach(function (b) {
     b.addEventListener('click', function () { setScenario(b.dataset.path); });
   });
