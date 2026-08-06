@@ -1204,3 +1204,156 @@ function tdTerrainNoise(seed) {
     });
   }
 })();
+
+// ===== Diffusion device (Grow) =====
+// Terrain is Sail's metaphor. Grow's subject is adoption spreading through a
+// population, so its field draws diffusion: seeded adopters, an advancing
+// front, and the links between neighbours lighting up only once both ends
+// have moved. Shares tdTerrainNoise so the irregularity matches the house
+// texture rather than looking like a different system.
+(function () {
+  var canvases = document.querySelectorAll('canvas.diffusion');
+  if (!canvases.length) return;
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function rgba(hex, a) {
+    var h = hex.replace('#', '');
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var n = parseInt(h, 16);
+    return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+  }
+
+  function drawDiffusion(canvas, t) {
+    var d = canvas.dataset;
+    var seed = parseFloat(d.seed || '1');
+    var alpha = parseFloat(d.alpha || '0.15');
+    var indexAlpha = parseFloat(d.indexAlpha || alpha * 2.6);
+    var line = d.line || '#1F3A5F';
+    var index = d.index || '#E8B003';
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
+    if (canvas.width !== Math.round(w * dpr)) {
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+    }
+    var ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+
+    var fbm = tdTerrainNoise(seed);
+    var pitch = parseFloat(d.pitch || '30');
+    var rowH = pitch * 0.866;
+    var cols = Math.ceil(w / pitch) + 2, rows = Math.ceil(h / rowH) + 2;
+
+    // Seeds are the innovators: spread anchors, with the noise supplying only
+    // jitter. Deriving both coordinates from the same field put all three
+    // within 40px of each other and collapsed the read into one blob.
+    var anchors = [[0.17, 0.28], [0.54, 0.72], [0.83, 0.22]];
+    var seeds = [];
+    for (var k = 0; k < anchors.length; k++) {
+      seeds.push([
+        (anchors[k][0] + fbm(k * 11.7 + 3.1, seed * 2.1) * 0.07) * w,
+        (anchors[k][1] + fbm(seed * 3.7, k * 9.3 + 5.4) * 0.09) * h
+      ]);
+    }
+    // Reach decides how far adoption has spread. Too generous and the field
+    // saturates into a gold wash; this keeps a visible front with genuine
+    // untouched ground beyond it.
+    var reach = Math.max(w, h) * 0.32;
+
+    // Adoption level per node, 0..1
+    var nodes = [], j2, i2;
+    for (j2 = 0; j2 < rows; j2++) {
+      nodes[j2] = [];
+      for (i2 = 0; i2 < cols; i2++) {
+        var x = i2 * pitch + (j2 % 2 ? pitch / 2 : 0);
+        var y = j2 * rowH;
+        var near = 1e9;
+        for (var q = 0; q < seeds.length; q++) {
+          var dx = x - seeds[q][0], dy = y - seeds[q][1];
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < near) near = dist;
+        }
+        // the front advances with t; noise keeps the boundary ragged
+        var grain = fbm(x / 180, y / 180) * 0.42;
+        var v = (1 - near / reach) + grain - 0.08 + t;
+        nodes[j2][i2] = { x: x, y: y, a: v < 0 ? 0 : (v > 1 ? 1 : v) };
+      }
+    }
+
+    // Links first, so the dots sit on top of them
+    ctx.lineWidth = 1;
+    for (j2 = 0; j2 < rows; j2++) {
+      for (i2 = 0; i2 < cols; i2++) {
+        var n0 = nodes[j2][i2];
+        var right = nodes[j2][i2 + 1];
+        var below = nodes[j2 + 1] && nodes[j2 + 1][i2];
+        var belowB = nodes[j2 + 1] && nodes[j2 + 1][i2 + (j2 % 2 ? 1 : -1)];
+        [right, below, belowB].forEach(function (nb) {
+          if (!nb) return;
+          var m = Math.min(n0.a, nb.a);
+          if (m <= 0.02) return;
+          // a link only carries once both ends have moved
+          ctx.strokeStyle = m > 0.55 ? rgba(index, indexAlpha * m * 0.7) : rgba(line, alpha * m);
+          ctx.beginPath();
+          ctx.moveTo(n0.x, n0.y);
+          ctx.lineTo(nb.x, nb.y);
+          ctx.stroke();
+        });
+      }
+    }
+
+    // Nodes: unadopted stay faint and small, adopters grow and turn gold
+    for (j2 = 0; j2 < rows; j2++) {
+      for (i2 = 0; i2 < cols; i2++) {
+        var n = nodes[j2][i2];
+        var r = 1.1 + n.a * 2.6;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = n.a > 0.55
+          ? rgba(index, Math.min(1, indexAlpha + n.a * 0.35))
+          : rgba(line, alpha + n.a * 0.25);
+        ctx.fill();
+      }
+    }
+
+    if (d.fadeColor) {
+      var g = d.fade === 'left' ? ctx.createLinearGradient(w, 0, 0, 0)
+        : d.fade === 'right' ? ctx.createLinearGradient(0, 0, w, 0)
+        : d.fade === 'top' ? ctx.createLinearGradient(0, h, 0, 0)
+        : ctx.createLinearGradient(0, 0, 0, h);
+      g.addColorStop(0, 'rgba(' + d.fadeColor + ',0)');
+      g.addColorStop(1, 'rgba(' + d.fadeColor + ',0.92)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+    }
+  }
+
+  var renderAll = function () {
+    Array.prototype.forEach.call(canvases, function (c) { drawDiffusion(c, 0); });
+  };
+  var raf = null;
+  window.addEventListener('resize', function () {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(renderAll);
+  });
+  renderAll();
+
+  var hero = document.querySelector('canvas.diffusion[data-animate]');
+  if (hero && !reducedMotion && window.matchMedia('(min-width: 700px)').matches) {
+    var phase = 0, visible = true, last = 0;
+    new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }).observe(hero);
+    var tick = function (now) {
+      if (visible && !document.hidden && now - last > 60) {
+        last = now;
+        phase += 0.0016;
+        // the front breathes rather than running away, so the field keeps its
+        // read of "partly adopted" instead of saturating
+        drawDiffusion(hero, Math.sin(phase) * 0.14);
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+})();
