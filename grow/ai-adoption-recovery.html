@@ -1245,6 +1245,20 @@
   .lp .seq-bar.miss { opacity: 0.22; border-style: dashed; border-color: #A93226; border-left-style: solid; }
   .lp .seq-bar.miss span { text-decoration: line-through; text-decoration-color: #A93226; }
 
+  /* ---- v9: failure cascade + loop step details ---- */
+  .lp .seq-bar.weak { background: #FFFFFF; border-style: dashed; border-color: #C99A05; border-left-style: solid; border-left-color: #C99A05; opacity: 0.85; }
+  .lp .seq-bar.weak span { color: #8A6302; }
+  .lp .seq-caption .cap-miss { color: #A93226; }
+  .lp .seq-caption .cap-weak { color: #8A6302; }
+  .lp .cyc-step[data-step] { cursor: pointer; transition: border-color 0.15s; }
+  .lp .cyc-step[data-step]:hover, .lp .cyc-step[data-step]:focus-visible { border-color: var(--lp-accent-ink); }
+  .lp .cyc-detail {
+    margin-top: 0.8rem; border: 1px solid var(--lp-line); border-radius: var(--lp-radius);
+    background: var(--lp-card); padding: 0.85rem 1rem; font-size: 0.88rem; color: var(--lp-body); min-height: 3.2em;
+  }
+  .lp .cyc-detail b { color: var(--lp-ink); }
+  .lp .cyc-detail ul { margin: 0.4rem 0 0; padding-left: 1.1rem; display: grid; gap: 0.3rem; }
+
   /* ---- v2: task sorter (overlay content) ---- */
   .lp .sorter h3 { font-size: 1.15rem; }
   .lp .sorter .st-q { margin-top: 1rem; }
@@ -1584,18 +1598,19 @@
         <text x="480" y="207" text-anchor="middle" font-family="Archivo, sans-serif" font-size="12.5" fill="#54524A">measured effects feed the next intervention;</text>
         <text x="480" y="224" text-anchor="middle" font-family="Archivo, sans-serif" font-size="12.5" fill="#54524A">the loop keeps running after delivery</text>
         <text x="153" y="207" text-anchor="middle" font-family="Archivo, sans-serif" font-size="10.5" font-weight="650" fill="#8A6302" transform="rotate(-90 153 207)">what the data says</text>
-        <foreignObject x="40" y="30" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step"><i>1</i><div><b>Your context</b><span>interviews &middot; usage data &middot; the 12-question diagnostic</span></div></div></foreignObject>
-        <foreignObject x="630" y="30" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step cyc-core"><i>2</i><div><b>AI-native production</b><span>diagnostics &middot; Simulation&trade; &middot; drafting, run over your context</span></div></div></foreignObject>
-        <foreignObject x="630" y="272" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step"><i>3</i><div><b>Custom playbooks</b><span>written for your teams and workflows</span></div></div></foreignObject>
-        <foreignObject x="40" y="272" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step"><i>4</i><div><b>Your dashboard</b><span>every play wired to its metric, read weekly</span></div></div></foreignObject>
+        <foreignObject x="40" y="30" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step" data-step="1" tabindex="0"><i>1</i><div><b>Your context</b><span>interviews &middot; usage data &middot; the 12-question diagnostic</span></div></div></foreignObject>
+        <foreignObject x="630" y="30" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step cyc-core" data-step="2" tabindex="0"><i>2</i><div><b>AI-native production</b><span>diagnostics &middot; Simulation&trade; &middot; drafting, run over your context</span></div></div></foreignObject>
+        <foreignObject x="630" y="272" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step" data-step="3" tabindex="0"><i>3</i><div><b>Custom playbooks</b><span>written for your teams and workflows</span></div></div></foreignObject>
+        <foreignObject x="40" y="272" width="290" height="96"><div xmlns="http://www.w3.org/1999/xhtml" class="cyc-step" data-step="4" tabindex="0"><i>4</i><div><b>Your dashboard</b><span>every play wired to its metric, read weekly</span></div></div></foreignObject>
       </svg>
       <div class="cyc-list" aria-hidden="true">
-        <div class="cyc-step"><i>1</i><div><b>Your context</b><span>interviews &middot; usage data &middot; the 12-question diagnostic</span></div></div>
-        <div class="cyc-step cyc-core"><i>2</i><div><b>AI-native production</b><span>diagnostics &middot; Simulation&trade; &middot; drafting, run over your context</span></div></div>
-        <div class="cyc-step"><i>3</i><div><b>Custom playbooks</b><span>written for your teams and workflows</span></div></div>
-        <div class="cyc-step"><i>4</i><div><b>Your dashboard</b><span>every play wired to its metric, read weekly</span></div></div>
+        <div class="cyc-step" data-step="1" tabindex="0"><i>1</i><div><b>Your context</b><span>interviews &middot; usage data &middot; the 12-question diagnostic</span></div></div>
+        <div class="cyc-step cyc-core" data-step="2" tabindex="0"><i>2</i><div><b>AI-native production</b><span>diagnostics &middot; Simulation&trade; &middot; drafting, run over your context</span></div></div>
+        <div class="cyc-step" data-step="3" tabindex="0"><i>3</i><div><b>Custom playbooks</b><span>written for your teams and workflows</span></div></div>
+        <div class="cyc-step" data-step="4" tabindex="0"><i>4</i><div><b>Your dashboard</b><span>every play wired to its metric, read weekly</span></div></div>
         <p class="cyc-loopnote">measured effects feed the next intervention: the loop keeps running after delivery</p>
       </div>
+      <div class="cyc-detail" id="cyc-detail"><b>Hover a step</b> to see what it needs and what it produces.</div>
     </div>
 
     <div class="carousel" id="doc-carousel">
@@ -2149,7 +2164,7 @@
     track('recovery-play');
   }
 
-  /* ---- Sequence player: the modeled 24 weeks, plays landing in order ---- */
+  /* ---- Sequence player: the modeled 24 weeks, with failure cascades ---- */
   var SCHEDULE = [
     ['sponsor', 1, 2], ['proof', 2, 4], ['manager', 3, 5], ['peer', 5, 6],
     ['friction', 6, 8], ['whole', 7, 10], ['whenthen', 9, 9], ['inaction', 10, 11],
@@ -2177,6 +2192,66 @@
     inaction: 'Inaction-Cost', quiet: 'Quiet Path', build: 'Capability Build',
     whenthen: 'When-Then', policy: 'Policy & SOPs', criteria: 'Perf. Criteria', ritual: 'Ritual & Cadence'
   };
+  function mlog(w, b2, span, mid, k) { return b2 + span / (1 + Math.exp(-(w - mid) / k)); }
+  function mrf(w, b2, peak, wpeak, floor, rate) {
+    var atPeak = b2 + (peak - b2) * (1 - Math.exp(-3));
+    if (w <= wpeak) return b2 + (peak - b2) * (1 - Math.exp(-3 * w / wpeak));
+    return floor + (atPeak - floor) * Math.exp(-rate * (w - wpeak));
+  }
+  function seqF(w) { return 18 + 64 / (1 + Math.exp(-(w - 10.2) / 2.4)); }
+  var SCEN = {
+    full: { label: 'Full sequence', color: '#10233F', f: seqF,
+      read: 'The modeled ceiling: all thirteen plays land cleanly, the threshold is crossed at week 11, and adoption reaches 80% by week 24. The ceiling the sequence earns, never the default.' },
+    stall5: { label: 'Stopped after five plays', color: '#10233F',
+      f: function (w) { var V = [18, 18.5, 19.5, 21, 23, 26, 30, 33, 31, 34, 39, 43, 45.5, 46.5, 47, 47, 47, 47, 46.9, 46.8, 46.8, 46.7, 46.7, 46.6, 46.6]; return V[Math.min(24, Math.round(w))]; },
+      seed: ['whole', 'whenthen', 'inaction', 'build', 'ritual', 'policy', 'criteria', 'quiet'],
+      fail: 'The effort stops at week 8: nothing after Workflow Redesign ever lands.',
+      read: 'The first five plays land, then the effort stops: the curve climbs to 47% and flatlines below the threshold. Gains hold only while pushed, and stay reversible.' },
+    nomgr: { label: 'Managers left out', color: '#B42318',
+      f: function (w) { return mrf(w, 18, 37, 9, 30, 0.09); },
+      seed: ['manager'],
+      fail: 'Manager-as-Channel never lands: managers get talking points, never authority.',
+      read: 'One missing play breaks seven others: without managers, the redesign, the laggard one-to-ones, capability, and the new review criteria all misfire. The rollout stalls in the mid-30s.' },
+    noproof: { label: 'No seeded proof', color: '#C99A05',
+      f: function (w) { return mrf(w, 18, 41, 7, 26, 0.12); },
+      seed: ['proof'],
+      fail: 'Proof Seeding never lands: no first win exists for anyone to point at.',
+      read: 'Kill the proof and the whole social chain fires on thin air: peer relay, the norm reframe, the kit stories, all of it misfires. An early spike, then decay toward the mid-20s.' },
+    early: { label: 'Early adopters only', color: '#0E7569',
+      f: function (w) { return mlog(w, 18, 7, 3.5, 1.6); },
+      seed: ['peer', 'inaction', 'quiet'],
+      fail: 'The majority plays are skipped: only the enthusiasts are ever addressed.',
+      read: 'The innovator 16% move fast and nobody follows: the early and late majority never enter, and the curve flatlines near 25%.' },
+    access: { label: 'Access, then silence', color: '#4E5BA6',
+      f: function (w) { return mrf(w, 18, 24, 5, 13, 0.1); },
+      seed: ['sponsor', 'manager', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual'],
+      fail: 'Only the kit ships. Nothing else ever lands, and the kit itself misfires without proof inside it.',
+      read: 'Access, licenses, and a resources page, with barely any follow-up communication or engagement: usage peaks by week 5 and fades back to the do-nothing line.' },
+    base: { label: 'No intervention', color: '#98A2B3',
+      f: function (w) { return 18 - 6 * (1 - Math.exp(-w / 8)); },
+      seed: ['sponsor', 'manager', 'whole', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual'],
+      fail: 'Nothing lands at all.',
+      read: 'The do-nothing trajectory from the simulator: early enthusiasm decays to 12% by week 24.' }
+  };
+  function seqCascade(seed) {
+    var miss = {};
+    seed.forEach(function (id) { miss[id] = true; });
+    var weak = {}, changed = true;
+    while (changed) {
+      changed = false;
+      EDGES.forEach(function (e) {
+        if ((miss[e.f] || weak[e.f]) && !miss[e.t] && !weak[e.t]) { weak[e.t] = true; changed = true; }
+      });
+    }
+    return { miss: miss, weak: weak };
+  }
+  function seqWeakReason(id, miss, weak) {
+    var names = [];
+    EDGES.forEach(function (e) {
+      if (e.t === id && (miss[e.f] || weak[e.f])) names.push(PLAYS[e.f] ? PLAYS[e.f].name : e.f);
+    });
+    return names.length ? names[0] : '';
+  }
   var seqChart = document.getElementById('seq-chart');
   var seqLanes = document.getElementById('seq-lanes');
   var seqCap = document.getElementById('seq-caption');
@@ -2184,8 +2259,8 @@
   var SX0 = 56, SX1 = 950, SY0 = 232, SY1 = 22;
   function sqx(w) { return SX0 + (SX1 - SX0) * w / 24; }
   function sqy(p) { return SY0 - (SY0 - SY1) * p / 100; }
-  function seqF(w) { return 18 + 64 / (1 + Math.exp(-(w - 10.2) / 2.4)); }
   var seqEls = null;
+  var seqScenario = 'full', seqMiss = {}, seqWeak = {};
   (function buildSeq() {
     if (!seqChart || !seqLanes) return;
     var NS = 'http://www.w3.org/2000/svg';
@@ -2207,6 +2282,10 @@
     });
     el(seqChart, 'line', { x1: SX0, y1: sqy(55), x2: SX1, y2: sqy(55), stroke: '#E8B003', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' });
     el(seqChart, 'text', { x: SX0 + 6, y: sqy(55) - 7, 'font-size': 11, 'font-weight': 600, fill: '#8A6302', 'font-family': 'Archivo, sans-serif' }, 'self-sustaining - 55%');
+    var ghostPts = [];
+    for (var gw = 0; gw <= 24; gw += 0.25) ghostPts.push(sqx(gw).toFixed(1) + ',' + sqy(seqF(gw)).toFixed(1));
+    var ghost = el(seqChart, 'polyline', { fill: 'none', stroke: '#10233F', 'stroke-width': 2, 'stroke-dasharray': '2 5', opacity: 0, points: ghostPts.join(' ') });
+    var ghostLab = el(seqChart, 'text', { x: SX1 - 4, y: sqy(80) - 8, 'text-anchor': 'end', 'font-size': 10.5, fill: '#7A776C', 'font-family': 'Archivo, sans-serif', opacity: 0 }, 'full sequence, for reference');
     var crossFlag = el(seqChart, 'text', { x: sqx(11), y: 38, 'text-anchor': 'middle', 'font-size': 12.5, 'font-weight': 750, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, 'week 11: the change starts carrying itself');
     var crossTick = el(seqChart, 'line', { x1: sqx(11), y1: 44, x2: sqx(11), y2: sqy(55), stroke: '#E8B003', 'stroke-width': 1.2, 'stroke-dasharray': '3 3', opacity: 0 });
     var endFlag = el(seqChart, 'text', { x: SX1 - 4, y: 48, 'text-anchor': 'end', 'font-size': 12.5, 'font-weight': 700, fill: '#10233F', 'font-family': 'Archivo, sans-serif', opacity: 0 }, '80% by week 24');
@@ -2232,7 +2311,7 @@
       bar.addEventListener('click', function () { seqPause(); selectPlay(s[0]); });
       seqLanes.appendChild(bar);
     });
-    seqEls = { curve: curve, head: head, markers: markers, crossFlag: crossFlag, crossTick: crossTick, endFlag: endFlag };
+    seqEls = { curve: curve, head: head, markers: markers, crossFlag: crossFlag, crossTick: crossTick, endFlag: endFlag, ghost: ghost, ghostLab: ghostLab };
   })();
   var seqW = 0, seqRunning = false, seqRaf = null, seqLast = null;
   var SEQ_SPEED = 1.9;
@@ -2243,39 +2322,69 @@
   }
   function seqRender(w) {
     if (!seqEls) return;
+    var sc = SCEN[seqScenario];
+    var isFull = (seqScenario === 'full');
     var pts = [];
     for (var x = 0; x <= 24; x += 0.2) {
       if (x > w) break;
-      pts.push(sqx(x).toFixed(1) + ',' + sqy(seqF(x)).toFixed(1));
+      pts.push(sqx(x).toFixed(1) + ',' + sqy(sc.f(x)).toFixed(1));
     }
-    if (w >= 24) pts.push(sqx(24).toFixed(1) + ',' + sqy(seqF(24)).toFixed(1));
+    if (w >= 24) pts.push(sqx(24).toFixed(1) + ',' + sqy(sc.f(24)).toFixed(1));
     seqEls.curve.setAttribute('points', pts.join(' '));
+    seqEls.curve.setAttribute('stroke', sc.color);
     var hx = sqx(Math.min(w, 24)).toFixed(1);
     seqEls.head.setAttribute('x1', hx);
     seqEls.head.setAttribute('x2', hx);
     seqEls.head.setAttribute('opacity', (w > 0.1 && w < 23.9) ? 0.8 : 0);
+    seqEls.ghost.setAttribute('opacity', isFull ? 0 : 0.4);
+    seqEls.ghostLab.setAttribute('opacity', isFull ? 0 : 1);
     SCHEDULE.forEach(function (s) {
       var m = seqEls.markers[s[0]];
-      if (m) m.setAttribute('opacity', w >= s[1] ? 1 : 0);
+      if (m) {
+        var lands = w >= s[1] && !seqMiss[s[0]];
+        m.setAttribute('opacity', lands ? 1 : 0);
+        m.setAttribute('cy', sqy(sc.f(s[1])).toFixed(1));
+        m.setAttribute('fill', seqWeak[s[0]] ? '#FFFFFF' : '#E8B003');
+      }
     });
     document.querySelectorAll('.seq-bar').forEach(function (b) {
       var s = null;
       SCHEDULE.forEach(function (x2) { if (x2[0] === b.dataset.play) s = x2; });
       if (!s) return;
-      b.classList.toggle('on', w >= s[1]);
-      b.classList.toggle('live', w >= s[1] && w <= s[2] + 0.999);
+      var started = w >= s[1];
+      b.classList.toggle('on', started && !seqMiss[s[0]]);
+      b.classList.toggle('live', started && w <= s[2] + 0.999 && !seqMiss[s[0]]);
+      b.classList.toggle('miss', started && !!seqMiss[s[0]]);
+      b.classList.toggle('weak', started && !!seqWeak[s[0]]);
     });
-    seqEls.crossFlag.setAttribute('opacity', w >= 11 ? 1 : 0);
-    seqEls.crossTick.setAttribute('opacity', w >= 11 ? 0.8 : 0);
-    seqEls.endFlag.setAttribute('opacity', w >= 23.5 ? 1 : 0);
+    seqEls.crossFlag.setAttribute('opacity', (isFull && w >= 11) ? 1 : 0);
+    seqEls.crossTick.setAttribute('opacity', (isFull && w >= 11) ? 0.8 : 0);
+    if (w >= 23.5) {
+      var endV = Math.round(sc.f(24));
+      seqEls.endFlag.textContent = isFull ? '80% by week 24' : endV + '% - ' + (endV >= 55 ? 'held' : 'below threshold, reversible');
+      seqEls.endFlag.setAttribute('fill', isFull ? '#10233F' : '#A93226');
+      seqEls.endFlag.setAttribute('opacity', 1);
+    } else {
+      seqEls.endFlag.setAttribute('opacity', 0);
+    }
     if (seqCap) {
       if (w <= 0.05) {
         seqCap.innerHTML = '<b>The modeled 24 weeks.</b> Press play, or click any play below for its full model detail.';
+      } else if (w >= 23.9) {
+        seqCap.innerHTML = (isFull ? '<b>Full sequence.</b> ' : '<i>Negative case</i> <b>' + sc.label + '.</b> ') + sc.read;
       } else {
         var a = seqActive(w);
         if (a) {
           var p = PLAYS[a[0]];
-          seqCap.innerHTML = '<i>Week ' + Math.min(24, Math.max(1, Math.floor(w))) + '</i> <b>' + p.name + '.</b> ' + (SEQWHY[a[0]] || '');
+          var wk = '<i>Week ' + Math.min(24, Math.max(1, Math.floor(w))) + '</i> ';
+          if (seqMiss[a[0]]) {
+            seqCap.innerHTML = wk + '<b class="cap-miss">' + p.name + ' never lands.</b> ' + (sc.fail || '');
+          } else if (seqWeak[a[0]]) {
+            var dep = seqWeakReason(a[0], seqMiss, seqWeak);
+            seqCap.innerHTML = wk + '<b class="cap-weak">' + p.name + ' runs, but misfires:</b> it needed ' + dep + ', and ' + dep + ' is not there.';
+          } else {
+            seqCap.innerHTML = wk + '<b>' + p.name + '.</b> ' + (SEQWHY[a[0]] || '');
+          }
         }
       }
     }
@@ -2319,6 +2428,31 @@
     seqPause();
     seqW = (vx - SX0) / (SX1 - SX0) * 24;
     seqRender(seqW);
+  });
+  function setScenario(k) {
+    var sc = SCEN[k];
+    if (!sc) return;
+    seqScenario = k;
+    var cas = seqCascade(sc.seed || []);
+    seqMiss = cas.miss;
+    seqWeak = cas.weak;
+    document.querySelectorAll('.seq-scen button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.dataset.path === k ? 'true' : 'false');
+    });
+    seqPause();
+    if (reduceMotion) {
+      seqW = 24;
+      seqRender(24);
+      seqBtnSet('Replay');
+    } else {
+      seqW = 0;
+      seqRender(0);
+      seqPlay();
+    }
+    track('recovery-model-toggle');
+  }
+  document.querySelectorAll('.seq-scen button').forEach(function (b) {
+    b.addEventListener('click', function () { setScenario(b.dataset.path); });
   });
   if (reduceMotion) {
     seqW = 24;
@@ -2370,80 +2504,6 @@
         '<p class="ov-blurb"><b>' + nm + '.</b> ' + (btn.dataset.blurb || '') + '</p></div>');
       track('recovery-doc');
     });
-  });
-
-  /* ---- Scenario overlays: the negative cases, on the same sequence ---- */
-  function mlog(w, b2, span, mid, k) { return b2 + span / (1 + Math.exp(-(w - mid) / k)); }
-  function mrf(w, b2, peak, wpeak, floor, rate) {
-    var atPeak = b2 + (peak - b2) * (1 - Math.exp(-3));
-    if (w <= wpeak) return b2 + (peak - b2) * (1 - Math.exp(-3 * w / wpeak));
-    return floor + (atPeak - floor) * Math.exp(-rate * (w - wpeak));
-  }
-  var SCEN = {
-    full: { color: '#10233F', label: 'Full sequence',
-      read: 'The modeled ceiling: all thirteen plays land cleanly, the threshold is crossed at week 11, and adoption reaches 80% by week 24. It is the ceiling the sequence earns, never the default.' },
-    stall5: { color: '#10233F', dash: '7 5',
-      f: function (w) { var V = [18, 18.5, 19.5, 21, 23, 26, 30, 33, 31, 34, 39, 43, 45.5, 46.5, 47, 47, 47, 47, 46.9, 46.8, 46.8, 46.7, 46.7, 46.6, 46.6]; return V[w] !== undefined ? V[w] : 46.6; },
-      read: 'The first five plays land, then the effort stops: the curve climbs to 47% and flatlines below the threshold. Gains hold only while pushed, and stay reversible.' },
-    nomgr: { color: '#B42318', f: function (w) { return mrf(w, 18, 37, 9, 30, 0.09); },
-      read: 'Awareness and training land, but managers never get authority over workflow redesign or the new performance expectations: the rollout stalls in the mid-30s and drifts.' },
-    noproof: { color: '#C99A05', f: function (w) { return mrf(w, 18, 41, 7, 26, 0.12); },
-      read: 'Without seeded proof, the social plays fire on thin air: an early spike, then decay toward the mid-20s as the skeptics call the bluff.' },
-    early: { color: '#0E7569', f: function (w) { return mlog(w, 18, 7, 3.5, 1.6); },
-      read: 'Only the enthusiasts are addressed: the innovator 16% move fast, the early and late majority never enter, and the curve flatlines near 25%.' },
-    access: { color: '#4E5BA6', f: function (w) { return mrf(w, 18, 24, 5, 13, 0.1); },
-      read: 'Access, licenses, and a resources page, with barely any follow-up communication or engagement: usage peaks by week 5 and fades back to the do-nothing line.' },
-    base: { color: '#98A2B3', dash: '6 5', f: function (w) { return 18 - 6 * (1 - Math.exp(-w / 8)); },
-      read: 'The do-nothing trajectory from the simulator: early enthusiasm decays to 12% by week 24.' }
-  };
-  var SCENMISS = {
-    full: [],
-    stall5: ['whole', 'whenthen', 'inaction', 'build', 'ritual', 'policy', 'criteria', 'quiet'],
-    nomgr: ['manager', 'criteria'],
-    noproof: ['proof'],
-    early: ['peer', 'inaction', 'quiet'],
-    access: ['sponsor', 'manager', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual'],
-    base: ['sponsor', 'manager', 'whole', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual']
-  };
-  var scenLine = null;
-  if (seqChart) {
-    scenLine = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-    scenLine.setAttribute('fill', 'none');
-    scenLine.setAttribute('stroke-width', '2.4');
-    scenLine.setAttribute('opacity', '0');
-    seqChart.appendChild(scenLine);
-  }
-  function setScenario(k) {
-    var sc = SCEN[k];
-    if (!sc) return;
-    document.querySelectorAll('.seq-scen button').forEach(function (b) {
-      b.setAttribute('aria-pressed', b.dataset.path === k ? 'true' : 'false');
-    });
-    var missing = SCENMISS[k] || [];
-    document.querySelectorAll('.seq-bar').forEach(function (b) {
-      b.classList.toggle('miss', missing.indexOf(b.dataset.play) !== -1);
-    });
-    if (k === 'full') {
-      if (scenLine) scenLine.setAttribute('opacity', '0');
-      if (seqCap) seqCap.innerHTML = '<b>Full sequence.</b> ' + sc.read;
-      return;
-    }
-    seqPause();
-    seqW = 24;
-    seqRender(24);
-    if (scenLine) {
-      var pts = [];
-      for (var w = 0; w <= 24; w += 0.25) pts.push(sqx(w).toFixed(1) + ',' + sqy(sc.f(w)).toFixed(1));
-      scenLine.setAttribute('points', pts.join(' '));
-      scenLine.setAttribute('stroke', sc.color);
-      scenLine.setAttribute('stroke-dasharray', sc.dash || '');
-      scenLine.setAttribute('opacity', '1');
-    }
-    if (seqCap) seqCap.innerHTML = '<i>Negative case</i> <b>' + (document.querySelector('.seq-scen button[data-path="' + k + '"]') || { textContent: '' }).textContent + '.</b> ' + sc.read + ' The struck plays below are the ones that never land.';
-    track('recovery-model-toggle');
-  }
-  document.querySelectorAll('.seq-scen button').forEach(function (b) {
-    b.addEventListener('click', function () { setScenario(b.dataset.path); });
   });
 
   /* ---- Pilot scorecard (forty-pilots card) ---- */
@@ -2732,6 +2792,41 @@
       openModal(sorterHTML());
       wireSorter();
       track('recovery-sorter');
+    });
+  });
+
+  /* ---- Delivery-loop step details ---- */
+  var CYCDETAIL = {
+    '1': ['Your context - what we need from you', [
+      "3-5 hours a day of your team's time across the ten days: interviews, working sessions, reviews",
+      'Access that supports delivery: usage and adoption data, the deployment inventory, policies, prior comms and training material',
+      'The people in the room: the sponsor, managers of the affected teams, and a data owner for read-only extracts'
+    ]],
+    '2': ['AI-native production - how ten days is enough', [
+      'Coding agents accelerate delivery: instruments, integrations, and the dashboard are built during the engagement, not after it',
+      'Diagnostics and a conditions survey run over your population; the Simulation scores your sequence before it runs',
+      'Interview-to-deliverable loops: what your people say in the morning becomes playbook drafts the same day'
+    ]],
+    '3': ['Custom playbooks - yours, not ours', [
+      'Everything flows into white-labeled templates that follow your branding',
+      'Written for your teams, workflows, and vocabulary, and handed over editable',
+      'Your team owns and maintains them after delivery'
+    ]],
+    '4': ['Your dashboard - wired to real data', [
+      'Built with adoption-data integrations where your stack allows: platform usage, in-workflow signals',
+      'Every intervention wired to the metric that will show it working',
+      'Reviewed in your existing weekly cadence; the roadmap adjusts to what the data says'
+    ]]
+  };
+  var cycDetail = document.getElementById('cyc-detail');
+  function cycShow(step) {
+    var d = CYCDETAIL[step];
+    if (!d || !cycDetail) return;
+    cycDetail.innerHTML = '<b>' + d[0] + '</b><ul>' + d[1].map(function (it) { return '<li>' + it + '</li>'; }).join('') + '</ul>';
+  }
+  document.querySelectorAll('.cyc-step[data-step]').forEach(function (st) {
+    ['mouseenter', 'focus', 'click'].forEach(function (evn) {
+      st.addEventListener(evn, function () { cycShow(st.dataset.step); });
     });
   });
 
