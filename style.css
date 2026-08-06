@@ -3136,3 +3136,170 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
   font-weight: 600; color: var(--navy); line-height: 1; letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums; margin-bottom: 0.22rem;
 }
+
+/* ============================================================
+   SAIL DEVICES
+   Four instruments for the Sail page, each doing a job prose was doing:
+   trail stations (the method), a document sheet (the diagnostic), a priced
+   pathway (the tiers), and a founding-year timeline (the proof). Accent from
+   --brand, so they read Sail blue there and stay reusable.
+   ============================================================ */
+
+/* --- Trail stations: the five frameworks as a walked sequence --- */
+.trail { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.8rem; }
+@media (max-width: 1020px) { .trail { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .trail { grid-template-columns: 1fr; } }
+.trail-stop {
+  position: relative; min-width: 0;
+  background: #fff; border: 1px solid var(--reg-line); border-radius: var(--reg-radius);
+  padding: 1.05rem 1.1rem; box-shadow: var(--elev-1);
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.trail-stop:hover { box-shadow: var(--elev-2); transform: translateY(-2px); }
+.trail-stop .ts-dot {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #fff; border: 2px solid var(--brand); color: var(--brand);
+  font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+  margin-bottom: 0.55rem;
+}
+.trail-stop b {
+  display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 0.98rem; color: var(--navy); line-height: 1.3; margin-bottom: 0.3rem;
+}
+.trail-stop p { font-size: 0.84rem; color: var(--midgray); line-height: 1.55; margin: 0; }
+/* the dashed route between stations */
+.trail-stop:not(:last-child)::after {
+  content: ""; position: absolute; top: 50%; right: -0.85rem;
+  width: 0.9rem; border-top: 2px dashed color-mix(in srgb, var(--brand) 55%, #fff);
+}
+@media (max-width: 1020px) { .trail-stop::after { display: none; } }
+
+/* --- Document sheet: the written diagnostic rendered as the document --- */
+.sheet-doc {
+  background: #fff; border: 1px solid var(--reg-line); border-radius: var(--reg-radius-lg);
+  box-shadow: var(--elev-2); overflow: hidden;
+}
+.sheet-doc-head {
+  display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; align-items: baseline;
+  padding: 1.1rem 1.6rem; border-bottom: 2px solid var(--brand);
+}
+.sheet-doc-head b {
+  font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.05rem;
+  color: var(--navy);
+}
+.sheet-doc-head span {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--midgray);
+}
+.sheet-doc-entries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 760px) { .sheet-doc-entries { grid-template-columns: 1fr; } }
+.sheet-entry { padding: 1.3rem 1.6rem; border-top: 1px solid var(--reg-line); min-width: 0; }
+.sheet-doc-entries .sheet-entry:first-child { border-top: none; }
+@media (min-width: 761px) {
+  .sheet-doc-entries .sheet-entry:nth-child(2) { border-top: none; }
+  .sheet-doc-entries .sheet-entry:nth-child(odd) { border-right: 1px solid var(--reg-line); }
+}
+.sheet-entry em {
+  display: block; font-style: normal; font-family: var(--mono); font-size: 0.66rem;
+  letter-spacing: 0.08em; color: var(--brand); margin-bottom: 0.3rem;
+}
+.sheet-entry b {
+  display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 1.02rem; color: var(--navy); line-height: 1.3; margin-bottom: 0.3rem;
+}
+.sheet-entry p { font-size: 0.88rem; color: var(--midgray); line-height: 1.6; margin: 0; }
+.sheet-doc-foot {
+  display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem;
+  padding: 0.85rem 1.6rem; border-top: 1px solid var(--reg-line);
+  background: var(--reg-bg-alt);
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--midgray);
+}
+
+/* --- Pathway: the tiers, priced, on one strip --- */
+.pathway { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; }
+@media (max-width: 1020px) { .pathway { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .pathway { grid-template-columns: 1fr; } }
+.pathway a.pw {
+  display: flex; flex-direction: column; min-width: 0; text-decoration: none;
+  background: #fff; border: 1px solid var(--reg-line); border-top: 3px solid var(--brand);
+  border-radius: var(--reg-radius); padding: 1.1rem 1.2rem; box-shadow: var(--elev-1);
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.pathway a.pw:hover { box-shadow: var(--elev-2); transform: translateY(-3px); }
+.pw b {
+  font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1rem;
+  color: var(--navy); line-height: 1.3;
+}
+.pw i {
+  font-style: normal; font-size: 0.8rem; color: var(--midgray); line-height: 1.45;
+  margin: 0.25rem 0 0.8rem;
+}
+.pw .pw-price {
+  margin-top: auto; font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 1.35rem; color: var(--navy); letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.pw .pw-unit {
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--midgray); margin-top: 0.15rem;
+}
+.pw--feat { position: relative; }
+.pw--feat .pw-flag {
+  position: absolute; top: -3px; right: 0.9rem;
+  font-family: var(--mono); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #10233F; background: var(--logo-gold);
+  padding: 0.24rem 0.55rem; border-radius: 0 0 6px 6px;
+}
+
+/* --- Founding-year timeline: the proof claim, drawn --- */
+.founding { position: relative; padding: 4.4rem 0.5rem 4.6rem; }
+.founding .fx-axis {
+  position: relative; height: 2px; background: var(--reg-line); border-radius: 1px;
+}
+.founding .fx-tick {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+}
+.founding .fx-tick i {
+  display: block; width: 11px; height: 11px; border-radius: 50%;
+  background: #fff; border: 2.5px solid var(--brand);
+}
+.founding .fx-tick a {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  display: block; text-align: center; text-decoration: none; white-space: nowrap;
+}
+.founding .fx-tick.up a { bottom: 1.5rem; }
+.founding .fx-tick.down a { top: 1.5rem; }
+/* stem from dot to label */
+.founding .fx-tick::before {
+  content: ""; position: absolute; left: 50%; width: 1px; height: 0.95rem;
+  background: color-mix(in srgb, var(--brand) 45%, #fff);
+}
+.founding .fx-tick.up::before { bottom: 0.55rem; }
+.founding .fx-tick.down::before { top: 0.55rem; }
+.founding .fx-tick a b {
+  display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 0.92rem; color: var(--navy); line-height: 1.2;
+}
+.founding .fx-tick a span {
+  display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em;
+  color: var(--midgray); margin-top: 0.1rem;
+}
+.founding .fx-tick a:hover b { color: var(--brand); }
+.founding .fx-span {
+  position: absolute; left: 0; right: 0; bottom: -3.4rem; text-align: center;
+  font-size: 0.84rem; color: var(--midgray); font-style: italic;
+}
+/* Mobile: the axis goes vertical, one row per company, ordered by year. */
+@media (max-width: 700px) {
+  .founding { padding: 0; }
+  .founding .fx-axis { height: auto; background: none; border-left: 2px solid var(--reg-line); padding-left: 1.2rem; display: grid; gap: 0.9rem; }
+  .founding .fx-tick { position: static; transform: none; }
+  .founding .fx-tick i { position: absolute; margin-left: -1.65rem; margin-top: 0.35rem; }
+  .founding .fx-tick a { position: static; transform: none; text-align: left; white-space: normal; }
+  .founding .fx-tick::before { display: none; }
+  .founding .fx-tick a b { display: inline; margin-right: 0.5rem; }
+  .founding .fx-tick a span { display: inline; }
+  .founding .fx-span { position: static; margin-top: 1.2rem; text-align: left; }
+}
