@@ -4105,13 +4105,15 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 }
 .seat-facts li:last-child { margin-bottom: 0; }
 
-/* ---- Reach: the geography credential ----
-   Two columns, because the claim has two halves that the word "global" usually
-   collapses into one: the countries lived and worked in, and the span of US
-   jurisdictions delivered to. Names rather than adjectives, on the reasoning
-   that a reader checks a list and skims a claim. */
+/* ---- Reach: the geography and sector credential ----
+   Three columns, because the claim has three parts that the word "global"
+   usually collapses into one: the countries lived and worked in, the US public
+   bodies delivered to, and the industries delivered into. Industry sits in its
+   own column rather than a footnote under the public sector list, which read as
+   though the whole US record were government work. Names rather than adjectives,
+   on the reasoning that a reader checks a list and skims a claim. */
 .reach-band {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.9rem; margin-top: 1.9rem;
 }
 .reach-col {
@@ -4141,6 +4143,16 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
   color: var(--navy); line-height: 1.5; white-space: nowrap;
 }
 .reach-note { font-size: 0.82rem; color: var(--midgray); line-height: 1.45; margin: 0.8rem 0 0; }
+/* One disclaimer under the band rather than repeated in each column's note. */
+.reach-foot { font-size: 0.78rem; color: var(--midgray); margin: 0.9rem 0 0; }
+/* Three across needs more room than two did: drop to two before the columns
+   get narrow enough to wrap a name like "Defense Innovation Unit". */
+@media (max-width: 1000px) {
+  .reach-band { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Three into two leaves the last card orphaned beside dead space; let it
+     take the second row whole. */
+  .reach-band .reach-col:nth-child(3) { grid-column: 1 / -1; }
+}
 @media (max-width: 720px) {
   .seat-fig { font-size: 2rem; }
   .reach-band { grid-template-columns: 1fr; }
