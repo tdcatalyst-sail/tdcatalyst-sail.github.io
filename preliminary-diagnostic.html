@@ -654,22 +654,34 @@
     /* Desktop keeps the title and the questions beside the chart; mobile reads
        title, chart, questions. Named areas carry both without duplicating
        markup or reordering the DOM. */
+    /* The panel reads as a document sheet, not a widget: a letterhead strip,
+       squarer corners, quiet border, the archetype colour only in accents. */
     .ap-panel {
       display: grid; align-items: start;
       grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
-      grid-template-areas: "head viz" "qs viz";
-      gap: 1.2rem 1.6rem;
-      background: #fff; border: 1px solid var(--reg-line); border-radius: 18px;
-      box-shadow: var(--elev-2); padding: 1.6rem 1.7rem;
+      grid-template-areas: "dochead dochead" "head viz" "qs viz";
+      gap: 1.1rem 1.6rem;
+      background: #fff; border: 1px solid var(--reg-line); border-radius: 8px;
+      box-shadow: var(--elev-2); padding: 1.3rem 1.7rem 1.6rem;
     }
+    .ap-dochead {
+      grid-area: dochead; display: flex; justify-content: space-between; align-items: baseline;
+      gap: 1rem; padding-bottom: 0.7rem; border-bottom: 2px solid var(--logo-gold);
+      font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.09em;
+      text-transform: uppercase; color: var(--midgray);
+    }
+    .ap-dochead .ap-brand { color: var(--navy); letter-spacing: 0.04em; }
+    .ap-dochead .ap-brand b { font-weight: 700; }
+    .ap-weak { font-size: 0.9rem; color: var(--charcoal); margin: 0.7rem 0 0; }
+    .ap-weak b { color: var(--ac); font-weight: 650; }
     .ap-head { grid-area: head; min-width: 0; }
     .ap-viz { grid-area: viz; }
     .ap-qwrap { grid-area: qs; min-width: 0; }
     @media (max-width: 700px) {
       .ap-panel {
         grid-template-columns: 1fr;
-        grid-template-areas: "head" "viz" "qs";
-        gap: 1.1rem; padding: 1.3rem 1.2rem;
+        grid-template-areas: "dochead" "head" "viz" "qs";
+        gap: 1.1rem; padding: 1.1rem 1.2rem 1.3rem;
       }
     }
     .ap-name {
@@ -1198,7 +1210,7 @@ function renderIntro() {
         <div class="reg-kicker">How the four minutes are spent</div>
         <div class="diag-chain">
           <div class="diag-chain-step"><em>1</em><b>Answer twelve questions</b><i>Each one carries the research finding it rests on, cited in place.</i></div>
-          <div class="diag-chain-step"><em>2</em><b>Get a named archetype</b><i>Your profile across six criteria, and the one axis it gives way on.</i></div>
+          <div class="diag-chain-step"><em>2</em><b>Get a named archetype</b><i>Your profile across six criteria, and the weakest one named.</i></div>
           <div class="diag-chain-step"><em>3</em><b>Leave with three moves</b><i>What to run in the next ninety days, in order.</i></div>
         </div>
       </div>
@@ -1610,16 +1622,17 @@ function archPanel(key) {
       </div>
     </div>`).join('');
   return `
+    <div class="ap-dochead"><span class="ap-brand"><b>TD</b>catalyst</span><span>Preliminary Diagnostic &middot; pattern ${pad2(Object.keys(ARCHETYPES).indexOf(key) + 1)} of 04</span></div>
     <div class="ap-head">
       <div class="ap-name">${esc(A.name)}</div>
       <p class="ap-read">${esc(P.read)}</p>
-      <div class="ap-deficit"><i></i><span>Gives way on <b>${esc(P.deficit)}</b></span></div>
+      <p class="ap-weak">Weakest of the six criteria: <b>${esc(P.deficit)}</b>.</p>
     </div>
-    <div class="ap-viz">${radarTile(key)}<p class="ap-cap">Read on the same six criteria as every other organization. The dashed ring marks the axis this archetype gives way on.</p></div>
+    <div class="ap-viz">${radarTile(key)}<p class="ap-cap">Profiled on the same six criteria as every organization that takes the diagnostic. The dashed ring marks the weakest area.</p></div>
     <div class="ap-qwrap">
-      <div class="ap-moves-head">Questions that surface it</div>
+      <div class="ap-moves-head">Two questions from the diagnostic</div>
       <div class="ap-qs">${qs}</div>
-      <p class="ap-qs-note">Two of the twelve, shown with the answer that points here. Every question in the diagnostic carries the research finding it rests on, so by the time you start you have already read the ground it stands on.</p>
+      <p class="ap-qs-note">Two of the twelve questions, shown with the answer that points to this pattern and the research finding behind it.</p>
     </div>`;
 }
 
@@ -1639,7 +1652,7 @@ function radarBlock(key) {
   const reads = RADAR_AXES.map((axis, i) => {
     const v = P.v[i];
     const isGap = i === P.crater || v < 0.35;
-    const band = v >= 0.5 ? 'reads strong' : (v >= 0.35 ? 'reads mixed' : 'reads weak');
+    const band = v >= 0.5 ? 'strong' : (v >= 0.35 ? 'mixed' : 'weak');
     return `<div class="diag-read ${isGap ? 'gap' : 'pass'}">
       <span class="mk">${isGap ? '\u2715' : '\u2713'}</span>
       <span class="nm">${esc(axis)}</span>
@@ -1651,9 +1664,9 @@ function radarBlock(key) {
       <div>${radarSvg(key)}</div>
       <div>
         <div class="tdc-kicker">Characteristic profile</div>
-        <h3 class="diag-radar-title">Where this pattern is strong, and where it gives way</h3>
+        <h3 class="diag-radar-title">Where this pattern is strong, and where it is weak</h3>
         <div class="diag-reads">${reads}</div>
-        <div class="diag-deficit"><i></i><span><b>Deficit: ${esc(P.deficit)}.</b> ${esc(P.read)}</span></div>
+        <div class="diag-deficit"><i></i><span><b>Weakest area: ${esc(P.deficit)}.</b> ${esc(P.read)}</span></div>
       </div>
     </div>`;
 }

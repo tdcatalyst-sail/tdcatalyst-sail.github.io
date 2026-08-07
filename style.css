@@ -1724,6 +1724,25 @@ section.article-section { padding-top: 2rem; }
 }
 .sel-wins { margin: 0.9rem 0 0.9rem; }
 
+/* ---- Per-station photo bands on the method page: the ambiance above,
+   the venue and what the station hosts on the caption bar. ---- */
+.stn-band {
+  margin: 0 0 1.8rem; border: 1px solid var(--reg-line);
+  border-radius: var(--reg-radius-lg); overflow: hidden; background: #fff;
+}
+.stn-band img { width: 100%; height: 290px; object-fit: cover; display: block; }
+.stn-band figcaption {
+  display: flex; flex-wrap: wrap; gap: 0.2rem 1.1rem; align-items: baseline;
+  padding: 0.75rem 1.2rem;
+}
+.stn-band b { font-size: 0.92rem; font-weight: 700; color: var(--navy); }
+.stn-band span { font-size: 0.85rem; color: var(--midgray); }
+.stn-band em { margin-left: auto; font-size: 0.8rem; font-style: italic; color: var(--midgray); }
+@media (max-width: 700px) {
+  .stn-band img { height: 200px; }
+  .stn-band em { margin-left: 0; flex-basis: 100%; }
+}
+
 /* ---- The worked example: the question up top, then the three Teece moves
    as columns rather than four stacked paragraphs. ---- */
 .worked {
@@ -3820,6 +3839,14 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 /* ---- Signs sampler ---- */
 .signs2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; }
 @media (max-width: 720px) { .signs2 { grid-template-columns: 1fr; } }
+/* The three postures ride the same card, one per column, numbered. */
+.signs2.postures3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 720px) { .signs2.postures3 { grid-template-columns: 1fr; } }
+.sign-card .sg-num {
+  font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.12em;
+  color: var(--logo-blue); margin-bottom: 0.4rem;
+}
+.postures3 .sign-card .sg-q { font-weight: 400; color: var(--midgray); }
 .sign-card {
   min-width: 0; background: #fff; border: 1px solid var(--reg-line);
   border-left: 3px solid var(--logo-blue); border-radius: var(--reg-radius);
