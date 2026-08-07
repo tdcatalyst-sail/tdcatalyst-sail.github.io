@@ -20,7 +20,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=4bfd8ba6">
+  <link rel="stylesheet" href="/style.css?v=e63a7f12">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -1508,6 +1508,65 @@
   }
   var SLICE = 360 / PLAYS.length, GAP = 1.6;
   var wheelSegs = {}, angleAt = 0, groupArcs = {};
+  /* ---- horizontal label fitting (Tom 2026-08-07) ----
+     Every string in the wheel is horizontal. Words never break; a label may
+     stack one word per line, centered in its sector. The fitter walks font
+     sizes from large to small and several radial centers, and accepts the
+     first size where every line's corner points sit inside the annular
+     sector with a 7px margin. Re-run once webfonts land. */
+  var mctx = document.createElement('canvas').getContext('2d');
+  function measureW(txt, size, weight) {
+    mctx.font = weight + ' ' + size + 'px Archivo, sans-serif';
+    return mctx.measureText(txt).width;
+  }
+  function angOf(x, y) {
+    var a = Math.atan2(y - CY, x - CX) * 180 / Math.PI + 90;
+    a %= 360; return a < 0 ? a + 360 : a;
+  }
+  function inBand(x, y, r0, r1, a0, a1) {
+    var r = Math.hypot(x - CX, y - CY);
+    if (r < r0 || r > r1) return false;
+    var a = angOf(x, y);
+    return a >= a0 && a <= a1;
+  }
+  function layoutInSector(lines, r0, r1, a0, a1, maxF, minF) {
+    var M = 7;
+    for (var f = maxF; f >= minF; f -= 0.5) {
+      var widths = lines.map(function (L) { return measureW(L.t, f * L.s, L.w); });
+      var lhs = lines.map(function (L) { return f * L.s * 1.16; });
+      var totH = lhs.reduce(function (a, b) { return a + b; }, 0);
+      var rfs = [0.5, 0.58, 0.42, 0.66, 0.34];
+      for (var ri = 0; ri < rfs.length; ri++) {
+        var rc = r0 + (r1 - r0) * rfs[ri];
+        var c = pol(rc, (a0 + a1) / 2);
+        var mA = (M / rc) * 57.29578;
+        var y = c[1] - totH / 2, ok = true, lineYs = [];
+        for (var li = 0; li < lines.length && ok; li++) {
+          var cyL = y + lhs[li] / 2;
+          lineYs.push(cyL);
+          var hw = widths[li] / 2, hh = f * lines[li].s * 0.6;
+          var pts = [[c[0] - hw, cyL - hh], [c[0] + hw, cyL - hh], [c[0] - hw, cyL + hh], [c[0] + hw, cyL + hh], [c[0] - hw, cyL], [c[0] + hw, cyL]];
+          for (var pi = 0; pi < pts.length; pi++) {
+            if (!inBand(pts[pi][0], pts[pi][1], r0 + M, r1 - M, a0 + mA, a1 - mA)) { ok = false; break; }
+          }
+          y += lhs[li];
+        }
+        if (ok) return { f: f, cx: c[0], lineYs: lineYs };
+      }
+    }
+    return null;
+  }
+  function setTspans(textEl, wordsArr, cx, ys) {
+    while (textEl.firstChild) textEl.removeChild(textEl.firstChild);
+    wordsArr.forEach(function (w, i) {
+      var ts = document.createElementNS(NS, 'tspan');
+      ts.setAttribute('x', cx.toFixed(1));
+      ts.setAttribute('y', ys[i].toFixed(1));
+      ts.textContent = w;
+      textEl.appendChild(ts);
+    });
+  }
+  var relayoutFns = [];
   GROUPS.forEach(function (grp) {
     var n = PLAYS.filter(function (p) { return p.group === grp.key; }).length;
     groupArcs[grp.key] = { a0: angleAt, a1: angleAt + n * SLICE };
@@ -1517,16 +1576,27 @@
   var arrowDefs = wel('defs', {});
   var mk = wel('marker', { id: 'wheelarr', viewBox: '0 0 8 8', refX: 6, refY: 4, markerWidth: 7, markerHeight: 7, orient: 'auto' }, arrowDefs);
   wel('path', { d: 'M0 0L8 4L0 8Z', fill: '#8A6302' }, mk);
+  // Group ink dark enough to read on the tint (gold text on gold tint fails)
+  var GINK = { O: '#10233F', M: '#8A6302', C: '#0E7569', S: '#4E5BA6' };
   GROUPS.forEach(function (grp) {
     var arc = groupArcs[grp.key];
     var g = wel('g', {});
-    wel('path', { d: ringSeg(IR0, IR1, arc.a0 + GAP / 2, arc.a1 - GAP / 2), fill: GCOLOR[grp.key], opacity: 0.92 }, g);
-    var mid = (arc.a0 + arc.a1) / 2, lp = pol((IR0 + IR1) / 2, mid);
-    var words = grp.label;
-    var t = wel('text', { x: lp[0].toFixed(1), y: lp[1].toFixed(1), 'text-anchor': 'middle', 'dominant-baseline': 'middle',
-      'font-size': 15, 'font-weight': 700, fill: '#fff', 'font-family': 'Archivo, sans-serif', 'letter-spacing': '0.02em' }, g, words);
-    var rot = mid > 180 ? mid + 90 : mid - 90;
-    t.setAttribute('transform', 'rotate(' + rot.toFixed(1) + ' ' + lp[0].toFixed(1) + ' ' + lp[1].toFixed(1) + ')');
+    // A tint, not a plain fill: the group is a category; the alternation of
+    // plays on the outer ring is the sequence that counts.
+    wel('path', { d: ringSeg(IR0, IR1, arc.a0 + GAP / 2, arc.a1 - GAP / 2),
+      fill: GCOLOR[grp.key], 'fill-opacity': 0.1, stroke: GCOLOR[grp.key], 'stroke-opacity': 0.45, 'stroke-width': 1 }, g);
+    var t = wel('text', { 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+      'font-weight': 700, fill: GINK[grp.key], 'font-family': 'Archivo, sans-serif', 'letter-spacing': '0.02em' }, g);
+    (function (grpRef, tRef, a0, a1) {
+      var apply = function () {
+        var lines = [{ t: grpRef.label, s: 1, w: 700 }];
+        var lay = layoutInSector(lines, IR0, IR1, a0, a1, 21, 8);
+        if (!lay) { var c = pol((IR0 + IR1) / 2, (a0 + a1) / 2); lay = { f: 8, cx: c[0], lineYs: [c[1]] }; }
+        tRef.setAttribute('font-size', lay.f);
+        setTspans(tRef, [grpRef.label], lay.cx, lay.lineYs);
+      };
+      apply(); relayoutFns.push(apply);
+    })(grp, t, arc.a0 + GAP / 2, arc.a1 - GAP / 2);
     // rotation arrow just past this group's end, in the seam between rings
     var ap0 = pol(IR1 + 3, arc.a1 - 7), ap1 = pol(IR1 + 3, arc.a1 + 3);
     wel('path', { d: 'M' + ap0[0].toFixed(1) + ' ' + ap0[1].toFixed(1) + ' A' + (IR1 + 3) + ' ' + (IR1 + 3) + ' 0 0 1 ' + ap1[0].toFixed(1) + ' ' + ap1[1].toFixed(1),
@@ -1541,14 +1611,30 @@
     var dur = p.weeks + (p.weeks === 1 ? ' wk' : ' wks');
     g.setAttribute('aria-label', 'Add to plan: ' + p.name + ', ' + dur);
     var path = wel('path', { d: ringSeg(OR0, OR1, a0, a1), fill: GCOLOR[p.group], 'fill-opacity': 0.1, stroke: GCOLOR[p.group], 'stroke-opacity': 0.35, 'stroke-width': 1 }, g);
-    var lp = pol((OR0 + OR1) / 2, mid);
-    var rot = mid > 180 ? mid + 90 : mid - 90;
-    var t = wel('text', { x: lp[0].toFixed(1), y: (lp[1] - 6).toFixed(1), 'text-anchor': 'middle', 'dominant-baseline': 'middle',
-      'font-size': 12.5, 'font-weight': 700, fill: '#1B1A16', 'font-family': 'Archivo, sans-serif', 'pointer-events': 'none' }, g, WSHORT[p.id] || p.name);
-    var tw = wel('text', { x: lp[0].toFixed(1), y: (lp[1] + 10).toFixed(1), 'text-anchor': 'middle', 'dominant-baseline': 'middle',
-      'font-size': 10, 'font-weight': 400, fill: '#6B6B6B', 'font-family': 'Archivo, sans-serif', 'pointer-events': 'none' }, g, dur);
-    var tr = 'rotate(' + rot.toFixed(1) + ' ' + lp[0].toFixed(1) + ' ' + lp[1].toFixed(1) + ')';
-    t.setAttribute('transform', tr); tw.setAttribute('transform', tr);
+    // Horizontal, one word per line when needed, sized as large as the
+    // sector allows with a 7px margin all round.
+    var t = wel('text', { 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+      'font-weight': 700, fill: '#1B1A16', 'font-family': 'Archivo, sans-serif', 'pointer-events': 'none' }, g);
+    var tw = wel('text', { 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+      'font-weight': 400, fill: '#6B6B6B', 'font-family': 'Archivo, sans-serif', 'pointer-events': 'none' }, g);
+    (function (playRef, tRef, twRef, sa0, sa1) {
+      var words = (WSHORT[playRef.id] || playRef.name).split(' ');
+      var durTxt = playRef.weeks + (playRef.weeks === 1 ? ' wk' : ' wks');
+      var apply = function () {
+        var lines = words.map(function (w) { return { t: w, s: 1, w: 700 }; });
+        lines.push({ t: durTxt, s: 0.78, w: 400 });
+        var lay = layoutInSector(lines, OR0, OR1, sa0, sa1, 19, 8);
+        if (!lay) {
+          var c = pol((OR0 + OR1) / 2, (sa0 + sa1) / 2);
+          lay = { f: 8, cx: c[0], lineYs: words.map(function (_, i) { return c[1] + (i - words.length / 2) * 9; }).concat([c[1] + words.length * 9 / 2 + 8]) };
+        }
+        tRef.setAttribute('font-size', lay.f);
+        twRef.setAttribute('font-size', lay.f * 0.78);
+        setTspans(tRef, words, lay.cx, lay.lineYs.slice(0, words.length));
+        setTspans(twRef, [durTxt], lay.cx, [lay.lineYs[words.length]]);
+      };
+      apply(); relayoutFns.push(apply);
+    })(p, t, tw, a0, a1);
     // flagged-cell marker: a dot riding the outer rim
     var dp = pol(OR1 - 7, mid);
     var dot = wel('circle', { cx: dp[0].toFixed(1), cy: dp[1].toFixed(1), r: 3.2, fill: '#DB160E', opacity: 0 }, g);
@@ -1584,16 +1670,11 @@
   var hubCount = wel('text', { x: CX, y: CY - 12, 'text-anchor': 'middle', 'font-size': 30, 'font-weight': 700, fill: '#10233F', 'font-family': 'Archivo, sans-serif' }, null, '0');
   wel('text', { x: CX, y: CY + 10, 'text-anchor': 'middle', 'font-size': 11, fill: '#6B6B6B', 'font-family': 'Archivo, sans-serif' }, null, 'plays in your plan');
   var hubWeeks = wel('text', { x: CX, y: CY + 30, 'text-anchor': 'middle', 'font-size': 12, 'font-weight': 600, fill: '#8A6302', 'font-family': 'Archivo, sans-serif' }, null, '0 / 24 weeks');
-  // long labels squeeze to the arc chord; re-measured once webfonts land
-  function fitWheelLabels() {
-    Object.keys(wheelSegs).forEach(function (id) {
-      var t = wheelSegs[id].name;
-      t.removeAttribute('textLength');
-      if (t.getComputedTextLength() > 96) { t.setAttribute('textLength', 96); t.setAttribute('lengthAdjust', 'spacingAndGlyphs'); }
-    });
+  // every label re-fits once webfonts land, since Archivo's metrics differ
+  // from the fallback the first pass measured with
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { relayoutFns.forEach(function (f) { f(); }); });
   }
-  fitWheelLabels();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitWheelLabels);
 
   // ===== render =====
   function render() {

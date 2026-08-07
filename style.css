@@ -3839,14 +3839,26 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 /* ---- Signs sampler ---- */
 .signs2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; }
 @media (max-width: 720px) { .signs2 { grid-template-columns: 1fr; } }
-/* The three postures ride the same card, one per column, numbered. */
+/* The three postures as bubbles: one horizontal line at every width,
+   centered content, fully rounded. No accent bar — the number carries it. */
 .signs2.postures3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-@media (max-width: 720px) { .signs2.postures3 { grid-template-columns: 1fr; } }
 .sign-card .sg-num {
   font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.12em;
   color: var(--logo-blue); margin-bottom: 0.4rem;
 }
+.postures3 .sign-card {
+  border: 1px solid var(--reg-line); border-left: 1px solid var(--reg-line);
+  border-radius: 28px; text-align: center;
+  padding: 1.6rem 1.3rem 1.5rem; box-shadow: var(--elev-2);
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+}
 .postures3 .sign-card .sg-q { font-weight: 400; color: var(--midgray); }
+@media (max-width: 720px) {
+  .signs2.postures3 { gap: 0.55rem; }
+  .postures3 .sign-card { border-radius: 20px; padding: 1rem 0.7rem 0.9rem; }
+  .postures3 .sign-card .sg-name { font-size: 0.98rem; }
+  .postures3 .sign-card .sg-q { font-size: 0.8rem; line-height: 1.45; }
+}
 .sign-card {
   min-width: 0; background: #fff; border: 1px solid var(--reg-line);
   border-left: 3px solid var(--logo-blue); border-radius: var(--reg-radius);
