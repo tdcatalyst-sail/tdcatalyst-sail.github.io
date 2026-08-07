@@ -1763,9 +1763,20 @@ section.article-section { padding-top: 2rem; }
 .stn-band b { font-size: 0.92rem; font-weight: 700; color: var(--navy); }
 .stn-band span { font-size: 0.85rem; color: var(--midgray); }
 .stn-band em { margin-left: auto; font-size: 0.8rem; font-style: italic; color: var(--midgray); }
+/* Per-photo focal points: tuned separately for the wide desktop band and the
+   short, near-square mobile band, since one object-position compromises
+   between two very different crop windows on a portrait source photo. */
+.stn-band img.img-storm { object-position: center 45%; }
+.stn-band img.img-canopy { object-position: center 60%; }
+.stn-band img.img-cypress { object-position: center 55%; }
+.stn-band img.img-grove { object-position: center 60%; }
 @media (max-width: 700px) {
   .stn-band img { height: 200px; }
   .stn-band em { margin-left: 0; flex-basis: 100%; }
+  .stn-band img.img-storm { object-position: center 28%; }
+  .stn-band img.img-canopy { object-position: center 35%; }
+  .stn-band img.img-cypress { object-position: center 50%; }
+  .stn-band img.img-grove { object-position: center 45%; }
 }
 
 /* ---- The worked example: the question up top, then the three Teece moves
