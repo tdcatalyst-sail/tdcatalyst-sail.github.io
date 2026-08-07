@@ -937,7 +937,7 @@ hr.sign-rule {
 .tier.recommended + .tier { border-top: 1px solid var(--hairline); }
 
 /* ============================================================
-   Contact Card mini — shown on Begin page
+   Contact Card mini — shown on Start page
    ============================================================ */
 .mini-contact-card {
   background: #fff;
@@ -3913,6 +3913,50 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 .sign-card .sg-q { font-size: 0.95rem; font-weight: 600; color: var(--navy); line-height: 1.5; }
 .signs2-cap { margin-top: 1rem; font-size: 0.88rem; color: var(--midgray); }
 .signs2-cap a { font-weight: 600; }
+
+/* ---- The posture glyph ----
+   One seeded piece of ground, drawn three times in the terrain device's own
+   grammar. 01 carries every line at equal weight, 02 drops the noise to ghosts
+   and the summit surfaces as an index contour, 03 keeps the summit and adds the
+   route. Hand-authored rather than generated: three fixed states, so a canvas
+   would buy nothing and cost the static-complete default. The <defs> block is
+   shared per page and drawn from #pg-* ids. */
+.pg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.sg-glyph { line-height: 0; margin-bottom: 0.7rem; }
+/* height auto, so the narrow cards at 375px letterbox nothing: the drawing
+   scales by width and the card keeps no dead vertical space. */
+.sg-glyph svg { display: block; width: 140px; height: auto; max-width: 100%; }
+.pg-noise { stroke: rgba(31, 58, 95, 0.40); }
+.pg-ghost { stroke: rgba(31, 58, 95, 0.13); }
+.pg-minor { stroke: rgba(31, 58, 95, 0.30); }
+.pg-faint { stroke: rgba(31, 58, 95, 0.20); }
+.pg-index { stroke: var(--logo-blue); }
+.pg-node { fill: #fff; stroke: var(--logo-blue); }
+.pg-node--lit { fill: var(--logo-blue); stroke: #fff; }
+@media (max-width: 720px) {
+  .sg-glyph { margin-bottom: 0.45rem; }
+  .sg-glyph svg { width: 104px; }
+}
+
+/* The same ground unrolled: three readings side by side with the walk drawn
+   straight through. Method page form, where the column is wide enough that
+   three repeated cards would just restate the Sail index. */
+.pg-strip { margin: 1.6rem 0 0; padding: 0; }
+.pg-strip svg { display: block; width: 100%; height: auto; }
+.pg-strip figcaption {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem; text-align: center; margin-top: 0.5rem;
+}
+.pg-strip figcaption b {
+  display: block; font-family: 'Fraunces', 'Besley', Georgia, serif;
+  font-weight: 400; font-size: 1.02rem; color: var(--navy);
+}
+.pg-strip figcaption span { display: block; font-size: 0.84rem; color: var(--midgray); }
+@media (max-width: 560px) {
+  .pg-strip figcaption { grid-template-columns: 1fr; gap: 0.3rem; text-align: left; }
+  .pg-strip figcaption b { font-size: 0.94rem; }
+  .pg-strip figcaption span { font-size: 0.8rem; }
+}
 
 /* ============================================================
    THE WALK SYSTEM  (Sail)

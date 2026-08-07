@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=c94d0b27">
+  <link rel="stylesheet" href="/style.css?v=543e1a74">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -210,18 +210,51 @@
       <h2>Walking fits the decisions that matter most.</h2>
       <p class="stn-sub">The pace of a coastal walk makes three postures available, and each one feeds the next.</p>
     </div>
+    <!-- The posture glyph's ground: one field, reused by all three readings, so
+         the cards read as one landscape seen three ways rather than as three
+         pictures. Lobed and off-center on purpose; nested ovals read as a
+         target, not a summit. Styles live in style.css under "posture glyph". -->
+    <svg class="pg-defs" aria-hidden="true"><defs>
+      <path id="pg-l1" d="M46,15 C49,11.8 55,12.8 55.5,17 C56,20.6 51,22.2 48,20.6 C45.5,19.2 44,17 46,15 Z"/>
+      <path id="pg-l2" d="M40,15.5 C44,8.5 57,8 60,14.5 C62.5,20 55,26 48,24.5 C43,23.5 37.5,20 40,15.5 Z"/>
+      <path id="pg-l3" d="M32,18 C35,6 58,2.5 65,11 C71,18.5 61,30 49,30 C40,30 29.5,26 32,18 Z"/>
+      <path id="pg-l4" d="M20,26 C19,10 45,-1 62,4 C74,7.5 77,20 69,29 C60,39 42,41 31,37 C24.5,34.5 20.5,31 20,26 Z"/>
+      <path id="pg-k1" d="M13,32 C15,27 24,27 25.5,31.5 C27,36 19,39 15.5,36.5 C13.5,35 12,34 13,32 Z"/>
+      <path id="pg-k2" d="M7,32.5 C9,24 28,22.5 31,30 C33.5,36.5 22,42.5 14,40 C9.5,38.5 6,36 7,32.5 Z"/>
+      <path id="pg-a1" d="M0,45.5 C12,42 22,47.5 32,45.5 C44,43 56,47 76,43.5"/>
+      <path id="pg-a2" d="M0,50.5 C14,48 24,52.5 34,50.5 C46,48 58,51.5 76,48.5"/>
+      <path id="pg-n1" d="M2,6 C18,14 26,2 42,9 C56,15 64,4 75,10"/>
+      <path id="pg-n2" d="M4,44 C12,30 20,36 30,22 C38,11 48,18 58,6"/>
+      <path id="pg-n3" d="M1,22 C14,28 22,14 38,20 C52,25 60,12 75,19"/>
+      <path id="pg-n4" d="M12,51 C22,38 34,44 44,32 C52,22 64,26 74,16"/>
+      <path id="pg-route" d="M3,49 C13,47 10,42 20,39.5 C30,37 26,31 34,28 C41,25.5 42,21 50,17.8"/>
+    </defs></svg>
     <div class="signs2 postures3">
       <div class="sign-card">
+        <div class="sg-glyph"><svg viewBox="0 0 76 52" fill="none" stroke-linecap="round" aria-hidden="true">
+          <g class="pg-noise" stroke-width="0.75"><use href="#pg-n1"/><use href="#pg-n2"/><use href="#pg-n3"/><use href="#pg-n4"/><use href="#pg-a1"/><use href="#pg-a2"/><use href="#pg-l4"/><use href="#pg-l3"/><use href="#pg-k2"/></g>
+        </svg></div>
         <div class="sg-num">01</div>
         <div class="sg-name">Inspiration</div>
         <p class="sg-q">From open senses and a quieted mind.</p>
       </div>
       <div class="sign-card">
+        <div class="sg-glyph"><svg viewBox="0 0 76 52" fill="none" stroke-linecap="round" aria-hidden="true">
+          <g class="pg-ghost" stroke-width="0.7" stroke-dasharray="1 3.5"><use href="#pg-n1"/><use href="#pg-n2"/><use href="#pg-n3"/><use href="#pg-n4"/></g>
+          <g class="pg-minor" stroke-width="0.75"><use href="#pg-a1"/><use href="#pg-a2"/><use href="#pg-l4"/><use href="#pg-l3"/><use href="#pg-k2"/><use href="#pg-k1"/></g>
+          <g class="pg-index" stroke-width="1.4"><use href="#pg-l2"/><use href="#pg-l1"/></g>
+        </svg></div>
         <div class="sg-num">02</div>
         <div class="sg-name">Radical honesty</div>
         <p class="sg-q">The noise tunes out. What&rsquo;s actually true surfaces.</p>
       </div>
       <div class="sign-card">
+        <div class="sg-glyph"><svg viewBox="0 0 76 52" fill="none" stroke-linecap="round" aria-hidden="true">
+          <g class="pg-faint" stroke-width="0.75"><use href="#pg-a1"/><use href="#pg-a2"/><use href="#pg-l4"/><use href="#pg-l3"/><use href="#pg-k2"/></g>
+          <g class="pg-index" stroke-width="1.4"><use href="#pg-l2"/><use href="#pg-l1"/></g>
+          <use href="#pg-route" class="pg-index" stroke-width="1.5" stroke-dasharray="3.5 3.5"/>
+          <circle class="pg-node" cx="50" cy="17.8" r="3.6" stroke-width="2.2"/>
+        </svg></div>
         <div class="sg-num">03</div>
         <div class="sg-name">Conviction</div>
         <p class="sg-q">The settled clarity to act on what you already know. In as few moves as possible.</p>
@@ -357,7 +390,7 @@
     <div class="section-head stn">
       <div class="stn-venue"><i></i>Station 4 &middot; The Methuselah grove</div>
       <h2>Decide at the pace the transformation actually runs.</h2>
-      <p class="stn-sub">Three field tiers, one methodology, fixed fees. Enterprise-scale execution routes into Grow.</p>
+      <p class="stn-sub">Three field tiers, one methodology, fixed fees.</p>
     </div>
     <a class="price-band price-band--sail reveal" href="sessions" data-gc="sail-price-band">
       <span class="pb-copy">
@@ -376,7 +409,7 @@
       <a class="pw" href="sessions" style="--pw-ac: var(--logo-gold); --pw-ink: var(--terracotta);"><b>Catalyst Field Session</b><i>Full day &middot; both landscapes &middot; up to 3 participants</i><span class="pw-price">15K USD</span><span class="pw-unit">Fixed fee</span></a>
       <a class="pw" href="sessions" style="--pw-ac: var(--value-green); --pw-ink: var(--value-green);"><b>Catalyst Immersive</b><i>Extended engagement for a leadership team</i><span class="pw-price">55K USD</span><span class="pw-unit">Per engagement</span></a>
     </div>
-    <p style="margin-top:1.4rem; font-size:0.92rem;"><a href="sessions">What each tier delivers, in full &rarr;</a> <span style="color: var(--midgray);">Enterprise-scale execution is routed into <a href="/grow/">Grow</a>.</span></p>
+    <p style="margin-top:1.4rem; font-size:0.92rem;"><a href="sessions">What each tier delivers, in full &rarr;</a></p>
   </div>
 </section>
 </div>
@@ -550,7 +583,7 @@
     </div>
     <div>
       <h4>Engage</h4>
-      <a href="start">Begin</a>
+      <a href="start">Start</a>
       <a href="field-notes">Field Notes</a>
       <a href="contact-card">Contact Card</a>
     </div>
