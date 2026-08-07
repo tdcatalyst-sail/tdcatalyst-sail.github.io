@@ -173,7 +173,7 @@
       <li><a href="#library">Method &amp; library</a></li>
       <li><a href="#proof">Proof</a></li>
       <li><a href="/grow/ai-transformation-simulation">Simulator<span class="tool-tag" aria-hidden="true">&#8599;</span></a></li>
-      <li><a href="#begin" class="nav-cta">Start</a></li>
+      <li><a href="#start" class="nav-cta">Start</a></li>
     </ul>
   </div>
 </nav>
@@ -197,7 +197,7 @@
       <span><b>30&ndash;90</b>days, scoped in writing</span>
     </div>
     <div class="btn-row">
-      <a href="#begin" class="btn btn-primary">Grow with AI</a>
+      <a href="#start" class="btn btn-primary">Grow with AI</a>
       <a href="#services" class="btn btn-ghost">See the engagements</a>
     </div>
   </div>
@@ -246,7 +246,7 @@
       <h2>Three fixed-fee offers, each ending in concrete decisions.</h2>
       <p>Most clients choose one, based on where the transformation is stalling. Every engagement is scoped in writing, priced before it starts, and delivered by Tom personally.</p>
     </div>
-    <a class="price-band reveal" href="#begin" data-gc="grow-price-band">
+    <a class="price-band reveal" href="#start" data-gc="grow-price-band">
       <span class="pb-copy">
         <span class="pb-kick">Launch pricing &middot; the entry point</span>
         <b>The Adoption Recovery Review: ten business days, fixed fee.</b>
@@ -2449,61 +2449,67 @@
 </section>
 
 <!-- BEGIN -->
-<section id="begin">
+<section id="start" class="alt">
   <div class="wrap">
     <div id="sent-banner" style="display:none; padding:1rem 1.2rem; margin-bottom:2rem; background:var(--seamist); border-left:3px solid var(--logo-blue); border-radius:4px;">
       <strong>Note received.</strong> Tom will reply directly from tom@tdcatalyst.com. Expect a response within two business days.
     </div>
   </div>
-  <div class="wrap grid-2">
+  <div class="wrap start-grid">
     <div>
-      <h2>Grow with AI</h2>
-      <p>Growing with AI starts with a fit call: thirty minutes, video or phone. Bring the program as it actually is. The stalled pilots count as much as the wins.</p>
-      <div class="btn-row" style="margin-top:1.2rem;">
+      <div class="reg-kicker">Get started</div>
+      <h2>Bring the program as it actually is.</h2>
+      <p>A 30-minute fit call, video or phone. The stalled pilots count as much as the wins, and there is nothing to resolve beforehand.</p>
+      <div class="btn-row" style="margin-top:1.4rem;">
         <a href="https://cal.com/tdcatalyst" class="btn btn-primary" target="_blank" rel="noopener">Grow with AI</a>
       </div>
+      <div class="book-callout">
+        <b>What the fit call produces</b>
+        <ol>
+          <li><b>Your situation, named.</b> Which of the four situations on this page your program matches, and why.</li>
+          <li><b>The engagement that fits, or none.</b> AI Portfolio Review, Adoption Reset, Reorganization Blueprint, Retained Advisory, or the honest read that this is not a fit.</li>
+          <li><b>Proposal scoping.</b> The key elements a first proposal needs.</li>
+        </ol>
+      </div>
+      <p class="alt-cta">Prefer email? <a href="mailto:tom@tdcatalyst.com">tom@tdcatalyst.com</a></p>
     </div>
     <div>
-      <h2>Start a conversation</h2>
-      <p>If you prefer to write, this form reaches Tom directly.</p>
-      <form class="form-grid" action="https://formsubmit.co/tom@tdcatalyst.com" method="POST">
-        <input type="hidden" name="_subject" value="New note from tdcatalyst.com/grow">
-        <input type="hidden" name="_captcha" value="true">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" value="https://tdcatalyst.com/grow/?sent=1">
-        <div>
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" required>
-        </div>
-        <div>
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required>
-        </div>
-        <div>
-          <label for="company">Organization</label>
-          <input type="text" id="company" name="company">
-        </div>
-        <div>
-          <label for="role">Role</label>
-          <input type="text" id="role" name="role">
-        </div>
-        <div>
-          <label for="interest">Engagement of interest</label>
-          <select id="interest" name="interest">
-            <option value="">Not sure yet</option>
-            <option value="portfolio">AI Portfolio Review</option>
-            <option value="adoption">Adoption Reset</option>
-            <option value="reorg">Reorganization Blueprint</option>
-            <option value="retained">Retained Advisory</option>
-          </select>
-        </div>
-        <div>
-          <label for="context">What is the situation</label>
-          <textarea id="context" name="context" placeholder="A few sentences on the program and what is prompting the outreach."></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Send</button>
-        <p style="font-size:0.82rem; color:var(--midgray); margin-top:0.4rem;">Messages route to tom@tdcatalyst.com.</p>
-      </form>
+      <div class="form-card">
+        <form class="form-grid" action="https://formsubmit.co/tom@tdcatalyst.com" method="POST">
+          <input type="hidden" name="_subject" value="New note from tdcatalyst.com/grow">
+          <input type="hidden" name="_captcha" value="true">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value="https://tdcatalyst.com/grow/?sent=1">
+          <div style="grid-column:1/-1;">
+            <label for="context">Why might we work together?</label>
+            <textarea id="context" name="context" required placeholder="A few sentences: what stalled, what is starting, or what you want different in 90 days."></textarea>
+          </div>
+          <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div>
+            <label for="email">Work email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div>
+            <label for="company">Organization</label>
+            <input type="text" id="company" name="company">
+          </div>
+          <div>
+            <label for="interest">Engagement of interest</label>
+            <select id="interest" name="interest">
+              <option value="">Not sure yet</option>
+              <option value="portfolio">AI Portfolio Review</option>
+              <option value="adoption">Adoption Reset</option>
+              <option value="reorg">Reorganization Blueprint</option>
+              <option value="retained">Retained Advisory</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="grid-column:1/-1; width:100%;">Send</button>
+          <p class="fine" style="grid-column:1/-1;">Messages route to tom@tdcatalyst.com via FormSubmit. See <a href="/privacy">Privacy</a>.</p>
+        </form>
+      </div>
     </div>
   </div>
 </section>
@@ -2523,7 +2529,7 @@
     <div>
       <h4>Engage</h4>
       <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">Adoption Simulator<span class="tool-tag" aria-hidden="true">&#8599;</span></a>
-      <a href="#begin">Begin</a>
+      <a href="#start">Begin</a>
     </div>
   </div>
 </footer>

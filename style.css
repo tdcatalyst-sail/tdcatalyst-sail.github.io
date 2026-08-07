@@ -1724,6 +1724,31 @@ section.article-section { padding-top: 2rem; }
 }
 .sel-wins { margin: 0.9rem 0 0.9rem; }
 
+/* ---- The Start screens: the campaign booking anatomy at site scope.
+   Left, the claim, the call CTA, and what the call produces; right, the
+   form on a card, context question first. ---- */
+.start-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+@media (max-width: 860px) { .start-grid { grid-template-columns: 1fr; gap: 1.8rem; } }
+.book-callout {
+  margin-top: 1.6rem; background: #fff; border: 1px solid var(--reg-line);
+  border-left: 3px solid var(--logo-gold); border-radius: var(--reg-radius);
+  padding: 1.1rem 1.3rem;
+}
+.book-callout > b {
+  display: block; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--navy); margin-bottom: 0.6rem; font-weight: 600;
+}
+.book-callout ol { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.5rem; }
+.book-callout li { font-size: 0.92rem; color: var(--midgray); line-height: 1.55; }
+.book-callout li b { color: var(--navy); font-weight: 600; }
+.form-card {
+  background: #fff; border: 1px solid var(--reg-line);
+  border-radius: var(--reg-radius-lg); box-shadow: var(--elev-2);
+  padding: 1.5rem 1.6rem;
+}
+.form-card .fine { font-size: 0.78rem; color: var(--midgray); margin-top: 0.6rem; }
+.alt-cta { margin-top: 1rem; font-size: 0.9rem; color: var(--midgray); }
+
 /* ---- Per-station photo bands on the method page: the ambiance above,
    the venue and what the station hosts on the caption bar. ---- */
 .stn-band {

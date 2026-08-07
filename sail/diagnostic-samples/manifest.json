@@ -1,0 +1,12 @@
+[
+  { "file": "framework-application-summary.html", "area": 1, "title": "Framework Application Summary", "format": "doc" },
+  { "file": "named-adaptive-challenge.html", "area": 1, "title": "Named Adaptive Challenge", "format": "doc" },
+  { "file": "named-adaptive-challenge-slide.html", "area": 1, "title": "The Adaptive Challenge on One Slide", "format": "slide" },
+  { "file": "organizational-landscape-analysis.html", "area": 2, "title": "Organizational Landscape Analysis", "format": "doc" },
+  { "file": "landscape-map-slide.html", "area": 2, "title": "Landscape Map: Signals, Assets, Constraints", "format": "slide" },
+  { "file": "leverage-inventory-sheet.html", "area": 3, "title": "Leverage Inventory", "format": "sheet" },
+  { "file": "leverage-honest-account.html", "area": 3, "title": "Leverage Inventory: The Honest Account", "format": "doc" },
+  { "file": "starting-roadmap-sheet.html", "area": 4, "title": "Starting Roadmap: The First 90 Days", "format": "sheet" },
+  { "file": "three-moves-slide.html", "area": 4, "title": "Three Moves Start the Ninety Days", "format": "slide" },
+  { "file": "what-remains-unresolved.html", "area": 4, "title": "What the Engagement Did Not Resolve", "format": "doc" }
+]
