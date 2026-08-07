@@ -1489,7 +1489,10 @@
   wheelSvg.setAttribute('role', 'group');
   wheelSvg.setAttribute('aria-label', 'The thirteen plays, arranged on the intervention wheel by group');
   wheelHost.appendChild(wheelSvg);
-  var CX = 280, CY = 280, IR0 = 96, IR1 = 150, OR0 = 156, OR1 = 246;
+  /* Tom 2026-08-07: small hub, wide rings. The hub holds only the count;
+     the group ring is broad enough for its label, the play ring takes all
+     the radius the viewBox allows. */
+  var CX = 280, CY = 280, IR0 = 60, IR1 = 148, OR0 = 154, OR1 = 274;
   function pol(r, aDeg) {
     var a = (aDeg - 90) * Math.PI / 180;
     return [CX + r * Math.cos(a), CY + r * Math.sin(a)];
@@ -1521,7 +1524,7 @@
     var mid = (arc.a0 + arc.a1) / 2, lp = pol((IR0 + IR1) / 2, mid);
     var words = grp.label;
     var t = wel('text', { x: lp[0].toFixed(1), y: lp[1].toFixed(1), 'text-anchor': 'middle', 'dominant-baseline': 'middle',
-      'font-size': 13, 'font-weight': 700, fill: '#fff', 'font-family': 'Archivo, sans-serif' }, g, words);
+      'font-size': 15, 'font-weight': 700, fill: '#fff', 'font-family': 'Archivo, sans-serif', 'letter-spacing': '0.02em' }, g, words);
     var rot = mid > 180 ? mid + 90 : mid - 90;
     t.setAttribute('transform', 'rotate(' + rot.toFixed(1) + ' ' + lp[0].toFixed(1) + ' ' + lp[1].toFixed(1) + ')');
     // rotation arrow just past this group's end, in the seam between rings
@@ -1540,10 +1543,10 @@
     var path = wel('path', { d: ringSeg(OR0, OR1, a0, a1), fill: GCOLOR[p.group], 'fill-opacity': 0.1, stroke: GCOLOR[p.group], 'stroke-opacity': 0.35, 'stroke-width': 1 }, g);
     var lp = pol((OR0 + OR1) / 2, mid);
     var rot = mid > 180 ? mid + 90 : mid - 90;
-    var t = wel('text', { x: lp[0].toFixed(1), y: (lp[1] - 5).toFixed(1), 'text-anchor': 'middle', 'dominant-baseline': 'middle',
-      'font-size': 11.5, 'font-weight': 700, fill: '#1B1A16', 'font-family': 'Archivo, sans-serif', 'pointer-events': 'none' }, g, WSHORT[p.id] || p.name);
-    var tw = wel('text', { x: lp[0].toFixed(1), y: (lp[1] + 9).toFixed(1), 'text-anchor': 'middle', 'dominant-baseline': 'middle',
-      'font-size': 9.5, 'font-weight': 400, fill: '#6B6B6B', 'font-family': 'Archivo, sans-serif', 'pointer-events': 'none' }, g, dur);
+    var t = wel('text', { x: lp[0].toFixed(1), y: (lp[1] - 6).toFixed(1), 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+      'font-size': 12.5, 'font-weight': 700, fill: '#1B1A16', 'font-family': 'Archivo, sans-serif', 'pointer-events': 'none' }, g, WSHORT[p.id] || p.name);
+    var tw = wel('text', { x: lp[0].toFixed(1), y: (lp[1] + 10).toFixed(1), 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+      'font-size': 10, 'font-weight': 400, fill: '#6B6B6B', 'font-family': 'Archivo, sans-serif', 'pointer-events': 'none' }, g, dur);
     var tr = 'rotate(' + rot.toFixed(1) + ' ' + lp[0].toFixed(1) + ' ' + lp[1].toFixed(1) + ')';
     t.setAttribute('transform', tr); tw.setAttribute('transform', tr);
     // flagged-cell marker: a dot riding the outer rim
@@ -1586,7 +1589,7 @@
     Object.keys(wheelSegs).forEach(function (id) {
       var t = wheelSegs[id].name;
       t.removeAttribute('textLength');
-      if (t.getComputedTextLength() > 90) { t.setAttribute('textLength', 90); t.setAttribute('lengthAdjust', 'spacingAndGlyphs'); }
+      if (t.getComputedTextLength() > 96) { t.setAttribute('textLength', 96); t.setAttribute('lengthAdjust', 'spacingAndGlyphs'); }
     });
   }
   fitWheelLabels();
