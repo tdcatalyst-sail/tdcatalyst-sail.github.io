@@ -137,6 +137,27 @@ function closeBrandMenu() {
   var lastY = window.scrollY;
   var threshold = 8; // ignore micro scrolls
   var topBuffer = 80; // always show near top
+
+  // The bar hides on scroll-down, but the one action a reader can take should
+  // not hide with it. Clone the nav's own CTA into a fixed pill that fades in
+  // exactly when the nav is gone: the clone inherits this page's label and
+  // href, so no nav markup changes and the practice CTA stays correct.
+  var floatCta = null;
+  var srcCta = nav.querySelector('.nav-cta');
+  if (srcCta) {
+    floatCta = srcCta.cloneNode(true);
+    floatCta.classList.add('nav-cta-float');
+    floatCta.removeAttribute('id');
+    // Report separately from the in-bar CTA, so we can tell a mid-scroll
+    // start from one taken off the header.
+    var brand = (document.body.className.match(/brand-(sail|grow|advise)/) || [0, 'hub'])[1];
+    floatCta.setAttribute('data-gc', 'cta-' + brand + '-sticky');
+    document.body.appendChild(floatCta);
+  }
+  function syncFloat() {
+    if (floatCta) floatCta.classList.toggle('is-on', nav.classList.contains('nav--hidden'));
+  }
+
   window.addEventListener('scroll', function () {
     var y = window.scrollY;
     var delta = y - lastY;
@@ -153,6 +174,7 @@ function closeBrandMenu() {
       nav.classList.remove('nav--hidden');
     }
     lastY = y;
+    syncFloat();
   }, { passive: true });
 })();
 

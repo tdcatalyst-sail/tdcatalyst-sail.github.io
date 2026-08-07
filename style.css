@@ -287,6 +287,38 @@ body:not(.brand-sail):not(.brand-grow):not(.brand-advise) .brand-menu a[href="/"
 }
 .nav-cta:hover { background: var(--logo-gold); color: var(--navy-deep) !important; }
 
+/* Sticky Start: the bar retracts on scroll-down but its CTA should not go with
+   it, so script.js clones the nav's own .nav-cta into this fixed pill and fades
+   it in whenever the nav is hidden. Cloning (rather than authoring a second
+   button into all 19 navs) keeps the label and href correct per page for free.
+   On phones the nav links collapse into the hamburger, so below 780px this is
+   the only always-reachable CTA on the page. */
+.nav-cta-float {
+  position: fixed;
+  top: 1rem;
+  right: 1.75rem;
+  z-index: 60;
+  opacity: 0;
+  transform: translateY(-0.6rem);
+  pointer-events: none;
+  /* The pill scrolls over whatever the page happens to be showing, including
+     the navy field panels it would otherwise disappear into. The white ring
+     separates it from a dark ground and is invisible on a light one. */
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9), 0 2px 14px rgba(31, 58, 95, 0.28);
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s, color 0.2s;
+}
+.nav-cta-float.is-on {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+@media (max-width: 780px) { .nav-cta-float { right: 1.25rem; } }
+@media (prefers-reduced-motion: reduce) {
+  .nav-cta-float { transition: opacity 0.3s ease; transform: none; }
+  .nav-cta-float.is-on { transform: none; }
+}
+@media print { .nav-cta-float { display: none; } }
+
 .nav-toggle {
   display: none;
   background: none; border: none;
