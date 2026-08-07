@@ -2115,6 +2115,30 @@ footer .footer-practices i {
 
     .lib-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
     @media (max-width: 560px) { .lib-grid { grid-template-columns: 1fr; } }
+    /* The double wheel replaces the card grid: the wheel takes the wide
+       column with its detail card beneath, the plan panel keeps the right. */
+    @media (min-width: 901px) { .build-grid:has(.aswheel) { grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr); } }
+    .lib-grid.aswheel { display: block; }
+    .wheel-wrap { display: grid; grid-template-columns: 1fr; gap: 0.6rem; align-items: start; }
+    .wheel-host svg { width: 100%; max-width: 560px; height: auto; display: block; margin: 0 auto; }
+    .wheel-host .wseg { cursor: pointer; outline: none; }
+    .wheel-host .wseg:hover path:first-of-type, .wheel-host .wseg:focus-visible path:first-of-type { fill-opacity: 0.22; }
+    .wheel-host .wseg.added:hover path:first-of-type { fill-opacity: 0.85; }
+    .wheel-host .wseg:focus-visible path:first-of-type { stroke-width: 2; stroke-opacity: 1; }
+    .wheel-host .wseg.locked { cursor: not-allowed; }
+    .wheel-detail {
+      border: 1px solid var(--hairline); border-radius: 8px; background: #fff;
+      padding: 1.1rem 1.2rem; min-height: 13rem; align-self: start; margin-top: 1.4rem;
+    }
+    .wheel-detail b { display: block; font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: 1.08rem; color: var(--navy); margin: 0.25rem 0 0.4rem; }
+    .wheel-detail p { font-size: 0.88rem; color: var(--midgray); line-height: 1.55; margin: 0 0 0.6rem; }
+    .wheel-detail .wd-group { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+    .wheel-detail .wd-fw { display: block; font-size: 0.78rem; color: var(--midgray); font-style: italic; }
+    .wheel-detail .wd-match { display: block; margin-top: 0.5rem; font-size: 0.78rem; font-weight: 600; color: var(--logo-red); }
+    .wheel-detail .wd-sustain { display: block; margin-top: 0.5rem; font-size: 0.78rem; color: var(--terracotta); }
+    /* small screens: the segment keeps its name, the weeks line moves to the
+       detail card the tap opens */
+    @media (max-width: 560px) { .wheel-host .wseg text + text { display: none; } }
     .play-card {
       background: #fff; border: 1px solid var(--hairline); border-radius: 5px;
       border-left: 3px solid var(--logo-blue);
