@@ -1692,7 +1692,7 @@
           <span class="seq-picklabel">Paths that reach self-sustaining</span>
           <div class="pathbtns seq-scen" role="group" aria-label="Paths that work">
             <button aria-pressed="true" data-path="full">All thirteen &middot; 80%</button>
-            <button aria-pressed="false" data-path="selective">Selective seven &middot; 62%</button>
+            <button aria-pressed="false" data-path="selective">Selective seven &middot; 61%</button>
           </div>
         </div>
         <div class="seq-pickset">
@@ -1708,7 +1708,7 @@
           </div>
         </div>
       </div>
-      <svg id="seq-chart" viewBox="0 0 980 250" role="img" aria-label="Modeled adoption over 24 weeks: all thirteen plays cross the 55 percent self-sustaining threshold at week 11 and reach 80 percent; a selective seven-play path crosses at week 14 and reaches 62 percent."></svg>
+      <svg id="seq-chart" viewBox="0 0 980 250" role="img" aria-label="Modeled adoption over 24 weeks: all thirteen plays cross the 55 percent self-sustaining threshold at week 11 and reach 80 percent; a selective seven-play path crosses at week 14 and reaches 61 percent."></svg>
       <div class="seq-caption" id="seq-caption"><b>The modeled 24 weeks.</b> Press play, or select any play for its full model detail.</div>
       <div class="seq-ladder" id="seq-lanes" aria-label="The plays on the modeled schedule"></div>
       <p class="graph-hint">One modeled schedule, not the only one: the simulator packs two workstreams at a time, gates proof before the social plays, builds capability on the redesigned workflow, and holds sustainment late. Score your own order in the <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">AI Adoption Simulator</a>.</p>
@@ -2352,66 +2352,65 @@
     whenthen: 'When-Then', policy: 'Policy & SOPs', criteria: 'Perf. Criteria', ritual: 'Ritual & Cadence'
   };
   var GCOL = { Opportunity: '#10233F', Motivation: '#C99A05', Capability: '#0E7569', Sustainment: '#4E5BA6' };
-  function mlog(w, b2, span, mid, k) { return b2 + span / (1 + Math.exp(-(w - mid) / k)); }
-  function mrf(w, b2, peak, wpeak, floor, rate) {
-    var atPeak = b2 + (peak - b2) * (1 - Math.exp(-3));
-    if (w <= wpeak) return b2 + (peak - b2) * (1 - Math.exp(-3 * w / wpeak));
-    return floor + (atPeak - floor) * Math.exp(-rate * (w - wpeak));
+  /* EVERY curve is the simulator's own weekly output for that scenario's
+     play list, harvested by running the live engine (simulate() in
+     ai-transformation-simulation.html) on the canonical order minus the
+     killed plays. Nothing here is an analytic fit: the dips are real play
+     disruption, the plateaus are the engine's own ceilings. Re-harvest
+     whenever the engine changes. Linear interpolation between the weekly
+     points keeps the animation fluid. */
+  function serF(V) {
+    return function (w) {
+      if (w <= 0) return V[0];
+      if (w >= 24) return V[24];
+      var i = Math.floor(w), t = w - i;
+      return V[i] + (V[i + 1] - V[i]) * t;
+    };
   }
-  /* The full-sequence curve is the simulator's own weekly output for all
-     thirteen plays in the canonical order (crosses 55% at week 11, 80% at
-     week 24), not an analytic fit: the week-7 dip is Workflow Redesign
-     disrupting before it pays, which a smooth logistic erased. Linear
-     interpolation between the weekly points keeps the animation fluid. */
   var SEQV = [16.1, 16.7, 18.6, 20, 23.1, 27.8, 34.5, 28.3, 33.2, 41.8, 47.7, 55.4, 57.3, 61.8, 64.7, 66.9, 70.8, 72.2, 73, 73.7, 74.2, 77.2, 78.6, 79.5, 80];
-  function seqF(w) {
-    if (w <= 0) return SEQV[0];
-    if (w >= 24) return SEQV[24];
-    var i = Math.floor(w), t = w - i;
-    return SEQV[i] + (SEQV[i + 1] - SEQV[i]) * t;
-  }
+  var seqF = serF(SEQV);
   var SCEN = {
     full: { label: 'All thirteen', color: '#10233F', kind: 'good', f: seqF, cross: 11, end: 80,
       read: 'Every play lands in order: past the threshold at week 11, 80% by week 24, and all five transformation phases complete. The ceiling the sequence earns.' },
-    selective: { label: 'Selective seven', color: '#0E7569', kind: 'good', cross: 14, end: 62,
+    selective: { label: 'Selective seven', color: '#0E7569', kind: 'good', cross: 14, end: 61,
       only: ['sponsor', 'proof', 'manager', 'peer', 'friction', 'inaction', 'build'],
-      f: function (w) { var V = [18, 18.6, 20.2, 22.4, 25.5, 29.5, 35.5, 33.5, 41.5, 47, 49, 52, 54.5, 56.5, 59, 60.5, 61.3, 61.7, 61.9, 62, 62, 62, 62, 62, 62]; return V[Math.min(24, Math.round(w))]; },
-      read: 'Seven plays, chosen for reach: past the threshold at week 14 and holding at 62%. Adoption carries itself, and the deeper phases (workflow redesigned, work identity, outcome) are the ones the other six plays complete.' },
+      f: serF([16.1, 16.7, 18.6, 20, 23.1, 27.7, 34.5, 28.3, 38.6, 44.5, 45.7, 48.1, 50.1, 51.8, 55.7, 57.6, 58.8, 59.5, 60, 60.3, 60.4, 60.5, 60.6, 60.7, 60.7]),
+      read: 'Seven plays, chosen for reach: past the threshold at week 14 and holding at 61%. Adoption carries itself, and the deeper phases (workflow redesigned, work identity, outcome) are the ones the other six plays complete.' },
     defaultcm: { label: 'The default change program', color: '#B42318', kind: 'bad', cross: null,
       only: ['sponsor', 'manager', 'build', 'proof'],
       /* The default program runs its plays EARLY - that is its whole
          pathology. Training lands weeks 3-8 on a workflow nobody redesigned,
          instead of at week 11 after the redesign. */
-      sched: { sponsor: [1, 2], manager: [2, 3], build: [3, 8], proof: [4, 6] },
-      f: function (w) { var V = [17, 17.5, 19.4, 20.8, 21.8, 21.1, 25.2, 28.3, 33.2, 38.7, 40.3, 41.3, 41.9, 42.3, 42.5, 42.7, 42.8, 42.9, 42.9, 42.9, 43, 43, 43, 43, 43]; return V[Math.min(24, Math.round(w))]; },
+      sched: { sponsor: [1, 2], proof: [2, 4], manager: [3, 5], build: [5, 10] },
+      f: serF([16.1, 16.7, 18.6, 20, 23.1, 27.7, 25.9, 29.3, 32.1, 34.4, 39.4, 40.6, 41.4, 41.9, 42.2, 42.4, 42.5, 42.6, 42.6, 42.7, 42.7, 42.7, 42.7, 42.7, 42.7]),
       read: 'What most organizations actually run: announce it from the top, brief the managers, train everyone, seed a win or two. Scored in the simulator it more than triples the do-nothing line, from 12% to 43%, and then stops below self-sustaining. Training landed on a workflow nobody redesigned, and nothing was built to hold the gain.' },
     stall5: { label: 'Stopped early', color: '#B42318', kind: 'bad',
-      f: function (w) { var V = [18, 18.5, 19.5, 21, 23, 26, 30, 33, 31, 34, 39, 43, 45.5, 46.5, 47, 47, 47, 47, 46.9, 46.8, 46.8, 46.7, 46.7, 46.6, 46.6]; return V[Math.min(24, Math.round(w))]; },
+      f: serF([16.1, 16.7, 18.6, 20, 23.1, 27.7, 34.5, 28.3, 35.9, 40.8, 45, 45.7, 46.2, 46.5, 46.7, 46.8, 46.9, 47, 47, 47.1, 47.1, 47.2, 47.2, 47.2, 47.3]),
       seed: ['whole', 'whenthen', 'inaction', 'build', 'ritual', 'policy', 'criteria', 'quiet'],
       fail: 'The effort stops at week 8: nothing after Workflow Redesign ever lands.',
       read: 'Five plays land, then the push stops: 47% and flatlining below the line. Gains hold only while pushed, and stay reversible.' },
-    nomgr: { label: 'Managers left out', color: '#B42318', kind: 'bad',
-      f: function (w) { return mrf(w, 18, 37, 9, 30, 0.09); },
+    nomgr: { label: 'Managers left out', color: '#B42318', kind: 'bad', cross: 19,
+      f: serF([16.1, 16.7, 18.6, 20, 23.1, 24.2, 27.8, 19.7, 23.1, 30.8, 35.1, 39.8, 38.8, 41.9, 44.7, 47.1, 50.6, 52.8, 54.4, 56.8, 59.2, 63, 65.3, 67, 68.3]),
       seed: ['manager'],
       fail: 'Manager-as-Channel never lands: managers get talking points, never authority.',
-      read: 'One missing play breaks seven others: the redesign, capability, the laggard path and the new criteria all misfire. Mid-30s, drifting.' },
+      read: 'One missing play weakens seven others: the redesign, capability, the laggard path and the new criteria all land without their channel. The threshold slips from week 11 to week 19, and the ceiling drops from 80% to 68%.' },
     noproof: { label: 'No seeded proof', color: '#B42318', kind: 'bad',
-      f: function (w) { return mrf(w, 18, 41, 7, 26, 0.12); },
+      f: serF([16.1, 16.7, 18.6, 20, 20.9, 23.4, 27, 20.6, 23.7, 31.1, 35.1, 36.2, 37.1, 39.9, 41.8, 42.7, 44.4, 45.1, 45.6, 46.2, 46.6, 47.9, 48.6, 49.1, 49.3]),
       seed: ['proof'],
       fail: 'Proof Seeding never lands: no first win exists for anyone to point at.',
-      read: 'Kill the proof and the whole social chain fires on thin air. An early spike, then decay toward the mid-20s.' },
-    early: { label: 'Enthusiasts only', color: '#B42318', kind: 'bad',
-      f: function (w) { return mlog(w, 18, 7, 3.5, 1.6); },
+      read: 'Kill the proof and the whole social chain fires on thin air: twelve plays still run, and the program flatlines at 49%, never self-sustaining.' },
+    early: { label: 'Enthusiasts only', color: '#B42318', kind: 'bad', cross: 17,
+      f: serF([16.1, 16.7, 18.6, 20, 23.1, 27.6, 21.1, 25.8, 34.3, 40.2, 40.6, 43.7, 46.7, 48.5, 52, 53.4, 54.2, 55.2, 56.1, 56.6, 56.9, 57.1, 57.3, 57.3, 57.4]),
       seed: ['peer', 'inaction', 'quiet'],
       fail: 'The majority plays are skipped: only the enthusiasts are ever addressed.',
-      read: 'The innovator 16% move fast and nobody follows: the early and late majority never enter. Flat near 25%.' },
+      read: 'The plays that move the early and late majority are skipped, and the climb slows: the threshold comes six weeks late, and the curve tops out at 57% instead of 80%.' },
     access: { label: 'Access, then silence', color: '#B42318', kind: 'bad',
-      f: function (w) { return mrf(w, 18, 24, 5, 13, 0.1); },
+      f: serF([16.1, 16.6, 12.3, 14.1, 17.9, 20.3, 21, 21.4, 21.8, 18.4, 16.4, 15.4, 14.8, 14.4, 14.2, 14.1, 14, 14, 14, 14, 14, 14, 14, 14, 14]),
       seed: ['sponsor', 'manager', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual'],
       fail: 'Only the kit ships. Nothing else lands, and the kit misfires without proof inside.',
-      read: 'Licenses and a resources page, with barely any follow-up: usage peaks by week 5 and fades back to the do-nothing line.' },
+      read: 'Licenses and a resources page, with barely any follow-up: usage peaks near 22% by week 8, then fades to 14%, within sight of the do-nothing line.' },
     base: { label: 'No intervention', color: '#98A2B3', kind: 'bad',
-      f: function (w) { return 18 - 6 * (1 - Math.exp(-w / 8)); },
+      f: serF([16.1, 14.2, 13.1, 12.5, 12.1, 11.9, 11.8, 11.8, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7, 11.7]),
       seed: ['sponsor', 'manager', 'whole', 'friction', 'proof', 'peer', 'inaction', 'quiet', 'build', 'whenthen', 'policy', 'criteria', 'ritual'],
       fail: 'Nothing lands at all.',
       read: 'The do-nothing trajectory from the simulator: early enthusiasm decays to 12% by week 24.' }
@@ -2595,7 +2594,9 @@
     }
     if (w >= 23.5) {
       var endV = Math.round(sc.f(24));
-      seqEls.endFlag.textContent = sc.kind === 'good' ? endV + '% - self-sustaining, held' : endV + '% - below the line, reversible';
+      seqEls.endFlag.textContent = sc.kind === 'good' ? endV + '% - self-sustaining, held'
+        : endV >= 55 ? endV + '% - past the line late, short of the ceiling'
+        : endV + '% - below the line, reversible';
       seqEls.endFlag.setAttribute('fill', sc.kind === 'good' ? '#10233F' : '#A93226');
       seqEls.endFlag.setAttribute('opacity', 1);
     } else {

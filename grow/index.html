@@ -1695,7 +1695,12 @@
   .glib .method-line em { color: var(--lp-accent-ink); font-style: normal; font-weight: 700; }
   @media (max-width: 720px) { .glib .method-line em { display: none; } }
 
-  .glib .liblist { display: grid; gap: 1.1rem; }
+  /* One screen: the engagement documents as a tall narrow tile on the left,
+     the four play groups as tiles beside it. Rows are compact (name + weeks);
+     the hover preview and the modal carry the detail. */
+  .glib .liblist { display: grid; grid-template-columns: minmax(250px, 320px) 1fr 1fr; gap: 0.9rem; align-items: start; }
+  .glib .libgroup.docs { grid-column: 1; grid-row: 1 / 3; }
+  @media (max-width: 900px) { .glib .liblist { grid-template-columns: 1fr; } .glib .libgroup.docs { grid-row: auto; } }
   .glib .libgroup { border: 1px solid var(--lp-line); border-radius: var(--lp-radius); background: var(--lp-card); overflow: hidden; }
   .glib .libgroup > b {
     display: flex; align-items: center; gap: 0.5rem;
@@ -1704,17 +1709,17 @@
   }
   .glib .libgroup > b i { width: 9px; height: 9px; border-radius: 50%; background: var(--gc, var(--lp-accent)); }
   .glib .libitem {
-    display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto; gap: 0.4rem 1rem; align-items: baseline;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.4rem 0.8rem; align-items: baseline;
     width: 100%; text-align: left; cursor: pointer; font-family: var(--lp-font);
     background: none; border: none; border-top: 1px solid var(--lp-line);
-    padding: 0.6rem 1rem;
+    padding: 0.5rem 0.9rem;
   }
   .glib .libgroup .libitem:first-of-type { border-top: none; }
   .glib .libitem:hover { background: var(--lp-bg-alt); }
-  .glib .libitem .n { font-size: 0.92rem; font-weight: 650; color: var(--lp-ink); }
-  .glib .libitem .f { font-size: 0.78rem; color: var(--lp-faint); }
+  .glib .libitem .n { font-size: 0.9rem; font-weight: 650; color: var(--lp-ink); }
+  /* the framework meta lives in the hover preview and the modal, not the row */
+  .glib .libitem .f { display: none; }
   .glib .libitem .w { font-size: 0.7rem; color: var(--lp-accent-ink); font-weight: 650; white-space: nowrap; }
-  @media (max-width: 640px) { .glib .libitem { grid-template-columns: minmax(0, 1fr) auto; } .glib .libitem .f { display: none; } }
 
   .glib .libpop {
     position: fixed; z-index: 80; width: 430px; pointer-events: none;
@@ -2266,15 +2271,15 @@
       b.addEventListener('click', function () { hidePop(); onClick(); });
       groupEl.appendChild(b);
     }
-    function group(label, color) {
+    function group(label, color, cls) {
       var d = document.createElement('div');
-      d.className = 'libgroup';
+      d.className = 'libgroup' + (cls ? ' ' + cls : '');
       d.style.setProperty('--gc', color);
       d.innerHTML = '<b><i></i>' + label + '</b>';
       host.appendChild(d);
       return d;
     }
-    var gd = group('Engagement documents', '#8A6302');
+    var gd = group('Engagement documents', '#8A6302', 'docs');
     srcCards.forEach(function (card) {
       var nameEl = card.querySelector('.cc-head');
       var nm = nameEl && nameEl.childNodes[0] ? nameEl.childNodes[0].textContent.trim() : 'Document';
@@ -2323,24 +2328,41 @@
     <div class="section-head reveal">
       <div class="reg-kicker">Proof</div>
       <h2>Built and delivered at scale.</h2>
-      <p>The engagements above are the productized form of work already done at scale, with commercial accountability attached.</p>
+      <p>The engagements above are the productized form of work already done at scale, with commercial accountability attached. Behind them are three seats held in sequence: the HR executive who lived with the systems, the consultant who redesigned global organizations, the vendor who delivered the platforms.</p>
     </div>
     <!-- CASE STUDIES: quantified metrics to be added from job-search internal folder (session planned) -->
     <div class="outcomes-grid grow-grid reveal">
       <div class="outcome-item">
         <div class="outcome-num">01</div>
         <h3>Eightfold AI</h3>
-        <p>From a standing start to an eight-figure ARR business: the workforce exchange practice at an enterprise AI company, across Fortune 500 and Global 500 accounts and state departments. The programs behind it (Workforce Exchange, Talent Intelligence Platform, Agentic Scale) are the same deployment, adoption, and workforce work this page offers, run inside live accounts.</p>
+        <p>From a standing start to an eight-figure ARR business: the workforce exchange practice at an enterprise AI company, across Fortune 500 and Global 500 accounts and state departments. Building and running that practice (Workforce Exchange, Talent Intelligence Platform, Agentic Scale) taught what the vendor sees and the buyer usually cannot: why adoption stalls after launch, and which sequence recovers it.</p>
       </div>
       <div class="outcome-item">
         <div class="outcome-num">02</div>
         <h3>Capgemini</h3>
-        <p>Engagement Manager in San Francisco, leading organizational design, change, and M&amp;A integration engagements for global companies, including global pharmaceutical organizations. The reorganization discipline behind the Blueprint engagement was built here, on enterprise-scale programs.</p>
+        <p>Engagement Manager in San Francisco. Day-1 readiness on a $2.5B pharmaceutical acquisition. Change lead on a Salesforce program across a 4,000-person global sales org, lifting CRM adoption. Operating model design for the data science function of a 15,000-person talent group. The reorganization discipline behind the Blueprint engagement was built on these programs.</p>
       </div>
       <div class="outcome-item">
         <div class="outcome-num">03</div>
         <h3>Public sector</h3>
-        <p>Delivered for the DoD Defense Innovation Unit and state labor departments. AI deployment in environments where procurement, policy, and workforce constraints are at their hardest, and where adoption cannot be bought with enthusiasm.</p>
+        <p>Delivered for the DoD Defense Innovation Unit (GigEagle) and six state and territorial labor departments, New York to Puerto Rico. AI deployment in environments where procurement, policy, and workforce constraints are at their hardest, and where adoption cannot be bought with enthusiasm.</p>
+      </div>
+    </div>
+    <div class="outcomes-grid grow-grid reveal" style="margin-top: 1.1rem;">
+      <div class="outcome-item">
+        <div class="outcome-num">04</div>
+        <h3>Tom has held your seat</h3>
+        <p>Country HR head and executive committee member at Capgemini Vietnam at 27, while the company grew 60%. The executive who lives with the system after the vendor leaves. The engagements are built for the team that stays, because Tom has been that team.</p>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-num">05</div>
+        <h3>Tom has held the vendor's seat</h3>
+        <p>Dozens of enterprise rollouts run from the vendor side. The FDE governance playbook and the scale / hold / kill verdict come from knowing every move a vendor makes, and which of those moves serve the vendor first.</p>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-num">06</div>
+        <h3>You work with the person who built it</h3>
+        <p>Every engagement is delivered personally by Tom, at a fixed fee agreed before the work starts. The methods, the instruments, and the simulator on this page are his own builds, and the person who shows up is the person accountable.</p>
       </div>
     </div>
     <div class="stat-strip reveal" style="margin-top: 2.4rem;">
