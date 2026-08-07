@@ -2166,8 +2166,8 @@ footer .footer-practices i {
     .wheel-wrap { display: grid; grid-template-columns: 1fr; gap: 0.6rem; align-items: start; }
     .wheel-host svg { width: 100%; max-width: 560px; height: auto; display: block; margin: 0 auto; }
     .wheel-host .wseg { cursor: pointer; outline: none; }
-    .wheel-host .wseg:hover path:first-of-type, .wheel-host .wseg:focus-visible path:first-of-type { fill-opacity: 0.22; }
-    .wheel-host .wseg.added:hover path:first-of-type { fill-opacity: 0.85; }
+    .wheel-host .wseg:hover path:first-of-type, .wheel-host .wseg:focus-visible path:first-of-type { fill-opacity: 0.24; }
+    .wheel-host .wseg.added:hover path:first-of-type { fill-opacity: 0.34; }
     .wheel-host .wseg:focus-visible path:first-of-type { stroke-width: 2; stroke-opacity: 1; }
     .wheel-host .wseg.locked { cursor: not-allowed; }
     .wheel-detail {
