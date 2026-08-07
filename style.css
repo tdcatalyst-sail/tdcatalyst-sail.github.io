@@ -4062,3 +4062,79 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 }
 .nav-links.nav-pills a:not(.nav-cta):hover { color: var(--brand-ink); background: #fff; border-color: var(--reg-line); }
 .nav-links.nav-pills a.now { color: var(--brand-ink); border-color: var(--brand); background: #fff; }
+
+/* ---- Seat cards: the three-seat proof, figure-led ----
+   The seats used to be 60-70 words of prose each and the evidence inside them
+   is numeric, so the number leads: one figure, its caption, then the facts as
+   a list. Same .outcome-item shell, so the card chrome and the logo-coloured
+   numeral above it are untouched. */
+.seat-fig {
+  display: block;
+  font-family: 'Besley', Georgia, serif;
+  font-size: 2.4rem; font-weight: 600; line-height: 1;
+  letter-spacing: -0.025em; color: var(--navy);
+  font-variant-numeric: tabular-nums;
+  margin: 0.15rem 0 0.32rem;
+}
+.seat-cap {
+  display: block; font-size: 0.82rem; line-height: 1.35;
+  color: var(--midgray); margin-bottom: 0.95rem;
+  padding-bottom: 0.95rem; border-bottom: 1px solid var(--hairline);
+}
+.seat-facts { list-style: none; margin: 0; padding: 0; }
+.seat-facts li {
+  position: relative; padding-left: 0.95rem;
+  font-size: 0.9rem; line-height: 1.45; color: var(--charcoal);
+  margin-bottom: 0.42rem;
+}
+/* the dot sits on the first line's optical centre, not the box's */
+.seat-facts li::before {
+  content: ""; position: absolute; left: 0; top: 0.62em;
+  width: 4px; height: 4px; border-radius: 50%; background: var(--brand);
+}
+.seat-facts li:last-child { margin-bottom: 0; }
+
+/* ---- Reach: the geography credential ----
+   Two columns, because the claim has two halves that the word "global" usually
+   collapses into one: the countries lived and worked in, and the span of US
+   jurisdictions delivered to. Names rather than adjectives, on the reasoning
+   that a reader checks a list and skims a claim. */
+.reach-band {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem; margin-top: 1.9rem;
+}
+.reach-col {
+  min-width: 0; background: #fff; border: 1px solid var(--reg-line);
+  border-top: 3px solid var(--brand); border-radius: var(--reg-radius);
+  padding: 1.15rem 1.3rem 1.3rem; box-shadow: var(--elev-1);
+}
+.reach-col .rc-label {
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--brand-ink); margin-bottom: 0.5rem;
+}
+.reach-col .rc-fig {
+  font-family: 'Besley', Georgia, serif; font-size: 2.1rem; font-weight: 600;
+  line-height: 1; letter-spacing: -0.025em; color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+.reach-col .rc-fig span {
+  font-size: 0.8rem; font-weight: 400; color: var(--midgray);
+  margin-left: 0.5rem; letter-spacing: 0;
+}
+.reach-list {
+  list-style: none; margin: 0.75rem 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 0.3rem 1.1rem;
+}
+.reach-list li {
+  font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 0.98rem;
+  color: var(--navy); line-height: 1.5; white-space: nowrap;
+}
+.reach-note { font-size: 0.82rem; color: var(--midgray); line-height: 1.45; margin: 0.8rem 0 0; }
+@media (max-width: 720px) {
+  .seat-fig { font-size: 2rem; }
+  .reach-band { grid-template-columns: 1fr; }
+  .reach-col .rc-fig { font-size: 1.8rem; }
+  /* the nowrap that keeps a country name whole would otherwise overflow 375px */
+  .reach-list { gap: 0.25rem 0.9rem; }
+  .reach-list li { font-size: 0.92rem; }
+}
