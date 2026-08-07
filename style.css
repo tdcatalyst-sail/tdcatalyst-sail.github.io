@@ -1713,6 +1713,110 @@ section.article-section { padding-top: 2rem; }
   .tc-axis { grid-template-columns: 116px 1fr 1fr; }
   .tc-axis.three { grid-template-columns: 116px repeat(3, 1fr); }
 }
+/* The same lanes and wins inside the Grow engagement panel */
+.sel-panel .tc-lanes { margin: 1.1rem 0 0.3rem; }
+.sel-panel .tc-lane { grid-template-columns: 196px 1fr; }
+.sel-panel .tc-axis { grid-template-columns: 196px 1fr 1fr; }
+.sel-panel .tc-axis.three { grid-template-columns: 196px repeat(3, 1fr); }
+@media (max-width: 700px) {
+  .sel-panel .tc-lane, .sel-panel .tc-axis { grid-template-columns: 128px 1fr; }
+  .sel-panel .tc-axis.three { grid-template-columns: 128px repeat(3, 1fr); }
+}
+.sel-wins { margin: 0.9rem 0 0.9rem; }
+
+/* ---- The worked example: the question up top, then the three Teece moves
+   as columns rather than four stacked paragraphs. ---- */
+.worked {
+  margin-top: 1.5rem; border: 1px solid var(--reg-line);
+  border-radius: var(--reg-radius-lg); overflow: hidden; background: #fff;
+}
+.worked-head { padding: 1.3rem 1.5rem; background: var(--reg-bg-alt, var(--seamist)); }
+.worked-head p { margin: 0.5rem 0 0; font-size: 0.95rem; color: var(--charcoal); line-height: 1.55; }
+.worked-head p b { color: var(--navy); font-weight: 600; }
+.worked-steps { display: grid; grid-template-columns: repeat(3, 1fr); }
+.worked-steps > div { padding: 1.2rem 1.3rem; border-right: 1px solid var(--reg-line); }
+.worked-steps > div:last-child { border-right: none; }
+.worked-steps span {
+  display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.45rem;
+}
+.worked-steps p { margin: 0; font-size: 0.88rem; color: var(--midgray); line-height: 1.58; }
+@media (max-width: 760px) {
+  .worked-steps { grid-template-columns: 1fr; }
+  .worked-steps > div { border-right: none; border-bottom: 1px solid var(--reg-line); }
+  .worked-steps > div:last-child { border-bottom: none; }
+}
+
+/* ---- The dependency chain: what each framework fails to do alone. ---- */
+.dep { list-style: none; padding: 0; margin: 1.2rem 0 0; display: grid; gap: 3px; }
+.dep li {
+  display: grid; grid-template-columns: minmax(0, 250px) minmax(0, 1fr);
+  gap: 0.5rem 1.1rem; align-items: baseline;
+  background: #fff; border: 1px solid var(--reg-line);
+  border-left: 3px solid var(--logo-gold);
+  border-radius: var(--reg-radius); padding: 0.8rem 1rem;
+  font-size: 0.92rem; color: var(--navy);
+}
+.dep li b { font-weight: 600; color: var(--navy); }
+.dep li span { color: var(--midgray); font-size: 0.88rem; line-height: 1.55; }
+@media (max-width: 620px) { .dep li { grid-template-columns: 1fr; } }
+
+/* Three-across variant of the loop strip. A class, not an inline override:
+   inline grid-template-columns beat the responsive rules below and pushed
+   the third column off a 375px screen. */
+.method-loop--3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 820px) {
+  .method-loop--3 { grid-template-columns: 1fr; }
+  .method-loop--3 > div { border-right: none; border-bottom: 1px solid var(--hairline); }
+  .method-loop--3 > div:last-child { border-bottom: none; }
+}
+
+/* ---- The signs selector on the method page. The question carries the panel,
+   so the name sits in the tab and the anchor note closes it. ---- */
+.sel--signs .sel-panel { min-height: 15rem; }
+.sign-k {
+  display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--sel-ink, var(--brand)); margin-bottom: 0.5rem;
+}
+.sel--signs .sel-name { font-size: 1.5rem; line-height: 1.28; margin-bottom: 0; }
+.sign-anchor {
+  margin-top: 1.2rem; padding-top: 0.9rem; border-top: 1px solid var(--reg-line);
+  font-size: 0.9rem; color: var(--midgray); line-height: 1.6;
+}
+.sign-anchor b {
+  display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--navy); margin-bottom: 0.3rem; font-weight: 500;
+}
+@media (max-width: 760px) { .sel--signs .sel-name { font-size: 1.25rem; } }
+
+/* ---- The ambidexterity matrix as a real 2x2. The target quadrant is the
+   only one that carries the accent frame. ---- */
+.quad {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+  margin-top: 1.5rem;
+}
+.quad > div {
+  background: #fff; border: 1px solid var(--reg-line);
+  border-radius: var(--reg-radius); padding: 1.2rem 1.3rem;
+}
+.quad .q-ax {
+  display: block; font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--midgray); margin-bottom: 0.5rem;
+}
+.quad b {
+  display: block; font-family: 'Fraunces', 'Besley', Georgia, serif; font-weight: 400;
+  font-size: 1.15rem; color: var(--navy); margin-bottom: 0.35rem;
+}
+.quad p { font-size: 0.88rem; color: var(--midgray); line-height: 1.58; margin: 0; }
+.quad .q-target {
+  border: 2px solid var(--terracotta);
+  background:
+    radial-gradient(18rem 8rem at 100% 0%, color-mix(in srgb, var(--logo-gold) 12%, transparent), transparent 70%),
+    #fff;
+}
+.quad .q-target .q-ax, .quad .q-target b { color: var(--terracotta); }
+.quad .q-target p { color: var(--charcoal); }
+@media (max-width: 620px) { .quad { grid-template-columns: 1fr; } }
 
 /* Collapsible sources section */
 .sources-collapsible {
@@ -3774,8 +3878,13 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
    the real peaks device runs. */
 .hero-walk-m { display: none; }
 @media (max-width: 999px) {
-  .hero-walk-m { display: block; max-width: 375px; margin: 1.4rem 0 0.4rem; }
+  /* Between phone and the desktop peaks device, the walk holds the hero's
+     full measure: centered, capped, with room below before the buttons. */
+  .hero-walk-m { display: block; max-width: 460px; margin: 1.6rem auto 0.8rem; }
   .hero-walk-m svg { width: 100%; height: auto; display: block; }
+}
+@media (max-width: 620px) {
+  .hero-walk-m { max-width: 375px; margin: 1.4rem 0 0.4rem; }
 }
 
 /* Framework at-a-glance chips on the method page. */
