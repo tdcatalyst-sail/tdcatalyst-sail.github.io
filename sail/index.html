@@ -342,7 +342,7 @@
         <div class="sheet-entry" role="button" tabindex="0" data-area="01"><em>01</em><b>Named adaptive challenge</b><p>A precise, written diagnosis of the gap between your current posture and the leadership capability the AI transition demands. Specific to your organization, built from your data.</p><span class="se-more">Preview the section &darr;</span></div>
         <div class="sheet-entry" role="button" tabindex="0" data-area="02"><em>02</em><b>Organizational landscape analysis</b><p>A structured read of the signals, assets, and constraints your operating environment is already producing. What your landscape is showing you, and what it is obscuring.</p><span class="se-more">Preview the section &darr;</span></div>
         <div class="sheet-entry" role="button" tabindex="0" data-area="03"><em>03</em><b>Leverage inventory</b><p>The specific capabilities, structural advantages, and resources available to close the identified gap. An honest accounting of what is present, what is absent, and what is misallocated.</p><span class="se-more">Preview the section &darr;</span></div>
-        <div class="sheet-entry" role="button" tabindex="0" data-area="04"><em>04</em><b>90-day starting roadmap</b><p>A sequenced set of first moves with clear ownership and decision points. Built so you can act before the signal hardens.</p><span class="se-more">Preview the section &darr;</span></div>
+        <div class="sheet-entry" role="button" tabindex="0" data-area="04"><em>04</em><b>90-day starting roadmap</b><p>A sequenced set of first moves with clear ownership and decision points. Built so you can act while the window is open.</p><span class="se-more">Preview the section &darr;</span></div>
       </div>
       <div class="sheet-doc-foot"><span>Delivered in 7&ndash;10 days</span><span>Google Drive: documents, slides, frameworks</span><span>Depth varies by tier</span></div>
     </div>
@@ -477,20 +477,47 @@
     "01": { t: "Named adaptive challenge", rows: ["The gap, named", "Current posture", "The capability the transition demands"] },
     "02": { t: "Organizational landscape analysis", rows: ["Signals your environment is producing", "Assets and constraints", "What the landscape is obscuring"] },
     "03": { t: "Leverage inventory", rows: ["Present", "Absent", "Misallocated"] },
-    "04": { t: "90-day starting roadmap", rows: ["First moves, sequenced", "Ownership and decision points", "Before the signal hardens"] }
+    "04": { t: "90-day starting roadmap", rows: ["First moves, sequenced", "Ownership and decision points", "The first ninety days"] }
+  };
+  var DOCS = {
+    "01": [
+      { f: "named-adaptive-challenge.html", t: "The memo", k: "Doc" },
+      { f: "framework-application-summary.html", t: "Framework application", k: "Doc" },
+      { f: "named-adaptive-challenge-slide.html", t: "On one slide", k: "Slide" }
+    ],
+    "02": [
+      { f: "organizational-landscape-analysis.html", t: "The analysis", k: "Doc" },
+      { f: "landscape-map-slide.html", t: "The landscape map", k: "Slide" }
+    ],
+    "03": [
+      { f: "leverage-inventory-sheet.html", t: "The inventory", k: "Sheet" },
+      { f: "leverage-honest-account.html", t: "The honest account", k: "Doc" }
+    ],
+    "04": [
+      { f: "starting-roadmap-sheet.html", t: "The roadmap", k: "Sheet" },
+      { f: "three-moves-slide.html", t: "Three moves", k: "Slide" },
+      { f: "what-remains-unresolved.html", t: "What is not resolved", k: "Doc" }
+    ]
   };
   var sov = document.getElementById('sov');
   var body = document.getElementById('sov-body');
   if (!sov) return;
   function open(area) {
-    var a = AREAS[area];
-    if (!a) return;
-    var rows = a.rows.map(function (r) {
-      return '<div class="rl">' + r + '</div><div class="rb"></div><div class="rb w2"></div><div class="rb w3"></div>';
+    var a = AREAS[area], docs = DOCS[area];
+    if (!a || !docs) return;
+    var tabs = docs.map(function (d, i) {
+      return '<button type="button" class="sov-tab" data-f="' + d.f + '" aria-pressed="' + (i === 0 ? 'true' : 'false') + '">' + d.t + '<em>' + d.k + '</em></button>';
     }).join('');
-    body.innerHTML = '<div class="sov-doc"><div class="sd-h"><span>The Trail Diagnostic</span><span>' + area + ' / 04</span></div>' +
-      '<div class="sd-b"><h4>' + a.t + '</h4>' + rows + '</div></div>' +
-      '<p class="sov-note">The structure of the real document; the content is written from your walk and your data. <a href="sessions">The first engagement is 5K USD, fixed &rarr;</a></p>';
+    body.innerHTML = '<div class="sd-h"><span>The Trail Diagnostic</span><span>' + area + ' / 04</span></div>' +
+      '<div class="sov-tabs" role="group" aria-label="Sample documents for this section">' + tabs + '</div>' +
+      '<iframe class="sov-frame" src="/sail/diagnostic-samples/' + docs[0].f + '" title="' + a.t + ' sample document" loading="eager"></iframe>' +
+      '<p class="sov-note">Illustrative samples of the real documents; yours are written from your walk and your data. <a href="sessions">The first engagement is 5K USD, fixed &rarr;</a></p>';
+    body.querySelectorAll('.sov-tab').forEach(function (b) {
+      b.addEventListener('click', function () {
+        body.querySelector('.sov-frame').src = '/sail/diagnostic-samples/' + b.dataset.f;
+        body.querySelectorAll('.sov-tab').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      });
+    });
     sov.hidden = false;
     document.body.style.overflow = 'hidden';
   }

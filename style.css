@@ -3837,9 +3837,28 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 .sov { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; padding: 1rem; }
 .sov-back { position: absolute; inset: 0; background: rgba(16, 26, 40, 0.55); backdrop-filter: blur(2px); }
 .sov-card {
-  position: relative; width: min(480px, 94vw); max-height: 88vh; overflow: auto;
+  position: relative; width: min(720px, 94vw); max-height: 90vh; overflow: auto;
   background: #fff; border-radius: var(--reg-radius-lg); box-shadow: var(--elev-3);
   padding: 1.6rem 1.7rem;
+}
+/* The preview is the real sample document in a frame, with its sibling
+   formats as tabs above it. */
+.sov-tabs { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.9rem 0 0.8rem; }
+.sov-tab {
+  display: inline-flex; align-items: baseline; gap: 0.45rem; cursor: pointer;
+  font-family: inherit; font-size: 0.85rem; font-weight: 600; color: var(--navy);
+  background: #fff; border: 1px solid var(--reg-line); border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+}
+.sov-tab em {
+  font-style: normal; font-family: var(--mono); font-size: 0.6rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--midgray);
+}
+.sov-tab[aria-pressed="true"] { border-color: var(--logo-blue); background: color-mix(in srgb, var(--logo-blue) 7%, #fff); }
+.sov-tab[aria-pressed="true"] em { color: var(--logo-blue); }
+.sov-frame {
+  display: block; width: 100%; height: min(62vh, 640px);
+  border: 1px solid var(--reg-line); border-radius: var(--reg-radius); background: #e9eaee;
 }
 .sov-x {
   position: absolute; top: 0.7rem; right: 0.8rem; width: 30px; height: 30px;
