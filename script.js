@@ -176,6 +176,17 @@ function closeBrandMenu() {
     lastY = y;
     syncFloat();
   }, { passive: true });
+
+  // On pointer devices, parking the mouse where the bar was brings it back;
+  // scrolling up stays the only reveal on touch screens.
+  if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.addEventListener('mousemove', function (ev) {
+      if (ev.clientY <= 56 && nav.classList.contains('nav--hidden')) {
+        nav.classList.remove('nav--hidden');
+        syncFloat();
+      }
+    }, { passive: true });
+  }
 })();
 
 // ===== Brand reshape 2026-07: terrain device + scroll reveals =====
