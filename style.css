@@ -373,63 +373,6 @@ section { padding: 5rem 0; }
   font-weight: 500;
 }
 
-/* ===== FEATURED TOOL BAND (hub only: nav -> band -> hero) ===== */
-.featured-band {
-  display: block;
-  background: var(--navy-deep);
-  color: var(--offwhite);
-  border-bottom: 1px solid transparent;   /* defeat global a:hover underline */
-  transition: background 0.2s;
-}
-.featured-band:hover { background: var(--navy); border-bottom-color: transparent; }
-.featured-inner {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.6rem 1.4rem;
-  padding: 0.7rem 0;
-}
-.featured-flag {
-  font-family: var(--mono);
-  font-size: 0.66rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--terracotta-soft);
-  border: 1px solid rgba(232, 176, 3, 0.45);
-  border-radius: 999px;
-  padding: 0.25em 0.7em;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.featured-text { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.25rem 0.7rem; }
-.featured-title {
-  font-family: 'Besley', Georgia, serif;
-  font-weight: 500;
-  color: var(--offwhite);
-}
-.featured-hook { color: var(--seamist); font-size: 0.95rem; opacity: 0.85; }
-.featured-go {
-  margin-left: auto;
-  font-family: var(--mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.06em;
-  color: var(--terracotta-soft);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.featured-band:hover .featured-go { color: var(--logo-gold); }
-@media (max-width: 640px) {
-  .featured-hook { display: none; }
-  .featured-inner {
-    padding: 0.75rem 0 0.85rem;
-    gap: 0.45rem 1rem;
-  }
-  .featured-title { line-height: 1.2; text-wrap: balance; }
-  /* flag left + "Open the simulation" right on one row; title on its own row below */
-  .featured-go { order: 2; margin-left: auto; }
-  .featured-text { order: 3; flex-basis: 100%; }
-}
-
 /* ===== HERO ===== */
 .hero {
   padding: 2.5rem 0 4rem;
@@ -1947,6 +1890,21 @@ body.brand-sail .nav-logo .mark-practice { color: var(--logo-blue); }
 body.brand-grow .nav-logo .mark-practice { color: var(--terracotta); }
 body.brand-advise .nav-logo .mark-practice { color: var(--logo-red); }
 
+/* ---- Grow productized register (Tom, 2026-08-07) ----
+   Grow is AI-native delivery for adoption consulting and presents in the
+   campaign pages' productized voice: Archivo display headings with tight
+   tracking, rounded-rectangle buttons. Sail keeps the serif strategy-walk
+   register; this scope must not leak past body.brand-grow. The nav
+   wordmark keeps its own faces via the more specific .nav-logo rules. */
+body.brand-grow h1, body.brand-grow h2, body.brand-grow h3 {
+  font-family: 'Archivo', 'Besley', Georgia, sans-serif;
+  font-weight: 760;
+  letter-spacing: -0.018em;
+}
+body.brand-grow h1 { font-weight: 800; }
+body.brand-grow .btn { border-radius: 12px; }
+body.brand-grow .nav-cta { border-radius: 999px; }
+
 /* Hub: practice cards */
 .practice-cards {
   display: grid;
@@ -2535,7 +2493,7 @@ footer .footer-practices i {
    =================================================================== */
 
 /* Terrain canvases: script.js draws topographic contours into any
-   canvas.terrain / canvas.card-terrain (see data- attrs there) */
+   canvas.terrain (see data- attrs there) */
 .hero--terrain { position: relative; overflow: hidden; }
 .hero--terrain > canvas.terrain { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero--terrain .wrap { position: relative; }
@@ -2643,70 +2601,180 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 }
 .fn-pillar { font-family: var(--mono); }
 
-/* Practice offer cards (hub) — white cards, per-practice terrain base */
-.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.1rem, 2.2vw, 1.8rem); }
-.prac-card {
-  position: relative;
-  display: flex; flex-direction: column;
-  background: #fff;
-  border: 1px solid var(--hairline);
-  border-radius: 3px;
-  padding: 1.9rem 1.9rem 1.6rem;
-  overflow: hidden;
+/* ============================================================
+   HUB PRACTICE BANDS (hub only)
+   Grow and Sail present in their own visual language rather than as a
+   symmetric card pair: Grow on its diffusion field with the engagements
+   and the launch offer, Sail on its own ground, one photograph of the
+   actual field. Advise closes the page as a signpost for its different
+   audience.
+   ============================================================ */
+.pband { position: relative; overflow: hidden; }
+.pband > canvas.pband-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.pband .wrap { position: relative; }
+.pband-kick { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+.pband-kick .reg-kicker { margin-bottom: 0; }
+.pband-flag {
+  display: inline-flex; align-items: center;
+  font-family: var(--mono); font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.11em; text-transform: uppercase;
+  color: #10233F; background: var(--logo-gold);
+  padding: 0.28rem 0.7rem; border-radius: var(--radius-pill);
   box-shadow: var(--elev-1);
-  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
-.prac-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--elev-3);
-  border-bottom-color: var(--hairline); /* cards are <a>; keep the link underline off */
-}
-.prac-card.sail:hover { border-color: var(--logo-blue); }
-.prac-card.grow:hover { border-color: var(--logo-gold); }
-.prac-card.advise:hover { border-color: var(--logo-red); }
-/* lit from afar: hovering a hero flag (or its label) activates the practice
-   card it links to — same presentation as the card's own hover */
-.prac-card--lit {
-  transform: translateY(-5px);
-  box-shadow: var(--elev-3);
-}
-.prac-card.sail.prac-card--lit { border-color: var(--logo-blue); }
-.prac-card.grow.prac-card--lit { border-color: var(--logo-gold); }
-.prac-card.advise.prac-card--lit { border-color: var(--logo-red); }
-.card-terrain {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  height: 130px; width: 100%;
-  pointer-events: none;
-  opacity: 0.75;
-  transition: opacity 0.3s ease;
-}
-.prac-card:hover .card-terrain { opacity: 1; }
-.prac-card > *:not(.card-terrain) { position: relative; }
-.prac-rule { display: block; width: 30px; border-top: 2px solid; margin-bottom: 1.1rem; transition: width 0.3s ease; }
-.prac-card:hover .prac-rule { width: 52px; }
-.prac-card.sail .prac-rule { border-color: var(--logo-blue); }
-.prac-card.grow .prac-rule { border-color: var(--logo-gold); }
-.prac-card.advise .prac-rule { border-color: var(--logo-red); }
-.prac-card h3 { font-size: 1.6rem; margin-bottom: 0.3rem; }
-.prac-tag {
-  font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.12em;
-  text-transform: uppercase; margin-bottom: 1rem;
-}
-.prac-card.sail .prac-tag { color: var(--logo-blue); }
-.prac-card.grow .prac-tag { color: var(--terracotta); }
-.prac-card.advise .prac-tag { color: var(--logo-red); }
-.prac-desc { font-size: 0.99rem; line-height: 1.6; color: var(--charcoal); }
-.prac-who { font-size: 0.88rem; color: var(--midgray); }
-.prac-go { font-weight: 600; font-size: 0.95rem; margin-top: auto; padding-top: 0.9rem; }
-.prac-go .arr { display: inline-block; transition: transform 0.25s ease; }
-.prac-card:hover .prac-go .arr { transform: translateX(5px); }
-.prac-card.sail .prac-go { color: var(--logo-blue); }
-.prac-card.grow .prac-go { color: var(--terracotta); }
-.prac-card.advise .prac-go { color: var(--logo-red); }
-@media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
+.pband--grow .reg-kicker { color: var(--terracotta); }
+.pband--grow .reg-kicker::before { background: var(--logo-gold); }
+/* Pulled up toward its h2 so the head groups with the sentence that
+   explains it, tighter than the lede sits to the cards below. */
+.pband-lede { max-width: 74ch; color: var(--charcoal); margin: -1.1rem 0 var(--space-4); }
+.pband-tiers { margin-bottom: 1rem; }
+/* The flagship's exact-gold key is optically lighter than its red and blue
+   neighbors; the wash gives it comparable weight without deepening the hue. */
+.pw--gold { background: linear-gradient(color-mix(in srgb, var(--logo-gold) 9%, #fff), #fff 34%); }
+.pband-enter { display: inline-block; margin-top: var(--space-3); font-weight: 600; font-size: 0.98rem; }
+.pband--grow .pband-enter { margin-top: 0.5rem; }
+.pband-enter .arr { display: inline-block; transition: transform 0.25s ease; }
+.pband-enter:hover .arr { transform: translateX(5px); }
+.pband--grow .pband-enter, .pband--grow .pband-enter:hover { color: var(--terracotta); }
 
-/* Through-line: asymmetric split with a gold seam rule (hub) */
-.through-grid { display: grid; grid-template-columns: 5fr 1px 7fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+/* Sail: the band is the ground itself — one full-bleed frame, the claim
+   in a card. The frame is the hub's own; photos never repeat site-wide. */
+.pband--sail { border-bottom: 1px solid var(--hairline); }
+.pband--sail .pband-photo {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.pband--sail .pband-scrim {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(100deg, rgba(18, 30, 45, 0.30), rgba(18, 30, 45, 0.06) 60%);
+}
+.pband--sail .wrap { z-index: 2; }
+.pband-card {
+  position: relative;
+  max-width: 620px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--reg-line);
+  border-top: 3px solid var(--logo-blue);
+  border-radius: var(--reg-radius-lg);
+  box-shadow: var(--elev-3);
+  padding: 2rem 2.4rem;
+  margin: clamp(1rem, 3vw, 2.5rem) 0;
+}
+.pband-card .reg-kicker { color: var(--logo-blue); }
+.pband-card .reg-kicker::before { background: var(--logo-blue); }
+.pband-card h2 { margin-bottom: 0.9rem; }
+.pband-card > p { color: var(--charcoal); }
+.pband-facts { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; gap: 0.45rem; }
+.pband-facts li {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  border-bottom: 1px dashed var(--reg-line); padding-bottom: 0.45rem;
+  font-size: 0.95rem;
+}
+.pband-facts b { font-family: 'Besley', Georgia, serif; font-weight: 600; color: var(--navy); }
+.pband-facts span { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--midgray); white-space: nowrap; }
+.pband-card .pband-enter { color: var(--logo-blue); margin-top: 1.3rem; }
+.pband--sail .band-note {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
+  padding: 2.4rem clamp(1.2rem, 4vw, 3rem) 1.1rem;
+  /* Deeper floor + shadow: the note has to survive whatever photo ships
+     next (bright fog bottoms included; frames never repeat site-wide). */
+  background: linear-gradient(to top, rgba(18, 30, 45, 0.72), rgba(18, 30, 45, 0));
+  color: rgba(235, 239, 236, 0.92);
+  text-shadow: 0 1px 4px rgba(18, 30, 45, 0.6);
+}
+@media (max-width: 720px) {
+  .pband-card { padding: 1.5rem 1.4rem; }
+  .pband-facts span { white-space: normal; text-align: right; }
+}
+
+/* Wide variant: the card spans the wrap; copy left, the three posture
+   glyphs (shared with Sail's Station 1) stacked on the right. */
+.pband-card--wide { max-width: none; }
+.pband-card-grid {
+  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center;
+}
+.pband-postures { display: grid; gap: 1rem; justify-self: center; }
+.pband-posture { display: flex; align-items: center; gap: 1.1rem; }
+.pband-posture .sg-glyph { margin-bottom: 0; flex-shrink: 0; }
+.pband-posture .sg-glyph svg { width: 118px; }
+.pband-posture .pp-num {
+  display: block; font-family: var(--mono); font-size: 0.62rem;
+  letter-spacing: 0.1em; color: var(--logo-blue); margin-bottom: 0.15rem;
+}
+.pband-posture .pp-label b {
+  font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 1.02rem; color: var(--navy); line-height: 1.25;
+}
+@media (max-width: 860px) {
+  .pband-card-grid { grid-template-columns: 1fr; }
+  .pband-postures { justify-self: start; }
+}
+
+/* The delivery flywheel at hub scale: Grow's wheel geometry in the
+   editorial register. The builder script lives inline on index.html. */
+.dloop-wrap {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem); align-items: center; margin-bottom: var(--space-4);
+}
+.dloop-chart { max-width: 460px; justify-self: center; width: 100%; }
+.dloop-wheel { display: block; width: 100%; height: auto; }
+.dloop-seg { cursor: pointer; outline: none; }
+.dloop-seg .dloop-arc { transition: fill-opacity var(--dur) var(--ease); }
+.dloop-seg:hover .dloop-arc, .dloop-seg:focus-visible .dloop-arc, .dloop-seg.on .dloop-arc { fill-opacity: 0.2; }
+.dloop-detail {
+  background: #fff; border: 1px solid var(--reg-line);
+  border-radius: var(--reg-radius-lg); box-shadow: var(--elev-1);
+  padding: 1.5rem 1.7rem; min-height: 16rem;
+}
+.dloop-detail .dd-eyebrow {
+  display: block; font-family: var(--mono); font-size: 0.62rem;
+  letter-spacing: 0.11em; text-transform: uppercase; color: var(--brand-ink);
+  margin-bottom: 0.45rem;
+}
+.dloop-detail b {
+  display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 1.18rem; color: var(--navy); margin-bottom: 0.4rem;
+}
+.dloop-detail p { font-size: 0.94rem; color: var(--midgray); line-height: 1.6; margin: 0; }
+.dloop-detail ul {
+  margin: 0.9rem 0 0; padding-left: 1.05rem;
+  display: grid; gap: 0.5rem; font-size: 0.9rem; color: var(--charcoal); line-height: 1.55;
+}
+.dloop-detail li::marker { color: var(--terracotta); }
+@media (max-width: 860px) {
+  .dloop-wrap { grid-template-columns: 1fr; }
+  .dloop-detail { min-height: 0; }
+}
+
+/* Hub hero: the logo artwork at a compact size (the 220px lockup gave the
+   page a slow start), then the claim and the numbers. */
+.hero--hub { padding: 3.5rem 0 5rem; }
+.hero--hub .hero-logo { width: 150px; margin-bottom: var(--space-3); }
+.hero--hub h1 { max-width: 20ch; }
+.hero--hub .stat-strip { margin-bottom: var(--space-4); }
+/* The peaks scanner needs the same vertical field the logo hero gave it, or
+   it finds room for only two of the three practice summits. Desktop only —
+   the overlay itself is display:none below 1024px. */
+@media (min-width: 1024px) {
+  .hero--hub { min-height: 820px; display: flex; align-items: center; }
+  .hero--hub > .wrap { width: 100%; }
+}
+
+/* Instruments join the delivery-loop section on the hub. */
+.inst-grid--push { margin-top: var(--space-4); }
+
+/* Advise signpost variant (hub): accent to the destination practice. */
+.practice-signpost--to-advise::before { background: var(--logo-red); }
+.practice-signpost--to-advise .signpost-go { color: var(--logo-red); }
+
+
+/* Through-line: asymmetric split; the middle track carries the seam-braid
+   SVG (three practice strands converging to one line), so it needs real
+   width — the old 1px track was sized for the retired .seam-rule and
+   collapsed the braid to invisibility on desktop. */
+.through-grid { display: grid; grid-template-columns: 5fr minmax(140px, 1.6fr) 7fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+.through-grid .seam-braid { align-self: center; }
 .seam-rule { width: 1px; height: 100%; background: linear-gradient(to bottom, var(--logo-gold), rgba(232, 176, 3, 0.15)); }
 .through-grid h2 { max-width: 14ch; }
 @media (max-width: 780px) {
@@ -2733,13 +2801,11 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 /* Scroll reveals — html.js gate keeps content visible without JS */
 html.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
 html.js .reveal.in { opacity: 1; transform: none; }
-html.js .cards .reveal:nth-child(2) { transition-delay: 0.1s; }
-html.js .cards .reveal:nth-child(3) { transition-delay: 0.2s; }
 @media (prefers-reduced-motion: reduce) {
   html.js .reveal { opacity: 1; transform: none; transition: none; }
   .card, .outcome-item, .btn { transition: none; }
   .card:hover, .outcome-item:hover, .btn:active { transform: none; }
-  .prac-card, .prac-rule, .prac-go .arr, .card-terrain { transition: none; }
+  .pband-enter .arr { transition: none; }
 }
 
 /* ===== DELIVERY TEMPLATES (print-ready documents under /templates/) =====
@@ -3099,10 +3165,10 @@ body.reg .tdc-dont { border-radius: var(--reg-radius); }
 .inst-meta {
   display: flex; flex-wrap: wrap; gap: 0.35rem 0.7rem; margin-bottom: 0.7rem;
   font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.09em;
-  text-transform: uppercase; color: var(--ic);
+  text-transform: uppercase; color: var(--ic-ink, var(--ic));
 }
 .inst-card p { font-size: 0.92rem; color: var(--midgray); line-height: 1.6; margin: 0 0 1rem; }
-.inst-go { font-size: 0.9rem; font-weight: 600; color: var(--ic); }
+.inst-go { font-size: 0.9rem; font-weight: 600; color: var(--ic-ink, var(--ic)); }
 .inst-go .arr { transition: transform var(--dur) var(--ease); display: inline-block; }
 .inst-card:hover .inst-go .arr { transform: translateX(4px); }
 
@@ -3191,35 +3257,6 @@ body.reg.brand-grow .outcomes-grid .outcome-item,
 body.reg.brand-advise .outcomes-grid .outcome-item {
   border-radius: var(--reg-radius-lg);
 }
-
-/* ============================================================
-   HUB ORDERING
-   Grow and Sail share a row; Advise sits apart because it sells to founders,
-   not to organizations deploying AI, and pretending otherwise made the hub
-   ask visitors to self-select across two unrelated axes at once.
-   ============================================================ */
-.cards--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-@media (max-width: 780px) { .cards--pair { grid-template-columns: 1fr; } }
-
-/* "Start here" on the practice most visitors arrive needing.
-   Selector matches .prac-card > :not(.card-terrain), which sets position:
-   relative at (0,2,0) and would otherwise stretch the flag to card width. */
-.prac-card { position: relative; }
-.prac-card > .prac-flag {
-  position: absolute; top: 0; right: 1.3rem; z-index: 2;
-  display: inline-flex; width: auto; align-items: center;
-  font-family: var(--mono); font-size: 0.6rem; font-weight: 600;
-  letter-spacing: 0.11em; text-transform: uppercase;
-  color: #10233F; background: var(--logo-gold);
-  padding: 0.28rem 0.7rem; border-radius: 0 0 7px 7px;
-  box-shadow: var(--elev-1);
-}
-
-.advise-apart { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(1.4rem, 4vw, 3rem); align-items: center; }
-@media (max-width: 860px) { .advise-apart { grid-template-columns: 1fr; } }
-.advise-apart .prac-card { margin: 0; }
-.advise-note p { color: var(--midgray); }
-.advise-note p:last-child { margin-bottom: 0; }
 
 /* ============================================================
    SELECTOR  (.sel-*)
@@ -3714,12 +3751,6 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 .trail-panel p { font-size: 0.94rem; color: var(--charcoal); line-height: 1.65; margin: 0 0 0.8rem; }
 .trail-panel p:last-of-type { margin-bottom: 0; }
 .trail-panel .tp-link { display: inline-block; margin-top: 0.9rem; font-size: 0.9rem; }
-
-/* Diffusion at card scale: same placement as the terrain strip it replaces. */
-.prac-card > canvas.card-diffusion {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  height: 130px; width: 100%; pointer-events: none;
-}
 
 /* Sail wash: the hero gradient as a reusable ground. Radial from the Sail
    blue, strongest top-left where the light enters, fading to the clear page.
