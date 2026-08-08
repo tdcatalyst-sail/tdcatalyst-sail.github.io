@@ -1590,9 +1590,20 @@ section.article-section { padding-top: 2rem; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 1rem;
   padding: 1.2rem 2rem 1.8rem;
   border-top: 1px solid var(--hairline);
+}
+/* Never let the price block squeeze the CTA: a wrapped label turns the pill
+   into a disc. It drops to its own line before it gives up any width. */
+.tcard-foot > .btn { flex: 0 0 auto; white-space: nowrap; }
+/* Once the card is narrower than price + pill, put the pill on its own line.
+   Keyed to the card, not the viewport: the pair goes two-up at 820px, so a
+   narrow card happens both on phones and in the two-column desktop range. */
+.tier-card-pair .tier-card { container-type: inline-size; }
+@container (max-width: 440px) {
+  .tcard-foot { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
 }
 
 /* Price panel for horizontal (featured + enterprise) */
