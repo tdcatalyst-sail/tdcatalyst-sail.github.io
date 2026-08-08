@@ -401,6 +401,53 @@ When adding a new field note essay:
 
 Changes are live on `tdcatalyst.com` within seconds of merging to `main`.
 
+### Branch history: `main` was rewritten, so "unmerged" indicators lie (IMPORTANT)
+
+**Do not audit unmerged work with ancestry.** Around 2026-08-05 `main`'s history was
+rewritten, leaving it rooted at parentless commits dated 2026-07-14. The ~106 branches
+that predate the rewrite still point at the original lineage (rooted at "Initial launch",
+2026-04-17) and share **no common ancestor** with `main`. `git merge-base` returns empty
+for them, so every ancestry-based signal — GitHub's branch UI, `git branch --merged`,
+`git cherry`, `git rev-list origin/main..<branch>` — reports them as unmerged even though
+their content shipped long ago. A branch showing "600 commits ahead" is an artifact of the
+rewrite, not real work.
+
+Two further traps when investigating:
+
+- **Sessions start from a shallow clone.** Run `git fetch --unshallow` first, or `main`
+  looks like it has 61 commits and fabricated root commits (including a parentless commit
+  whose subject begins "Merge:", which is impossible in real history).
+- **Most branches were squash-merged**, so even within one lineage a branch is often not
+  an ancestor of what it merged into. Non-ancestry is not evidence of unmerged work.
+
+**The correct audit is by content:** take the branch's own commits, then check whether the
+change they describe is present in `main`'s files today. Reconstruct the old `main` tip
+with the newest pre-rewrite branch (`claude/deploy-kit-offline-staging-4x4l65`, 2026-08-03)
+and test ancestry against *that* to triage cheaply before content-checking the remainder.
+
+**Audit completed 2026-08-08 — result: everything of substance is merged.** All 115
+non-`main` branches were checked (9 post-rewrite, 77 contained in the old `main`, 29
+verified individually). Zero open PRs. Only two gaps existed, both settled in the commit
+that added this section: the `version-assets.py` line-ending fix (applied), and three files
+from `claude/generate-website-one-pager-P5Jhf` — `adaptability-signs-one-pager.html` plus
+two committed PDFs — deliberately left out, superseded by `sail/one-pager.html` and better
+kept out of a publicly served repo. **The stale branches are expected. Re-auditing them is
+wasted effort; treat this paragraph as the answer.**
+
+### The `?v=` stamps go stale silently — verify, don't assume
+
+The stamps drifted for roughly three weeks: HTML pointed at `style.css?v=b5be7bb4` while
+the file hashed to `5554720d`, because `style.css` / `script.js` were edited without
+re-running the stamper. Nothing warns you, and returning visitors get cached stale assets —
+exactly the failure the script exists to prevent. `scripts/version-assets.py` is idempotent,
+so **run it and commit the result whenever you touch those two files, and run it as a
+one-line check if you suspect drift**: a clean tree means the stamps are correct.
+
+A re-stamp touches every HTML file without changing a word of rendered content, so it is
+the one case where you **skip `scripts/sitemap-lastmod.py`**. Running it would re-date all
+25 URLs to today and tell crawlers the whole site changed; `<lastmod>` should track real
+content changes, not cache-buster churn.
+
 ## Design System Reference
 
 ### Spacing Scale (used in CSS and classes)
