@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=153ced1a">
+  <link rel="stylesheet" href="/style.css?v=5a60b5e8">
   <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -1486,6 +1486,25 @@
   }
   .glib .libpop .paper { zoom: 1.5; }
   @media (hover: none) { .glib .libpop { display: none !important; } }
+
+  /* Up-close modal. Ported from ai-adoption-recovery.html's .lp scope — the
+     original module port dropped these, so opening an instrument locked the
+     scroll behind an unstyled, invisible overlay. The [hidden] rule is
+     load-bearing: the class display beats the UA's hidden handling. */
+  .glib .lp-overlay { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+  .glib .lp-overlay[hidden] { display: none; }
+  .glib .lp-overlay-back { position: absolute; inset: 0; background: rgba(16, 26, 40, 0.55); backdrop-filter: blur(3px); }
+  .glib .lp-overlay-card {
+    position: relative; z-index: 1; max-width: 780px; width: 100%; max-height: min(86vh, 900px); overflow-y: auto;
+    background: var(--lp-bg); border-radius: var(--lp-radius-lg); padding: 1.6rem 1.6rem 1.5rem;
+    box-shadow: 0 30px 80px rgba(4, 10, 20, 0.45);
+  }
+  .glib .lp-overlay-x {
+    position: sticky; top: 0; float: right; margin: -0.4rem -0.4rem 0 0;
+    width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--lp-line);
+    background: var(--lp-card); color: var(--lp-ink); font-size: 1.25rem; line-height: 1; cursor: pointer;
+  }
+  .glib .lp-overlay .pdetail { border: none; box-shadow: none; padding: 0.2rem 0 0; margin-top: 0; background: none; }
 
       </style>
       <div class="method-line" aria-label="The method, in one line">

@@ -2676,16 +2676,17 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
   .pband-facts span { white-space: normal; text-align: right; }
 }
 
-/* Wide variant: the card spans the wrap; copy left, the three posture
-   glyphs (shared with Sail's Station 1) stacked on the right. */
+/* Wide variant: the card spans the wrap. Copy, then the three posture
+   glyphs in a row (shared with Sail's Station 1), then the tier facts. */
 .pband-card--wide { max-width: none; }
-.pband-card-grid {
-  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center;
+.pband-p { max-width: 70ch; }
+.pband-card--wide .pband-facts { max-width: 560px; }
+.pband-postures {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem; margin: var(--space-3) 0 0.4rem; max-width: 640px;
 }
-.pband-postures { display: grid; gap: 1rem; justify-self: center; }
-.pband-posture { display: flex; align-items: center; gap: 1.1rem; }
-.pband-posture .sg-glyph { margin-bottom: 0; flex-shrink: 0; }
+.pband-posture { display: flex; flex-direction: column; gap: 0.4rem; }
+.pband-posture .sg-glyph { margin-bottom: 0; }
 .pband-posture .sg-glyph svg { width: 118px; }
 .pband-posture .pp-num {
   display: block; font-family: var(--mono); font-size: 0.62rem;
@@ -2695,9 +2696,9 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
   font-family: 'Besley', Georgia, serif; font-weight: 600;
   font-size: 1.02rem; color: var(--navy); line-height: 1.25;
 }
-@media (max-width: 860px) {
-  .pband-card-grid { grid-template-columns: 1fr; }
-  .pband-postures { justify-self: start; }
+@media (max-width: 620px) {
+  .pband-posture .sg-glyph svg { width: 90px; }
+  .pband-posture .pp-label b { font-size: 0.92rem; }
 }
 
 /* The delivery flywheel at hub scale: Grow's wheel geometry in the
@@ -2736,10 +2737,10 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
   .dloop-detail { min-height: 0; }
 }
 
-/* Hub hero: the logo artwork at a compact size (the 220px lockup gave the
-   page a slow start), then the claim and the numbers. */
+/* Hub hero: the logo at the same 220px the practice heroes use, the
+   tricolor lines, then the claim and the numbers. */
 .hero--hub { padding: 3.5rem 0 5rem; }
-.hero--hub .hero-logo { width: 150px; margin-bottom: var(--space-3); }
+.hero--hub .hero-logo { margin-bottom: var(--space-3); }
 .hero--hub h1 { max-width: 20ch; }
 .hero--hub .stat-strip { margin-bottom: var(--space-4); }
 /* The peaks scanner needs the same vertical field the logo hero gave it, or
@@ -2753,9 +2754,18 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 /* Instruments join the delivery-loop section on the hub. */
 .inst-grid--push { margin-top: var(--space-4); }
 
-/* Advise signpost variant (hub): accent to the destination practice. */
+/* Advise signpost variant (hub): accent to the destination practice, with
+   the fork-in-the-route mark beside the copy — a thinking partner at the
+   defining moment, in the posture glyphs' drawing language. */
 .practice-signpost--to-advise::before { background: var(--logo-red); }
 .practice-signpost--to-advise .signpost-go { color: var(--logo-red); }
+.practice-signpost--to-advise { display: flex; align-items: center; gap: clamp(1.2rem, 3vw, 2.2rem); }
+.signpost-mark { flex-shrink: 0; line-height: 0; }
+.signpost-mark svg { width: 138px; height: auto; display: block; }
+@media (max-width: 560px) {
+  .practice-signpost--to-advise { flex-direction: column; align-items: flex-start; }
+  .signpost-mark svg { width: 110px; }
+}
 
 
 /* Through-line: asymmetric split; the middle track carries the seam-braid
@@ -3450,7 +3460,9 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 .stat-strip span { display: block; font-size: 0.78rem; color: var(--midgray); line-height: 1.3; }
 .stat-strip b {
   display: block; font-family: 'Besley', Georgia, serif; font-size: 1.85rem;
-  font-weight: 600; color: var(--navy); line-height: 1; letter-spacing: -0.02em;
+  /* 700, because Besley's high-contrast zeros go thin at 600 and a figure
+     like "500" reads lighter than the letters beside it. */
+  font-weight: 700; color: var(--navy); line-height: 1; letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums; margin-bottom: 0.22rem;
 }
 
@@ -4129,7 +4141,11 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 }
 @media (max-width: 700px) {
   .mosaic-sec { padding: 3rem 0; }
-  .mosaic-sec .mosaic { grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); grid-auto-rows: 108px; }
+  /* Wide strips rather than small squares: a square tile shows a landscape
+     frame's FULL height, sky included, and the below-the-skyline crops never
+     engage. A tile wider than the frames' aspect ratio crops vertically, so
+     every tile's object-position lands on ground rather than sky. */
+  .mosaic-sec .mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 78px; }
   .mosaic-card { padding: 1.4rem 1.3rem; }
 }
 
@@ -4170,7 +4186,7 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
               background var(--dur-fast) var(--ease);
 }
 .nav-links.nav-pills a:not(.nav-cta):hover { color: var(--brand-ink); background: #fff; border-color: var(--reg-line); }
-.nav-links.nav-pills a.now,
+.nav-links.nav-pills a.now:not(.nav-cta),
 .nav-links.nav-pills a.active:not(.nav-cta) { color: var(--brand-ink); border-color: var(--brand); background: #fff; }
 
 /* ---- Seat cards: the three-seat proof, figure-led ----

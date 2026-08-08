@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=153ced1a">
+  <link rel="stylesheet" href="/style.css?v=5a60b5e8">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -593,7 +593,9 @@
 // Scroll-spy for the in-page nav. Same observer the Sail pages run: the pill
 // bar mixes section anchors with page links, so only the anchors are tracked.
 (function () {
-  var links = document.querySelectorAll('.nav-pills a[href^="#"]');
+  // The Start CTA is also a #-anchor but keeps its button styling: spying it
+  // would stamp .now and flood the navy pill white at the bottom of the page.
+  var links = document.querySelectorAll('.nav-pills a[href^="#"]:not(.nav-cta)');
   if (!links.length || !('IntersectionObserver' in window)) return;
   var map = {};
   links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
