@@ -31,7 +31,9 @@ ASSETS = {
 
 
 def short_hash(path: Path) -> str:
-    return hashlib.md5(path.read_bytes()).hexdigest()[:8]
+    # Hash LF-normalized bytes so the stamp matches the git blob (the repo
+    # normalizes line endings) regardless of CRLF/LF in the local checkout.
+    return hashlib.md5(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()[:8]
 
 
 def main() -> int:
