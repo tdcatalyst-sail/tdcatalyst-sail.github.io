@@ -2817,18 +2817,6 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 /* Instruments join the delivery-loop section on the hub. */
 .inst-grid--push { margin-top: var(--space-4); }
 
-/* Advise signpost variant (hub): accent to the destination practice, with
-   the fork-in-the-route mark beside the copy — a thinking partner at the
-   defining moment, in the posture glyphs' drawing language. */
-.practice-signpost--to-advise::before { background: var(--logo-red); }
-.practice-signpost--to-advise .signpost-go { color: var(--logo-red); }
-.practice-signpost--to-advise { display: flex; align-items: center; gap: clamp(1.2rem, 3vw, 2.2rem); }
-.signpost-mark { flex-shrink: 0; line-height: 0; }
-.signpost-mark svg { width: 138px; height: auto; display: block; }
-@media (max-width: 560px) {
-  .practice-signpost--to-advise { flex-direction: column; align-items: flex-start; }
-  .signpost-mark svg { width: 110px; }
-}
 
 
 /* Through-line: asymmetric split; the middle track carries the seam-braid
