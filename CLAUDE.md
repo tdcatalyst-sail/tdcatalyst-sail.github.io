@@ -52,8 +52,18 @@ tdcatalyst-sail.github.io/
 **Cross-linking rules:**
 - The hub (`/`) links to everything — it is the umbrella.
 - **Sail ↔ Grow are an intentional diagnostic→implementation pathway** and may carry *curated, contextual* cross-links both ways: Sail frames the adaptive challenge and delivers the 90-day roadmap; Grow executes it (portfolio decisions, adoption systems, org redesign). Current curated links — Sail→Grow: the Enterprise Engagement tier card CTA and the end-of-"engagement pathway" handoff on `sail/sessions.html`. Grow→Sail carries none at present: the "Start in Sail" signpost that sat above the engagements block on `grow/index.html` was removed 2026-07-24 (its `.practice-signpost` CSS in `style.css` is retained but currently unused). Keep these as deliberate handoffs at decision points — do **not** add blanket cross-practice links to nav or scatter them through body copy.
-- **Advise stays self-sufficient** — no body cross-links into or out of it. The shared footer's practice list (the small `.footer-practices` block linking the sibling sub-sites) and the "All TDcatalyst practices →" link (to `/`) are the only cross-practice links every page carries; those are the umbrella affordance and are fine everywhere.
+- **Advise stays self-sufficient** — no body cross-links into or out of it. The nav's `.brand-menu` practice switcher (TDcatalyst / Sail / Grow / Advise, on every page) is the only cross-practice affordance every page carries, and it is fine everywhere. The footer used to duplicate it with a `.footer-practices` list and an "All TDcatalyst practices →" link; both were removed 2026-08-08 when the footers were stripped to identity only (see "Footers carry no navigation" below).
 - The nav logo on every page reads `TDcatalyst/sail` (or `/grow`, `/advise`) via `<span class="mark-practice">`, colored by the `body.brand-*` class (sail=blue, grow=gold, advise=red). **Logo link target = that page's own practice home** (`/sail/`, `/grow/`, `/advise/`); umbrella pages (root `index.html`, root `about.html`) link to `/`. The logo sits inside a `.nav-brand` cluster with a caret **practice switcher** (`.brand-switch` button → `.brand-menu` dropdown) linking to every home — TDcatalyst (`/`), Sail, Grow, Advise — with the current practice (or the hub, on umbrella pages) highlighted. The dropdown markup is identical on all 18 pages; only the logo `href` and `mark-practice` suffix vary. Toggle is an inline `onclick`; `closeBrandMenu()` in `script.js` closes it on outside-click / Escape / scroll-away. Like the rest of the nav, this brand block is copy-pasted across all pages — edit one and propagate.
+
+**Footers carry no navigation (2026-08-08):**
+
+Every footer is identity only — mark, independence disclaimer, copyright with Privacy/Terms, and on Sail pages the land acknowledgment. **Do not put links back into it.** The nav at the top of every page already carries the page's own links plus all four practice homes in the `.brand-menu` switcher, so footer link columns were pure duplication. The `Practices` / `Practice` / `Engage` columns, the `.footer-practices` list, and the `footer-home-link` are gone; their CSS went with them and `footer .wrap` is no longer a grid. The four `/grow/ai-adoption-*` campaign pages keep their own one-line `.lp-footer` (scoped in-page, same rule: copyright plus Privacy/Terms).
+
+Stripping the columns left a few pages without a path to a page the footer used to reach. These are open wayfinding questions for Tom, not bugs to patch by re-adding footer links:
+- `/sail/field-notes` is now reachable only from Sail pages (their nav carries it) — not from the hub, Grow, or Advise, and not from `sail/method.html` or `sail/sessions.html`, whose navs are section-anchored.
+- `/sail/contact-card` is no longer linked from anywhere; it is a direct-share artifact, like `one-pager.html`.
+- `/sail/about` is not in the nav on `sail/index.html`, `sail/method.html`, or `sail/sessions.html`; `/grow/about` is not in the nav on `grow/index.html` or `grow/method.html`.
+- `/preliminary-diagnostic` is absent from `sail/method.html` and `sail/sessions.html`.
 
 **Sail sub-site (sail/), main pages:**
 - `index.html` — Hero/home page with thesis, engagement outcomes, CTA
@@ -390,6 +400,53 @@ When adding a new field note essay:
 7. **Delete the feature branch** when done (optional, GitHub can auto-delete after merge)
 
 Changes are live on `tdcatalyst.com` within seconds of merging to `main`.
+
+### Branch history: `main` was rewritten, so "unmerged" indicators lie (IMPORTANT)
+
+**Do not audit unmerged work with ancestry.** Around 2026-08-05 `main`'s history was
+rewritten, leaving it rooted at parentless commits dated 2026-07-14. The ~106 branches
+that predate the rewrite still point at the original lineage (rooted at "Initial launch",
+2026-04-17) and share **no common ancestor** with `main`. `git merge-base` returns empty
+for them, so every ancestry-based signal — GitHub's branch UI, `git branch --merged`,
+`git cherry`, `git rev-list origin/main..<branch>` — reports them as unmerged even though
+their content shipped long ago. A branch showing "600 commits ahead" is an artifact of the
+rewrite, not real work.
+
+Two further traps when investigating:
+
+- **Sessions start from a shallow clone.** Run `git fetch --unshallow` first, or `main`
+  looks like it has 61 commits and fabricated root commits (including a parentless commit
+  whose subject begins "Merge:", which is impossible in real history).
+- **Most branches were squash-merged**, so even within one lineage a branch is often not
+  an ancestor of what it merged into. Non-ancestry is not evidence of unmerged work.
+
+**The correct audit is by content:** take the branch's own commits, then check whether the
+change they describe is present in `main`'s files today. Reconstruct the old `main` tip
+with the newest pre-rewrite branch (`claude/deploy-kit-offline-staging-4x4l65`, 2026-08-03)
+and test ancestry against *that* to triage cheaply before content-checking the remainder.
+
+**Audit completed 2026-08-08 — result: everything of substance is merged.** All 115
+non-`main` branches were checked (9 post-rewrite, 77 contained in the old `main`, 29
+verified individually). Zero open PRs. Only two gaps existed, both settled in the commit
+that added this section: the `version-assets.py` line-ending fix (applied), and three files
+from `claude/generate-website-one-pager-P5Jhf` — `adaptability-signs-one-pager.html` plus
+two committed PDFs — deliberately left out, superseded by `sail/one-pager.html` and better
+kept out of a publicly served repo. **The stale branches are expected. Re-auditing them is
+wasted effort; treat this paragraph as the answer.**
+
+### The `?v=` stamps go stale silently — verify, don't assume
+
+The stamps drifted for roughly three weeks: HTML pointed at `style.css?v=b5be7bb4` while
+the file hashed to `5554720d`, because `style.css` / `script.js` were edited without
+re-running the stamper. Nothing warns you, and returning visitors get cached stale assets —
+exactly the failure the script exists to prevent. `scripts/version-assets.py` is idempotent,
+so **run it and commit the result whenever you touch those two files, and run it as a
+one-line check if you suspect drift**: a clean tree means the stamps are correct.
+
+A re-stamp touches every HTML file without changing a word of rendered content, so it is
+the one case where you **skip `scripts/sitemap-lastmod.py`**. Running it would re-date all
+25 URLs to today and tell crawlers the whole site changed; `<lastmod>` should track real
+content changes, not cache-buster churn.
 
 ## Design System Reference
 
