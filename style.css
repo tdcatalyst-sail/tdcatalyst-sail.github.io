@@ -2659,6 +2659,7 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 .pband--sail .wrap { z-index: 2; }
 .pband-card {
   position: relative;
+  overflow: hidden;
   max-width: 620px;
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid var(--reg-line);
@@ -2681,6 +2682,16 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 .pband-facts b { font-family: 'Besley', Georgia, serif; font-weight: 600; color: var(--navy); }
 .pband-facts span { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--midgray); white-space: nowrap; }
 .pband-card .pband-enter { color: var(--logo-blue); margin-top: 1.3rem; }
+/* Sail's contour device inside the card: a terrain strip at the base,
+   fading up so the copy stays clear. Drawn by script.js (card-terrain). */
+.pband-card > canvas.card-terrain {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 150px; width: 100%; pointer-events: none;
+}
+.pband-card > *:not(canvas) { position: relative; }
+/* In the merged through-line + delivery section the lede follows the seam
+   grid rather than hugging its own h2, so the pull-up comes off. */
+.pband-lede--flow { margin-top: var(--space-4); }
 .pband--sail .band-note {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
   padding: 2.4rem clamp(1.2rem, 4vw, 3rem) 1.1rem;
