@@ -1275,91 +1275,126 @@ function tdTerrainNoise(seed) {
     ctx.clearRect(0, 0, w, h);
 
     var fbm = tdTerrainNoise(seed);
-    var pitch = parseFloat(d.pitch || '30');
+    var num = function (k, dflt) { return d[k] === undefined ? dflt : parseFloat(d[k]); };
+    var pitch = num('pitch', 32);
     var rowH = pitch * 0.866;
-    var cols = Math.ceil(w / pitch) + 2, rows = Math.ceil(h / rowH) + 2;
+    var cols = Math.ceil(w / pitch) + 3, rows = Math.ceil(h / rowH) + 3;
 
-    // Seeds are the innovators: spread anchors, with the noise supplying only
-    // jitter. Deriving both coordinates from the same field put all three
-    // within 40px of each other and collapsed the read into one blob.
-    var anchors = [[0.17, 0.28], [0.54, 0.72], [0.83, 0.22]];
-    var seeds = [];
-    for (var k = 0; k < anchors.length; k++) {
-      seeds.push([
-        (anchors[k][0] + fbm(k * 11.7 + 3.1, seed * 2.1) * 0.07) * w,
-        (anchors[k][1] + fbm(seed * 3.7, k * 9.3 + 5.4) * 0.09) * h
-      ]);
+    // Deep ochre carries the adopted population; the brighter index colour is
+    // spent only on the front, so the eye lands on the boundary rather than
+    // on the mass behind it.
+    var adopt = d.adopt || '#8A6302';
+
+    var front = num('front', 0.26), soft = num('soft', 0.24);
+    var wobAmt = num('wobamt', 0.62), wobScale = num('wobscale', 520);
+    var tilt = num('tilt', 0.16);
+    var grain = num('grain', 0.20), grainScale = num('grainscale', 110);
+    var jitter = num('jitter', 0.40);
+    var tDorm = num('tdorm', 0.30), tAdopt = num('tadopt', 0.62);
+
+    // Deterministic per-edge value: lets links be thinned to a fraction so the
+    // adopted field reads as a constellation instead of woven mesh.
+    function gate(i, j, k) {
+        var v = Math.sin(i * 12.9898 + j * 78.233 + k * 37.719 + seed) * 43758.5453;
+        return v - Math.floor(v);
     }
-    // Reach decides how far adoption has spread. Too generous and the field
-    // saturates into a gold wash; this keeps a visible front with genuine
-    // untouched ground beyond it.
-    var reach = Math.max(w, h) * 0.32;
 
-    // Adoption level per node, 0..1
     var nodes = [], j2, i2;
     for (j2 = 0; j2 < rows; j2++) {
       nodes[j2] = [];
       for (i2 = 0; i2 < cols; i2++) {
         var x = i2 * pitch + (j2 % 2 ? pitch / 2 : 0);
         var y = j2 * rowH;
-        // A perfect lattice of identical dots reads as wallpaper. Jitter every
-        // node off the grid with the same noise the front uses, so the
-        // population reads as a population.
-        // Per-node hash jitter, not fbm: the smoothed noise moved neighbours
-        // together (and only positive), so the lattice still read as a grid.
-        // A sin-hash gives each node an independent, deterministic offset.
+        // Per-node sin-hash offset: the smoothed field moves neighbours
+        // together, which leaves the lattice reading as a grid.
         var hx = Math.sin((i2 + seed) * 127.1 + j2 * 311.7) * 43758.5453;
         var hy = Math.sin(i2 * 269.5 + (j2 + seed) * 183.3) * 27183.7351;
-        x += (hx - Math.floor(hx) - 0.5) * pitch * 0.66;
-        y += (hy - Math.floor(hy) - 0.5) * rowH * 0.66;
-        var near = 1e9;
-        for (var q = 0; q < seeds.length; q++) {
-          var dx = x - seeds[q][0], dy = y - seeds[q][1];
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < near) near = dist;
-        }
-        // the front advances with t; noise keeps the boundary ragged
-        var grain = fbm(x / 180, y / 180) * 0.42;
-        var v = (1 - near / reach) + grain - 0.08 + t;
-        nodes[j2][i2] = { x: x, y: y, a: v < 0 ? 0 : (v > 1 ? 1 : v) };
+        x += (hx - Math.floor(hx) - 0.5) * pitch * jitter;
+        y += (hy - Math.floor(hy) - 0.5) * rowH * jitter;
+        // The front is a boundary, not a blob: it wobbles in long lobes and
+        // leans across the canvas, so adoption reads as a wave with a
+        // direction rather than three clouds.
+        var wob = (fbm(y / wobScale, seed * 1.7) - 0.5) * w * wobAmt;
+        var lean = (y / h - 0.5) * w * tilt;
+        var a = (x - (w * front + wob + lean)) / (w * soft);
+        a += (fbm(x / grainScale, y / grainScale) - 0.5) * grain + t;
+        nodes[j2][i2] = { x: x, y: y, a: a < 0 ? 0 : (a > 1 ? 1 : a) };
       }
     }
 
     // Links first, so the dots sit on top of them
-    ctx.lineWidth = 1;
     for (j2 = 0; j2 < rows; j2++) {
       for (i2 = 0; i2 < cols; i2++) {
         var n0 = nodes[j2][i2];
-        var right = nodes[j2][i2 + 1];
-        var below = nodes[j2 + 1] && nodes[j2 + 1][i2];
-        var belowB = nodes[j2 + 1] && nodes[j2 + 1][i2 + (j2 % 2 ? 1 : -1)];
-        [right, below, belowB].forEach(function (nb) {
-          if (!nb) return;
+        var nbrs = [[nodes[j2][i2 + 1], 0]];
+        if (nodes[j2 + 1]) {
+          nbrs.push([nodes[j2 + 1][i2], 1]);
+          nbrs.push([nodes[j2 + 1][i2 + (j2 % 2 ? 1 : -1)], 2]);
+        }
+        for (var q = 0; q < nbrs.length; q++) {
+          var nb = nbrs[q][0];
+          if (!nb) continue;
           var m = Math.min(n0.a, nb.a);
-          if (m <= 0.02) return;
           // a link only carries once both ends have moved
-          ctx.strokeStyle = m > 0.55 ? rgba(index, indexAlpha * m * 0.7) : rgba(line, alpha * m);
+          if (m > tAdopt) {
+            if (gate(i2, j2, nbrs[q][1]) > num('linkkeep', 0.45)) continue;
+            ctx.strokeStyle = rgba(adopt, num('linkgold', 0.26) * m);
+          } else if (m > tDorm) {
+            if (gate(i2, j2, nbrs[q][1]) > num('linkkeepband', 0.35)) continue;
+            ctx.strokeStyle = rgba(line, num('linknavy', 0.05));
+          } else continue;
+          ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(n0.x, n0.y);
           ctx.lineTo(nb.x, nb.y);
           ctx.stroke();
-        });
+        }
       }
     }
 
-    // Nodes: unadopted stay faint and small, adopters grow and turn gold
+    // A soft halo on the activating band, so the front carries light
+    var glowA = num('glowa', 0.05), glowR = num('glowr', 7.5);
+    if (glowA > 0) {
+      ctx.fillStyle = rgba(index, glowA);
+      for (j2 = 0; j2 < rows; j2++) {
+        for (i2 = 0; i2 < cols; i2++) {
+          var ng = nodes[j2][i2];
+          if (ng.a > tDorm && ng.a < tAdopt) {
+            ctx.beginPath();
+            ctx.arc(ng.x, ng.y, glowR, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      }
+    }
+
+    // Nodes: dormant stay faint, the front is drawn as open rings that have
+    // not filled yet, adopted are solid.
+    var scoutFloor = num('scoutfloor', 0.10), scoutRate = num('scoutrate', 0.12);
     for (j2 = 0; j2 < rows; j2++) {
       for (i2 = 0; i2 < cols; i2++) {
         var n = nodes[j2][i2];
-        // size varies per node as well as per adoption level
-        var sz = 0.75 + (fbm(n.x / 37, n.y / 41) * 0.5 + 0.5) * 0.6;
-        var r = (1.1 + n.a * 2.6) * sz;
         ctx.beginPath();
-        ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-        ctx.fillStyle = n.a > 0.55
-          ? rgba(index, Math.min(1, indexAlpha + n.a * 0.35))
-          : rgba(line, alpha + n.a * 0.25);
-        ctx.fill();
+        if (n.a >= tAdopt) {
+          ctx.arc(n.x, n.y, num('radopt', 1.8), 0, Math.PI * 2);
+          ctx.fillStyle = rgba(adopt, num('aadopt', 0.55));
+          ctx.fill();
+        } else if (n.a > tDorm) {
+          ctx.arc(n.x, n.y, num('rring', 3.2), 0, Math.PI * 2);
+          ctx.strokeStyle = rgba(index, num('aring', 0.72));
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        } else if (n.a > scoutFloor && gate(i2, j2, 9) < scoutRate) {
+          // the few innovators already lit out ahead of the wave
+          ctx.arc(n.x, n.y, num('scoutr', 2.6), 0, Math.PI * 2);
+          ctx.strokeStyle = rgba(index, num('scouta', 0.42));
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        } else {
+          ctx.arc(n.x, n.y, num('rdorm', 0.8), 0, Math.PI * 2);
+          ctx.fillStyle = rgba(line, alpha);
+          ctx.fill();
+        }
       }
     }
 
