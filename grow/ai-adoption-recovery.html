@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=855b8a49">
+  <link rel="stylesheet" href="/style.css?v=9453f599">
   <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -1356,7 +1356,7 @@
   .lp .fly-detail b { display: block; font-size: 1.18rem; font-weight: 700; color: var(--lp-ink); letter-spacing: -0.015em; }
   .lp .fly-detail p { font-size: 0.9rem; margin-top: 0.45rem; }
   .lp .fly-detail ul { margin: 0.9rem 0 0; padding-left: 1.05rem; display: grid; gap: 0.5rem; font-size: 0.88rem; }
-  .lp .fly-detail li::marker { color: var(--lp-accent); }
+  .lp .fly-detail li::marker { color: var(--lp-accent-ink); }
   @media (max-width: 860px) { .lp .fly-wrap { grid-template-columns: 1fr; } .lp .fly-detail { min-height: 0; } }
 
   /* ---- v10: library head + outcome numbers ---- */
@@ -3050,7 +3050,7 @@
         'The Transformation Dynamics Simulation scores your sequence before anyone runs it',
         'Interview-to-deliverable loops: the morning session becomes playbook drafts the same day'
       ] },
-    { n: '3', key: 'playbooks', title: 'Custom playbooks', color: '#C99A05',
+    { n: '3', key: 'playbooks', title: 'Custom playbooks', color: '#C99A05', ink: '#8A6302', chipInk: '#10233F',
       lead: 'Yours, in your name, not ours.',
       items: [
         'Everything flows into white-labeled templates that follow your branding',
@@ -3090,7 +3090,8 @@
     function show(i) {
       var f = FLY[i];
       if (!detail) return;
-      detail.innerHTML = '<span class="fd-eyebrow" style="color:' + f.color + '">Turn ' + f.n + '</span>' +
+      // Gold quarter drops to its ink tone for small text on the white card.
+      detail.innerHTML = '<span class="fd-eyebrow" style="color:' + (f.ink || f.color) + '">Turn ' + f.n + '</span>' +
         '<b>' + f.title + '</b><p>' + f.lead + '</p><ul>' +
         f.items.map(function (it) { return '<li>' + it + '</li>'; }).join('') + '</ul>';
       host.querySelectorAll('.fly-seg').forEach(function (s2, j) { s2.classList.toggle('on', j === i); });
@@ -3102,7 +3103,7 @@
       var mid = (a0 + a1) / 2;
       var lp = pt((RO + RI) / 2, mid);
       el('circle', { cx: lp[0].toFixed(1), cy: (lp[1] - 22).toFixed(1), r: 13, fill: f.color }, null, g);
-      el('text', { x: lp[0].toFixed(1), y: (lp[1] - 17.5).toFixed(1), 'text-anchor': 'middle', 'font-size': 12, 'font-weight': 800, fill: '#FFFFFF', 'font-family': 'Archivo, sans-serif' }, f.n, g);
+      el('text', { x: lp[0].toFixed(1), y: (lp[1] - 17.5).toFixed(1), 'text-anchor': 'middle', 'font-size': 12, 'font-weight': 800, fill: f.chipInk || '#FFFFFF', 'font-family': 'Archivo, sans-serif' }, f.n, g);
       var words = f.title.split(' ');
       words.forEach(function (wd, k) {
         el('text', { x: lp[0].toFixed(1), y: (lp[1] + 6 + k * 15).toFixed(1), 'text-anchor': 'middle', 'font-size': 13, 'font-weight': 700, fill: '#1B1A16', 'font-family': 'Archivo, sans-serif' }, wd, g);

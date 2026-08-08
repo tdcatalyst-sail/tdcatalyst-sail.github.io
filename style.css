@@ -1879,6 +1879,21 @@ body.brand-sail .nav-logo .mark-practice { color: var(--logo-blue); }
 body.brand-grow .nav-logo .mark-practice { color: var(--terracotta); }
 body.brand-advise .nav-logo .mark-practice { color: var(--logo-red); }
 
+/* ---- Grow productized register (Tom, 2026-08-07) ----
+   Grow is AI-native delivery for adoption consulting and presents in the
+   campaign pages' productized voice: Archivo display headings with tight
+   tracking, rounded-rectangle buttons. Sail keeps the serif strategy-walk
+   register; this scope must not leak past body.brand-grow. The nav
+   wordmark keeps its own faces via the more specific .nav-logo rules. */
+body.brand-grow h1, body.brand-grow h2, body.brand-grow h3 {
+  font-family: 'Archivo', 'Besley', Georgia, sans-serif;
+  font-weight: 760;
+  letter-spacing: -0.018em;
+}
+body.brand-grow h1 { font-weight: 800; }
+body.brand-grow .btn { border-radius: 12px; }
+body.brand-grow .nav-cta { border-radius: 999px; }
+
 /* Hub: practice cards */
 .practice-cards {
   display: grid;
