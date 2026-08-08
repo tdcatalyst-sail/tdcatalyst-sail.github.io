@@ -57,6 +57,28 @@
   --step-3: 1.5rem;
   --step-4: 1.9rem;
 
+  /* ---- The figure contract (added 2026-08-08) ----------------------------
+     Numbers on this site do two different jobs and get two different faces.
+
+     FIGURE  - a number that makes a claim (a price, a count, a percentage).
+               Besley at --fig-weight, tracked in by --fig-track, always
+               tabular. 700 rather than 600 because Besley is a Clarendon:
+               its high-contrast zeros go thin at 600 and a figure like "500"
+               then reads lighter than the letters beside it.
+     COUNTER - a number that labels or orders (01, 02, a step, a question
+               index). Mono, letterspaced out, never serif. Same register as
+               the eyebrows and coordinates it sits with.
+
+     Besley's default figures are genuinely proportional - the digits run
+     1030 to 1180 units, a 15% spread - so tabular-nums is not decorative
+     here. Any Besley figure without it visibly jitters. Both subset faces
+     carry the tnum feature (verified against the woff2 with fontTools), so
+     the declaration does real work. Neither carries lnum or onum, and the
+     default figures are already lining, so do not write lining-nums: it
+     would be a no-op that reads like a promise. */
+  --fig-weight: 700;
+  --fig-track: -0.022em;
+
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dur-fast: 0.16s;
   --dur: 0.28s;
@@ -596,13 +618,22 @@ section:has(+ .hero) {
   border-color: #C9C5B6;
 }
 .card h3 { color: var(--navy); margin-bottom: 0.5rem; }
+/* Counter register. The bare .num carries sail/method.html's five framework
+   numerals, which used to repeat this declaration inline five times because
+   they sit outside .card. */
+.num,
 .card .num {
-  font-family: 'Besley', Georgia, serif;
-  font-size: 0.85rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
   color: var(--terracotta);
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
   margin-bottom: 0.8rem;
 }
+.num--red  { color: var(--logo-red); }
+.num--gold { color: var(--logo-gold); }
+.num--blue { color: var(--logo-blue); }
 .card .source {
   font-size: 0.82rem;
   color: var(--midgray);
@@ -635,6 +666,8 @@ section:has(+ .hero) {
 .tier-price .amount {
   font-family: 'Besley', Georgia, serif;
   font-size: 1.5rem;
+  font-weight: var(--fig-weight);
+  letter-spacing: var(--fig-track);
   color: var(--navy);
   font-variant-numeric: tabular-nums;
   display: block;
@@ -910,7 +943,7 @@ hr.sign-rule {
 
 .mini-card-tagline {
   font-family: 'Besley', Georgia, serif;
-  font-style: italic; font-weight: 300;
+  font-style: italic; font-weight: 400;
   font-size: 0.9rem; color: var(--navy); line-height: 1.5;
 }
 
@@ -950,10 +983,16 @@ hr.sign-rule {
   border-color: #C9C5B6;
 }
 
+/* Counter register: this orders the cards, it does not make a claim, so it
+   sits with the eyebrows in mono rather than with the figures in Besley.
+   .sg-num, .sheet-entry em, .chain-step em and .pp-num already read this way;
+   this was the last serif counter on the site. */
 .outcome-num {
-  font-family: 'Besley', Georgia, serif;
-  font-size: 0.82rem;
-  letter-spacing: 0.15em;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
   margin-bottom: 0.7rem;
   color: var(--logo-blue);
 }
@@ -969,6 +1008,9 @@ hr.sign-rule {
 .engagement-price {
   font-family: 'Besley', Georgia, serif;
   font-size: 1.15rem;
+  font-weight: var(--fig-weight);
+  letter-spacing: var(--fig-track);
+  font-variant-numeric: tabular-nums;
   color: var(--navy);
   margin: 0 0 0.7rem;
 }
@@ -1053,7 +1095,7 @@ hr.sign-rule {
 
 .brand-grow .outcomes-grid .engagement-price {
   font-size: 1.45rem;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--fig-track);
   margin: 0.35rem 0 1.1rem;
   padding-bottom: 1.1rem;
   border-bottom: 1px solid var(--hairline);
@@ -1156,7 +1198,7 @@ hr.sign-rule {
 .scard-tag { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--logo-red); font-weight: 600; margin-bottom: 0.5rem; }
 .scard-name { font-family: 'Besley', Georgia, serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 0.3rem; }
 .scard-meta { font-size: 0.82rem; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
-.scard-price { font-family: 'Besley', Georgia, serif; font-size: 1.5rem; color: var(--navy); font-variant-numeric: tabular-nums; margin-bottom: 0.9rem; }
+.scard-price { font-family: 'Besley', Georgia, serif; font-size: 1.5rem; font-weight: var(--fig-weight); letter-spacing: var(--fig-track); color: var(--navy); font-variant-numeric: tabular-nums; margin-bottom: 0.9rem; }
 .scard-outcome { font-size: 0.95rem; color: var(--charcoal); flex: 1; margin-bottom: 1rem; }
 .scard-delivers {
   font-size: 0.82rem;
@@ -1421,7 +1463,9 @@ section.article-section { padding-top: 2rem; }
 .stat-num {
   font-family: 'Besley', Georgia, serif;
   font-size: 2.6rem;
-  font-weight: 400;
+  font-weight: var(--fig-weight);
+  letter-spacing: var(--fig-track);
+  font-variant-numeric: tabular-nums;
   color: var(--navy);
   line-height: 1;
   margin-bottom: 0.5rem;
@@ -1433,7 +1477,8 @@ section.article-section { padding-top: 2rem; }
 .pull-quote {
   font-family: 'Besley', Georgia, serif;
   font-size: 1.3rem;
-  font-weight: 300;
+  /* Besley is loaded 400-900; 300 silently clamped to 400 and read as intent. */
+  font-weight: 400;
   color: var(--navy);
   line-height: 1.5;
   border-left: 4px solid var(--logo-red);
@@ -1619,6 +1664,8 @@ section.article-section { padding-top: 2rem; }
 .tcard-amount {
   font-family: 'Besley', Georgia, serif;
   font-size: 1.75rem;
+  font-weight: var(--fig-weight);
+  letter-spacing: var(--fig-track);
   color: var(--navy);
   font-variant-numeric: tabular-nums;
   display: block;
@@ -1689,7 +1736,7 @@ section.article-section { padding-top: 2rem; }
 }
 .book-callout > b {
   display: block; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--navy); margin-bottom: 0.6rem; font-weight: 600;
+  text-transform: uppercase; color: var(--navy); margin-bottom: 0.6rem; font-weight: 500;
 }
 .book-callout ol { margin: 0; padding-left: 1.1rem; display: grid; gap: 0.5rem; }
 .book-callout li { font-size: 0.92rem; color: var(--midgray); line-height: 1.55; }
@@ -2340,7 +2387,7 @@ html:not(.js) .entry-fig { display: none; }
     @media (max-width: 520px) { .sim-readout { grid-template-columns: 1fr; } }
     .readout-item { background: var(--seamist); border-radius: 3px; padding: 1.1rem 1.2rem; text-align: center; }
     .readout-item.gap { background: var(--navy); }
-    .readout-num { font-family: 'Besley', Georgia, serif; font-size: 2.1rem; line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; }
+    .readout-num { font-family: 'Besley', Georgia, serif; font-size: 2.1rem; font-weight: var(--fig-weight); letter-spacing: var(--fig-track); line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; }
     .readout-item.gap .readout-num { color: #fff; }
     .readout-item.plan .readout-num { color: var(--logo-blue); }
     .readout-item.base .readout-num { color: var(--logo-red); }
@@ -2711,7 +2758,7 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 .pband-kick .reg-kicker { margin-bottom: 0; }
 .pband-flag {
   display: inline-flex; align-items: center;
-  font-family: var(--mono); font-size: 0.6rem; font-weight: 600;
+  font-family: var(--mono); font-size: 0.6rem; font-weight: 500;
   letter-spacing: 0.11em; text-transform: uppercase;
   color: #10233F; background: var(--logo-gold);
   padding: 0.28rem 0.7rem; border-radius: var(--radius-pill);
@@ -2832,8 +2879,9 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 .pband-posture .sg-glyph { margin-bottom: 0; }
 .pband-posture .sg-glyph svg { width: 100%; max-width: 124px; }
 .pband-posture .pp-num {
-  display: block; font-family: var(--mono); font-size: 0.62rem;
-  letter-spacing: 0.1em; color: var(--logo-blue); margin-bottom: 0.15rem;
+  display: block; font-family: var(--mono); font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.12em; font-variant-numeric: tabular-nums;
+  color: var(--logo-blue); margin-bottom: 0.15rem;
 }
 .pband-posture .pp-label b {
   font-family: 'Besley', Georgia, serif; font-weight: 600;
@@ -3255,15 +3303,15 @@ input[type="checkbox"].doc-check:focus-visible { outline: 2px solid var(--logo-b
 .tdc-dont { background: #FCF1F0; border: 1px solid #F0D2CE; }
 .tdc-do .lbl, .tdc-dont .lbl {
   display: block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em;
-  text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 600;
+  text-transform: uppercase; margin-bottom: 0.25rem; font-weight: 500;
 }
 .tdc-do .lbl { color: var(--value-green); }
 .tdc-dont .lbl { color: #A93226; }
 
 /* Stat block */
 .tdc-stat .n {
-  font-family: 'Besley', Georgia, serif; font-size: 1.9rem; font-weight: 600;
-  color: var(--navy); letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+  font-family: 'Besley', Georgia, serif; font-size: 1.9rem; font-weight: var(--fig-weight);
+  color: var(--navy); letter-spacing: var(--fig-track); font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 .tdc-stat .l { font-size: 0.86rem; color: var(--midgray); margin-top: 0.3rem; }
@@ -3601,7 +3649,8 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
   text-transform: uppercase; color: var(--midgray); margin-bottom: 0.22rem;
 }
 .sel-fact .v {
-  font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.12rem;
+  font-family: 'Besley', Georgia, serif; font-weight: var(--fig-weight); font-size: 1.12rem;
+  letter-spacing: var(--fig-track);
   color: var(--navy); line-height: 1.25; font-variant-numeric: tabular-nums;
 }
 /* Fact values all read navy; the accent stays on borders, icons and light. */
@@ -3637,7 +3686,8 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
   display: inline-flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; border-radius: 50%; font-style: normal;
   background: var(--reg-rule); color: #10233F;
-  font-family: var(--mono); font-size: 0.74rem; font-weight: 600;
+  font-family: var(--mono); font-size: 0.74rem; font-weight: 500;
+  font-variant-numeric: tabular-nums;
   margin-bottom: 0.6rem;
 }
 .chain-step h3, .chain-step b {
@@ -3662,9 +3712,8 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 .stat-strip span { display: block; font-size: 0.78rem; color: var(--midgray); line-height: 1.3; }
 .stat-strip b {
   display: block; font-family: 'Besley', Georgia, serif; font-size: 1.85rem;
-  /* 700, because Besley's high-contrast zeros go thin at 600 and a figure
-     like "500" reads lighter than the letters beside it. */
-  font-weight: 700; color: var(--navy); line-height: 1; letter-spacing: -0.02em;
+  font-weight: var(--fig-weight); color: var(--navy); line-height: 1;
+  letter-spacing: var(--fig-track);
   font-variant-numeric: tabular-nums; margin-bottom: 0.22rem;
 }
 
@@ -3691,7 +3740,7 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
   display: inline-flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; border-radius: 50%;
   background: #fff; border: 2px solid var(--brand); color: var(--brand);
-  font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+  font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
   margin-bottom: 0.55rem;
 }
 .trail-stop b {
@@ -3768,8 +3817,8 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
   margin: 0.25rem 0 0.8rem;
 }
 .pw .pw-price {
-  margin-top: auto; font-family: 'Besley', Georgia, serif; font-weight: 600;
-  font-size: 1.35rem; color: var(--navy); letter-spacing: -0.01em;
+  margin-top: auto; font-family: 'Besley', Georgia, serif; font-weight: var(--fig-weight);
+  font-size: 1.35rem; color: var(--navy); letter-spacing: var(--fig-track);
   font-variant-numeric: tabular-nums;
 }
 .pw .pw-unit {
@@ -3779,7 +3828,7 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 .pw--feat { position: relative; }
 .pw--feat .pw-flag {
   position: absolute; top: -3px; right: 0.9rem;
-  font-family: var(--mono); font-size: 0.56rem; font-weight: 600; letter-spacing: 0.1em;
+  font-family: var(--mono); font-size: 0.56rem; font-weight: 500; letter-spacing: 0.1em;
   text-transform: uppercase; color: #10233F; background: var(--logo-gold);
   padding: 0.24rem 0.55rem; border-radius: 0 0 6px 6px;
 }
@@ -3851,7 +3900,7 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 }
 .gnt-gate em {
   font-style: normal; font-family: var(--mono); font-size: 0.62rem;
-  color: var(--brand); font-weight: 600;
+  color: var(--brand); font-weight: 500;
 }
 .gnt-arr { align-self: center; color: var(--brand); display: inline-flex; }
 .gnt-arr svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
@@ -3933,8 +3982,9 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 .cred-reveal > summary:hover { box-shadow: var(--elev-2); border-left-color: var(--brand-ink); }
 .cred-reveal > summary:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 .cr-count {
-  font-family: 'Besley', Georgia, serif; font-weight: 700;
+  font-family: 'Besley', Georgia, serif; font-weight: var(--fig-weight);
   font-size: 1.6rem; line-height: 1; color: var(--navy);
+  letter-spacing: var(--fig-track);
   font-variant-numeric: tabular-nums;
 }
 .cr-label { flex: 1 1 16ch; min-width: 0; font-size: 0.95rem; color: var(--charcoal); }
@@ -4091,11 +4141,13 @@ a.price-band:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(22
 @media (max-width: 720px) { .pb-price { text-align: left; } }
 .pb-price .was {
   display: block; font-family: 'Besley', Georgia, serif; font-size: 1rem;
+  font-weight: var(--fig-weight); letter-spacing: var(--fig-track);
+  font-variant-numeric: tabular-nums;
   color: rgba(199, 211, 206, 0.7); text-decoration: line-through; text-decoration-color: var(--logo-red);
 }
 .pb-price .now {
-  display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
-  font-size: 2.1rem; color: var(--logo-gold); line-height: 1.05; letter-spacing: -0.02em;
+  display: block; font-family: 'Besley', Georgia, serif; font-weight: var(--fig-weight);
+  font-size: 2.1rem; color: var(--logo-gold); line-height: 1.05; letter-spacing: var(--fig-track);
   font-variant-numeric: tabular-nums;
 }
 .pb-price .unit {
@@ -4287,7 +4339,7 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 .stn { margin-bottom: 1.1rem; }
 .stn .stn-venue {
   display: inline-flex; align-items: center; gap: 0.55rem;
-  font-family: var(--mono); font-size: 0.66rem; font-weight: 600;
+  font-family: var(--mono); font-size: 0.66rem; font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase; color: var(--logo-blue);
   margin-bottom: 0.55rem;
 }
@@ -4380,8 +4432,8 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 .seat-fig {
   display: block;
   font-family: 'Besley', Georgia, serif;
-  font-size: 2.4rem; font-weight: 600; line-height: 1;
-  letter-spacing: -0.025em; color: var(--navy);
+  font-size: 2.4rem; font-weight: var(--fig-weight); line-height: 1;
+  letter-spacing: var(--fig-track); color: var(--navy);
   font-variant-numeric: tabular-nums;
   margin: 0.15rem 0 0.32rem;
 }
@@ -4424,8 +4476,8 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
   text-transform: uppercase; color: var(--brand-ink); margin-bottom: 0.5rem;
 }
 .reach-col .rc-fig {
-  font-family: 'Besley', Georgia, serif; font-size: 2.1rem; font-weight: 600;
-  line-height: 1; letter-spacing: -0.025em; color: var(--navy);
+  font-family: 'Besley', Georgia, serif; font-size: 2.1rem; font-weight: var(--fig-weight);
+  line-height: 1; letter-spacing: var(--fig-track); color: var(--navy);
   font-variant-numeric: tabular-nums;
 }
 .reach-col .rc-fig span {
