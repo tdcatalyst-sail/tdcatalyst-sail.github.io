@@ -101,7 +101,7 @@
   ]
 }
   </script>
-  <link rel="stylesheet" href="/style.css?v=8466e004">
+  <link rel="stylesheet" href="/style.css?v=252103b8">
 </head>
 <body class="reg">
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -173,7 +173,7 @@
 </section>
 
 <!-- THE THREE PRACTICES: THE MAP, BEFORE THE BANDS GO DEEP -->
-<section id="practices">
+<section class="alt" id="practices">
   <div class="wrap">
     <div class="section-head reveal">
       <div class="reg-kicker">Three ways in</div>
@@ -244,9 +244,28 @@
   </div>
 </section>
 
+<!-- THE SEAM, first of three.
+     Entering the practice bands: the three strands are about to become three
+     sections, and the navy line they run into is the discipline underneath.
+     The same drawing carries the through-line copy further down and closes
+     the page. -->
+<div class="seam-band" aria-hidden="true">
+  <div class="seam-fig">
+    <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+      <path d="M0 6 C 190 6, 250 20, 300 20" fill="none" stroke="#E8B003" stroke-width="2.5" opacity="0.85"/>
+      <path d="M0 20 C 190 20, 250 20, 300 20" fill="none" stroke="#0348CA" stroke-width="2.5" opacity="0.75"/>
+      <path d="M0 34 C 190 34, 250 20, 300 20" fill="none" stroke="#DB160E" stroke-width="2.5" opacity="0.7"/>
+      <path class="seam-halo" d="M296 20 L 600 20" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+      <circle class="seam-knot-halo" cx="300" cy="20" r="7.5" fill="#FFFFFF"/>
+      <path class="seam-out" d="M300 20 L 600 20" fill="none" stroke="#1F3A5F" stroke-width="3"/>
+      <circle class="seam-knot" cx="300" cy="20" r="4.5" fill="#1F3A5F"/>
+    </svg>
+  </div>
+</div>
+
 <!-- GROW: THE DEPLOYMENT PRACTICE, IN ITS OWN LANGUAGE -->
-<section class="pband pband--grow alt" id="grow">
-  <canvas class="diffusion pband-canvas" data-seed="412" data-pitch="26" data-line="#8A6302" data-index="#E8B003" data-alpha="0.10" data-index-alpha="0.28" data-fade="left" data-fade-color="247,247,245" aria-hidden="true"></canvas>
+<section class="pband pband--grow" id="grow">
+  <canvas class="diffusion pband-canvas" data-seed="412" data-pitch="26" data-line="#8A6302" data-index="#E8B003" data-alpha="0.10" data-index-alpha="0.28" data-fade="left" data-fade-color="255,255,255" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="section-head reveal">
       <div class="pband-kick">
@@ -363,7 +382,7 @@
 </section>
 
 <!-- ADVISE: THE THIRD PRACTICE, IN THE RHYTHM -->
-<section class="pband pband--advise" id="advise">
+<section class="pband pband--advise alt" id="advise">
   <div class="wrap">
     <div class="pband-advise-grid">
       <div>
@@ -439,7 +458,13 @@
 </section>
 
 <!-- THE DELIVERY SYSTEM: WHY WORK WITH ME -->
-<section class="alt" id="delivery">
+<!-- THE THROUGH-LINE
+     Was one section, "A compounding practice.", carrying the seam narrative,
+     the flywheel and both instruments under a single heading. It ran about
+     four times the height of anything around it and read as three sections
+     wearing one hat. Now three, each of ordinary weight, with grounds
+     alternating so no two neighbours share one. -->
+<section id="through-line">
   <div class="wrap">
     <div class="section-head reveal">
       <div class="reg-kicker">The through-line</div>
@@ -465,6 +490,16 @@
         <p style="margin-bottom:0;"><a href="/about">About me and the practice &rarr;</a></p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- THE DELIVERY LOOP -->
+<section class="alt" id="loop">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="reg-kicker">The loop</div>
+      <h2>Four turns, then it keeps turning.</h2>
+    </div>
     <p class="pband-lede pband-lede--flow reveal">Every engagement runs on the same AI-native loop, and the method is already built. Run the two instruments below and judge the work before we talk.</p>
     <!-- The delivery flywheel, shared visual language with /grow/. The hub
          version generalizes the quarter details to every engagement (no
@@ -484,9 +519,12 @@
           <text x="230" y="258" text-anchor="middle" font-family="Archivo, sans-serif" font-size="10.5" fill="#6B6B6B">each turn compounds</text>
         </svg>
       </div>
+      <!-- The section heading now carries "Four turns, then it keeps
+           turning.", so the panel's own copy of that line goes: it is the
+           same sentence twice on first paint. The eyebrow and the prompt
+           stay, and the JS replaces all of this on quarter select. -->
       <div class="dloop-detail" id="dloop-detail">
         <span class="dd-eyebrow">The loop</span>
-        <b>Four turns, then it keeps turning.</b>
         <p>Context in, playbooks out, the dashboard reads what lands, and the next move is chosen on that evidence. Select a quarter of the wheel.</p>
       </div>
     </div>
@@ -566,12 +604,22 @@
       });
     })();
     </script>
-    <!-- The instruments are not content cards. Each one carries a miniature of
-         its own output - the diagnostic's six-criteria profile, the
-         simulation's adoption curve - on a readout plate beside the copy, so
-         the pair reads as instruments on a bench and shows what it produces
-         before you open it. A generic glyph in a rounded square told you
-         nothing and made these look like every other card on the site. -->
+  </div>
+</section>
+
+<!-- THE INSTRUMENTS
+     Not content cards. Each one carries a miniature of its own output - the
+     diagnostic's six-criteria profile, the simulation's adoption curve - on a
+     readout plate beside the copy, so the pair reads as instruments on a
+     bench and shows what it produces before you open it. A generic glyph in a
+     rounded square told you nothing and made these look like every other card
+     on the site. -->
+<section id="instruments">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="reg-kicker">The instruments</div>
+      <h2>Two tools you can run before we ever speak.</h2>
+    </div>
     <div class="inst-bench inst-bench--push">
       <a href="/preliminary-diagnostic" target="_blank" rel="noopener" class="inst-row reveal" style="--ic: var(--logo-blue);">
         <div class="inst-readout">
@@ -634,7 +682,7 @@
 </section>
 
 <!-- REACH -->
-<section>
+<section class="alt" id="reach">
   <div class="wrap">
     <div class="section-head reveal">
       <div class="reg-kicker">Reach</div>
@@ -673,6 +721,19 @@
 <!-- FOOTER CTA -->
 <section class="cta-panel cta-panel--field" id="cta">
   <canvas class="terrain" data-seed="66" data-line="#3d5a7c" data-index="#E8B003" data-alpha="0.35" data-index-alpha="0.5" aria-hidden="true"></canvas>
+  <!-- THE SEAM, third and last. The page opened the practice bands with the
+       strands running together and closes on the line they became. -->
+  <div class="wrap"><div class="seam-fig" aria-hidden="true">
+    <svg viewBox="0 0 600 34" preserveAspectRatio="none">
+      <path d="M0 4 C 190 4, 250 17, 300 17" fill="none" stroke="#E8B003" stroke-width="2.5" opacity="0.9"/>
+      <path d="M0 17 C 190 17, 250 17, 300 17" fill="none" stroke="#4C86F0" stroke-width="2.5" opacity="0.85"/>
+      <path d="M0 30 C 190 30, 250 17, 300 17" fill="none" stroke="#F2564F" stroke-width="2.5" opacity="0.8"/>
+      <path class="seam-halo" d="M296 17 L 600 17" fill="none" stroke="#16283F" stroke-width="8"/>
+      <circle class="seam-knot-halo" cx="300" cy="17" r="7.5" fill="#16283F"/>
+      <path class="seam-out" d="M300 17 L 600 17" fill="none" stroke="#EBEFEC" stroke-width="3"/>
+      <circle class="seam-knot" cx="300" cy="17" r="4.5" fill="#EBEFEC"/>
+    </svg>
+  </div></div>
   <div class="wrap cta-inner reveal">
     <p class="cta-sentence">Not sure which of these fits? Book thirty minutes and we will figure it out together.</p>
     <a href="/start" class="btn btn-gold">Start</a>

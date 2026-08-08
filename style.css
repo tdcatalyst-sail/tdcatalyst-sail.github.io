@@ -1939,9 +1939,27 @@ body.brand-advise { --brand: var(--logo-red);   --brand-ink: #9C1009; }
    logo palette in the accents, which is what making body.brand-* a real
    variable was for; tinting the paper per practice just made the whole site
    feel washed. */
-body.brand-sail   { --reg-rule: var(--logo-blue); }
-body.brand-grow   { --reg-rule: var(--logo-gold); }
-body.brand-advise { --reg-rule: var(--logo-red); }
+/* --reg-rule is mostly drawn as a hairline, but .chain-step's counter fills a
+   disc with it, so each value carries the ink that reads on it: dark on gold,
+   white on the three dark accents. */
+body.brand-sail   { --reg-rule: var(--logo-blue); --reg-rule-ink: #FFFFFF; }
+body.brand-grow   { --reg-rule: var(--logo-gold); --reg-rule-ink: #10233F; }
+body.brand-advise { --reg-rule: var(--logo-red);  --reg-rule-ink: #FFFFFF; }
+
+/* The hub had no colour of its own: carrying no brand-* class, its section
+   rules fell through to Grow's gold while the page also flew all three logo
+   colours, so it read as a sampler of the practices rather than as the thing
+   they are practices OF. Its colour is navy, and the tricolour is spent only
+   where the three are actually named: .hero-lines, the peaks flags, the
+   three .practice-card accents, and each band's own kicker.
+
+   This also makes the seam argument literal. The braid in #through-line runs
+   three coloured strands into one navy line; every hub section marker is
+   then that line, at eyebrow scale. The strands appear three times, the line
+   they resolve into repeats down the page. */
+body:not(.brand-sail):not(.brand-grow):not(.brand-advise) {
+  --reg-rule: var(--navy); --reg-rule-ink: #FFFFFF;
+}
 
 body.brand-sail .nav-logo .mark-practice { color: var(--logo-blue); }
 body.brand-grow .nav-logo .mark-practice { color: var(--terracotta); }
@@ -3685,7 +3703,7 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
 .chain-step em {
   display: inline-flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; border-radius: 50%; font-style: normal;
-  background: var(--reg-rule); color: #10233F;
+  background: var(--reg-rule); color: var(--reg-rule-ink, #10233F);
   font-family: var(--mono); font-size: 0.74rem; font-weight: 500;
   font-variant-numeric: tabular-nums;
   margin-bottom: 0.6rem;
@@ -4028,8 +4046,37 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 /* The through-line's claim is that three kinds of work meet at one seam.
    The rule between the heading and the copy now draws it: three strands in
    the practice colours converging to a single navy line. */
+/* ---- The seam: the hub's device
+   Three practice strands running into one navy line. It is the hub's whole
+   argument drawn rather than stated, so it is spent sparingly: entering the
+   practice bands, in the through-line where it belongs to the copy, and on
+   the closing panel. The single navy line it resolves into is what recurs,
+   as .reg-kicker's rule on every hub section.
+
+   .seam-band is the full-width divider form; .seam-braid is the inline form
+   inside .through-grid. --seam-out lets the dark panel keep the resolved
+   line visible against navy. ---- */
 .seam-braid { position: relative; height: 46px; margin: 0.4rem 0; }
 .seam-braid svg { display: block; width: 100%; height: 100%; }
+
+/* .seam-fig is the unit and carries the sizing; .seam-band is only the
+   full-width divider wrapper. Scoping the svg width to .seam-band left the
+   closing panel's copy at its intrinsic 600px inside a 335px column on
+   mobile, cropped rather than scaled, and only the panel's overflow:hidden
+   kept that off the page. */
+.seam-band { padding: 0; background: transparent; }
+.seam-band .seam-fig { max-width: 1180px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2.5rem); }
+.seam-fig { position: relative; height: 40px; }
+.seam-fig svg { display: block; width: 100%; height: 100%; }
+@media (max-width: 640px) { .seam-fig { height: 30px; } }
+
+/* On the navy closing panel the strands stay logo-true but the resolved line
+   and its knot invert, or they vanish into the ground. */
+.cta-panel--field .seam-fig { position: relative; padding: 0; margin-bottom: 1.4rem; height: 34px; }
+.cta-panel--field .seam-fig .seam-out { stroke: var(--offwhite); }
+.cta-panel--field .seam-fig .seam-knot { fill: var(--offwhite); }
+.cta-panel--field .seam-fig .seam-halo { stroke: var(--navy-deep); }
+.cta-panel--field .seam-fig .seam-knot-halo { fill: var(--navy-deep); }
 
 /* ============================================================
    IN-PAGE VALUE NAV  (.subnav)
