@@ -1905,60 +1905,90 @@ body.brand-grow h1 { font-weight: 800; }
 body.brand-grow .btn { border-radius: 12px; }
 body.brand-grow .nav-cta { border-radius: 999px; }
 
-/* Hub: practice cards */
+/* --- Hub: the three practice cards -------------------------------------
+   The map at the top of the hub, before the bands go deep on each one.
+   Each card carries its practice's own graphic device so the three read as
+   three disciplines rather than three paragraphs: Grow the diffusion field
+   (adoption spreading through a population), Sail the terrain contours
+   (ground read before it is walked), Advise a wayfinding marker planted on
+   the enterprise. Accents follow the practice colours everywhere else on
+   the site: grow gold, sail blue, advise red. */
 .practice-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1rem, 2vw, 1.8rem);
-  margin-top: 2rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.6rem);
+  margin-top: var(--space-4);
 }
 @media (max-width: 880px) { .practice-cards { grid-template-columns: 1fr; } }
 
 .practice-card {
+  --pc-ac: var(--navy);
+  --pc-ink: var(--navy);
+  position: relative;
   display: flex;
   flex-direction: column;
+  min-width: 0;
   background: #fff;
-  border: 1px solid var(--hairline);
-  border-radius: 2px;
-  padding: clamp(1.5rem, 2.5vw, 2.2rem);
+  border: 1px solid var(--reg-line);
+  border-radius: var(--reg-radius);
+  overflow: hidden;
   text-decoration: none;
   color: var(--charcoal);
-  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  box-shadow: var(--elev-1);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.practice-card::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 3px;
+  background: var(--pc-ac); z-index: 2;
 }
 .practice-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 28px rgba(31, 58, 95, 0.10);
-  border-color: var(--navy);
+  box-shadow: var(--elev-2);
+  border-color: var(--pc-ac);
 }
-.practice-bar {
-  display: block;
-  width: 52px;
-  height: 4px;
-  border-radius: 2px;
-  margin-bottom: 1.2rem;
-}
-.practice-card.sail .practice-bar { background: var(--logo-gold); }
-.practice-card.grow .practice-bar { background: var(--logo-blue); }
-.practice-card.advise .practice-bar { background: var(--logo-red); }
 
+/* The graphic well. Fixed aspect so the three devices sit on one baseline
+   however long the copy under them runs. */
+.practice-viz {
+  position: relative;
+  aspect-ratio: 16 / 7;
+  background: var(--offwhite);
+  border-bottom: 1px solid var(--reg-line);
+  overflow: hidden;
+}
+.practice-viz > canvas,
+.practice-viz > svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; display: block;
+}
+
+.practice-body {
+  display: flex; flex-direction: column; flex: 1 1 auto;
+  padding: clamp(1.15rem, 2vw, 1.5rem);
+}
+.practice-kick {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--pc-ink); margin-bottom: 0.5rem;
+}
 .practice-name {
   font-family: 'Besley', Georgia, serif;
-  font-size: 1.55rem;
-  color: var(--navy);
-  margin-bottom: 0.2rem;
-}
-.practice-tag {
-  font-size: 0.78rem;
   font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--midgray);
-  margin-bottom: 1rem;
+  font-size: clamp(1.2rem, 1.7vw, 1.4rem);
+  line-height: 1.2;
+  color: var(--navy);
+  margin-bottom: 0.5rem;
 }
-.practice-desc { font-size: 0.93rem; color: var(--charcoal); margin-bottom: 1rem; }
-.practice-who { font-size: 0.85rem; color: var(--midgray); margin-bottom: 1.4rem; }
-.practice-go { margin-top: auto; color: var(--navy); font-size: 0.9rem; font-weight: 500; }
-.practice-card:hover .practice-go { color: var(--terracotta); }
+.practice-desc { font-size: 0.93rem; color: var(--charcoal); margin-bottom: 0.9rem; }
+.practice-who {
+  font-size: 0.8rem; color: var(--midgray); margin-bottom: 1.2rem;
+  padding-top: 0.7rem; border-top: 1px solid var(--reg-line);
+}
+.practice-go {
+  margin-top: auto; color: var(--pc-ink);
+  font-size: 0.92rem; font-weight: 600;
+}
+.practice-go .arr { display: inline-block; transition: transform 0.25s ease; }
+.practice-card:hover .practice-go .arr { transform: translateX(5px); }
 
 /* 3-up variant of the outcomes grid (grow / advise service blocks) */
 .outcomes-grid.grow-grid { grid-template-columns: repeat(3, 1fr); }
@@ -2709,6 +2739,39 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 @media (max-width: 860px) {
   .pband-card-grid { grid-template-columns: 1fr; }
   .pband-postures { justify-self: start; }
+}
+
+/* --- Advise band ------------------------------------------------------
+   The third practice sits in the rhythm with the other two rather than as
+   a footnote after the proof. Its device is drawn, not generated: Grow's
+   diffusion and Sail's terrain describe fields, and what Advise describes
+   is a route to a destination. The skyline and marker ride the right edge
+   at low contrast, so the copy column stays clean at every width. */
+.pband--advise { border-top: 1px solid var(--hairline); }
+.pband-advise-grid {
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center;
+}
+.pband--advise .reg-kicker { color: var(--logo-red); }
+.pband--advise .reg-kicker::before { background: var(--logo-red); }
+.pband--advise .section-head { margin-bottom: var(--space-3); }
+.pband--advise .pband-lede { margin-top: 0; }
+.pband--advise .pband-facts li { border-bottom-color: var(--hairline); }
+.pband--advise .pband-enter,
+.pband--advise .pband-enter:hover { color: var(--logo-red); }
+.pband-note { max-width: 62ch; color: var(--midgray); font-size: 0.95rem; margin-top: 1.1rem; }
+/* The route figure: a diagram beside the copy, the way Sail's band pairs
+   its posture glyphs with its card, not a wash behind the text. */
+.pband-route { width: 100%; height: auto; display: block; }
+.pband-route-fig { min-width: 0; }
+.pband-route-cap {
+  display: block; margin-top: 0.9rem;
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--midgray); text-align: center;
+}
+@media (max-width: 860px) {
+  .pband-advise-grid { grid-template-columns: 1fr; }
+  .pband-route-fig { max-width: 30rem; }
 }
 
 /* The delivery flywheel at hub scale: Grow's wheel geometry in the
