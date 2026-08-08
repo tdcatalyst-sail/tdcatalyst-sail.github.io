@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=fe26a6c4">
+  <link rel="stylesheet" href="/style.css?v=140e546f">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -180,7 +180,13 @@
 
 <!-- HERO -->
 <section class="hero hero-with-logo hero--diffusion" id="main-content">
-  <canvas class="diffusion" data-seed="91" data-line="#1F3A5F" data-index="#E8B003" data-alpha="0.13" data-index-alpha="0.38" data-pitch="30" data-fade="left" data-fade-color="255,255,255" data-animate="1" aria-hidden="true"></canvas>
+  <!-- The substrate stays quiet: a navy constellation at wide pitch with most
+       links thinned away, and only a whisper of warmth on the adoption front.
+       The gold in this hero belongs to the entry field, not the background. -->
+  <canvas class="diffusion" data-seed="91" data-line="#1F3A5F" data-index="#E8B003" data-adopt="#2F4A6F"
+          data-alpha="0.07" data-index-alpha="0.16" data-pitch="46"
+          data-linkgold="0.14" data-linknavy="0.035" data-linkkeep="0.30" data-linkkeepband="0.18"
+          data-glowa="0.03" data-fade="left" data-fade-color="255,255,255" data-animate="1" aria-hidden="true"></canvas>
   <div class="wrap hero-split">
    <div class="hero-split-copy">
     <img src="/images/logo-v2.jpg" alt="TDcatalyst — Precision, Catalysis, Momentum" class="hero-logo" width="1213" height="1213">
@@ -211,12 +217,13 @@
         cells are built by the script below; the picker doubles as the
         situation chooser the card grid used to be. -->
    <figure class="entry-fig">
-     <svg class="entry-grid" id="entryGrid" viewBox="0 0 360 204" role="img" aria-label="How AI enters the operating model, shown on one population of teams: a stalled department platform lights one block and decays at its edges; frontier-lab seats light everyone shallowly; forty pilots scatter unconnected; starting from zero lights a handful at the margins.">
+     <svg class="entry-grid" id="entryGrid" viewBox="0 0 330 330" role="img" aria-label="How AI enters the operating model, shown on one organization drawn as five rings of teams: a stalled department platform lights one wedge and thins at its outer edge; frontier-lab seats light everyone shallowly; forty pilots scatter across the rings; starting from zero lights a handful at the rim.">
        <g id="entryBase"></g>
        <g id="entryLit"></g>
      </svg>
      <figcaption class="entry-cap">
-       <div class="entry-tabs" role="tablist" aria-label="How AI entered your organization">
+       <div class="entry-kick">How AI entered &middot; pick yours</div>
+       <div class="entry-tabs" id="entryTabs" role="tablist" aria-label="How AI entered your organization">
          <button type="button" class="entry-tab is-on" role="tab" aria-selected="true" data-state="platform" data-offer="reset">Stalled department platform</button>
          <button type="button" class="entry-tab" role="tab" aria-selected="false" data-state="seats" data-offer="reset">Frontier-lab seats</button>
          <button type="button" class="entry-tab" role="tab" aria-selected="false" data-state="pilots" data-offer="review">The forty pilots</button>
@@ -241,46 +248,54 @@
   var go = document.getElementById('entryGo');
   if (!svg || !base || !lit) return;
 
-  var NS = 'http://www.w3.org/2000/svg', COLS = 14, ROWS = 8, S = 22, G = 4;
+  // The organization as five concentric rings of teams, 120 in all: the
+  // centre is the core, the rim the edges of the business. A wedge is a
+  // department, which is what a stalled platform actually occupies.
+  var NS = 'http://www.w3.org/2000/svg';
+  var CX = 165, CY = 165, RINGS = [
+    { n: 12, r: 42 }, { n: 18, r: 68 }, { n: 24, r: 94 },
+    { n: 30, r: 120 }, { n: 36, r: 146 }
+  ];
   var cells = [];
-  for (var r = 0; r < ROWS; r++) {
-    for (var c = 0; c < COLS; c++) {
-      var x = c * (S + G), y = r * (S + G);
-      var b = document.createElementNS(NS, 'rect');
-      b.setAttribute('x', x); b.setAttribute('y', y);
-      b.setAttribute('width', S); b.setAttribute('height', S); b.setAttribute('rx', 3);
-      b.setAttribute('fill', '#1F3A5F'); b.setAttribute('fill-opacity', '0.07');
+  RINGS.forEach(function (ring, k) {
+    var off = (k % 2) * (Math.PI / ring.n);
+    for (var i = 0; i < ring.n; i++) {
+      var a = (i / ring.n) * Math.PI * 2 + off - Math.PI / 2;
+      var x = CX + Math.cos(a) * ring.r, y = CY + Math.sin(a) * ring.r;
+      var b = document.createElementNS(NS, 'circle');
+      b.setAttribute('cx', x.toFixed(1)); b.setAttribute('cy', y.toFixed(1)); b.setAttribute('r', '5.2');
+      b.setAttribute('fill', '#1F3A5F'); b.setAttribute('fill-opacity', '0.09');
       base.appendChild(b);
-      var l = document.createElementNS(NS, 'rect');
-      l.setAttribute('x', x); l.setAttribute('y', y);
-      l.setAttribute('width', S); l.setAttribute('height', S); l.setAttribute('rx', 3);
+      var l = document.createElementNS(NS, 'circle');
+      l.setAttribute('cx', x.toFixed(1)); l.setAttribute('cy', y.toFixed(1)); l.setAttribute('r', '5.2');
       l.setAttribute('fill', '#E8B003'); l.setAttribute('fill-opacity', '0');
       l.setAttribute('class', 'entry-cell');
       lit.appendChild(l);
-      cells.push({ el: l, c: c, r: r });
+      cells.push({ el: l, ring: k, i: i, n: ring.n });
     }
-  }
+  });
 
   // Deterministic scatter, so the pilots land in the same places every load.
   function hash(i) { var v = Math.sin(i * 127.1 + 311.7) * 43758.5453; return v - Math.floor(v); }
 
   var PATTERNS = {
+    // One department: a contiguous wedge, a sixth of every ring, so exactly
+    // 20 of the 120 teams — 17%, inside the 15–30% the copy states. The two
+    // outer rings hold it faintly: adoption thins toward the edges.
     platform: function (cell) {
-      var inBlock = cell.c >= 1 && cell.c <= 5 && cell.r >= 2 && cell.r <= 5;
-      if (!inBlock) return 0;
-      var core = cell.c <= 3 && cell.r <= 4;
-      return core ? 0.92 : 0.34;
+      var span = cell.n / 6, start = Math.floor(cell.n * 0.55);
+      var d = (cell.i - start + cell.n) % cell.n;
+      if (d >= span) return 0;
+      return cell.ring <= 2 ? 0.95 : 0.32;
     },
-    seats: function () { return 0.26; },
-    // 0.704 is the threshold that lights exactly forty of the 112 cells,
-    // so the picture and the words agree.
-    pilots: function (cell, i) { return hash(i) > 0.704 ? 0.5 + hash(i + 99) * 0.5 : 0; },
+    seats: function () { return 0.24; },
+    // The threshold that lights exactly forty of the 120, so the picture and
+    // the words agree.
+    pilots: function (cell, i) { return hash(i) > 0.712 ? 0.55 + hash(i + 99) * 0.45 : 0; },
+    // A handful, out at the rim and unconnected to anything.
     zero: function (cell) {
-      var spots = [[0, 7], [13, 1], [11, 6], [2, 0]];
-      for (var k = 0; k < spots.length; k++) {
-        if (spots[k][0] === cell.c && spots[k][1] === cell.r) return 0.6;
-      }
-      return 0;
+      if (cell.ring !== 4) return 0;
+      return (cell.i === 3 || cell.i === 13 || cell.i === 22 || cell.i === 30) ? 0.62 : 0;
     }
   };
   var COPY = {
@@ -292,6 +307,7 @@
   var ORDER = ['platform', 'seats', 'pilots', 'zero'];
   var tabs = [].slice.call(document.querySelectorAll('.entry-tab'));
 
+  var tabsHost = document.getElementById('entryTabs');
   function paint(key) {
     var fn = PATTERNS[key];
     for (var i = 0; i < cells.length; i++) {
@@ -302,15 +318,33 @@
       var on = t.dataset.state === key;
       t.classList.toggle('is-on', on);
       t.setAttribute('aria-selected', String(on));
-      if (on && go) go.setAttribute('data-offer', t.dataset.offer);
+      if (on) {
+        if (go) go.setAttribute('data-offer', t.dataset.offer);
+        // Restart the dwell bar so the pill visibly counts down to the next
+        // pattern: that is what tells a first-time reader this is running.
+        t.classList.remove('is-timing');
+        void t.offsetWidth;
+        if (tabsHost && tabsHost.classList.contains('is-cycling')) t.classList.add('is-timing');
+      } else {
+        t.classList.remove('is-timing');
+      }
     });
   }
 
   var idx = 0, timer = null;
   var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function advance() { idx = (idx + 1) % ORDER.length; paint(ORDER[idx]); }
-  function start() { if (still || timer) return; timer = setInterval(advance, 3600); }
-  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  function start() {
+    if (still || timer) return;
+    if (tabsHost) tabsHost.classList.add('is-cycling');
+    paint(ORDER[idx]);
+    timer = setInterval(advance, 4200);
+  }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+    if (tabsHost) tabsHost.classList.remove('is-cycling');
+    tabs.forEach(function (t) { t.classList.remove('is-timing'); });
+  }
 
   tabs.forEach(function (t) {
     t.addEventListener('click', function () {
