@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=9453f599">
+  <link rel="stylesheet" href="/style.css?v=b5be7bb4">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -584,6 +584,29 @@
     </div>
   </div>
 </footer>
+
+<script>
+// Scroll-spy for the in-page nav. Same observer the Sail pages run: the pill
+// bar mixes section anchors with page links, so only the anchors are tracked.
+(function () {
+  var links = document.querySelectorAll('.nav-pills a[href^="#"]');
+  if (!links.length || !('IntersectionObserver' in window)) return;
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      links.forEach(function (a) { a.classList.remove('now'); });
+      var a = map[en.target.id];
+      if (a) a.classList.add('now');
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  Object.keys(map).forEach(function (id) {
+    var sec = document.getElementById(id);
+    if (sec) io.observe(sec);
+  });
+})();
+</script>
 
 <script src="/script.js?v=203ef14f"></script>
 <script data-goatcounter="https://tdcatalyst.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
