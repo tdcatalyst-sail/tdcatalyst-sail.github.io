@@ -4325,13 +4325,13 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
   /* the drawn portion: a solid overlay line that grows with scroll */
 }
 /* Default: the route is fully drawn and every flag planted. JS upgrades to
-   the progressive walk by adding .walk-anim when it can actually run, so a
+   the progressive walk by adding .spine-anim when it can actually run, so a
    blocked script degrades to the complete static route, never a dim one. */
 .walkhost .walkline::before {
   content: ""; position: absolute; left: -2px; top: 0;
   height: 100%; width: 2px; background: var(--logo-blue);
 }
-.walkhost.walk-anim .walkline::before {
+.walkhost.spine-anim .walkline::before {
   height: calc(var(--wp, 0) * 100%); transition: height 0.1s linear;
 }
 @media (max-width: 640px) { .walkhost .walkline { display: none; } }
@@ -4348,9 +4348,127 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
   background: #fff; border: 2.5px solid var(--logo-blue);
   transition: transform 0.45s var(--ease), opacity 0.45s var(--ease);
 }
-.walk-anim .stn:not(.reached) .stn-venue i { transform: scale(0.4); opacity: 0.4; }
+.spine-anim .stn:not(.reached) .stn-venue i { transform: scale(0.4); opacity: 0.4; }
 .stn h2 { margin-bottom: 0.4rem; }
 .stn .stn-sub { color: var(--midgray); max-width: 62ch; margin: 0; }
+
+/* ============================================================
+   THE RUN  (Grow)
+   Grow's structural twin of the walk. Sail routes a page across ground, so
+   its spine is a dashed trail between named venues. Grow routes a page
+   through time, so its spine is a ruler and the markers are day counts: the
+   reader can see the whole engagement laid out before reading a word of it,
+   which is what makes a fixed fee legible.
+
+   Same mechanism (script.js, one spine block), same static-complete rule,
+   deliberately not the same look: solid rather than dashed, ticked rather
+   than flagged, gold rather than blue.
+   ============================================================ */
+.runhost { position: relative; }
+.runhost .runline {
+  position: absolute; left: max(0.9rem, calc((100vw - 1200px) / 2 - 2.2rem));
+  top: 0; bottom: 0; width: 0; pointer-events: none;
+  border-left: 2px solid color-mix(in srgb, var(--logo-gold) 30%, transparent);
+}
+/* Default state is the finished ruler. JS only adds .spine-anim. */
+.runhost .runline::before {
+  content: ""; position: absolute; left: -2px; top: 0;
+  height: 100%; width: 2px; background: var(--logo-gold);
+}
+.runhost.spine-anim .runline::before {
+  height: calc(var(--wp, 0) * 100%); transition: height 0.1s linear;
+}
+@media (max-width: 640px) { .runhost .runline { display: none; } }
+
+.phase { margin-bottom: 1.1rem; }
+.phase .phase-mark {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  font-family: var(--mono); font-size: 0.66rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--terracotta);
+  margin-bottom: 0.55rem;
+}
+/* The tick, not a flag: a measure mark on the ruler. Gold reads as gold at
+   graphic scale; --terracotta is the text-safe tone and stays on the label. */
+.phase .phase-mark i {
+  width: 3px; height: 15px; border-radius: 1px; flex-shrink: 0;
+  background: var(--logo-gold);
+  transition: transform 0.45s var(--ease), opacity 0.45s var(--ease);
+  transform-origin: center;
+}
+.phase .phase-mark b { font-weight: 500; color: var(--terracotta); }
+.phase .phase-mark span { color: var(--midgray); font-weight: 500; }
+.spine-anim .phase:not(.reached) .phase-mark i { transform: scaleY(0.25); opacity: 0.35; }
+.phase h2 { margin-bottom: 0.4rem; }
+.phase .phase-sub { color: var(--midgray); max-width: 62ch; margin: 0; }
+
+/* ---- Grow's ground light. The twin of .sail-wash: two low-opacity radials
+   of the practice colour, sitting behind the diffusion canvas so the field
+   reads as lit rather than printed. Gold is warmer and carries further than
+   blue, so both stops are pulled down from Sail's 0.14/0.07. ---- */
+.grow-wash { position: relative; }
+.grow-wash::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(120% 90% at 12% -12%, rgba(232, 176, 3, 0.10), transparent 62%),
+    radial-gradient(100% 80% at 96% 108%, rgba(232, 176, 3, 0.05), transparent 58%);
+}
+.grow-wash > .wrap { position: relative; }
+
+/* ---- The artifact strip (Grow)
+   Sail proves itself with photographs of real ground, because its claim is
+   that the ground does the work. Grow's claim is that the deliverables are
+   already built, so its texture is the deliverables: the instrument library
+   at a glance, drawn rather than photographed. Borrowing more coastline here
+   would have every image on the page doing Sail's job.
+
+   Deliberately NOT a port of the .glib carousel on /grow/method - that block
+   carries its own scoped design system and the full mockups. This is the
+   strip that says the library exists and sends you there. ---- */
+.artifact-strip {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-2); margin-top: var(--space-4);
+}
+@media (max-width: 900px) { .artifact-strip { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .artifact-strip { grid-template-columns: repeat(2, 1fr); } }
+.artifact { display: block; text-decoration: none; }
+.artifact .paper-mini {
+  aspect-ratio: 3 / 4; background: #fff;
+  border: 1px solid var(--reg-line); border-radius: var(--radius-sm);
+  box-shadow: var(--elev-1); padding: 0.5rem 0.55rem;
+  display: flex; flex-direction: column; gap: 0.28rem; overflow: hidden;
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.artifact:hover .paper-mini { box-shadow: var(--elev-2); transform: translateY(-2px); }
+.paper-mini .pm-head {
+  height: 7px; background: var(--navy); border-radius: 1px; margin-bottom: 0.1rem;
+}
+.paper-mini .pm-rule { height: 2px; background: var(--logo-gold); width: 42%; border-radius: 1px; }
+.paper-mini .pm-line { height: 3px; background: #E9E7E0; border-radius: 1px; }
+.paper-mini .pm-line.s { width: 62%; }
+.paper-mini .pm-line.m { width: 84%; }
+.paper-mini .pm-block {
+  margin-top: auto; height: 26%; background: #F3F1EA;
+  border-left: 2px solid var(--logo-gold); border-radius: 1px;
+}
+.artifact .af-name {
+  display: block; font-family: 'Besley', Georgia, serif; font-size: 0.86rem;
+  color: var(--navy); line-height: 1.3; margin-top: 0.5rem;
+}
+.artifact .af-tag {
+  display: block; font-family: var(--mono); font-size: 0.58rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--midgray);
+  margin-top: 0.22rem;
+}
+/* The tail tile: the rest of the library, as a door rather than a document. */
+.artifact--more .paper-mini {
+  align-items: center; justify-content: center; background: var(--reg-bg-alt);
+  border-style: dashed; box-shadow: none;
+}
+.artifact--more .pm-count {
+  font-family: 'Besley', Georgia, serif; font-size: 1.6rem;
+  font-weight: var(--fig-weight); letter-spacing: var(--fig-track);
+  font-variant-numeric: tabular-nums; color: var(--terracotta); line-height: 1;
+}
 
 /* ---- The mosaic: many small pictures, clearly visible. The copy sits on
    its own card, so readability never depends on washing the photos out. ---- */

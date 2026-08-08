@@ -1455,32 +1455,42 @@ function tdTerrainNoise(seed) {
   sync();
 })();
 
-// ===== The walk spine (Sail) =====
-// The routed portion of a page draws its trail as the reader walks it:
-// --wp on the host sets the solid line's height; stations plant flags via
-// IntersectionObserver. Static under 1000px and reduced motion (CSS side).
+// ===== The spine =====
+// A routed page draws its own line as the reader moves down it: --wp on the
+// host sets the drawn portion's height, and each marker lights when its
+// section arrives. Two practices route their pages this way and share the
+// mechanism, not the look:
+//   Sail  .walkhost / .walkline / .stn   a dashed trail between real venues
+//   Grow  .runhost  / .runline  / .phase a ruler ticked in days
+// Static under 1000px and under reduced motion, which is the CSS default:
+// this only ever ADDS .spine-anim, so a blocked script leaves the line fully
+// drawn and every marker lit rather than a dim half-page.
 (function () {
-  var host = document.querySelector('.walkhost');
-  if (!host) return;
-  var line = host.querySelector('.walkline');
-  if (line && window.matchMedia('(min-width: 1000px)').matches &&
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    host.classList.add('walk-anim');
-    var onScroll = function () {
-      var r = host.getBoundingClientRect();
-      var vh = window.innerHeight;
-      var p = (vh * 0.7 - r.top) / r.height;
-      host.style.setProperty('--wp', Math.max(0, Math.min(1, p)).toFixed(4));
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    onScroll();
-  }
-  var stns = host.querySelectorAll('.stn');
-  if (stns.length && 'IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('reached'); });
-    }, { rootMargin: '0px 0px -35% 0px' });
-    stns.forEach(function (el) { io.observe(el); });
-  }
+  var hosts = document.querySelectorAll('.walkhost, .runhost');
+  if (!hosts.length) return;
+  var animate = window.matchMedia('(min-width: 1000px)').matches &&
+                !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('reached'); });
+  }, { rootMargin: '0px 0px -35% 0px' }) : null;
+
+  Array.prototype.forEach.call(hosts, function (host) {
+    var line = host.querySelector('.walkline, .runline');
+    if (line && animate) {
+      host.classList.add('spine-anim');
+      var onScroll = function () {
+        var r = host.getBoundingClientRect();
+        var p = (window.innerHeight * 0.7 - r.top) / r.height;
+        host.style.setProperty('--wp', Math.max(0, Math.min(1, p)).toFixed(4));
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      onScroll();
+    }
+    if (io) {
+      Array.prototype.forEach.call(host.querySelectorAll('.stn, .phase'), function (el) {
+        io.observe(el);
+      });
+    }
+  });
 })();
