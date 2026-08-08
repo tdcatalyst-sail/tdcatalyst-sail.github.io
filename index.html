@@ -101,7 +101,7 @@
   ]
 }
   </script>
-  <link rel="stylesheet" href="/style.css?v=fe26a6c4">
+  <link rel="stylesheet" href="/style.css?v=1d323aac">
 </head>
 <body class="reg">
 <a href="#main-content" class="skip-link">Skip to content</a>
@@ -384,37 +384,54 @@
            route climbs through the four gates the copy names, then forks at
            the defining moment, with the counsel standing at the node. -->
       <div class="pband-route-fig reveal">
-        <svg class="pband-route" viewBox="0 0 420 232" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="The route upmarket: through procurement, security review, works council and the CHRO's risk calculus to a defining moment, where the route forks and standing counsel is beside the decision.">
-          <g stroke="#1F3A5F" opacity="0.2" stroke-width="1.4">
-            <path d="M0 200 C 60 190, 108 206, 158 198 C 216 188, 286 202, 420 190"/>
-            <path d="M0 218 C 70 210, 118 224, 168 216 C 228 207, 300 219, 420 210"/>
-            <path d="M6 34 C 74 52, 122 22, 196 40 C 262 56, 320 28, 416 44"/>
-            <path d="M0 118 C 46 110, 84 124, 126 116"/>
-            <path d="M292 150 C 340 142, 378 154, 420 146"/>
-          </g>
-          <path d="M18 206 L 74 196 L 140 178 L 206 158 L 268 136"
-                stroke="#DB160E" stroke-width="2" stroke-dasharray="5 5.5"/>
-          <g fill="#FFFFFF" stroke="#DB160E" stroke-width="1.6">
-            <circle cx="74" cy="196" r="5"/>
-            <circle cx="140" cy="178" r="5"/>
-            <circle cx="206" cy="158" r="5"/>
-          </g>
-          <g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#6B6B6B">
-            <text x="74" y="182" text-anchor="middle">Procurement</text>
-            <text x="140" y="164" text-anchor="middle">Security</text>
-            <text x="206" y="144" text-anchor="middle">Works council</text>
-          </g>
-          <!-- The fork: taken branch strong, the other held faint. -->
-          <path d="M268 136 C 306 130, 348 128, 404 126" stroke="#DB160E" stroke-width="2" stroke-dasharray="5 5.5" opacity="0.28"/>
-          <path d="M268 136 C 302 112, 336 84, 386 62" stroke="#DB160E" stroke-width="2" stroke-dasharray="5 5.5"/>
-          <circle cx="268" cy="136" r="8.5" fill="#FFFFFF" stroke="#DB160E" stroke-width="2.6"/>
-          <circle cx="250" cy="150" r="4.6" fill="#DB160E"/>
-          <g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#6B6B6B">
-            <text x="268" y="118" text-anchor="middle">The defining moment</text>
-          </g>
-          <path d="M392 30 a13 13 0 0 1 13 13 c0 9.5 -13 25 -13 25 s-13 -15.5 -13 -25 A13 13 0 0 1 392 30 Z" fill="#DB160E" stroke="none"/>
-          <circle cx="392" cy="43" r="4.8" fill="#FFFFFF"/>
-        </svg>
+        <div class="pband-route-plate">
+          <!-- The ground is the brand's own terrain device rather than five
+               hand-drawn line fragments that started and stopped in mid-air. -->
+          <canvas class="card-terrain" data-seed="214" data-line="#1F3A5F" data-index="#1F3A5F" data-alpha="0.05" data-index-alpha="0.09" data-scale="240" aria-hidden="true"></canvas>
+          <svg class="pband-route" viewBox="0 0 420 232" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="The route upmarket: a dashed line climbing through procurement, security review and the works council to a defining moment, where it forks. Standing counsel is the steady line running alongside the whole way, present at the node where the call is made, and the account sits on the far side.">
+            <defs>
+              <linearGradient id="adv-fade" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#DB160E" stop-opacity="0.32"/>
+                <stop offset="1" stop-color="#DB160E" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- Standing counsel: navy and solid, so it reads as a second actor
+                 rather than a shadow of the route. It is the one line here that
+                 does not depend on clearing a gate, it runs the whole gauntlet
+                 alongside the route, and it is present at the decision. -->
+            <path d="M16 216 C 46 210, 62 204, 86 200 S 128 190, 150 182 S 192 168, 214 158 S 248 145, 259 133"
+                  stroke="#1F3A5F" stroke-width="1.7" opacity="0.62"/>
+            <!-- The route: dashed, because every gate can stop it. Smooth, not
+                 the five straight segments and hard kinks it used to be. -->
+            <path d="M16 206 C 46 200, 62 194, 86 190 S 128 180, 150 172 S 192 158, 214 148 S 254 132, 274 118"
+                  stroke="#DB160E" stroke-width="2" stroke-dasharray="5 5.5"/>
+            <!-- The fork. The branch not taken thins out instead of stopping dead. -->
+            <path d="M274 118 C 310 118, 350 122, 410 125" stroke="url(#adv-fade)" stroke-width="2" stroke-dasharray="5 5.5"/>
+            <path d="M274 118 C 306 108, 342 84, 383 66" stroke="#DB160E" stroke-width="2" stroke-dasharray="5 5.5"/>
+            <g fill="#FFFFFF" stroke="#DB160E" stroke-width="1.6">
+              <circle cx="86" cy="190" r="4.5"/>
+              <circle cx="150" cy="172" r="4.5"/>
+              <circle cx="214" cy="148" r="4.5"/>
+            </g>
+            <circle cx="274" cy="118" r="9" fill="#FFFFFF" stroke="#DB160E" stroke-width="2.6"/>
+            <circle cx="259" cy="133" r="3.8" fill="#1F3A5F"/>
+            <!-- The account on the far side: arrival drawn in the same node
+                 language as the rest of the site, not a dropped map pin. -->
+            <circle cx="392" cy="62" r="16" stroke="#DB160E" stroke-width="1.1" opacity="0.28"/>
+            <circle cx="392" cy="62" r="10" stroke="#DB160E" stroke-width="1.6"/>
+            <circle cx="392" cy="62" r="4.4" fill="#DB160E"/>
+            <!-- Labels sit above and left of their node. The route climbs to
+                 the right, so a label level with its node, or right of it, is
+                 always struck by the line: that is what put the dashes through
+                 "The defining moment" before. -->
+            <g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#6B6B6B" text-anchor="end">
+              <text x="80" y="180">Procurement</text>
+              <text x="144" y="162">Security</text>
+              <text x="208" y="138">Works council</text>
+              <text x="262" y="104">The defining moment</text>
+            </g>
+          </svg>
+        </div>
         <span class="pband-route-cap">The gauntlet, the call that decides it, and the account on the far side</span>
       </div>
     </div>
@@ -549,24 +566,68 @@
       });
     })();
     </script>
-    <div class="inst-grid inst-grid--push">
-      <a href="/preliminary-diagnostic" target="_blank" rel="noopener" class="inst-card reveal" style="--ic: var(--logo-red);">
-        <div class="inst-head">
-          <span class="tdc-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M7.5 12a4.5 4.5 0 0 1 9 0"/><circle cx="12" cy="12" r="1.4"/><path d="M12 12l6 6"/></svg></span>
+    <!-- The instruments are not content cards. Each one carries a miniature of
+         its own output - the diagnostic's six-criteria profile, the
+         simulation's adoption curve - on a readout plate beside the copy, so
+         the pair reads as instruments on a bench and shows what it produces
+         before you open it. A generic glyph in a rounded square told you
+         nothing and made these look like every other card on the site. -->
+    <div class="inst-bench inst-bench--push">
+      <a href="/preliminary-diagnostic" target="_blank" rel="noopener" class="inst-row reveal" style="--ic: var(--logo-red);">
+        <div class="inst-readout">
+          <canvas class="card-terrain" data-seed="226" data-line="#1F3A5F" data-index="#1F3A5F" data-alpha="0.05" data-index-alpha="0.09" data-scale="210" aria-hidden="true"></canvas>
+          <!-- What it returns: a profile across six criteria, uneven, which is
+               what a stall looks like when you plot it. -->
+          <svg viewBox="0 0 150 130" fill="none" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+            <g stroke="#1F3A5F" opacity="0.22" stroke-width="1">
+              <polygon points="75,18 114.8,41 114.8,87 75,110 35.2,87 35.2,41"/>
+              <polygon points="75,33.3 101.6,48.7 101.6,79.4 75,94.7 48.4,79.4 48.4,48.7"/>
+              <polygon points="75,48.7 88.2,56.4 88.2,71.7 75,79.3 61.8,71.7 61.8,56.4"/>
+              <path d="M75 64 L75 18 M75 64 L114.8 41 M75 64 L114.8 87 M75 64 L75 110 M75 64 L35.2 87 M75 64 L35.2 41"/>
+            </g>
+            <polygon points="75,23.5 91.7,54.4 103.7,80.6 75,74.1 48.7,79.2 59.8,55.3"
+                     fill="#DB160E" fill-opacity="0.14" stroke="#DB160E" stroke-width="1.8"/>
+            <g fill="#DB160E">
+              <circle cx="75" cy="23.5" r="2.4"/><circle cx="91.7" cy="54.4" r="2.4"/><circle cx="103.7" cy="80.6" r="2.4"/>
+              <circle cx="75" cy="74.1" r="2.4"/><circle cx="48.7" cy="79.2" r="2.4"/><circle cx="59.8" cy="55.3" r="2.4"/>
+            </g>
+          </svg>
+        </div>
+        <div class="inst-body">
           <h3>AI Transformation Stall Diagnostic</h3>
+          <div class="inst-meta"><span>12 questions</span><span>4 minutes</span><span>No email</span></div>
+          <p>Answer twelve questions, each carrying the research finding it rests on, and get the archetype your organization&rsquo;s stall takes, your profile across six criteria, and three moves for the next ninety days.</p>
+          <span class="inst-go">Run the diagnostic <span class="arr">&rarr;</span></span>
         </div>
-        <div class="inst-meta"><span>12 questions</span><span>4 minutes</span><span>No email</span></div>
-        <p>Answer twelve questions, each carrying the research finding it rests on, and get the archetype your organization&rsquo;s stall takes, your profile across six criteria, and three moves for the next ninety days.</p>
-        <span class="inst-go">Run the diagnostic <span class="arr">&rarr;</span></span>
       </a>
-      <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener" class="inst-card reveal" style="--ic: var(--logo-gold); --ic-ink: var(--terracotta);">
-        <div class="inst-head">
-          <span class="tdc-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M4 16c3-1 5-9 9-9s4.5 4 7 4"/><circle cx="13" cy="7" r="1.3"/></svg></span>
-          <h3>Transformation Dynamics Simulation&trade;</h3>
+      <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener" class="inst-row reveal" style="--ic: var(--logo-gold); --ic-ink: var(--terracotta);">
+        <div class="inst-readout">
+          <canvas class="card-terrain" data-seed="238" data-line="#1F3A5F" data-index="#1F3A5F" data-alpha="0.05" data-index-alpha="0.09" data-scale="210" aria-hidden="true"></canvas>
+          <!-- What it returns: the stalled trajectory held faint, the curve the
+               sequenced plays produce drawn over it, and the segments below in
+               the order they move. -->
+          <svg viewBox="0 0 150 130" fill="none" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+            <path d="M12 108 L140 108" stroke="#1F3A5F" opacity="0.2" stroke-width="1"/>
+            <path d="M14 102 C 50 99, 84 93, 138 85" stroke="#E8B003" stroke-width="1.6" stroke-dasharray="4 4.5" opacity="0.5"/>
+            <path d="M14 102 C 48 100, 58 88, 74 66 S 104 32, 138 26" stroke="#E8B003" stroke-width="2.2"/>
+            <g fill="#FFFFFF" stroke="#E8B003" stroke-width="1.8">
+              <circle cx="74" cy="66" r="3.4"/>
+              <circle cx="99" cy="40" r="3.4"/>
+            </g>
+            <g fill="#E8B003">
+              <rect x="14" y="113" width="26" height="6" rx="3"/>
+              <rect x="45" y="113" width="26" height="6" rx="3"/>
+            </g>
+            <rect x="76" y="113" width="26" height="6" rx="3" fill="#E8B003" fill-opacity="0.34"/>
+            <rect x="107.6" y="113.6" width="24.8" height="4.8" rx="2.4" stroke="#E8B003" stroke-width="1.2" opacity="0.5"/>
+          </svg>
         </div>
-        <div class="inst-meta"><span>13 plays</span><span>24 weeks</span><span>Sequence decides it</span></div>
-        <p>Flag where adoption is stuck, sequence the interventions that move each segment, and watch the curve evolve. Run a play before its proof exists and watch the downstream plays break.</p>
-        <span class="inst-go">Open the simulator <span class="arr">&rarr;</span></span>
+        <div class="inst-body">
+          <h3>Transformation Dynamics Simulation&trade;</h3>
+          <div class="inst-meta"><span>13 plays</span><span>24 weeks</span><span>Sequence decides it</span></div>
+          <p>Flag where adoption is stuck, sequence the interventions that move each segment, and watch the curve evolve. Run a play before its proof exists and watch the downstream plays break.</p>
+          <span class="inst-go">Open the simulator <span class="arr">&rarr;</span></span>
+        </div>
       </a>
     </div>
   </div>
