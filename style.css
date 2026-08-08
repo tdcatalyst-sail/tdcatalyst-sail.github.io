@@ -4237,12 +4237,15 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 .hero-walk-m { display: none; }
 @media (max-width: 999px) {
   /* Between phone and the desktop peaks device, the walk holds the hero's
-     full measure: centered, capped, with room below before the buttons. */
-  .hero-walk-m { display: block; max-width: 460px; margin: 1.6rem auto 0.8rem; }
+     full measure: centered, capped, with room below before the buttons. The
+     bottom margin carries more than it looks: the first station's label now
+     runs to the floor of the viewBox, where the old layout left that corner
+     empty, so 0.8rem put text 12px off the buttons against 35px of air above. */
+  .hero-walk-m { display: block; max-width: 460px; margin: 1.6rem auto 1.7rem; }
   .hero-walk-m svg { width: 100%; height: auto; display: block; }
 }
 @media (max-width: 620px) {
-  .hero-walk-m { max-width: 375px; margin: 1.4rem 0 0.4rem; }
+  .hero-walk-m { max-width: 375px; margin: 1.4rem 0 1.6rem; }
 }
 
 /* Framework at-a-glance chips on the method page. */
