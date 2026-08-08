@@ -2661,7 +2661,10 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
   position: relative;
   overflow: hidden;
   max-width: 620px;
-  background: rgba(255, 255, 255, 0.95);
+  /* Opaque, not 95%: the in-card terrain fades to pure white, and over a
+     translucent ground that fade painted a visibly brighter block across
+     the lower third. Same white on both sides removes the seam. */
+  background: #fff;
   border: 1px solid var(--reg-line);
   border-top: 3px solid var(--logo-blue);
   border-radius: var(--reg-radius-lg);
@@ -2682,11 +2685,12 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 .pband-facts b { font-family: 'Besley', Georgia, serif; font-weight: 600; color: var(--navy); }
 .pband-facts span { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--midgray); white-space: nowrap; }
 .pband-card .pband-enter { color: var(--logo-blue); margin-top: 1.3rem; }
-/* Sail's contour device inside the card: a terrain strip at the base,
-   fading up so the copy stays clear. Drawn by script.js (card-terrain). */
+/* Sail's contour device inside the card: a shallow strip in the card's
+   own foot margin, so the contours read as a watermark under the content
+   rather than through it. Drawn by script.js (card-terrain). */
 .pband-card > canvas.card-terrain {
   position: absolute; left: 0; right: 0; bottom: 0;
-  height: 150px; width: 100%; pointer-events: none;
+  height: 80px; width: 100%; pointer-events: none;
 }
 .pband-card > *:not(canvas) { position: relative; }
 /* In the merged through-line + delivery section the lede follows the seam
@@ -2706,18 +2710,40 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
   .pband-facts span { white-space: normal; text-align: right; }
 }
 
-/* Wide variant: the card spans the wrap. Copy, then the three posture
-   glyphs in a row (shared with Sail's Station 1), then the tier facts. */
-.pband-card--wide { max-width: none; }
-.pband-p { max-width: 70ch; }
-.pband-card--wide .pband-facts { max-width: 560px; }
+/* Wide variant: the card holds the left of the band and the photograph
+   keeps the right. It spanned the whole wrap before, which left the ridge
+   as a 71px sliver on either side and 445px of empty card beside the
+   glyphs — the ground is Sail's proof, so it gets real width back. The
+   foot padding is the clear zone the contour strip lives in. */
+.pband-card--wide {
+  max-width: 62%;
+  padding-bottom: 5.6rem;
+}
+@media (max-width: 980px) { .pband-card--wide { max-width: none; } }
+.pband-p { max-width: 46ch; }
 .pband-postures {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem; margin: var(--space-3) 0 0.4rem; max-width: 640px;
+  gap: 1rem; margin: var(--space-4) 0 var(--space-3);
+}
+/* The tiers take the same three columns as the postures above them, so the
+   card's lower half is one rhythm instead of a name and a price flung 362px
+   apart by space-between across a row nothing else was as wide as. */
+.pband-card--wide .pband-facts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem; margin-top: var(--space-3);
+}
+.pband-card--wide .pband-facts li {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem;
+  border-bottom: none; border-top: 2px solid var(--logo-blue);
+  padding: 0.6rem 0 0;
+}
+.pband-card--wide .pband-facts span { white-space: normal; }
+@media (max-width: 620px) {
+  .pband-card--wide .pband-facts { grid-template-columns: 1fr; gap: 0.7rem; }
 }
 .pband-posture { display: flex; flex-direction: column; gap: 0.4rem; }
 .pband-posture .sg-glyph { margin-bottom: 0; }
-.pband-posture .sg-glyph svg { width: 118px; }
+.pband-posture .sg-glyph svg { width: 100%; max-width: 124px; }
 .pband-posture .pp-num {
   display: block; font-family: var(--mono); font-size: 0.62rem;
   letter-spacing: 0.1em; color: var(--logo-blue); margin-bottom: 0.15rem;
@@ -3715,6 +3741,11 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
   font-style: normal; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--brand-ink); white-space: nowrap;
 }
+/* Advise's fork mark, carried onto its own page beside the question that
+   is the defining moment the mark draws. */
+.gnt-fork { flex-shrink: 0; line-height: 0; align-self: center; }
+.gnt-fork svg { width: 62px; height: auto; display: block; }
+@media (max-width: 560px) { .gnt-fork { display: none; } }
 .gnt-q b {
   font-family: 'Besley', Georgia, serif; font-weight: 600; font-size: 1.02rem;
   color: var(--navy); line-height: 1.4;
