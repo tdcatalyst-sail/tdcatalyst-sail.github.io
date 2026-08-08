@@ -684,26 +684,25 @@ section:has(+ .hero) {
   border-color: var(--navy);
 }
 
-/* ===== FOOTER ===== */
+/* ===== FOOTER =====
+   Identity only: mark, disclaimer, copyright, legal. No link columns — every
+   link the footer used to repeat (page sections, sibling practices, the hub)
+   is already in the nav at the top of the page. */
 footer {
   background: var(--navy);
   color: var(--offwhite);
-  padding: 3.5rem 0 2rem;
+  padding: 2.5rem 0 2rem;
   margin-top: 0; /* was 4rem; showed as a stray body-bg strip after dark bands */
 }
-footer .wrap { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 2rem; }
-@media (max-width: 780px) { footer .wrap { grid-template-columns: 1fr; } }
-footer h4 { color: var(--seamist); font-size: 0.9rem; font-weight: 500; margin-bottom: 1rem; font-family: 'Archivo', sans-serif; }
-footer a { color: var(--seamist); font-size: 0.9rem; display: block; padding: 0.25rem 0; border: none; }
+footer a { color: var(--seamist); border: none; }
 footer a:hover { color: var(--terracotta-soft); }
 footer .tagline { font-family: 'Besley', Georgia, serif; font-size: 1rem; margin-bottom: 0.4rem; font-weight: 400; }
-footer .fine { font-size: 0.8rem; color: var(--seamist); opacity: 0.7; margin-top: 0.4rem; margin-bottom: 1rem; }
-footer .fine a { display: inline; padding: 0; font-size: inherit; }
+footer .fine { font-size: 0.8rem; color: var(--seamist); opacity: 0.7; margin-top: 0.3rem; }
 footer .land {
-  grid-column: 1 / -1;
   border-top: 1px solid rgba(217, 226, 230, 0.2);
-  padding-top: 1.5rem;
-  margin-top: 1rem;
+  padding-top: 1.25rem;
+  margin-top: 1.6rem;
+  max-width: 64ch;
   font-size: 0.8rem;
   color: var(--seamist);
   opacity: 0.75;
@@ -1964,29 +1963,8 @@ body.brand-grow .nav-cta { border-radius: 999px; }
 .outcomes-grid.grow-grid { grid-template-columns: repeat(3, 1fr); }
 @media (max-width: 880px) { .outcomes-grid.grow-grid { grid-template-columns: 1fr; } }
 
-/* Footer link back to the umbrella hub */
-footer .footer-home-link {
-  display: block;
-  margin-top: 0.4rem;
-  margin-bottom: 1rem;
-}
-
-footer .footer-practices {
-  margin-top: 0;
-}
-footer .footer-practices a {
-  display: block;
-  margin-bottom: 0.8rem;
-}
-footer .footer-practices i {
-  display: block;
-  font-style: italic;
-  font-size: 0.8rem;
-  color: var(--seamist);
-  opacity: 0.6;
-  margin-top: 0.15rem;
-  font-weight: 400;
-}
+/* The footer's hub link and practice list were removed with the rest of the
+   footer nav; the .brand-menu switcher in the nav carries all four homes. */
 
 /* ============================================================
    Field photography — full-bleed bands and landscape figures
@@ -4103,7 +4081,8 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
               background var(--dur-fast) var(--ease);
 }
 .nav-links.nav-pills a:not(.nav-cta):hover { color: var(--brand-ink); background: #fff; border-color: var(--reg-line); }
-.nav-links.nav-pills a.now { color: var(--brand-ink); border-color: var(--brand); background: #fff; }
+.nav-links.nav-pills a.now,
+.nav-links.nav-pills a.active:not(.nav-cta) { color: var(--brand-ink); border-color: var(--brand); background: #fff; }
 
 /* ---- Seat cards: the three-seat proof, figure-led ----
    The seats used to be 60-70 words of prose each and the evidence inside them
