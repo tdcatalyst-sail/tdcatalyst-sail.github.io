@@ -61,21 +61,41 @@
      Numbers on this site do two different jobs and get two different faces.
 
      FIGURE  - a number that makes a claim (a price, a count, a percentage).
-               Besley at --fig-weight, tracked in by --fig-track, always
-               tabular. 700 rather than 600 because Besley is a Clarendon:
-               its high-contrast zeros go thin at 600 and a figure like "500"
-               then reads lighter than the letters beside it.
+               Besley at --fig-weight, tracked in by --fig-track. 700 rather
+               than 600 because Besley is a Clarendon: its high-contrast
+               zeros go thin at 600 and a figure like "500" then reads
+               lighter than the letters beside it.
      COUNTER - a number that labels or orders (01, 02, a step, a question
                index). Mono, letterspaced out, never serif. Same register as
                the eyebrows and coordinates it sits with.
 
-     Besley's default figures are genuinely proportional - the digits run
-     1030 to 1180 units, a 15% spread - so tabular-nums is not decorative
-     here. Any Besley figure without it visibly jitters. Both subset faces
-     carry the tnum feature (verified against the woff2 with fontTools), so
-     the declaration does real work. Neither carries lnum or onum, and the
-     default figures are already lining, so do not write lining-nums: it
-     would be a no-op that reads like a promise. */
+     DO NOT put font-variant-numeric: tabular-nums on Besley. The tnum
+     feature in fonts/besley-var-latin.woff2 is broken above weight 400, and
+     it fails in exactly the place it is most visible. tnum maps the digits
+     to a separate glyph set (uniFF10-uniFF19); measured against the file
+     with fontTools, nine of those ten gain about 50% ink from wght 400 to
+     700, and the tabular ZERO gains none at all - it is frozen at its
+     400-weight outline. At 700 it renders 17% lighter than the tabular five
+     beside it and 29% lighter than the default zero, which is why
+     "Fortune 500" read as a bold "5" followed by two pale "0"s.
+
+     It also stops doing its job: the frozen zero keeps a 1100-unit advance
+     while the other tabular digits widen to 1250 at weight 700, so the
+     figures are not even uniform width, which is the entire point of the
+     feature. The DEFAULT figure set is sound - all ten digits vary
+     correctly with weight - so dropping tnum costs nothing here. Nothing on
+     this site sets numbers in an aligned column; every figure is a single
+     claim in its own card or row.
+
+     This is Besley's problem alone. Archivo was measured the same way and is
+     clean: uniform tabular advances at every weight from 400 to 800 and no
+     frozen digit, so the .lp campaign pages and the .glib block on
+     /grow/method keep their tabular figures. Do not strip those.
+
+     Neither face carries lnum or onum and the defaults are already lining,
+     so do not write lining-nums either: it would be a no-op that reads like
+     a promise. If Besley is ever re-subset from an upstream that fixes the
+     zero, tabular can come back - test wght 700, not the 400 default. */
   --fig-weight: 700;
   --fig-track: -0.022em;
 
@@ -167,6 +187,10 @@ p.lead { font-size: 1.15rem; color: var(--midgray); }
 a { color: var(--navy); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
 a:hover { border-bottom-color: var(--logo-gold); }
 
+/* Mono only. Do not put this on Besley: its tnum glyph set is broken above
+   weight 400 (see the figure contract in :root). Plex Mono is monospaced, so
+   this is a no-op there anyway; the class is kept for any future face that
+   needs it. */
 .tabular { font-variant-numeric: tabular-nums; }
 
 /* ===== NAV ===== */
@@ -669,7 +693,6 @@ section:has(+ .hero) {
   font-weight: var(--fig-weight);
   letter-spacing: var(--fig-track);
   color: var(--navy);
-  font-variant-numeric: tabular-nums;
   display: block;
 }
 .tier-price .unit { font-size: 0.82rem; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.1em; }
@@ -1010,7 +1033,6 @@ hr.sign-rule {
   font-size: 1.15rem;
   font-weight: var(--fig-weight);
   letter-spacing: var(--fig-track);
-  font-variant-numeric: tabular-nums;
   color: var(--navy);
   margin: 0 0 0.7rem;
 }
@@ -1198,7 +1220,7 @@ hr.sign-rule {
 .scard-tag { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--logo-red); font-weight: 600; margin-bottom: 0.5rem; }
 .scard-name { font-family: 'Besley', Georgia, serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 0.3rem; }
 .scard-meta { font-size: 0.82rem; color: var(--midgray); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
-.scard-price { font-family: 'Besley', Georgia, serif; font-size: 1.5rem; font-weight: var(--fig-weight); letter-spacing: var(--fig-track); color: var(--navy); font-variant-numeric: tabular-nums; margin-bottom: 0.9rem; }
+.scard-price { font-family: 'Besley', Georgia, serif; font-size: 1.5rem; font-weight: var(--fig-weight); letter-spacing: var(--fig-track); color: var(--navy); margin-bottom: 0.9rem; }
 .scard-outcome { font-size: 0.95rem; color: var(--charcoal); flex: 1; margin-bottom: 1rem; }
 .scard-delivers {
   font-size: 0.82rem;
@@ -1465,7 +1487,6 @@ section.article-section { padding-top: 2rem; }
   font-size: 2.6rem;
   font-weight: var(--fig-weight);
   letter-spacing: var(--fig-track);
-  font-variant-numeric: tabular-nums;
   color: var(--navy);
   line-height: 1;
   margin-bottom: 0.5rem;
@@ -1667,7 +1688,6 @@ section.article-section { padding-top: 2rem; }
   font-weight: var(--fig-weight);
   letter-spacing: var(--fig-track);
   color: var(--navy);
-  font-variant-numeric: tabular-nums;
   display: block;
   line-height: 1.1;
 }
@@ -2405,7 +2425,7 @@ html:not(.js) .entry-fig { display: none; }
     @media (max-width: 520px) { .sim-readout { grid-template-columns: 1fr; } }
     .readout-item { background: var(--seamist); border-radius: 3px; padding: 1.1rem 1.2rem; text-align: center; }
     .readout-item.gap { background: var(--navy); }
-    .readout-num { font-family: 'Besley', Georgia, serif; font-size: 2.1rem; font-weight: var(--fig-weight); letter-spacing: var(--fig-track); line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; }
+    .readout-num { font-family: 'Besley', Georgia, serif; font-size: 2.1rem; font-weight: var(--fig-weight); letter-spacing: var(--fig-track); line-height: 1; color: var(--navy); }
     .readout-item.gap .readout-num { color: #fff; }
     .readout-item.plan .readout-num { color: var(--logo-blue); }
     .readout-item.base .readout-num { color: var(--logo-red); }
@@ -3329,7 +3349,7 @@ input[type="checkbox"].doc-check:focus-visible { outline: 2px solid var(--logo-b
 /* Stat block */
 .tdc-stat .n {
   font-family: 'Besley', Georgia, serif; font-size: 1.9rem; font-weight: var(--fig-weight);
-  color: var(--navy); letter-spacing: var(--fig-track); font-variant-numeric: tabular-nums;
+  color: var(--navy); letter-spacing: var(--fig-track);
   line-height: 1;
 }
 .tdc-stat .l { font-size: 0.86rem; color: var(--midgray); margin-top: 0.3rem; }
@@ -3669,7 +3689,7 @@ body.reg.brand-advise .outcomes-grid .outcome-item {
 .sel-fact .v {
   font-family: 'Besley', Georgia, serif; font-weight: var(--fig-weight); font-size: 1.12rem;
   letter-spacing: var(--fig-track);
-  color: var(--navy); line-height: 1.25; font-variant-numeric: tabular-nums;
+  color: var(--navy); line-height: 1.25;
 }
 /* Fact values all read navy; the accent stays on borders, icons and light. */
 .sel-facts { border-top-color: color-mix(in srgb, var(--sel-ac) 26%, var(--reg-line)); }
@@ -3731,8 +3751,7 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 .stat-strip b {
   display: block; font-family: 'Besley', Georgia, serif; font-size: 1.85rem;
   font-weight: var(--fig-weight); color: var(--navy); line-height: 1;
-  letter-spacing: var(--fig-track);
-  font-variant-numeric: tabular-nums; margin-bottom: 0.22rem;
+  letter-spacing: var(--fig-track); margin-bottom: 0.22rem;
 }
 
 /* ============================================================
@@ -3837,7 +3856,6 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
 .pw .pw-price {
   margin-top: auto; font-family: 'Besley', Georgia, serif; font-weight: var(--fig-weight);
   font-size: 1.35rem; color: var(--navy); letter-spacing: var(--fig-track);
-  font-variant-numeric: tabular-nums;
 }
 .pw .pw-unit {
   font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em;
@@ -4003,7 +4021,6 @@ section:not(.alt) .chain-step:not(:last-child)::after { background: var(--reg-bg
   font-family: 'Besley', Georgia, serif; font-weight: var(--fig-weight);
   font-size: 1.6rem; line-height: 1; color: var(--navy);
   letter-spacing: var(--fig-track);
-  font-variant-numeric: tabular-nums;
 }
 .cr-label { flex: 1 1 16ch; min-width: 0; font-size: 0.95rem; color: var(--charcoal); }
 .cr-cue {
@@ -4189,13 +4206,11 @@ a.price-band:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(22
 .pb-price .was {
   display: block; font-family: 'Besley', Georgia, serif; font-size: 1rem;
   font-weight: var(--fig-weight); letter-spacing: var(--fig-track);
-  font-variant-numeric: tabular-nums;
   color: rgba(199, 211, 206, 0.7); text-decoration: line-through; text-decoration-color: var(--logo-red);
 }
 .pb-price .now {
   display: block; font-family: 'Besley', Georgia, serif; font-weight: var(--fig-weight);
   font-size: 2.1rem; color: var(--logo-gold); line-height: 1.05; letter-spacing: var(--fig-track);
-  font-variant-numeric: tabular-nums;
 }
 .pb-price .unit {
   display: block; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.11em;
@@ -4513,8 +4528,7 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 }
 .artifact--more .pm-count {
   font-family: 'Besley', Georgia, serif; font-size: 1.6rem;
-  font-weight: var(--fig-weight); letter-spacing: var(--fig-track);
-  font-variant-numeric: tabular-nums; color: var(--terracotta); line-height: 1;
+  font-weight: var(--fig-weight); letter-spacing: var(--fig-track); color: var(--terracotta); line-height: 1;
 }
 
 /* ---- The mosaic: many small pictures, clearly visible. The copy sits on
@@ -4599,7 +4613,6 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
   font-family: 'Besley', Georgia, serif;
   font-size: 2.4rem; font-weight: var(--fig-weight); line-height: 1;
   letter-spacing: var(--fig-track); color: var(--navy);
-  font-variant-numeric: tabular-nums;
   margin: 0.15rem 0 0.32rem;
 }
 .seat-cap {
@@ -4643,7 +4656,6 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 .reach-col .rc-fig {
   font-family: 'Besley', Georgia, serif; font-size: 2.1rem; font-weight: var(--fig-weight);
   line-height: 1; letter-spacing: var(--fig-track); color: var(--navy);
-  font-variant-numeric: tabular-nums;
 }
 .reach-col .rc-fig span {
   font-size: 0.8rem; font-weight: 400; color: var(--midgray);
