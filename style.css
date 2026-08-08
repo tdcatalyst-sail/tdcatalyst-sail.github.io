@@ -4476,59 +4476,21 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
 }
 .grow-wash > .wrap { position: relative; }
 
-/* ---- The artifact strip (Grow)
-   Sail proves itself with photographs of real ground, because its claim is
-   that the ground does the work. Grow's claim is that the deliverables are
-   already built, so its texture is the deliverables: the instrument library
-   at a glance, drawn rather than photographed. Borrowing more coastline here
-   would have every image on the page doing Sail's job.
-
-   Deliberately NOT a port of the .glib carousel on /grow/method - that block
-   carries its own scoped design system and the full mockups. This is the
-   strip that says the library exists and sends you there. ---- */
-.artifact-strip {
-  display: grid; grid-template-columns: repeat(5, 1fr);
-  gap: var(--space-2); margin-top: var(--space-4);
+/* ---- The loop wheel, static (Grow)
+   Replaces the artifact strip: five drawn document thumbnails that carried no
+   words, so at phone width the method section read as a grid of blank cards.
+   The wheel is the same device as .dloop-wrap on the hub and .fly-wrap on
+   /grow/method - identical geometry, quarter colors and labels - but static
+   markup with no builder script and no detail panel, because the section it
+   sits in only has to show that the loop exists and send you to the method
+   page for what each turn needs and produces. ---- */
+.loopwheel { margin: var(--space-4) 0 0; }
+.loopwheel svg {
+  display: block; width: 100%; max-width: 400px; height: auto; margin: 0 auto;
 }
-@media (max-width: 900px) { .artifact-strip { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 560px) { .artifact-strip { grid-template-columns: repeat(2, 1fr); } }
-.artifact { display: block; text-decoration: none; }
-.artifact .paper-mini {
-  aspect-ratio: 3 / 4; background: #fff;
-  border: 1px solid var(--reg-line); border-radius: var(--radius-sm);
-  box-shadow: var(--elev-1); padding: 0.5rem 0.55rem;
-  display: flex; flex-direction: column; gap: 0.28rem; overflow: hidden;
-  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
-}
-.artifact:hover .paper-mini { box-shadow: var(--elev-2); transform: translateY(-2px); }
-.paper-mini .pm-head {
-  height: 7px; background: var(--navy); border-radius: 1px; margin-bottom: 0.1rem;
-}
-.paper-mini .pm-rule { height: 2px; background: var(--logo-gold); width: 42%; border-radius: 1px; }
-.paper-mini .pm-line { height: 3px; background: #E9E7E0; border-radius: 1px; }
-.paper-mini .pm-line.s { width: 62%; }
-.paper-mini .pm-line.m { width: 84%; }
-.paper-mini .pm-block {
-  margin-top: auto; height: 26%; background: #F3F1EA;
-  border-left: 2px solid var(--logo-gold); border-radius: 1px;
-}
-.artifact .af-name {
-  display: block; font-family: 'Besley', Georgia, serif; font-size: 0.86rem;
-  color: var(--navy); line-height: 1.3; margin-top: 0.5rem;
-}
-.artifact .af-tag {
-  display: block; font-family: var(--mono); font-size: 0.58rem; font-weight: 500;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--midgray);
-  margin-top: 0.22rem;
-}
-/* The tail tile: the rest of the library, as a door rather than a document. */
-.artifact--more .paper-mini {
-  align-items: center; justify-content: center; background: var(--reg-bg-alt);
-  border-style: dashed; box-shadow: none;
-}
-.artifact--more .pm-count {
-  font-family: 'Besley', Georgia, serif; font-size: 1.6rem;
-  font-weight: var(--fig-weight); letter-spacing: var(--fig-track); color: var(--terracotta); line-height: 1;
+.loopwheel figcaption {
+  max-width: 46ch; margin: 1.1rem auto 0; text-align: center;
+  font-size: 0.94rem; line-height: 1.6; color: var(--midgray);
 }
 
 /* ---- The mosaic: many small pictures, clearly visible. The copy sits on
