@@ -20,7 +20,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=106716e1">
+  <link rel="stylesheet" href="/style.css?v=c69b6db6">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -2156,25 +2156,25 @@
   // ===== lead-gen: build a summary image of what they built and attach it to the submission =====
   var CHART_CSS =
     '.grid-line{stroke:#D9D3CA;stroke-width:1}' +
-    '.axis-label{fill:#6B6B6B;font-family:Inter,Arial,sans-serif;font-size:12px}' +
+    '.axis-label{fill:#6B6B6B;font-family:Archivo,Arial,sans-serif;font-size:12px}' +
     '.curve-base{fill:none;stroke:#C44536;stroke-width:2.5;stroke-dasharray:6 5;stroke-linecap:round}' +
     '.curve-plan{fill:none;stroke:#4A7C9E;stroke-width:3;stroke-linecap:round}' +
     '.curve-value{fill:none;stroke:#4E8B72;stroke-width:2;stroke-linecap:round}' +
     '.gap-area{fill:#4A7C9E;opacity:.09}.sustain-zone{fill:#4A7C9E;opacity:.05}' +
     '.phase-band-sustain{fill:#4E8B72;opacity:.05}.phase-divider{stroke:#4E8B72;stroke-width:1;stroke-dasharray:2 4;opacity:.5}' +
-    '.phase-band-label{fill:#4E8B72;font-family:Inter,Arial,sans-serif;font-size:10px;font-weight:600;letter-spacing:.04em;opacity:.8}' +
+    '.phase-band-label{fill:#4E8B72;font-family:Archivo,Arial,sans-serif;font-size:10px;font-weight:600;letter-spacing:.04em;opacity:.8}' +
     '.threshold-line{stroke:#1F3A5F;stroke-width:1.5;stroke-dasharray:2 4;opacity:.6}' +
-    '.threshold-label{fill:#1F3A5F;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:600;opacity:.8}' +
+    '.threshold-label{fill:#1F3A5F;font-family:Archivo,Arial,sans-serif;font-size:11px;font-weight:600;opacity:.8}' +
     '.play-marker{stroke:#1F3A5F;stroke-width:1;stroke-dasharray:3 3;opacity:.35}.play-marker.break{stroke:#C44536;opacity:.55}' +
-    '.play-dot{fill:#1F3A5F}.break-x{fill:#C44536;font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:700}' +
-    '.play-num{fill:#1F3A5F;opacity:.45;font-family:Inter,Arial,sans-serif;font-size:9px;font-weight:600}.play-hit{fill:none}' +
+    '.play-dot{fill:#1F3A5F}.break-x{fill:#C44536;font-family:Archivo,Arial,sans-serif;font-size:13px;font-weight:700}' +
+    '.play-num{fill:#1F3A5F;opacity:.45;font-family:Archivo,Arial,sans-serif;font-size:9px;font-weight:600}.play-hit{fill:none}' +
     '.phase-node-line{stroke:#C8950A;stroke-width:1;opacity:.55}.phase-node{fill:#C8950A;stroke:#fff;stroke-width:1.5}' +
-    '.phase-node-num{fill:#fff;font-family:Inter,Arial,sans-serif;font-size:10px;font-weight:700}' +
+    '.phase-node-num{fill:#fff;font-family:Archivo,Arial,sans-serif;font-size:10px;font-weight:700}' +
     '.end-dot-b{fill:#C44536}.end-dot-p{fill:#4A7C9E}.end-dot-v{fill:#4E8B72}' +
     '.cross-line{stroke:#C8950A;stroke-width:1.5}.cross-dot{fill:#C8950A;stroke:#fff;stroke-width:1.5}' +
-    '.cross-flag{fill:#C8950A;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:700}' +
+    '.cross-flag{fill:#C8950A;font-family:Archivo,Arial,sans-serif;font-size:11px;font-weight:700}' +
     '.vcross-dot{fill:#4E8B72;stroke:#fff;stroke-width:1.5}' +
-    '.vcross-flag{fill:#4E8B72;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:700}';
+    '.vcross-flag{fill:#4E8B72;font-family:Archivo,Arial,sans-serif;font-size:11px;font-weight:700}';
 
   function chartToImage(cb) {
     var src = document.querySelector('.sim-chart');
@@ -2205,9 +2205,9 @@
       F_SMALL_SB = '600 17px Inter, Arial, sans-serif',
       F_LABEL = '600 15px Inter, Arial, sans-serif',
       F_SECTION = '600 20px Inter, Arial, sans-serif',
-      F_TITLE = '400 54px Fraunces, Georgia, serif',
-      F_BRAND = '500 30px Fraunces, Georgia, serif',
-      F_STAT = '500 40px Fraunces, Georgia, serif';
+      F_TITLE = '400 54px Besley, Georgia, serif',
+      F_BRAND = '500 30px Besley, Georgia, serif',
+      F_STAT = '500 40px Besley, Georgia, serif';
 
   function trySpacing(x, v) { try { x.letterSpacing = v; } catch (e) {} }
 
@@ -2320,7 +2320,7 @@
     // ---- masthead ----
     x.fillStyle = DOC_NAVY; x.font = F_BRAND; x.fillText('TDcatalyst', PG_M, 152);
     var bw = x.measureText('TDcatalyst').width;
-    x.fillStyle = DOC_BLUE; x.font = '400 26px Fraunces, Georgia, serif'; x.fillText('/grow', PG_M + bw + 2, 152);
+    x.fillStyle = DOC_BLUE; x.font = '400 26px Besley, Georgia, serif'; x.fillText('/grow', PG_M + bw + 2, 152);
     x.fillStyle = DOC_GRAY; x.font = F_SMALL; x.textAlign = 'right'; x.fillText(dateStr, PG_W - PG_M, 152); x.textAlign = 'left';
     x.fillStyle = DOC_BLUE; x.fillRect(PG_M, 176, 84, 3);
     x.strokeStyle = DOC_LINE; x.lineWidth = 1;

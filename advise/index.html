@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=106716e1">
+  <link rel="stylesheet" href="/style.css?v=c69b6db6">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -192,6 +192,7 @@
     <div class="sel-note reveal" style="--sel-ac: var(--brand); margin-top: 1.6rem;">
       <span><b>Experimental &middot; embodied strategic framing.</b> The quarterly strategy session can be taken out of the boardroom and onto the trail: a facilitated strategy walk on the Pacific coast south of San Francisco. The pace changes what founders are willing to say out loud about the company. Offered as an experimental component of either form.</span>
     </div>
+  </div>
 </section>
 
 <!-- PROOF -->
@@ -237,12 +238,18 @@
         </ul>
       </div>
     </div>
-    <div class="stat-strip reveal" style="margin-top: 2.6rem;">
-      <span><b>8-figure</b>ARR practice built from a standing start</span>
-      <span><b>24</b>named accounts, enterprise and public sector</span>
-      <span><b>5</b>countries run operator-side</span>
-    </div>
-    <div class="cred-wall reveal">
+    <!-- The named-account wall sits behind this disclosure rather than
+         front-loading the section: the seats above already carry the
+         8-figure practice and the five operator-side countries, so a strip
+         restating them read as the same proof twice. The summary keeps the
+         account count, which is the one figure the seats do not state. -->
+    <details class="cred-reveal reveal">
+      <summary>
+        <span class="cr-count">24</span>
+        <span class="cr-label">named accounts, enterprise and public sector, across five industries.</span>
+        <span class="cr-cue"><span class="cr-cue-closed">See who</span><span class="cr-cue-open">Hide</span></span>
+      </summary>
+      <div class="cred-wall">
       <div class="cred-group">
         <div class="cg-label">Pharmaceutical &amp; life sciences</div>
         <ul><li>Roche / Genentech</li><li>Sanofi</li><li>Bayer</li></ul>
@@ -263,7 +270,8 @@
         <div class="cg-label">Public sector, defense &amp; workforce</div>
         <ul><li>Defense Innovation Unit (Dept. of Defense)</li><li>State of New York</li><li>State of Florida</li><li>State of Colorado</li><li>State of Indiana</li><li>District of Columbia</li><li>Government of Puerto Rico</li><li>Allegis</li><li>OneTen</li></ul>
       </div>
-    </div>
+      </div>
+    </details>
     <p class="cred-fine">Delivered for, in prior roles. Quantified case studies are shared in the first call. TDcatalyst is an independent practice, not affiliated with or endorsed by any prior employer.</p>
 
   </div>

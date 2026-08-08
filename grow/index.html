@@ -14,7 +14,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=106716e1">
+  <link rel="stylesheet" href="/style.css?v=c69b6db6">
     <!-- Structured data: a machine-readable restatement of what this page already says. -->
   <script type="application/ld+json">
 {
@@ -413,13 +413,18 @@
         <p>Every engagement is delivered personally by Tom, at a fixed fee agreed before the work starts. The methods, the instruments, and the simulator on this page are his own builds, and the person who shows up is the person accountable.</p>
       </div>
     </div>
-    <div class="stat-strip reveal" style="margin-top: 2.4rem;">
-      <span><b>25</b>programs delivered</span>
-      <span><b>8-figure</b>ARR practice built from a standing start</span>
-      <span><b>Fortune 500</b>and Global 500 companies</span>
-      <span><b>6</b>state and territorial governments</span>
-    </div>
-    <div class="cred-wall reveal">
+    <!-- The named-account wall sits behind this disclosure rather than
+         front-loading the section: the seats above already carry the
+         8-figure practice, the Fortune 500 accounts and the six
+         governments, so a strip restating them read as the same proof
+         twice. The summary keeps the two counts that were not said above. -->
+    <details class="cred-reveal reveal">
+      <summary>
+        <span class="cr-count">25</span>
+        <span class="cr-label">programs delivered, for 24 named organizations across five industries and the public sector.</span>
+        <span class="cr-cue"><span class="cr-cue-closed">See who</span><span class="cr-cue-open">Hide</span></span>
+      </summary>
+      <div class="cred-wall">
       <div class="cred-group">
         <div class="cg-label">Pharmaceutical &amp; life sciences</div>
         <ul><li>Roche / Genentech</li><li>Sanofi</li><li>Bayer</li></ul>
@@ -440,7 +445,9 @@
         <div class="cg-label">Public sector, defense &amp; workforce</div>
         <ul><li>Defense Innovation Unit (Dept. of Defense)</li><li>State of New York</li><li>State of Florida</li><li>State of Colorado</li><li>State of Indiana</li><li>District of Columbia</li><li>Government of Puerto Rico</li><li>Allegis</li><li>OneTen</li></ul>
       </div>
-    </div>    <p class="cred-fine">Delivered in prior roles. Quantified case studies are shared in the first call. TDcatalyst is an independent practice, not affiliated with or endorsed by any prior employer.</p>
+      </div>
+    </details>
+    <p class="cred-fine">Delivered in prior roles. Quantified case studies are shared in the first call. TDcatalyst is an independent practice, not affiliated with or endorsed by any prior employer.</p>
 
   </div>
 </section>
