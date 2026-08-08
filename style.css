@@ -2598,12 +2598,18 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 }
 .pband--grow .reg-kicker { color: var(--terracotta); }
 .pband--grow .reg-kicker::before { background: var(--logo-gold); }
-.pband-lede { max-width: 74ch; color: var(--charcoal); margin-bottom: 1.8rem; }
+/* Pulled up toward its h2 so the head groups with the sentence that
+   explains it, tighter than the lede sits to the cards below. */
+.pband-lede { max-width: 74ch; color: var(--charcoal); margin: -1.1rem 0 var(--space-4); }
 .pband-tiers { margin-bottom: 1rem; }
-.pband-enter { display: inline-block; margin-top: 1.6rem; font-weight: 600; font-size: 0.98rem; }
+/* The flagship's exact-gold key is optically lighter than its red and blue
+   neighbors; the wash gives it comparable weight without deepening the hue. */
+.pw--gold { background: linear-gradient(color-mix(in srgb, var(--logo-gold) 9%, #fff), #fff 34%); }
+.pband-enter { display: inline-block; margin-top: var(--space-3); font-weight: 600; font-size: 0.98rem; }
+.pband--grow .pband-enter { margin-top: 0.5rem; }
 .pband-enter .arr { display: inline-block; transition: transform 0.25s ease; }
 .pband-enter:hover .arr { transform: translateX(5px); }
-.pband--grow .pband-enter { color: var(--terracotta); }
+.pband--grow .pband-enter, .pband--grow .pband-enter:hover { color: var(--terracotta); }
 
 /* Sail: the band is the ground itself — one full-bleed frame, the claim
    in a card. The frame is the hub's own; photos never repeat site-wide. */
@@ -2644,38 +2650,105 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 .pband--sail .band-note {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 1;
   padding: 2.4rem clamp(1.2rem, 4vw, 3rem) 1.1rem;
-  background: linear-gradient(to top, rgba(18, 30, 45, 0.55), rgba(18, 30, 45, 0));
+  /* Deeper floor + shadow: the note has to survive whatever photo ships
+     next (bright fog bottoms included; frames never repeat site-wide). */
+  background: linear-gradient(to top, rgba(18, 30, 45, 0.72), rgba(18, 30, 45, 0));
   color: rgba(235, 239, 236, 0.92);
+  text-shadow: 0 1px 4px rgba(18, 30, 45, 0.6);
 }
 @media (max-width: 720px) {
   .pband-card { padding: 1.5rem 1.4rem; }
   .pband-facts span { white-space: normal; text-align: right; }
 }
 
-/* Hub hero without the logo lockup: the wordmark lives in the nav and the
-   tricolor lines carry the artwork's strokes. The extra air keeps room for
-   the peaks overlay to plant its flags. */
+/* Wide variant: the card spans the wrap; copy left, the three posture
+   glyphs (shared with Sail's Station 1) stacked on the right. */
+.pband-card--wide { max-width: none; }
+.pband-card-grid {
+  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center;
+}
+.pband-postures { display: grid; gap: 1rem; justify-self: center; }
+.pband-posture { display: flex; align-items: center; gap: 1.1rem; }
+.pband-posture .sg-glyph { margin-bottom: 0; flex-shrink: 0; }
+.pband-posture .sg-glyph svg { width: 118px; }
+.pband-posture .pp-num {
+  display: block; font-family: var(--mono); font-size: 0.62rem;
+  letter-spacing: 0.1em; color: var(--logo-blue); margin-bottom: 0.15rem;
+}
+.pband-posture .pp-label b {
+  font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 1.02rem; color: var(--navy); line-height: 1.25;
+}
+@media (max-width: 860px) {
+  .pband-card-grid { grid-template-columns: 1fr; }
+  .pband-postures { justify-self: start; }
+}
+
+/* The delivery flywheel at hub scale: Grow's wheel geometry in the
+   editorial register. The builder script lives inline on index.html. */
+.dloop-wrap {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem); align-items: center; margin-bottom: var(--space-4);
+}
+.dloop-chart { max-width: 460px; justify-self: center; width: 100%; }
+.dloop-wheel { display: block; width: 100%; height: auto; }
+.dloop-seg { cursor: pointer; outline: none; }
+.dloop-seg .dloop-arc { transition: fill-opacity var(--dur) var(--ease); }
+.dloop-seg:hover .dloop-arc, .dloop-seg:focus-visible .dloop-arc, .dloop-seg.on .dloop-arc { fill-opacity: 0.2; }
+.dloop-detail {
+  background: #fff; border: 1px solid var(--reg-line);
+  border-radius: var(--reg-radius-lg); box-shadow: var(--elev-1);
+  padding: 1.5rem 1.7rem; min-height: 16rem;
+}
+.dloop-detail .dd-eyebrow {
+  display: block; font-family: var(--mono); font-size: 0.62rem;
+  letter-spacing: 0.11em; text-transform: uppercase; color: var(--brand-ink);
+  margin-bottom: 0.45rem;
+}
+.dloop-detail b {
+  display: block; font-family: 'Besley', Georgia, serif; font-weight: 600;
+  font-size: 1.18rem; color: var(--navy); margin-bottom: 0.4rem;
+}
+.dloop-detail p { font-size: 0.94rem; color: var(--midgray); line-height: 1.6; margin: 0; }
+.dloop-detail ul {
+  margin: 0.9rem 0 0; padding-left: 1.05rem;
+  display: grid; gap: 0.5rem; font-size: 0.9rem; color: var(--charcoal); line-height: 1.55;
+}
+.dloop-detail li::marker { color: var(--terracotta); }
+@media (max-width: 860px) {
+  .dloop-wrap { grid-template-columns: 1fr; }
+  .dloop-detail { min-height: 0; }
+}
+
+/* Hub hero: the logo artwork at a compact size (the 220px lockup gave the
+   page a slow start), then the claim and the numbers. */
 .hero--hub { padding: 3.5rem 0 5rem; }
+.hero--hub .hero-logo { width: 150px; margin-bottom: var(--space-3); }
 .hero--hub h1 { max-width: 20ch; }
-.hero--hub .stat-strip { margin-bottom: 2.1rem; }
+.hero--hub .stat-strip { margin-bottom: var(--space-4); }
 /* The peaks scanner needs the same vertical field the logo hero gave it, or
    it finds room for only two of the three practice summits. Desktop only —
    the overlay itself is display:none below 1024px. */
 @media (min-width: 1024px) {
-  .hero--hub { min-height: 768px; display: flex; align-items: center; }
+  .hero--hub { min-height: 820px; display: flex; align-items: center; }
   .hero--hub > .wrap { width: 100%; }
 }
 
 /* Instruments join the delivery-loop section on the hub. */
-.inst-grid--push { margin-top: 1.9rem; }
+.inst-grid--push { margin-top: var(--space-4); }
 
 /* Advise signpost variant (hub): accent to the destination practice. */
 .practice-signpost--to-advise::before { background: var(--logo-red); }
 .practice-signpost--to-advise .signpost-go { color: var(--logo-red); }
 
 
-/* Through-line: asymmetric split with a gold seam rule (hub) */
-.through-grid { display: grid; grid-template-columns: 5fr 1px 7fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+/* Through-line: asymmetric split; the middle track carries the seam-braid
+   SVG (three practice strands converging to one line), so it needs real
+   width — the old 1px track was sized for the retired .seam-rule and
+   collapsed the braid to invisibility on desktop. */
+.through-grid { display: grid; grid-template-columns: 5fr minmax(140px, 1.6fr) 7fr; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+.through-grid .seam-braid { align-self: center; }
 .seam-rule { width: 1px; height: 100%; background: linear-gradient(to bottom, var(--logo-gold), rgba(232, 176, 3, 0.15)); }
 .through-grid h2 { max-width: 14ch; }
 @media (max-width: 780px) {
