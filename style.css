@@ -1904,6 +1904,22 @@ body.brand-grow h1 { font-weight: 800; }
 body.brand-grow .btn { border-radius: 12px; }
 body.brand-grow .nav-cta { border-radius: 999px; }
 
+/* ---- Tool heroes: the instrument's own readout, on the right ----
+   Each tool is introduced on the hub by a drawing of what it returns. The
+   tool's own page opens with that same drawing, so arriving from the hub
+   lands on something already recognised. Copy left, mark right, stacking
+   below 900px. */
+.tool-hero-split {
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(1.4rem, 4.5vw, 3.6rem); align-items: center;
+}
+@media (max-width: 900px) { .tool-hero-split { grid-template-columns: 1fr; } }
+.tool-mark { justify-self: end; width: 100%; max-width: 310px; min-width: 0; }
+.tool-mark svg { display: block; width: 100%; height: auto; }
+@media (max-width: 900px) {
+  .tool-mark { justify-self: start; max-width: 260px; margin-top: var(--space-3); }
+}
+
 /* ---- Grow's hero: copy beside the entry-pattern field ----
    The four situations used to be a card grid further down the page. They
    are one animated population here instead: same teams, four ways AI

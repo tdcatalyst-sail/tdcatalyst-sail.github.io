@@ -20,7 +20,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=3a66d9db">
+  <link rel="stylesheet" href="/style.css?v=98d583b1">
   <style>
     /* ============================================================
        Diagnostic page — page-specific styles only.
@@ -918,13 +918,31 @@
        Copy is the same intro renderIntro() paints — keep the two in step. -->
   <div id="diag-app">
     <section class="hero hero-with-logo">
-      <div class="wrap narrow">
-        <div class="reg-kicker">A preliminary diagnostic</div>
-        <h1>Where is AI transformation stalling in your organization.</h1>
-        <p class="hero-sub">Twelve questions, four minutes, one named diagnosis: the archetype your organization&rsquo;s stall actually takes, and the three moves that follow.</p>
-        <noscript>
-          <p class="hero-sub"><strong>The diagnostic needs JavaScript to run.</strong> With it switched off, write to <a href="mailto:tom@tdcatalyst.com">tom@tdcatalyst.com</a> and the same read can be done in conversation.</p>
-        </noscript>
+      <div class="wrap tool-hero-split">
+        <div class="diag-hero-copy">
+          <div class="reg-kicker">A preliminary diagnostic</div>
+          <h1>Where is AI transformation stalling in your organization.</h1>
+          <p class="hero-sub">Twelve questions, four minutes, one named diagnosis: the archetype your organization&rsquo;s stall actually takes, and the three moves that follow.</p>
+          <noscript>
+            <p class="hero-sub"><strong>The diagnostic needs JavaScript to run.</strong> With it switched off, write to <a href="mailto:tom@tdcatalyst.com">tom@tdcatalyst.com</a> and the same read can be done in conversation.</p>
+          </noscript>
+        </div>
+        <div class="tool-mark" aria-hidden="true">
+          <svg viewBox="0 0 150 130" fill="none" stroke-linejoin="round" stroke-linecap="round">
+            <g stroke="#1F3A5F" opacity="0.22" stroke-width="1">
+              <polygon points="75,18 114.8,41 114.8,87 75,110 35.2,87 35.2,41"/>
+              <polygon points="75,33.3 101.6,48.7 101.6,79.4 75,94.7 48.4,79.4 48.4,48.7"/>
+              <polygon points="75,48.7 88.2,56.4 88.2,71.7 75,79.3 61.8,71.7 61.8,56.4"/>
+              <path d="M75 64 L75 18 M75 64 L114.8 41 M75 64 L114.8 87 M75 64 L75 110 M75 64 L35.2 87 M75 64 L35.2 41"/>
+            </g>
+            <polygon points="75,23.5 91.7,54.4 103.7,80.6 75,74.1 48.7,79.2 59.8,55.3"
+                     fill="#DB160E" fill-opacity="0.14" stroke="#DB160E" stroke-width="1.8"/>
+            <g fill="#DB160E">
+              <circle cx="75" cy="23.5" r="2.4"/><circle cx="91.7" cy="54.4" r="2.4"/><circle cx="103.7" cy="80.6" r="2.4"/>
+              <circle cx="75" cy="74.1" r="2.4"/><circle cx="48.7" cy="79.2" r="2.4"/><circle cx="59.8" cy="55.3" r="2.4"/>
+            </g>
+          </svg>
+        </div>
       </div>
     </section>
   </div>
@@ -1173,7 +1191,7 @@ function setProgress() {
 function renderIntro() {
   app.innerHTML = `
     <section class="hero hero-with-logo">
-      <div class="wrap diag-fade">
+      <div class="wrap diag-fade tool-hero-split">
         <div class="diag-hero-copy">
           <div class="reg-kicker">A preliminary diagnostic</div>
           <h1>Where is AI transformation stalling in your organization.</h1>
@@ -1187,6 +1205,25 @@ function renderIntro() {
           <div class="btn-row" style="margin-top: 0;">
             <button class="btn btn-primary" id="diag-begin" data-gc="cta-sail-diagnostic">Start the diagnostic</button>
           </div>
+        </div>
+        <!-- The mark this tool carries on the hub: a profile across six
+             criteria, uneven, which is what a stall looks like plotted. Keep
+             in step with the static seed above. -->
+        <div class="tool-mark" aria-hidden="true">
+          <svg viewBox="0 0 150 130" fill="none" stroke-linejoin="round" stroke-linecap="round">
+            <g stroke="#1F3A5F" opacity="0.22" stroke-width="1">
+              <polygon points="75,18 114.8,41 114.8,87 75,110 35.2,87 35.2,41"/>
+              <polygon points="75,33.3 101.6,48.7 101.6,79.4 75,94.7 48.4,79.4 48.4,48.7"/>
+              <polygon points="75,48.7 88.2,56.4 88.2,71.7 75,79.3 61.8,71.7 61.8,56.4"/>
+              <path d="M75 64 L75 18 M75 64 L114.8 41 M75 64 L114.8 87 M75 64 L75 110 M75 64 L35.2 87 M75 64 L35.2 41"/>
+            </g>
+            <polygon points="75,23.5 91.7,54.4 103.7,80.6 75,74.1 48.7,79.2 59.8,55.3"
+                     fill="#DB160E" fill-opacity="0.14" stroke="#DB160E" stroke-width="1.8"/>
+            <g fill="#DB160E">
+              <circle cx="75" cy="23.5" r="2.4"/><circle cx="91.7" cy="54.4" r="2.4"/><circle cx="103.7" cy="80.6" r="2.4"/>
+              <circle cx="75" cy="74.1" r="2.4"/><circle cx="48.7" cy="79.2" r="2.4"/><circle cx="59.8" cy="55.3" r="2.4"/>
+            </g>
+          </svg>
         </div>
       </div>
     </section>
