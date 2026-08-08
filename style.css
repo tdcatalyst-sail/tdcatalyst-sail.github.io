@@ -4081,7 +4081,8 @@ a.price-band--sail .pb-price .now { color: #9DBCF7; }
               background var(--dur-fast) var(--ease);
 }
 .nav-links.nav-pills a:not(.nav-cta):hover { color: var(--brand-ink); background: #fff; border-color: var(--reg-line); }
-.nav-links.nav-pills a.now { color: var(--brand-ink); border-color: var(--brand); background: #fff; }
+.nav-links.nav-pills a.now,
+.nav-links.nav-pills a.active:not(.nav-cta) { color: var(--brand-ink); border-color: var(--brand); background: #fff; }
 
 /* ---- Seat cards: the three-seat proof, figure-led ----
    The seats used to be 60-70 words of prose each and the evidence inside them
