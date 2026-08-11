@@ -2857,6 +2857,14 @@ a.hp-row, a.hp-row:hover { border-bottom: none; cursor: pointer; }
 .pband-facts b { font-family: 'Besley', Georgia, serif; font-weight: 600; color: var(--navy); }
 .pband-facts span { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--midgray); white-space: nowrap; }
 .pband-card .pband-enter { color: var(--logo-blue); margin-top: 1.3rem; }
+/* The Sail card is itself the link to the practice (the hub's practice cards
+   work the same way), so it carries a card's affordances rather than a
+   paragraph's: no underline, body ink for the copy, and the same lift and
+   arrow-nudge on hover that the "Enter Sail" line used to own alone. */
+a.pband-card { display: block; text-decoration: none; color: var(--charcoal); transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease; }
+a.pband-card:hover { transform: translateY(-3px); box-shadow: var(--elev-4, var(--elev-3)); border-color: var(--logo-blue); }
+a.pband-card:hover .pband-enter .arr { transform: translateX(5px); }
+a.pband-card:focus-visible { outline: 2px solid var(--logo-blue); outline-offset: 3px; }
 /* Sail's contour device inside the card: a shallow strip in the card's
    own foot margin, so the contours read as a watermark under the content
    rather than through it. Drawn by script.js (card-terrain). */
