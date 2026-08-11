@@ -669,7 +669,7 @@
   .lp .hubfo .hint { font-size: 11px; color: var(--lp-faint); }
   @media (min-width: 701px) {
     .lp .wheel-card { display: block; }
-    html.js .lp .filters, html.js .lp .pgrid { display: none; }
+    html.js .lp .playbox { display: none; }
   }
 
   /* Redesigned campaign ribbon: prominent, clickable */
@@ -880,6 +880,26 @@
 
   /* Mobile play tiles (chips upgraded) */
   .lp .play { border-left-width: 3px; }
+  /* The thirteen tiles are the phone-only view of the plays (desktop reads them
+     off the sequence ladder), and stacked one per row they ran longer than
+     everything around them. They fold behind a native <details> summary, so the
+     fold still opens with no JS and there is no expanded flash before it. */
+  .lp .playbox {
+    margin-top: 1.6rem; background: var(--lp-card);
+    border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
+  }
+  .lp .playbox-sum {
+    display: flex; align-items: center; gap: 0.8rem; cursor: pointer;
+    padding: 0.9rem 1.05rem; list-style: none; font-family: var(--lp-font);
+  }
+  .lp .playbox-sum::-webkit-details-marker { display: none; }
+  .lp .playbox-sum:focus-visible { outline: 2px solid var(--lp-accent-ink); outline-offset: 2px; border-radius: var(--lp-radius-lg); }
+  .lp .pbx-tx b { display: block; font-size: 0.95rem; font-weight: 700; color: var(--lp-ink); }
+  .lp .pbx-tx span { display: block; font-size: 0.78rem; color: var(--lp-faint); margin-top: 0.12rem; }
+  .lp .playbox-sum svg { width: 20px; height: 20px; margin-left: auto; flex-shrink: 0; color: var(--lp-accent-ink); transition: transform 0.18s; }
+  .lp .playbox[open] .playbox-sum svg { transform: rotate(180deg); }
+  .lp .playbox .filters { margin: 0 0 0.9rem; padding: 0 1.05rem; }
+  .lp .playbox .pgrid { padding: 0 1.05rem 1.05rem; }
   .lp .play[data-group="O"] { border-left-color: #10233F; }
   .lp .play[data-group="M"] { border-left-color: #C99A05; }
   .lp .play[data-group="C"] { border-left-color: #0E7569; }
@@ -1714,6 +1734,12 @@
       <p class="graph-hint">One modeled schedule, not the only one: the simulator packs two workstreams at a time, gates proof before the social plays, builds capability on the redesigned workflow, and holds sustainment late. Score your own order in the <a href="/grow/ai-transformation-simulation" target="_blank" rel="noopener">AI Adoption Simulator</a>.</p>
     </div>
 
+    <!-- Phone-only: the tiles below fold shut until asked for. -->
+    <details class="playbox">
+      <summary class="playbox-sum">
+        <span class="pbx-tx"><b>The thirteen plays</b><span>Open any one for its full model detail</span></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
     <div class="filters" role="group" aria-label="Filter plays by group">
       <button aria-pressed="true" data-f="all">All 13 plays</button>
       <button aria-pressed="false" data-f="O">Opportunity</button>
@@ -1723,6 +1749,7 @@
     </div>
     <div class="pgrid"><button class="play" data-group="O" data-play="sponsor" aria-expanded="false"><span class="ptop"><span class="grp">Opportunity</span><span class="wks">2 wks</span></span><span class="pname">Executive Sponsorship</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:12%"></i><i style="height:12%"></i><i style="height:12%"></i></span></button><button class="play" data-group="O" data-play="manager" aria-expanded="false"><span class="ptop"><span class="grp">Opportunity</span><span class="wks">3 wks</span></span><span class="pname">Manager-as-Channel</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:12%"></i><i style="height:12%"></i><i style="height:12%"></i></span></button><button class="play" data-group="O" data-play="whole" aria-expanded="false"><span class="ptop"><span class="grp">Opportunity</span><span class="wks">4 wks</span></span><span class="pname">Whole-Product Kit</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:60%"></i><i style="height:12%"></i><i style="height:12%"></i></span></button><button class="play" data-group="O" data-play="friction" aria-expanded="false"><span class="ptop"><span class="grp">Opportunity</span><span class="wks">3 wks</span></span><span class="pname">Workflow Redesign</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:36%"></i><i style="height:32%"></i><i style="height:12%"></i></span></button><button class="play" data-group="M" data-play="proof" aria-expanded="false"><span class="ptop"><span class="grp">Motivation</span><span class="wks">3 wks</span></span><span class="pname">Proof Seeding</span><span class="minibars" aria-hidden="true"><i style="height:60%"></i><i style="height:12%"></i><i style="height:12%"></i><i style="height:12%"></i></span></button><button class="play" data-group="M" data-play="peer" aria-expanded="false"><span class="ptop"><span class="grp">Motivation</span><span class="wks">2 wks</span></span><span class="pname">Peer Proof Relay</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:44%"></i><i style="height:28%"></i><i style="height:12%"></i></span></button><button class="play" data-group="M" data-play="inaction" aria-expanded="false"><span class="ptop"><span class="grp">Motivation</span><span class="wks">2 wks</span></span><span class="pname">Inaction-Cost Reframe</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:12%"></i><i style="height:80%"></i><i style="height:12%"></i></span></button><button class="play" data-group="M" data-play="quiet" aria-expanded="false"><span class="ptop"><span class="grp">Motivation</span><span class="wks">4 wks</span></span><span class="pname">Quiet Path for Laggards</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:12%"></i><i style="height:12%"></i><i style="height:96%"></i></span></button><button class="play" data-group="C" data-play="build" aria-expanded="false"><span class="ptop"><span class="grp">Capability</span><span class="wks">6 wks</span></span><span class="pname">Capability Build</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:24%"></i><i style="height:20%"></i><i style="height:12%"></i></span></button><button class="play" data-group="C" data-play="whenthen" aria-expanded="false"><span class="ptop"><span class="grp">Capability</span><span class="wks">1 wks</span></span><span class="pname">When-Then Prompts</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:20%"></i><i style="height:16%"></i><i style="height:12%"></i></span></button><button class="play" data-group="S" data-play="policy" aria-expanded="false"><span class="ptop"><span class="grp">Sustainment</span><span class="wks">3 wks</span></span><span class="pname">Policy & Standards Codified</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:20%"></i><i style="height:16%"></i><i style="height:12%"></i></span></button><button class="play" data-group="S" data-play="criteria" aria-expanded="false"><span class="ptop"><span class="grp">Sustainment</span><span class="wks">3 wks</span></span><span class="pname">Performance Criteria Redefined</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:24%"></i><i style="height:24%"></i><i style="height:16%"></i></span></button><button class="play" data-group="S" data-play="ritual" aria-expanded="false"><span class="ptop"><span class="grp">Sustainment</span><span class="wks">2 wks</span></span><span class="pname">Ritual & Cadence</span><span class="minibars" aria-hidden="true"><i style="height:12%"></i><i style="height:12%"></i><i style="height:12%"></i><i style="height:12%"></i></span></button>
     </div>
+    </details>
     <div class="lp-overlay" id="pmodal" hidden>
       <div class="lp-overlay-back" data-close></div>
       <div class="lp-overlay-card" role="dialog" aria-modal="true" aria-label="Intervention detail">
