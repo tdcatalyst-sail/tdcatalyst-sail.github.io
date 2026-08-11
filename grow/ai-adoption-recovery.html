@@ -1568,13 +1568,20 @@
         <p class="case-tagline">Every system you already own now ships agents.</p>
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>The agentic push is arriving through the stack you already bought. Every platform in it now ships AI features and asks for credits to run them, so the spend compounds vendor by vendor while nobody can say which consumption is earning anything inside a workflow.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Decide which platforms matter and which AI features earn their consumption inside a named workflow. Every vendor ask scored on five criteria and decided in writing, with a standing cadence that keeps pace with what those vendors ship next quarter.</p></div></div>
         <div class="case-viz cv-score">
+          <!-- Arrives already scored on the pattern we meet most often: an AI
+               feature switched on inside a platform the organization already
+               owns, security signed off and a budget owner attached, with no
+               workflow evidence under it. The verdict below is what the click
+               handler computes for these five answers; keep the two in step if
+               either changes. -->
           <div class="cv-score-head">Score one platform's AI features on the five criteria:</div>
-          <div class="cvq"><span>Value evidence: it moves a named workflow metric</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
-          <div class="cvq"><span>Workflow embed: over 30% in-flow use</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
-          <div class="cvq"><span>Named sponsor funds and defends it</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
-          <div class="cvq"><span>Consumption cost per unit of work falls with scale</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
-          <div class="cvq"><span>Risk cleared: data, security, compliance</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
-          <div class="cvq-res" id="pilot-res">Answer all five: the verdict computes.</div>
+          <div class="cvq"><span>Value evidence: it moves a named workflow metric</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="true">No</button></span></div>
+          <div class="cvq"><span>Workflow embed: over 30% in-flow use</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="true">No</button></span></div>
+          <div class="cvq"><span>Named sponsor funds and defends it</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="true">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
+          <div class="cvq"><span>Consumption cost per unit of work falls with scale</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="false">Yes</button><button type="button" data-v="0" aria-pressed="true">No</button></span></div>
+          <div class="cvq"><span>Risk cleared: data, security, compliance</span><span class="cvq-t"><button type="button" data-v="1" aria-pressed="true">Yes</button><button type="button" data-v="0" aria-pressed="false">No</button></span></div>
+          <div class="cvq-res" id="pilot-res"><b style="color:#A93226">STOP</b> &middot; 2/5 criteria met. below the bar on most criteria: hold it as experimentation or stop, and repoint the spend at a feature that clears the bar.</div>
+          <div class="cv-cap">Scored on the pattern we see most. Change any answer for your own.</div>
         </div>
         <span class="case-cta">This is us &rarr;</span>
       </article>
@@ -2774,6 +2781,11 @@
   /* ---- Pilot scorecard (forty-pilots card) ---- */
   var pilotAns = [null, null, null, null, null];
   document.querySelectorAll('.cv-score .cvq').forEach(function (row, i) {
+    // The card ships pre-scored on the common case, so seed the answers from
+    // the markup: the first tap has to recompute against four kept answers,
+    // not against four nulls.
+    var seed = row.querySelector('button[aria-pressed="true"]');
+    if (seed) pilotAns[i] = seed.dataset.v === '1' ? 1 : 0;
     row.querySelectorAll('button').forEach(function (b) {
       b.addEventListener('click', function (ev) {
         ev.stopPropagation();
