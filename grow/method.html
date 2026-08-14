@@ -413,7 +413,10 @@
   }
   .glib .paper.portrait { aspect-ratio: 3 / 4; }
   .glib .paper.tall { aspect-ratio: auto; }
-  .glib .phead { display: flex; align-items: baseline; gap: 4px; font-size: 8.5px; letter-spacing: 0.01em; color: #10233F; }
+  /* No flex gap here: "TD" and "catalyst" are separate flex items (the <b> plus
+     the anonymous text run), so any gap splits the mark into "TD catalyst".
+     The right-hand label is pushed over by its own margin-left:auto instead. */
+  .glib .phead { display: flex; align-items: baseline; font-size: 8.5px; letter-spacing: 0.01em; color: #10233F; }
   .glib .phead b { font-weight: 800; }
   .glib .phead span { margin-left: auto; font-size: 7px; text-transform: uppercase; letter-spacing: 0.08em; color: #8A6302; font-weight: 700; }
   .glib .phead.dark { color: #FFFFFF; background: #10233F; margin: -11px -12px 0; padding: 8px 12px; }
