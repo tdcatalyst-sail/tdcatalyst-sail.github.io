@@ -443,10 +443,17 @@ exactly the failure the script exists to prevent. `scripts/version-assets.py` is
 so **run it and commit the result whenever you touch those two files, and run it as a
 one-line check if you suspect drift**: a clean tree means the stamps are correct.
 
-A re-stamp touches every HTML file without changing a word of rendered content, so it is
-the one case where you **skip `scripts/sitemap-lastmod.py`**. Running it would re-date all
-25 URLs to today and tell crawlers the whole site changed; `<lastmod>` should track real
-content changes, not cache-buster churn.
+A re-stamp touches every HTML file without changing a word of rendered content, and
+`<lastmod>` should track real content changes, not cache-buster churn. **`sitemap-lastmod.py`
+now enforces this itself** (2026-08-14): when it walks a page's history it skips any commit
+whose diff for that page is nothing but `?v=` stamps, and keeps walking back to the page's
+last real edit. A commit that re-stamps *and* edits the page still counts as real. So the
+script is safe to run at any time — it no longer needs the hand-applied "skip it after a
+re-stamp" rule that used to live here.
+
+This was not theoretical: the stamp-only commit `ef244a5` had already pushed 18 URLs to a
+date on which not a word of them changed. If `<lastmod>` ever looks like the whole site
+moved at once, that is the signature — re-run the script and the honest dates come back.
 
 ## Design System Reference
 
