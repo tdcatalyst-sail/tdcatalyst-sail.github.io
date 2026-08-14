@@ -216,6 +216,44 @@ function tdTerrainNoise(seed) {
   };
 }
 
+// Size a device canvas to its box and hand back a cleared context.
+//
+// Both renderers used to test only the WIDTH before resizing the backing store,
+// and then clear only the CSS-pixel box. When a canvas got shorter without its
+// width changing — which is what the Grow hero does once the entry field builds
+// and the fonts settle — the store kept its taller height, so the rows below
+// the new box were never cleared. The stale strip stayed on screen, squashed
+// into the bottom edge of the field, and on the animated hero every later frame
+// composited onto it until it saturated to near-solid navy. That was the dark
+// residue along the bottom of the diffusion dots. Sizing on either dimension
+// and clearing the whole store closes it for terrain and diffusion alike.
+function tdSizeCanvas(canvas, w, h, dpr) {
+  var pw = Math.round(w * dpr), ph = Math.round(h * dpr);
+  if (canvas.width !== pw || canvas.height !== ph) {
+    canvas.width = pw;
+    canvas.height = ph;
+  }
+  var ctx = canvas.getContext('2d');
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return ctx;
+}
+
+// Redraw when a canvas's own box changes, not just when the window resizes.
+// Heroes change height on their own as JS-built figures land and webfonts swap,
+// and those never fire a window resize, so the field would otherwise sit
+// stretched at the wrong size until something else moved.
+function tdObserveCanvases(canvases, redraw) {
+  if (typeof ResizeObserver !== 'function') return;
+  var raf = null;
+  var ro = new ResizeObserver(function () {
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(redraw);
+  });
+  Array.prototype.forEach.call(canvases, function (c) { ro.observe(c); });
+}
+
 (function () {
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var makeNoise = tdTerrainNoise;
@@ -230,13 +268,7 @@ function tdTerrainNoise(seed) {
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
-    if (canvas.width !== Math.round(w * dpr)) {
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-    }
-    var ctx = canvas.getContext('2d');
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, w, h);
+    var ctx = tdSizeCanvas(canvas, w, h, dpr);
     var fbm = makeNoise(seed);
     var cell = 6, scale = parseFloat(d.scale || '210');
     var cols = Math.ceil(w / cell) + 1, rows = Math.ceil(h / cell) + 1;
@@ -302,6 +334,7 @@ function tdTerrainNoise(seed) {
       if (raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(renderAll);
     });
+    tdObserveCanvases(canvases, renderAll);
     renderAll();
 
     // Slow drift on [data-animate] canvases — paused offscreen, off under reduced motion
@@ -1260,19 +1293,12 @@ function tdTerrainNoise(seed) {
     var d = canvas.dataset;
     var seed = parseFloat(d.seed || '1');
     var alpha = parseFloat(d.alpha || '0.15');
-    var indexAlpha = parseFloat(d.indexAlpha || alpha * 2.6);
     var line = d.line || '#1F3A5F';
     var index = d.index || '#E8B003';
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
-    if (canvas.width !== Math.round(w * dpr)) {
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-    }
-    var ctx = canvas.getContext('2d');
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, w, h);
+    var ctx = tdSizeCanvas(canvas, w, h, dpr);
 
     var fbm = tdTerrainNoise(seed);
     var num = function (k, dflt) { return d[k] === undefined ? dflt : parseFloat(d[k]); };
@@ -1280,10 +1306,22 @@ function tdTerrainNoise(seed) {
     var rowH = pitch * 0.866;
     var cols = Math.ceil(w / pitch) + 3, rows = Math.ceil(h / rowH) + 3;
 
-    // Deep ochre carries the adopted population; the brighter index colour is
-    // spent only on the front, so the eye lands on the boundary rather than
-    // on the mass behind it.
-    var adopt = d.adopt || '#8A6302';
+    // The adopted population is the same navy as the rest of the substrate,
+    // carried by weight rather than by a second hue: bigger dots and denser
+    // links where the front has passed. The index colour is spent only on the
+    // front itself, so the eye lands on the boundary rather than on the mass
+    // behind it. It was deep ochre until 2026-08, then an off-palette navy;
+    // both left the settled mass reading as a different, darker system than
+    // the field it sits in.
+    var adopt = d.adopt || line;
+
+    // alpha is the one ink control: everything navy scales off it, so quieting
+    // a field quiets all of it. The adopted dot used to hold a fixed 0.55 while
+    // the links tracked alpha, which is why a quieted field still left a dark
+    // residue behind the front.
+    var linkDorm = num('linkdorm', alpha * 0.5);
+    var linkAdopt = num('linkadopt', alpha * 2.0);
+    var adoptA = num('aadopt', alpha * 2.4);
 
     var front = num('front', 0.26), soft = num('soft', 0.24);
     var wobAmt = num('wobamt', 0.62), wobScale = num('wobscale', 520);
@@ -1338,10 +1376,10 @@ function tdTerrainNoise(seed) {
           // a link only carries once both ends have moved
           if (m > tAdopt) {
             if (gate(i2, j2, nbrs[q][1]) > num('linkkeep', 0.45)) continue;
-            ctx.strokeStyle = rgba(adopt, num('linkgold', 0.26) * m);
+            ctx.strokeStyle = rgba(adopt, linkAdopt * m);
           } else if (m > tDorm) {
             if (gate(i2, j2, nbrs[q][1]) > num('linkkeepband', 0.35)) continue;
-            ctx.strokeStyle = rgba(line, num('linknavy', 0.05));
+            ctx.strokeStyle = rgba(line, linkDorm);
           } else continue;
           ctx.lineWidth = 1;
           ctx.beginPath();
@@ -1377,7 +1415,7 @@ function tdTerrainNoise(seed) {
         ctx.beginPath();
         if (n.a >= tAdopt) {
           ctx.arc(n.x, n.y, num('radopt', 1.8), 0, Math.PI * 2);
-          ctx.fillStyle = rgba(adopt, num('aadopt', 0.55));
+          ctx.fillStyle = rgba(adopt, adoptA);
           ctx.fill();
         } else if (n.a > tDorm) {
           ctx.arc(n.x, n.y, num('rring', 3.2), 0, Math.PI * 2);
@@ -1418,6 +1456,7 @@ function tdTerrainNoise(seed) {
     if (raf) cancelAnimationFrame(raf);
     raf = requestAnimationFrame(renderAll);
   });
+  tdObserveCanvases(canvases, renderAll);
   renderAll();
 
   var hero = document.querySelector('canvas.diffusion[data-animate]');
