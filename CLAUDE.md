@@ -236,14 +236,12 @@ That material lives in a Google Doc in Tom's Drive, **"TDcatalyst — Practice W
    <head>
      <meta charset="utf-8" />
      <meta name="viewport" content="width=device-width, initial-scale=1" />
-     <link rel="icon" type="image/png" href="favicon.png">
+     <link rel="icon" type="image/png" href="/favicon.png">
      <title>Page Title — TDcatalyst</title>
      <meta name="description" content="..." />
      <link rel="canonical" href="https://tdcatalyst.com/page.html" />
      <!-- OG + Twitter meta tags here (copy from index.html) -->
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+     <!-- No font links: fonts are self-hosted via @font-face in style.css -->
      <link rel="stylesheet" href="/style.css">
    </head>
    <!-- Also add <script src="/script.js"></script> before </body>. Then run
@@ -273,7 +271,7 @@ That material lives in a Google Doc in Tom's Drive, **"TDcatalyst — Practice W
    </section>
    ```
 
-3. **Links:** All links are relative (e.g., `href="method.html"`, `href="images/logo.jpg"`). Exception: External links like Unsplash CDNs.
+3. **Links:** Follow the path convention above — shared assets root-absolute (`/style.css`, `/images/logo-v2.jpg`, `/favicon.png`), page-to-page links within `sail/` relative (`href="method.html"`), cross-site links root-absolute (`/sail/`, `/grow/`, `/advise/`, `/`). Exception: External links like Unsplash CDNs.
 
 4. **Accessibility:**
    - Always include `id="main-content"` on first content section after nav
@@ -338,12 +336,12 @@ When adding a new field note essay:
 |------|--------|
 | **Add/edit a page** | Create/edit `.html` file following template structure. Use `.wrap` container, semantic sections, comments for organization. |
 | **Update colors** | Add/modify CSS variable in `style.css` `:root`. Use throughout with `var(--varname)`. Never hardcode hex. |
-| **Update typography** | Modify font size/weight in `style.css` using `clamp()`. Remember: Fraunces for headings, Inter for body. |
+| **Update typography** | Modify font size/weight in `style.css` using `clamp()`. Remember: Besley for headings, Archivo for body, IBM Plex Mono for eyebrows/captions (all self-hosted — see Styles). |
 | **Add a component** | Create a new CSS class in `style.css`. Use existing color/spacing variables. |
 | **Update nav** | Edit the nav block in ONE page, then copy to all others (it's shared). Nav is in `<nav><div class="nav-inner">` with logo, toggle button, and `<ul class="nav-links">`. |
 | **Add a form field** | Add `<input>` or `<textarea>` to `begin.html`. Form submits via `<form action="...">` (backend handles it). Add `?sent=1` to redirect URL to trigger banner. |
-| **Link to a page** | Use relative path: `href="method.html"`, `href="about.html"`, `href="images/logo.jpg"`. Do NOT use absolute URLs for local files. |
-| **Add an image** | Store in `images/` directory. Use relative path: `src="images/file.jpg"`. For external CDN images, use full URL with `onerror="this.style.display='none'"` fallback. |
+| **Link to a page** | Within `sail/`, use relative paths (`href="method.html"`); cross-site and shared-asset links are root-absolute (`/sail/`, `/grow/`, `/images/logo-v2.jpg`). Do NOT use full `https://` URLs for local files. |
+| **Add an image** | Store in `images/` directory. Reference root-absolute: `src="/images/file.jpg"`. For external CDN images, use full URL with `onerror="this.style.display='none'"` fallback. |
 | **Remove a section** | Find the `<!-- SECTION_NAME -->` comment, delete the entire `<section>...</section>` block and comment. |
 
 ## Git Workflow
@@ -464,12 +462,12 @@ moved at once, that is the signature — re-run the script and the honest dates 
 ### Font Scale
 | Element | Size | Family | Weight | Line Height |
 |---------|------|--------|--------|-------------|
-| h1 | `clamp(2.2rem, 5vw, 3.6rem)` | Fraunces | 400 | 1.1 |
-| h2 | `clamp(1.7rem, 3.2vw, 2.4rem)` | Fraunces | 400 | 1.2 |
-| h3 | `1.25rem` | Fraunces | 400 | 1.3 |
-| body (p) | `17px` (1rem) | Inter | 400 | 1.6 |
-| .lead | `1.15rem` | Inter | 400 | 1.6 |
-| .eyebrow | Small, uppercase | Inter | 500 | — |
+| h1 | `clamp(2.2rem, 5vw, 3.6rem)` | Besley | 500 | 1.1 |
+| h2 | `clamp(1.7rem, 3.2vw, 2.4rem)` | Besley | 500 | 1.2 |
+| h3 | `1.25rem` | Besley | 500 | 1.3 |
+| body (p) | `17.5px` (1rem) | Archivo | 400 | 1.6 |
+| .lead | `1.15rem` | Archivo | 400 | 1.6 |
+| .eyebrow | `0.74rem`, uppercase | IBM Plex Mono | 500 | — |
 
 ### Button States
 - `.btn-primary` — Navy bg, white text; hover floods logo gold with navy-deep text
@@ -520,7 +518,7 @@ Before merging to `main`:
 - **No build process:** HTML, CSS, JS are served as-is; zero bundling overhead
 - **Passive scroll listeners:** Nav hide/reveal uses `{ passive: true }` for 60fps scroll performance
 - **Backdrop blur:** Nav uses `backdrop-filter: blur(10px)` with `will-change: transform` for GPU acceleration
-- **Font subsetting:** Google Fonts CDN preconnected to avoid render-blocking delays
+- **Fonts:** Self-hosted latin-subset woff2 in `/fonts/`, loaded via `@font-face` with `font-display: swap` — no third-party font CDN
 - **Image optimization:** External images load async; broken images hidden, not replaced with fallbacks
 - **No JavaScript frameworks:** Pure vanilla JS keeps bundle size minimal
 
