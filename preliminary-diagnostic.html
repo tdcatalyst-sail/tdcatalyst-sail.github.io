@@ -897,10 +897,14 @@
       </div>
     </div>
     <button class="nav-toggle" aria-label="Open navigation" aria-expanded="false" onclick="var o=document.getElementById('nav').classList.toggle('open');this.setAttribute('aria-expanded',o)"><span></span><span></span><span></span></button>
+    <!-- Standalone tool nav. The diagnostic belongs to no practice: it is
+         entered from Grow, from Sail and from the hub alike, always in a new
+         tab, so carrying the three practice homes as pills quietly re-sorted
+         a Grow visitor into Sail on the way out. The pills are now the tool's
+         own: the diagnostic, who is behind it, and the way to a conversation.
+         The .brand-menu switcher above still reaches all four homes for
+         anyone who genuinely wants to change practice. -->
     <ul class="nav-links nav-pills">
-      <li><a href="/grow/">Grow</a></li>
-      <li><a href="/sail/">Sail</a></li>
-      <li><a href="/advise/">Advise</a></li>
       <li><a href="/preliminary-diagnostic" class="active" aria-current="page">Diagnostic</a></li>
       <li><a href="/about">About</a></li>
       <li><a href="/start" class="nav-cta">Start</a></li>
@@ -1206,7 +1210,7 @@ function renderIntro() {
             <span><b>3</b>organizational moves</span>
           </div>
           <div class="btn-row" style="margin-top: 0;">
-            <button class="btn btn-primary" id="diag-begin" data-gc="cta-sail-diagnostic">Start the diagnostic</button>
+            <button class="btn btn-primary" id="diag-begin" data-gc="cta-hub-diagnostic">Start the diagnostic</button>
           </div>
         </div>
         <!-- The mark this tool carries on the hub: a profile across six
@@ -1274,7 +1278,7 @@ function renderIntro() {
         <div class="diag-close">
           <h2>Which one is yours?</h2>
           <p>The diagnostic reads your organization on the same six criteria and names the archetype it lands on, with the three moves that follow.</p>
-          <button class="btn btn-primary" id="diag-begin-2" data-gc="cta-sail-diagnostic-2">Start the diagnostic</button>
+          <button class="btn btn-primary" id="diag-begin-2" data-gc="cta-hub-diagnostic-2">Start the diagnostic</button>
         </div>
       </div>
     </section>
