@@ -59,11 +59,25 @@ tdcatalyst-sail.github.io/
 
 Every footer is identity only — mark, independence disclaimer, copyright with Privacy/Terms, and on Sail pages the land acknowledgment. **Do not put links back into it.** The nav at the top of every page already carries the page's own links plus all four practice homes in the `.brand-menu` switcher, so footer link columns were pure duplication. The `Practices` / `Practice` / `Engage` columns, the `.footer-practices` list, and the `footer-home-link` are gone; their CSS went with them and `footer .wrap` is no longer a grid. The four `/grow/ai-adoption-*` campaign pages keep their own one-line `.lp-footer` (scoped in-page, same rule: copyright plus Privacy/Terms).
 
-Stripping the columns left a few pages without a path to a page the footer used to reach. These are open wayfinding questions for Tom, not bugs to patch by re-adding footer links:
-- `/sail/field-notes` is now reachable only from Sail pages (their nav carries it) — not from the hub, Grow, or Advise, and not from `sail/method.html` or `sail/sessions.html`, whose navs are section-anchored.
+Stripping the columns left a few pages without a path to a page the footer used to reach. Those gaps were closed 2026-08-31 by giving each practice one nav (see below); what remains is deliberate:
+- `/sail/field-notes` is reachable from every Sail page and from nowhere else — not from the hub, Grow, or Advise. That is the cross-practice rule working as intended, not a gap.
 - `/sail/contact-card` is no longer linked from anywhere; it is a direct-share artifact, like `one-pager.html`.
-- `/sail/about` is not in the nav on `sail/index.html`, `sail/method.html`, or `sail/sessions.html`. The Grow half of this was closed 2026-08-31: `/grow/about` now sits in the nav pills on `grow/index.html` and `grow/method.html`, next to the `grow/about.html` and `grow/ai-transformation-simulation.html` navs that already carried it, so every Grow page reaches it. Grow's About is the Grow-voiced page (`grow/about.html`, gold terrain, "Delivered by the person who did the work") — it is not the hub `/about` and carries no Sail copy, so the nav link stays inside the practice.
-- `/preliminary-diagnostic` is absent from `sail/method.html` and `sail/sessions.html`.
+
+**One nav per practice (2026-08-31):** every page inside a practice carries the identical pill set, so the nav never changes shape as a visitor moves through. This is the rule the Production Checklist's "navigation matches all other pages" line is asking for — when a nav looks wrong, copy the block from a sibling page rather than inventing a set for that page.
+
+| Practice | Pills, in order |
+|---|---|
+| Hub (`/`, `/about`, `/start`, `/privacy`, `/terms`) | Grow · Sail · Advise · Diagnostic↗ · About · Start |
+| Sail (10 pages) | Method · Sessions & pricing · Field Notes · Diagnostic↗ · About · Start |
+| Grow (4 nav pages) | Engagements · Method · Proof · Diagnostic↗ · Simulator↗ · About · Start |
+| Advise (2 pages) | The offer · Proof · Who it's for · About · Start |
+| `/preliminary-diagnostic` | Diagnostic · About · Start (standalone, see below) |
+
+Two conventions inside that:
+- **Anchors resolve to the practice home.** A pill that names a section of the practice home is a bare `#fragment` on the home itself and `/grow/#services` (or `/advise/#offer`) everywhere else, so the same label always lands in the same place. Real page-to-page links are root-absolute in Grow and Advise (`/grow/method`, `/advise/about`) and relative inside `sail/` (`method`, `about`), per the path convention above.
+- **The current page's pill carries both `class="active"` and `aria-current="page"`.** A practice home marks nothing active — its logo is the home link.
+
+Sail lost its section-anchor pills in this pass. `sail/index.html`, `sail/method.html` and `sail/sessions.html` each carried a different set of in-page jumps (`#signs`/`#method`, `#posture`/`#signs`/`#sequence`, `#tiers`/`#pathway`/`#produces`), which is why About, Field Notes and the Diagnostic could not fit and were simply absent from those three pages. Keeping the anchors *and* adding the destinations wraps the nav onto three rows at 1024px — measured, not guessed — so the destinations won: Sail's sections are its pages, and the top nav now names them. The three now-dead scroll-spy IIFEs went with the anchors (one of them still queried `.subnav`, whose markup left the site on 2026-08-06). Grow keeps its scroll-spy, because `grow/index.html` is a genuine single-page conversion page and still anchors `#services`/`#proof`.
 
 **The diagnostic is a standalone tool, owned by no practice (2026-08-31):** `preliminary-diagnostic.html` is linked from Grow, from Sail and from the hub, always with `target="_blank"`, so it is the one page whose visitors arrive with a practice already in mind. Its nav pills used to be the hub's — Grow / Sail / Advise / Diagnostic / About / Start — which meant a visitor who opened it from Grow was offered Sail as a peer exit and got quietly re-sorted into the wrong practice. The pills are now the tool's own (Diagnostic, About, Start) and the page carries no practice pill at all. The `.brand-menu` switcher in `.nav-brand` is unchanged and still reaches all four homes, which is the deliberate way to change practice. The page's forward path stays the Adoption Recovery Review (`/grow/ai-adoption-recovery#begin`, on the result CTA). **Do not re-add practice pills to this nav**, and do not give the page a `body.brand-*` class — it is hub-navy on purpose. `sail/preliminary-diagnostic.html` remains a redirect stub for the pre-restructure URL; keep it.
 
