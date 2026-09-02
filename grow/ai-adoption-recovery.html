@@ -959,6 +959,21 @@
   .lp .case-flag .case-cta { margin-top: 0.6rem; }
   .lp .case-note-row { margin-top: 1rem; font-size: 0.8rem; color: var(--lp-faint); }
 
+  /* Collapsible situation cards: head always visible, body on demand */
+  .lp .case-head { display: block; }
+  .lp .case-toggle {
+    display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.85rem;
+    font-size: 0.78rem; font-weight: 650; letter-spacing: 0.02em; color: var(--lp-accent-ink);
+  }
+  .lp .case-toggle::after { content: "▾"; font-size: 0.72rem; transition: transform 0.2s ease; }
+  .lp .case.open .case-toggle::after { transform: rotate(180deg); }
+  .lp .case-toggle .lbl-open { display: none; }
+  .lp .case.open .case-toggle .lbl-shut { display: none; }
+  .lp .case.open .case-toggle .lbl-open { display: inline; }
+  .lp .case-body { display: none; }
+  .lp .case.open .case-body { display: block; }
+  .lp .case:not(.open) { padding-bottom: 1.15rem; }
+
   /* ---- v2: sequence board ---- */
   .lp .board-card {
     background: var(--lp-card); border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
@@ -1525,17 +1540,21 @@
     <div class="sec-head">
       <span class="kicker">Where you are starting from</span>
       <h2>Four situations, one discipline: the work has to change.</h2>
-      <p>Enterprise AI rarely fails loudly. MIT found <b>95%</b> of GenAI pilots show no measurable P&amp;L impact, and adoption typically plateaus at <b>15&ndash;30%</b>. Select your situation: the page tunes itself.</p>
+      <p>Enterprise AI rarely fails loudly. MIT found <b>95%</b> of GenAI pilots show no measurable P&amp;L impact, and adoption typically plateaus at <b>15&ndash;30%</b>. Open the one that matches yours: the card unfolds and the page tunes itself.</p>
     </div>
     <div class="case-grid">
 
-      <article class="case" role="button" tabindex="0" data-sit="platform" aria-pressed="false">
+      <article class="case" role="button" tabindex="0" aria-expanded="false" data-sit="platform" aria-pressed="false">
+        <div class="case-head">
         <h3 class="case-title">Stalled platform</h3>
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 12l3-3 2.5 2L16 7"/></svg></span>
           <span class="case-pill">25 programs delivered</span>
         </div>
         <p class="case-tagline">The platform launched. Usage plateaued.</p>
+        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">The problem and the roadmap</span><span class="lbl-open">Hide the detail</span></span>
+        </div>
+        <div class="case-body">
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>A department-level AI platform (talent, service, finance, operations): licensed, launched, and stuck at 15&ndash;30% adoption, most of it performative. People run the tool beside the old way, usage decays each quarter, and renewal approaches with log-ins as the only evidence.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Re-sequence the rollout around the workflows the platform was bought for: redesign three to five of them end to end, build the capability, and hold it in the team cadence, measured on feature depth per workflow.</p></div></div>
         <div class="case-viz" aria-hidden="true">
           <div class="cv-chain">
@@ -1547,15 +1566,20 @@
           <div class="cv-cap">Traced across your full adoption matrix, segment by segment</div>
         </div>
         <span class="case-cta">This is us &rarr;</span>
+        </div>
       </article>
 
-      <article class="case case-flag" role="button" tabindex="0" data-sit="seats" aria-pressed="false">
+      <article class="case case-flag" role="button" tabindex="0" aria-expanded="false" data-sit="seats" aria-pressed="false">
+        <div class="case-head">
         <h3 class="case-title">Frontier-lab seats</h3>
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.6L18 9.4l-4.2 1.8L12 16l-1.8-4.8L6 9.4l4.2-1.8L12 3z"/><path d="M19 14l.9 2.3L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.7L19 14z"/></svg></span>
           <span class="case-flagpill">Flagship</span>
         </div>
         <p class="case-tagline">Everyone got a seat. Every role changes.</p>
+        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">The problem and the roadmap</span><span class="lbl-open">Hide the detail</span></span>
+        </div>
+        <div class="case-body">
         <div class="cv-vendors" aria-label="Anthropic Claude, OpenAI ChatGPT, Microsoft Copilot, Google Gemini">
           <span class="cvv"><svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#D97757" stroke-width="2.1" stroke-linecap="round" fill="none"><path d="M12 3.2v4M12 16.8v4M3.2 12h4M16.8 12h4M5.8 5.8l2.8 2.8M15.4 15.4l2.8 2.8M18.2 5.8l-2.8 2.8M8.6 15.4l-2.8 2.8"/></g></svg>Claude</span>
           <span class="cvv"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#1B1A16" stroke-width="1.8"><rect x="8.8" y="2.6" width="6.4" height="18.8" rx="3.2"/><rect x="8.8" y="2.6" width="6.4" height="18.8" rx="3.2" transform="rotate(60 12 12)"/><rect x="8.8" y="2.6" width="6.4" height="18.8" rx="3.2" transform="rotate(120 12 12)"/></g></svg>ChatGPT</span>
@@ -1573,15 +1597,20 @@
         </div>
         <button type="button" class="case-sort" data-sorter>Sort one of your tasks &rarr;</button>
         <span class="case-cta">This is us &rarr;</span>
+        </div>
       </article>
 
-      <article class="case" role="button" tabindex="0" data-sit="pilots" aria-pressed="false">
+      <article class="case" role="button" tabindex="0" aria-expanded="false" data-sit="pilots" aria-pressed="false">
+        <div class="case-head">
         <h3 class="case-title">The forty pilots</h3>
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 18l9 5 9-5" opacity="0.45"/></svg></span>
           <span class="case-pill">Emerging challenge</span>
         </div>
         <p class="case-tagline">Every system you already own now ships agents.</p>
+        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">The problem and the roadmap</span><span class="lbl-open">Hide the detail</span></span>
+        </div>
+        <div class="case-body">
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>The agentic push is arriving through the stack you already bought. Every platform in it now ships AI features and asks for credits to run them, so the spend compounds vendor by vendor while nobody can say which consumption is earning anything inside a workflow.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Decide which platforms matter and which AI features earn their consumption inside a named workflow. Every vendor ask scored on five criteria and decided in writing, with a standing cadence that keeps pace with what those vendors ship next quarter.</p></div></div>
         <div class="case-viz cv-score">
           <!-- Arrives already scored on the pattern we meet most often: an AI
@@ -1600,15 +1629,20 @@
           <div class="cv-cap">Scored on the pattern we see most. Change any answer for your own.</div>
         </div>
         <span class="case-cta">This is us &rarr;</span>
+        </div>
       </article>
 
-      <article class="case" role="button" tabindex="0" data-sit="zero" aria-pressed="false">
+      <article class="case" role="button" tabindex="0" aria-expanded="false" data-sit="zero" aria-pressed="false">
+        <div class="case-head">
         <h3 class="case-title">Starting 0 &rarr; 1</h3>
         <div class="case-top">
           <span class="case-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16"/><path d="M12 16a5 5 0 0 0 5-5H7a5 5 0 0 0 5 5z"/><path d="M12 3v3M6.3 5.6l1.8 1.8M17.7 5.6l-1.8 1.8"/></svg></span>
           <span class="case-pill">Your one chance to start right</span>
         </div>
         <p class="case-tagline">A handful use AI. Some are hiding it.</p>
+        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">The problem and the roadmap</span><span class="lbl-open">Hide the detail</span></span>
+        </div>
+        <div class="case-body">
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>Leadership has barely touched the tools, no platform is chosen, no use policy exists, and the only reportable number is log-ins. A third of employees quietly read AI as replacement.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Vision and culture first: leadership writes the charter and goes first, managers coach the new work and repurpose the freed time visibly, and monthly builder events make augmentation something people can see.</p></div></div>
         <div class="case-viz" aria-hidden="true">
           <div class="cv-hero"><b>+46%</b><span>more likely to read AI as augmentation when people trust leadership's intent to invest in them</span></div>
@@ -1618,6 +1652,7 @@
           <div class="cv-cap">BetterUp: the belief the first signals decide</div>
         </div>
         <span class="case-cta">This is us &rarr;</span>
+        </div>
       </article>
 
     </div>
@@ -2982,7 +3017,10 @@
   var SITLABEL = { platform: 'Stalled department platform', seats: 'Frontier-lab seats', pilots: 'Agentic pilot portfolio', zero: 'Starting 0 to 1' };
   function selectSituation(sit) {
     document.querySelectorAll('.case[data-sit]').forEach(function (x) {
-      x.setAttribute('aria-pressed', x.dataset.sit === sit ? 'true' : 'false');
+      var on = x.dataset.sit === sit;
+      x.setAttribute('aria-pressed', on ? 'true' : 'false');
+      x.setAttribute('aria-expanded', on ? 'true' : 'false');
+      x.classList.toggle('open', on);
     });
     document.querySelectorAll('.outcome[data-sit]').forEach(function (o) {
       o.classList.toggle('sel', o.dataset.sit === sit);
@@ -3003,9 +3041,18 @@
     }
     track('recovery-situation');
   }
+  function toggleCase(c) {
+    var open = c.classList.contains('open');
+    selectSituation(open ? null : c.dataset.sit);
+    if (!open && !reduceMotion) {
+      var top = c.getBoundingClientRect().top;
+      if (top < 70) window.scrollBy({ top: top - 90, behavior: 'smooth' });
+    }
+  }
   document.querySelectorAll('.case[data-sit]').forEach(function (c) {
     c.addEventListener('click', function (ev) {
       if (ev.target.closest('[data-sorter], a, .cvq')) return;
+      if (ev.target.closest('.case-head')) { toggleCase(c); return; }
       selectSituation(c.dataset.sit);
       if (ev.target.closest('.case-cta')) {
         var pr = document.getElementById('price');
@@ -3013,7 +3060,7 @@
       }
     });
     c.addEventListener('keydown', function (ev) {
-      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); selectSituation(c.dataset.sit); }
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); toggleCase(c); }
     });
   });
   document.querySelectorAll('.reset-tabs button').forEach(function (b) {
