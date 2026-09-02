@@ -160,7 +160,12 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+/* The nav is sticky on every page, so a bare fragment jump parks its target
+   under the bar. scroll-padding-top on the scroller clears it for hash
+   navigation and for scrollIntoView alike. 88px covers the tallest bar the
+   nav takes (68 desktop, 74 tablet, 70 mobile, 78 on the campaign pages
+   own .lp-nav) and leaves the target a little air below it. */
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
 
 body {
   font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
