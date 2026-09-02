@@ -542,9 +542,14 @@
   .lp .rcase .exp { display: flex; gap: 0.6rem; margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px dashed var(--lp-line); font-size: 0.86rem; }
   .lp .rcase .exp b { color: var(--lp-ink); font-weight: 650; }
   .lp .rcase .exp::before { content: "\2192"; color: var(--lp-accent-ink); font-weight: 700; }
-  .lp .reset-note { margin-top: 1.4rem; font-size: 0.88rem; color: var(--lp-body); max-width: 760px; }
+  .lp .reset-note {
+    margin-top: 1.1rem; font-size: 0.95rem; line-height: 1.55; color: var(--lp-body); max-width: 760px;
+    background: var(--lp-bg-alt); border: 1px solid var(--lp-line); border-left: 3px solid var(--lp-accent);
+    border-radius: var(--lp-radius); padding: 0.95rem 1.15rem;
+  }
   .lp .reset-note b { color: var(--lp-ink); }
   .lp .reset-note a { color: var(--lp-accent-ink); font-weight: 650; }
+  .lp .sec-head .reset-note + p { margin-top: 1.1rem; }
 
   /* FAQ */
   .lp .faq-list { border-top: 1px solid var(--lp-line); margin-top: 0; max-width: 780px; }
@@ -2018,6 +2023,7 @@
     <div class="sec-head">
       <span class="kicker">Where it leads</span>
       <h2>The Adoption Reset: the roadmap, executed in 90 days.</h2>
+      <p class="reset-note"><b>The Review fee is the down payment.</b> Start a Reset within 30 days of delivery and 100% of the $12,500 is credited toward the Reset. The full <a href="/grow/?offer=reset#offers" target="_blank" rel="noopener">Adoption Reset engagement ($40K&ndash;$75K, fixed fee)</a> is on the Grow page; the entry point for every situation is the same 30-minute call.</p>
       <p>The Review hands you the plan. The Reset runs it with you: interventions in sequence, tracked on the dashboard, adjusted as the data comes in. Pick your situation to see what 90 days produces. The lanes overlap by design (the model schedules two workstreams at a time, matching real change capacity), and the fading bars continue past week 12.</p>
     </div>
     <div class="reset-tabs" role="group" aria-label="Pick your situation">
@@ -2104,7 +2110,6 @@
       </article>
     </div>
     <p class="reset-sourcing"><b>About these numbers.</b> Indicative 90-day targets for programs of this shape, drawn from adoption work of this kind and from anonymized enterprise delivery experience. They are the targets set against your own week-one baseline during the Review, never a promise.</p>
-    <p class="reset-note"><b>The Review fee is the down payment.</b> Start a Reset within 30 days of delivery and 100% of the $12,500 is credited toward the Reset. The full <a href="/grow/?offer=reset#offers" target="_blank" rel="noopener">Adoption Reset engagement ($40K&ndash;$75K, fixed fee)</a> is on the Grow page; the entry point for every situation is the same 30-minute call.</p>
   </div>
 </section>
 
