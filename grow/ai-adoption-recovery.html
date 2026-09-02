@@ -162,6 +162,13 @@
   /* The practice suffix wraps as one piece onto a second line when the bar
      is narrow; it must never break at its own hyphens mid-token. */
   .lp .lp-logo span { color: var(--lp-accent-ink); font-weight: 600; display: inline-block; white-space: nowrap; }
+  .lp .lp-brand { display: flex; flex-direction: column; align-items: flex-start; gap: 0.1rem; min-width: 0; }
+  .lp .lp-fullsite {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.01em; color: var(--lp-faint);
+    text-decoration: none; border-bottom: 1px solid transparent; line-height: 1.2;
+  }
+  .lp .lp-fullsite:hover { color: var(--lp-accent-ink); border-bottom-color: var(--lp-accent); }
+  .lp .lp-fullsite:focus-visible { outline: 2px solid var(--lp-accent-ink); outline-offset: 2px; }
   .lp .lp-nav .btn { padding: 0.55rem 1.2rem; font-size: 0.88rem; }
   .lp .lp-nav .btn-primary:hover { transform: none; }
   .lp .lp-nav { border-bottom-color: rgba(230, 227, 215, 0.9); box-shadow: 0 1px 0 rgba(27, 26, 22, 0.02); }
@@ -1513,7 +1520,10 @@
 
 <header class="lp-nav">
   <div class="lp-nav-inner">
-    <a href="/grow/" class="lp-logo">TDcatalyst<span>/grow-with-ai</span></a>
+    <div class="lp-brand">
+      <a href="/grow/" class="lp-logo">TDcatalyst<span>/grow-with-ai</span></a>
+      <a href="https://tdcatalyst.com/grow/" class="lp-fullsite">See the full site</a>
+    </div>
     <nav class="lp-links" aria-label="Page sections">
       <a href="#diagnose">Diagnose your stall</a>
       <a href="#system">The play library</a>
