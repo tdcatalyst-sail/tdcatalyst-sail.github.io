@@ -727,7 +727,7 @@
   .lp .cal-ic { width: 17px; height: 17px; margin-right: 0.5rem; flex-shrink: 0; }
 
   /* Use cases */
-  .lp .case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+  .lp .case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; align-items: start; }
   .lp .case {
     background: var(--lp-card); border: 1px solid var(--lp-line); border-radius: var(--lp-radius-lg);
     padding: 1.5rem 1.5rem 1.4rem;
@@ -962,17 +962,46 @@
   /* Collapsible situation cards: head always visible, body on demand */
   .lp .case-head { display: block; }
   .lp .case-toggle {
-    display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.85rem;
-    font-size: 0.78rem; font-weight: 650; letter-spacing: 0.02em; color: var(--lp-accent-ink);
+    display: inline-flex; align-items: center; gap: 0.45rem; margin-top: 0.95rem;
+    font-size: 0.8rem; font-weight: 650; letter-spacing: 0.01em; color: var(--lp-accent-ink);
+    background: var(--lp-bg-alt); border: 1px solid var(--lp-line); border-radius: 999px;
+    padding: 0.38rem 0.85rem; transition: background 0.15s, border-color 0.15s;
   }
-  .lp .case-toggle::after { content: "▾"; font-size: 0.72rem; transition: transform 0.2s ease; }
+  .lp .case-toggle::after {
+    content: "▾"; font-size: 0.7rem; line-height: 1; transition: transform 0.2s ease;
+  }
   .lp .case.open .case-toggle::after { transform: rotate(180deg); }
+  .lp .case:hover .case-toggle { background: rgba(232, 176, 3, 0.16); border-color: rgba(232, 176, 3, 0.5); }
   .lp .case-toggle .lbl-open { display: none; }
   .lp .case.open .case-toggle .lbl-shut { display: none; }
   .lp .case.open .case-toggle .lbl-open { display: inline; }
   .lp .case-body { display: none; }
   .lp .case.open .case-body { display: block; }
   .lp .case:not(.open) { padding-bottom: 1.15rem; }
+
+  /* Read all four at once */
+  .lp .case-tools { display: flex; justify-content: flex-end; margin-bottom: 0.8rem; }
+  .lp .case-all {
+    font-family: inherit; font-size: 0.8rem; font-weight: 650; color: var(--lp-body); cursor: pointer;
+    background: var(--lp-card); border: 1px solid var(--lp-line); border-radius: 999px;
+    padding: 0.4rem 0.95rem; display: inline-flex; align-items: center; gap: 0.45rem;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .lp .case-all::after { content: "▾"; font-size: 0.7rem; line-height: 1; transition: transform 0.2s ease; }
+  .lp .case-all:hover { border-color: var(--lp-accent); color: var(--lp-ink); }
+  .lp .case-all:focus-visible { outline: 2px solid var(--lp-accent-ink); outline-offset: 2px; }
+  .lp .case-all[aria-pressed="true"] { border-color: var(--lp-accent); color: var(--lp-ink); }
+  .lp .case-all[aria-pressed="true"]::after { transform: rotate(180deg); }
+  .lp .case-all .lbl-open { display: none; }
+  .lp .case-all[aria-pressed="true"] .lbl-shut { display: none; }
+  .lp .case-all[aria-pressed="true"] .lbl-open { display: inline; }
+  .lp .case-grid.all-open .case-body { display: block; }
+  .lp .case-grid.all-open .case-toggle { display: none; }
+  .lp .case-grid.all-open .case { padding-bottom: 1.4rem; }
+  @media (max-width: 640px) {
+    .lp .case-all { padding: 0.62rem 1.05rem; }
+    .lp .case-toggle { padding: 0.6rem 1rem; }
+  }
 
   /* ---- v2: sequence board ---- */
   .lp .board-card {
@@ -1540,9 +1569,12 @@
     <div class="sec-head">
       <span class="kicker">Where you are starting from</span>
       <h2>Four situations, one discipline: the work has to change.</h2>
-      <p>Enterprise AI rarely fails loudly. MIT found <b>95%</b> of GenAI pilots show no measurable P&amp;L impact, and adoption typically plateaus at <b>15&ndash;30%</b>. Open the one that matches yours: the card unfolds and the page tunes itself.</p>
+      <p>Enterprise AI rarely fails loudly. MIT found <b>95%</b> of GenAI pilots show no measurable P&amp;L impact, and adoption typically plateaus at <b>15&ndash;30%</b>. Open the one that matches yours and the page tunes itself, or open all four to read straight through.</p>
     </div>
-    <div class="case-grid">
+    <div class="case-tools">
+      <button type="button" class="case-all" id="case-all" aria-pressed="false" aria-controls="case-grid"><span class="lbl-shut">Open all four</span><span class="lbl-open">Close all four</span></button>
+    </div>
+    <div class="case-grid" id="case-grid">
 
       <article class="case" role="button" tabindex="0" aria-expanded="false" data-sit="platform" aria-pressed="false">
         <div class="case-head">
@@ -1552,7 +1584,7 @@
           <span class="case-pill">25 programs delivered</span>
         </div>
         <p class="case-tagline">The platform launched. Usage plateaued.</p>
-        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">The problem and the roadmap</span><span class="lbl-open">Hide the detail</span></span>
+        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">See the problem and the roadmap</span><span class="lbl-open">Close this one</span></span>
         </div>
         <div class="case-body">
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>A department-level AI platform (talent, service, finance, operations): licensed, launched, and stuck at 15&ndash;30% adoption, most of it performative. People run the tool beside the old way, usage decays each quarter, and renewal approaches with log-ins as the only evidence.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Re-sequence the rollout around the workflows the platform was bought for: redesign three to five of them end to end, build the capability, and hold it in the team cadence, measured on feature depth per workflow.</p></div></div>
@@ -1577,7 +1609,7 @@
           <span class="case-flagpill">Flagship</span>
         </div>
         <p class="case-tagline">Everyone got a seat. Every role changes.</p>
-        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">The problem and the roadmap</span><span class="lbl-open">Hide the detail</span></span>
+        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">See the problem and the roadmap</span><span class="lbl-open">Close this one</span></span>
         </div>
         <div class="case-body">
         <div class="cv-vendors" aria-label="Anthropic Claude, OpenAI ChatGPT, Microsoft Copilot, Google Gemini">
@@ -1608,7 +1640,7 @@
           <span class="case-pill">Emerging challenge</span>
         </div>
         <p class="case-tagline">Every system you already own now ships agents.</p>
-        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">The problem and the roadmap</span><span class="lbl-open">Hide the detail</span></span>
+        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">See the problem and the roadmap</span><span class="lbl-open">Close this one</span></span>
         </div>
         <div class="case-body">
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>The agentic push is arriving through the stack you already bought. Every platform in it now ships AI features and asks for credits to run them, so the spend compounds vendor by vendor while nobody can say which consumption is earning anything inside a workflow.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Decide which platforms matter and which AI features earn their consumption inside a named workflow. Every vendor ask scored on five criteria and decided in writing, with a standing cadence that keeps pace with what those vendors ship next quarter.</p></div></div>
@@ -1640,7 +1672,7 @@
           <span class="case-pill">Your one chance to start right</span>
         </div>
         <p class="case-tagline">A handful use AI. Some are hiding it.</p>
-        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">The problem and the roadmap</span><span class="lbl-open">Hide the detail</span></span>
+        <span class="case-toggle" aria-hidden="true"><span class="lbl-shut">See the problem and the roadmap</span><span class="lbl-open">Close this one</span></span>
         </div>
         <div class="case-body">
         <div class="case-cols"><div class="case-col"><b class="cc-lbl">The problem</b><p>Leadership has barely touched the tools, no platform is chosen, no use policy exists, and the only reportable number is log-ins. A third of employees quietly read AI as replacement.</p></div><div class="case-col"><b class="cc-lbl">The roadmap</b><p>Vision and culture first: leadership writes the charter and goes first, managers coach the new work and repurpose the freed time visibly, and monthly builder events make augmentation something people can see.</p></div></div>
@@ -3019,7 +3051,7 @@
     document.querySelectorAll('.case[data-sit]').forEach(function (x) {
       var on = x.dataset.sit === sit;
       x.setAttribute('aria-pressed', on ? 'true' : 'false');
-      x.setAttribute('aria-expanded', on ? 'true' : 'false');
+      x.setAttribute('aria-expanded', on || allOpen() ? 'true' : 'false');
       x.classList.toggle('open', on);
     });
     document.querySelectorAll('.outcome[data-sit]').forEach(function (o) {
@@ -3041,13 +3073,27 @@
     }
     track('recovery-situation');
   }
+  var caseGrid = document.getElementById('case-grid');
+  var caseAll = document.getElementById('case-all');
+  function allOpen() { return !!caseGrid && caseGrid.classList.contains('all-open'); }
   function toggleCase(c) {
     var open = c.classList.contains('open');
     selectSituation(open ? null : c.dataset.sit);
-    if (!open && !reduceMotion) {
+    if (!open && !allOpen() && !reduceMotion) {
       var top = c.getBoundingClientRect().top;
       if (top < 70) window.scrollBy({ top: top - 90, behavior: 'smooth' });
     }
+  }
+  if (caseAll && caseGrid) {
+    caseAll.addEventListener('click', function () {
+      var on = !allOpen();
+      caseGrid.classList.toggle('all-open', on);
+      caseAll.setAttribute('aria-pressed', on ? 'true' : 'false');
+      document.querySelectorAll('.case[data-sit]').forEach(function (c) {
+        c.setAttribute('aria-expanded', on || c.classList.contains('open') ? 'true' : 'false');
+      });
+      track('recovery-cases-all');
+    });
   }
   document.querySelectorAll('.case[data-sit]').forEach(function (c) {
     c.addEventListener('click', function (ev) {
