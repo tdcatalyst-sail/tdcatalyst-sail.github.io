@@ -20,7 +20,7 @@
   <meta property="og:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://tdcatalyst.com/images/logo-og.jpg" />
-  <link rel="stylesheet" href="/style.css?v=8f260367">
+  <link rel="stylesheet" href="/style.css?v=930d4d9d">
   <style>
     /* ============================================================
        Diagnostic page — page-specific styles only.
@@ -1779,9 +1779,11 @@ function renderResult() {
     <section class="cta-panel">
       <div class="wrap">
         <p class="cta-sentence">From a named archetype to a fixed 90-day plan.</p>
-        <p class="diag-cta-body">This diagnostic names the stall. The Adoption Recovery Review resolves it: ten business days at a fixed $12,500, ending in the recovery decision on every deployment line and the 90-day sequence on a calendar, credited in full against an Adoption Reset started within 30 days.</p>
+        ${state.resultKey === 'OM' ? `<p class="diag-cta-body">This diagnostic names the stall. An operating model lag is structural, so the Reorganization Blueprint answers it: six to ten weeks at a fixed fee, from a task-level work inventory to redesigned roles, decision rights for people and agents, and a sequenced 90-day transition.</p>
         <div class="btn-row" style="justify-content:center;">
-          <a class="btn btn-primary" href="/grow/ai-adoption-recovery#begin">Get started on the recovery &rarr;</a>
+          <a class="btn btn-primary" href="/grow/?offer=blueprint#offers" data-gc="cta-hub-diagnostic-blueprint">See the Reorganization Blueprint &rarr;</a>` : `<p class="diag-cta-body">This diagnostic names the stall. The Adoption Recovery Review resolves it: ten business days at a fixed $12,500, ending in the recovery decision on every deployment line and the 90-day sequence on a calendar, credited in full against an Adoption Reset started within 30 days.</p>
+        <div class="btn-row" style="justify-content:center;">
+          <a class="btn btn-primary" href="/grow/ai-adoption-recovery#begin">Get started on the recovery &rarr;</a>`}
           <button class="btn btn-ghost" id="diag-restart">Retake the diagnostic</button>
         </div>
       </div>
