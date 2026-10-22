@@ -1937,14 +1937,14 @@
   /* ---- Delivery flywheel ---- */
   var FLY = [
     { n: '1', key: 'context', title: 'Your context', color: '#10233F',
-      lead: 'What we need from you across the ten days.',
+      lead: 'What we need from you during the engagement.',
       items: [
         '3 to 5 hours a day summed across your team: interviews, working sessions, reviews',
         'Access that supports delivery: usage and adoption data, the deployment inventory, policies, prior comms and training material',
         'The people in the room: the sponsor, managers of the affected teams, a data owner for read-only extracts'
       ] },
     { n: '2', key: 'production', title: 'AI-native production', color: '#0E7569',
-      lead: 'How ten days of engagement replaces a months-long change program.',
+      lead: 'How the engagement replaces a months-long change program.',
       items: [
         'Coding agents accelerate delivery: instruments, integrations and the dashboard are built during the engagement, not after it',
         'Diagnostics and a conditions survey run over your population',
@@ -2077,7 +2077,8 @@
       var nm = nameEl && nameEl.childNodes[0] ? nameEl.childNodes[0].textContent.trim() : 'Document';
       var paper = card.querySelector('.paper');
       var ph = paper ? paper.outerHTML : '';
-      addItem(gd, nm, 'Built with you during the ten days', 'Included', ph, function () {
+      var inLib = !!card.querySelector('.st.lib');
+      addItem(gd, nm, inLib ? 'From the library' : 'Built with you during the engagement', inLib ? 'Library' : 'Included', ph, function () {
         openModal('<div class="ov-doc">' + ph + '<p class="ov-blurb"><b>' + nm + '.</b> ' + (card.dataset.blurb || '') + '</p></div>');
         track('grow-doc');
       });
